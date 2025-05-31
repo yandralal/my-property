@@ -1,4 +1,4 @@
-﻿using System.Data.OleDb;
+﻿using Microsoft.Data.SqlClient;
 
 namespace RealEstateManager
 {
@@ -20,32 +20,29 @@ namespace RealEstateManager
                 return;
             }
 
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Data", "Database.xlsx");
-            if (!File.Exists(filePath))
-            {
-                MessageBox.Show("User database file not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             bool isValid = false;
+
             try
             {
-                string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={filePath};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";";
-                using (var conn = new OleDbConnection(connStr))
+                using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    // Assuming the first worksheet is named "Sheet1"
-                    string query = "SELECT * FROM [Users$]";
-                    using var cmd = new OleDbCommand(query, conn);
-                    using var reader = cmd.ExecuteReader();
-                    while (reader != null && reader.Read())
+                    string query = "SELECT UserName, PasswordHash FROM [Login] WHERE UserName = @username";
+                    using (var cmd = new SqlCommand(query, conn))
                     {
-                        string dbUsername = reader["UserName"]?.ToString()?.Trim() ?? "";
-                        string dbPassword = reader["PasswordHash"]?.ToString()?.Trim() ?? "";
-                        if (username.Equals(dbUsername, StringComparison.OrdinalIgnoreCase) && password == dbPassword)
+                        cmd.Parameters.AddWithValue("@username", username);
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            isValid = true;
-                            break;
+                            if (reader.Read())
+                            {
+                                string dbUsername = reader["UserName"]?.ToString()?.Trim() ?? "";
+                                string dbPassword = reader["PasswordHash"]?.ToString()?.Trim() ?? "";
+                                if (username.Equals(dbUsername, StringComparison.OrdinalIgnoreCase) && password == dbPassword)
+                                {
+                                    isValid = true;
+                                }
+                            }
                         }
                     }
                 }
@@ -59,7 +56,9 @@ namespace RealEstateManager
             if (isValid)
             {
                 MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Proceed to next form or logic
+                var landingForm = new LandingForm();
+                landingForm.Show();
+                this.Hide();
             }
             else
             {

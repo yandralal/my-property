@@ -2,10 +2,15 @@
 {
     partial class LoginForm
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Panel panelLogin;
+        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.TextBox textBoxUsername;
+        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.Button buttonLogin;
+        private System.Windows.Forms.CheckBox checkBoxRemember;
+        private System.Windows.Forms.PictureBox pictureBoxLogo;
+        private System.Windows.Forms.Button buttonShowPassword;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -28,10 +33,123 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            panelLogin = new Panel();
+            buttonShowPassword = new Button();
+            pictureBoxLogo = new PictureBox();
+            labelTitle = new Label();
+            textBoxUsername = new TextBox();
+            textBoxPassword = new TextBox();
+            buttonLogin = new Button();
+            checkBoxRemember = new CheckBox();
+            panelLogin.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxLogo).BeginInit();
+            SuspendLayout();
+            // 
+            // panelLogin
+            // 
+            panelLogin.BackColor = Color.WhiteSmoke;
+            panelLogin.BorderStyle = BorderStyle.FixedSingle;
+            panelLogin.Controls.Add(buttonShowPassword);
+            panelLogin.Controls.Add(pictureBoxLogo);
+            panelLogin.Controls.Add(labelTitle);
+            panelLogin.Controls.Add(textBoxUsername);
+            panelLogin.Controls.Add(textBoxPassword);
+            panelLogin.Controls.Add(buttonLogin);
+            panelLogin.Controls.Add(checkBoxRemember);
+            panelLogin.Location = new Point(200, 75);
+            panelLogin.Name = "panelLogin";
+            panelLogin.Size = new Size(400, 363);
+            panelLogin.TabIndex = 0;
+            // 
+            // buttonShowPassword
+            // 
+            buttonShowPassword.FlatStyle = FlatStyle.Flat;
+            buttonShowPassword.Location = new Point(315, 200);
+            buttonShowPassword.Name = "buttonShowPassword";
+            buttonShowPassword.Size = new Size(35, 34);
+            buttonShowPassword.TabIndex = 0;
+            buttonShowPassword.Text = "👁";
+            buttonShowPassword.Click += buttonShowPassword_Click;
+            // 
+            // pictureBoxLogo
+            // 
+            pictureBoxLogo.Image = Properties.Resources.logo_jpg;
+            pictureBoxLogo.Location = new Point(160, 10);
+            pictureBoxLogo.Name = "pictureBoxLogo";
+            pictureBoxLogo.Size = new Size(70, 63);
+            pictureBoxLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxLogo.TabIndex = 1;
+            pictureBoxLogo.TabStop = false;
+            // 
+            // labelTitle
+            // 
+            labelTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelTitle.ForeColor = Color.DodgerBlue;
+            labelTitle.Location = new Point(0, 100);
+            labelTitle.Name = "labelTitle";
+            labelTitle.Size = new Size(400, 40);
+            labelTitle.TabIndex = 2;
+            labelTitle.Text = "Sign In";
+            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // textBoxUsername
+            // 
+            textBoxUsername.Font = new Font("Segoe UI", 12F);
+            textBoxUsername.Location = new Point(50, 150);
+            textBoxUsername.Name = "textBoxUsername";
+            textBoxUsername.PlaceholderText = "Username";
+            textBoxUsername.Size = new Size(300, 34);
+            textBoxUsername.TabIndex = 3;
+            // 
+            // textBoxPassword
+            // 
+            textBoxPassword.Font = new Font("Segoe UI", 12F);
+            textBoxPassword.Location = new Point(50, 200);
+            textBoxPassword.Name = "textBoxPassword";
+            textBoxPassword.PlaceholderText = "Password";
+            textBoxPassword.Size = new Size(267, 34);
+            textBoxPassword.TabIndex = 4;
+            textBoxPassword.UseSystemPasswordChar = true;
+            // 
+            // buttonLogin
+            // 
+            buttonLogin.BackColor = Color.DodgerBlue;
+            buttonLogin.FlatStyle = FlatStyle.Flat;
+            buttonLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonLogin.ForeColor = Color.White;
+            buttonLogin.Location = new Point(50, 290);
+            buttonLogin.Name = "buttonLogin";
+            buttonLogin.Size = new Size(300, 46);
+            buttonLogin.TabIndex = 5;
+            buttonLogin.Text = "Login";
+            buttonLogin.UseVisualStyleBackColor = false;
+            buttonLogin.Click += buttonLogin_Click;
+            // 
+            // checkBoxRemember
+            // 
+            checkBoxRemember.Font = new Font("Segoe UI", 10F);
+            checkBoxRemember.Location = new Point(50, 250);
+            checkBoxRemember.Name = "checkBoxRemember";
+            checkBoxRemember.Size = new Size(150, 24);
+            checkBoxRemember.TabIndex = 6;
+            checkBoxRemember.Text = "Remember Me";
+            // 
+            // LoginForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Gainsboro;
+            ClientSize = new Size(813, 513);
+            Controls.Add(panelLogin);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Login";
+            panelLogin.ResumeLayout(false);
+            panelLogin.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxLogo).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion

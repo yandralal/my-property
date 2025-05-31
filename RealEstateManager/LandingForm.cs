@@ -44,5 +44,16 @@ namespace RealEstateManager
                 dataGridViewProperties.DataSource = dt;
             }
         }
+
+        private void LandingForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void registerSaleMenuItem_Click(object sender, EventArgs e)
+        {
+            var registerSaleForm = new Pages.RegisterSaleForm();
+            registerSaleForm.ShowDialog();
+        }
     }
 }

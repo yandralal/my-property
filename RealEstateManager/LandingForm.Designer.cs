@@ -46,6 +46,7 @@ namespace RealEstateManager
             registerPlotMenuItem = new ToolStripMenuItem();
             viewPropertiesMenuItem = new ToolStripMenuItem();
             ownerDetailsMenuItem = new ToolStripMenuItem();
+            registerPlotToolStripMenuItem = new ToolStripMenuItem();
             transactionsMenu = new ToolStripMenuItem();
             viewTransactionsMenuItem = new ToolStripMenuItem();
             registerTransactionMenuItem = new ToolStripMenuItem();
@@ -89,7 +90,7 @@ namespace RealEstateManager
             // 
             // propertyMenu
             // 
-            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPropertyMenuItem, registerPlotMenuItem, viewPropertiesMenuItem, ownerDetailsMenuItem });
+            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPropertyMenuItem, registerPlotMenuItem, viewPropertiesMenuItem, ownerDetailsMenuItem, registerPlotToolStripMenuItem });
             propertyMenu.Name = "propertyMenu";
             propertyMenu.Size = new Size(59, 32);
             propertyMenu.Text = "File";
@@ -119,6 +120,12 @@ namespace RealEstateManager
             ownerDetailsMenuItem.Name = "ownerDetailsMenuItem";
             ownerDetailsMenuItem.Size = new Size(248, 32);
             ownerDetailsMenuItem.Text = "Owner Details";
+            // 
+            // registerPlotToolStripMenuItem
+            // 
+            registerPlotToolStripMenuItem.Name = "registerPlotToolStripMenuItem";
+            registerPlotToolStripMenuItem.Size = new Size(248, 32);
+            registerPlotToolStripMenuItem.Text = "Register Plot";
             // 
             // transactionsMenu
             // 
@@ -195,6 +202,7 @@ namespace RealEstateManager
             registerSaleMenuItem.Name = "registerSaleMenuItem";
             registerSaleMenuItem.Size = new Size(279, 32);
             registerSaleMenuItem.Text = "Register Sale";
+            registerSaleMenuItem.Click += registerSaleMenuItem_Click;
             // 
             // handoverMenuItem
             // 
@@ -243,7 +251,7 @@ namespace RealEstateManager
             buttonAddProperty.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             buttonAddProperty.Location = new Point(60, 62);
             buttonAddProperty.Name = "buttonAddProperty";
-            buttonAddProperty.Size = new Size(300, 46);
+            buttonAddProperty.Size = new Size(240, 40);
             buttonAddProperty.TabIndex = 2;
             buttonAddProperty.Text = "Register New Property";
             buttonAddProperty.UseVisualStyleBackColor = false;
@@ -252,11 +260,12 @@ namespace RealEstateManager
             // 
             // buttonManagePlots
             // 
+            buttonManagePlots.Location = new Point(280, 160);
+            buttonManagePlots.Name = "buttonManagePlots";
+            buttonManagePlots.Size = new Size(180, 35);
+            buttonManagePlots.TabIndex = 1;
             buttonManagePlots.Text = "Manage Plots";
-            buttonManagePlots.Location = new System.Drawing.Point(280, 160);
-            buttonManagePlots.Size = new System.Drawing.Size(180, 35);
             buttonManagePlots.Click += ButtonManagePlots_Click;
-            Controls.Add(buttonManagePlots);
             // 
             // LandingForm
             // 
@@ -267,11 +276,14 @@ namespace RealEstateManager
             Controls.Add(menuStripMain);
             Controls.Add(buttonAddProperty);
             Controls.Add(dataGridViewProperties);
+            Controls.Add(buttonManagePlots);
             ForeColor = Color.White;
             MainMenuStrip = menuStripMain;
             Name = "LandingForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Landing Page";
+            Load += LandingForm_Load;
+            Controls.SetChildIndex(buttonManagePlots, 0);
             Controls.SetChildIndex(dataGridViewProperties, 0);
             Controls.SetChildIndex(buttonAddProperty, 0);
             Controls.SetChildIndex(menuStripMain, 0);
@@ -282,5 +294,6 @@ namespace RealEstateManager
             ResumeLayout(false);
             PerformLayout();
         }
+        private ToolStripMenuItem registerPlotToolStripMenuItem;
     }
 }

@@ -119,7 +119,7 @@
             buttonLogin.ForeColor = Color.White;
             buttonLogin.Location = new Point(50, 290);
             buttonLogin.Name = "buttonLogin";
-            buttonLogin.Size = new Size(300, 46);
+            buttonLogin.Size = new Size(300, 40);
             buttonLogin.TabIndex = 5;
             buttonLogin.Text = "Login";
             buttonLogin.UseVisualStyleBackColor = false;

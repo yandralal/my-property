@@ -55,7 +55,6 @@ namespace RealEstateManager
 
             if (isValid)
             {
-                MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 var landingForm = new LandingForm();
                 landingForm.Show();
                 this.Hide();

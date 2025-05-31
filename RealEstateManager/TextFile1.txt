@@ -1,4 +1,30 @@
-﻿CREATE TABLE Property (
+﻿
+CREATE TABLE [Login] (
+    UserID INT PRIMARY KEY,
+    UserName NVARCHAR(50) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    FirstName NVARCHAR(100) NOT NULL,
+    LastName NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(255) NOT NULL,
+    MobileNo NVARCHAR(20) NOT NULL,
+    Role NVARCHAR(50) NOT NULL,
+    IsActive BIT NOT NULL
+);
+
+INSERT INTO [Login] (UserID, UserName, PasswordHash, FirstName, LastName, Email, MobileNo, Role, IsActive)
+VALUES (
+    1,
+    'YT',
+    'Password01',
+    'Yandralal',
+    'Thakre',
+    'yandralal@live.com',
+    '9637151024',
+    'Admin',
+    1
+);
+
+CREATE TABLE Property (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Title NVARCHAR(255) NOT NULL,
     Type NVARCHAR(100) NOT NULL,
@@ -16,4 +42,39 @@
     ModifiedBy NVARCHAR(255) NOT NULL,
     ModifiedDate DATETIME NOT NULL,
     IsDeleted BIT NOT NULL DEFAULT 0
+);
+
+
+CREATE TABLE Plot (
+	Id INT IDENTITY PRIMARY KEY,
+	PropertyId INT NOT NULL,
+    PlotNumber NVARCHAR(50) NOT NULL,
+    Area DECIMAL(18,2) NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    Owner NVARCHAR(100),
+    CreatedBy NVARCHAR(255) NOT NULL,
+    CreatedDate DATETIME NOT NULL,
+    ModifiedBy NVARCHAR(255) NOT NULL,
+    ModifiedDate DATETIME NOT NULL,
+    IsDeleted BIT NOT NULL DEFAULT 0,
+	FOREIGN KEY (PropertyId) REFERENCES Property(Id)
+);
+
+
+CREATE TABLE PropertySale (
+    SaleId INT IDENTITY PRIMARY KEY,
+    PropertyId INT NOT NULL,
+    PlotId INT NULL,
+    CustomerName NVARCHAR(100) NOT NULL,
+    CustomerPhone NVARCHAR(20) NOT NULL,
+    CustomerEmail NVARCHAR(100) NULL,
+    SaleAmount DECIMAL(18,2) NOT NULL,
+    SaleDate DATETIME NOT NULL,
+    CreatedBy NVARCHAR(255) NOT NULL,
+    CreatedDate DATETIME NOT NULL,
+    ModifiedBy NVARCHAR(255) NOT NULL,
+    ModifiedDate DATETIME NOT NULL,
+    IsDeleted BIT NOT NULL DEFAULT 0,
+    FOREIGN KEY (PropertyId) REFERENCES Property(Id),
+    FOREIGN KEY (PlotId) REFERENCES Plot(Id)
 );

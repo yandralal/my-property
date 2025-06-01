@@ -64,6 +64,7 @@ namespace RealEstateManager.Pages
             comboBoxProperty.Name = "comboBoxProperty";
             comboBoxProperty.Size = new Size(250, 36);
             comboBoxProperty.TabIndex = 1;
+            comboBoxProperty.SelectedIndexChanged += ComboBoxProperty_SelectedIndexChanged;
             // 
             // labelPlot
             // 
@@ -89,7 +90,7 @@ namespace RealEstateManager.Pages
             labelCustomerName.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelCustomerName.Location = new Point(30, 143);
             labelCustomerName.Name = "labelCustomerName";
-            labelCustomerName.Size = new Size(206, 30);
+            labelCustomerName.Size = new Size(178, 30);
             labelCustomerName.TabIndex = 4;
             labelCustomerName.Text = "Name:";
             // 
@@ -106,7 +107,7 @@ namespace RealEstateManager.Pages
             labelCustomerPhone.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelCustomerPhone.Location = new Point(30, 200);
             labelCustomerPhone.Name = "labelCustomerPhone";
-            labelCustomerPhone.Size = new Size(190, 30);
+            labelCustomerPhone.Size = new Size(178, 30);
             labelCustomerPhone.TabIndex = 6;
             labelCustomerPhone.Text = "Phone:";
             // 
@@ -123,7 +124,7 @@ namespace RealEstateManager.Pages
             labelCustomerEmail.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelCustomerEmail.Location = new Point(30, 257);
             labelCustomerEmail.Name = "labelCustomerEmail";
-            labelCustomerEmail.Size = new Size(190, 30);
+            labelCustomerEmail.Size = new Size(168, 30);
             labelCustomerEmail.TabIndex = 8;
             labelCustomerEmail.Text = "Email:";
             // 

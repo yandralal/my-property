@@ -8,6 +8,12 @@ namespace RealEstateManager.Pages
         public RegisterPropertyForm()
         {
             InitializeComponent();
+            SetupPhoneNumberValidation();
+            SetupPriceFormatting();
+        }
+
+        private void SetupPhoneNumberValidation()
+        {
             // Restrict phone number input to digits only and max 10 chars
             textBoxPhone.KeyPress += (s, e) =>
             {
@@ -22,8 +28,10 @@ namespace RealEstateManager.Pages
                 }
             };
             textBoxPhone.MaxLength = 10;
+        }
 
-            // Format price to .00 automatically on leave
+        private void SetupPriceFormatting()
+        {
             textBoxPrice.Leave += (s, e) =>
             {
                 if (decimal.TryParse(textBoxPrice.Text, out decimal val))
@@ -82,7 +90,7 @@ namespace RealEstateManager.Pages
             string modifiedDate = createdDate;
             int isDeleted = 0;
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;";
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             try
             {

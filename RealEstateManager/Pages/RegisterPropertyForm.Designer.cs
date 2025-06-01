@@ -59,97 +59,194 @@ namespace RealEstateManager.Pages
             labelDescription = new Label();
             textBoxDescription = new TextBox();
             buttonRegister = new Button();
-
             SuspendLayout();
+            // 
             // labelTitle
+            // 
+            labelTitle.Location = new Point(30, 30);
+            labelTitle.Name = "labelTitle";
+            labelTitle.Size = new Size(120, 25);
+            labelTitle.TabIndex = 0;
             labelTitle.Text = "Property Title:";
-            labelTitle.Location = new System.Drawing.Point(30, 30);
-            labelTitle.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxTitle
-            textBoxTitle.Location = new System.Drawing.Point(160, 30);
-            textBoxTitle.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxTitle.Location = new Point(160, 30);
+            textBoxTitle.Name = "textBoxTitle";
+            textBoxTitle.Size = new Size(250, 27);
+            textBoxTitle.TabIndex = 1;
+            // 
             // labelType
+            // 
+            labelType.Location = new Point(30, 70);
+            labelType.Name = "labelType";
+            labelType.Size = new Size(120, 25);
+            labelType.TabIndex = 2;
             labelType.Text = "Type:";
-            labelType.Location = new System.Drawing.Point(30, 70);
-            labelType.Size = new System.Drawing.Size(120, 25);
+            // 
             // comboBoxType
-            comboBoxType.Location = new System.Drawing.Point(160, 70);
-            comboBoxType.Size = new System.Drawing.Size(250, 27);
+            // 
             comboBoxType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxType.Items.AddRange(new object[] { "Residential", "Commercial", "Plot", "Other" });
+            comboBoxType.Location = new Point(160, 70);
+            comboBoxType.Name = "comboBoxType";
+            comboBoxType.Size = new Size(250, 28);
+            comboBoxType.TabIndex = 3;
+            // 
             // labelStatus
+            // 
+            labelStatus.Location = new Point(30, 110);
+            labelStatus.Name = "labelStatus";
+            labelStatus.Size = new Size(120, 25);
+            labelStatus.TabIndex = 4;
             labelStatus.Text = "Status:";
-            labelStatus.Location = new System.Drawing.Point(30, 110);
-            labelStatus.Size = new System.Drawing.Size(120, 25);
+            // 
             // comboBoxStatus
-            comboBoxStatus.Location = new System.Drawing.Point(160, 110);
-            comboBoxStatus.Size = new System.Drawing.Size(250, 27);
+            // 
             comboBoxStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxStatus.Items.AddRange(new object[] { "Available", "Sold", "Pending", "Rented" });
+            comboBoxStatus.Location = new Point(160, 110);
+            comboBoxStatus.Name = "comboBoxStatus";
+            comboBoxStatus.Size = new Size(250, 28);
+            comboBoxStatus.TabIndex = 5;
+            // 
             // labelPrice
+            // 
+            labelPrice.Location = new Point(30, 150);
+            labelPrice.Name = "labelPrice";
+            labelPrice.Size = new Size(120, 25);
+            labelPrice.TabIndex = 6;
             labelPrice.Text = "Price:";
-            labelPrice.Location = new System.Drawing.Point(30, 150);
-            labelPrice.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxPrice
-            textBoxPrice.Location = new System.Drawing.Point(160, 150);
-            textBoxPrice.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxPrice.Location = new Point(160, 150);
+            textBoxPrice.Name = "textBoxPrice";
+            textBoxPrice.Size = new Size(250, 27);
+            textBoxPrice.TabIndex = 7;
+            // 
             // labelOwner
+            // 
+            labelOwner.Location = new Point(30, 190);
+            labelOwner.Name = "labelOwner";
+            labelOwner.Size = new Size(120, 25);
+            labelOwner.TabIndex = 8;
             labelOwner.Text = "Owner Name:";
-            labelOwner.Location = new System.Drawing.Point(30, 190);
-            labelOwner.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxOwner
-            textBoxOwner.Location = new System.Drawing.Point(160, 190);
-            textBoxOwner.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxOwner.Location = new Point(160, 190);
+            textBoxOwner.Name = "textBoxOwner";
+            textBoxOwner.Size = new Size(250, 27);
+            textBoxOwner.TabIndex = 9;
+            // 
             // labelPhone
+            // 
+            labelPhone.Location = new Point(30, 230);
+            labelPhone.Name = "labelPhone";
+            labelPhone.Size = new Size(120, 25);
+            labelPhone.TabIndex = 10;
             labelPhone.Text = "Phone Number:";
-            labelPhone.Location = new System.Drawing.Point(30, 230);
-            labelPhone.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxPhone
-            textBoxPhone.Location = new System.Drawing.Point(160, 230);
-            textBoxPhone.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxPhone.Location = new Point(160, 230);
+            textBoxPhone.Name = "textBoxPhone";
+            textBoxPhone.Size = new Size(250, 27);
+            textBoxPhone.TabIndex = 11;
+            // 
             // labelAddress
+            // 
+            labelAddress.Location = new Point(30, 270);
+            labelAddress.Name = "labelAddress";
+            labelAddress.Size = new Size(120, 25);
+            labelAddress.TabIndex = 12;
             labelAddress.Text = "Address:";
-            labelAddress.Location = new System.Drawing.Point(30, 270);
-            labelAddress.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxAddress
-            textBoxAddress.Location = new System.Drawing.Point(160, 270);
-            textBoxAddress.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxAddress.Location = new Point(160, 270);
+            textBoxAddress.Name = "textBoxAddress";
+            textBoxAddress.Size = new Size(250, 27);
+            textBoxAddress.TabIndex = 13;
+            // 
             // labelCity
+            // 
+            labelCity.Location = new Point(30, 310);
+            labelCity.Name = "labelCity";
+            labelCity.Size = new Size(120, 25);
+            labelCity.TabIndex = 14;
             labelCity.Text = "City:";
-            labelCity.Location = new System.Drawing.Point(30, 310);
-            labelCity.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxCity
-            textBoxCity.Location = new System.Drawing.Point(160, 310);
-            textBoxCity.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxCity.Location = new Point(160, 310);
+            textBoxCity.Name = "textBoxCity";
+            textBoxCity.Size = new Size(250, 27);
+            textBoxCity.TabIndex = 15;
+            // 
             // labelState
+            // 
+            labelState.Location = new Point(30, 350);
+            labelState.Name = "labelState";
+            labelState.Size = new Size(120, 25);
+            labelState.TabIndex = 16;
             labelState.Text = "State:";
-            labelState.Location = new System.Drawing.Point(30, 350);
-            labelState.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxState
-            textBoxState.Location = new System.Drawing.Point(160, 350);
-            textBoxState.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxState.Location = new Point(160, 350);
+            textBoxState.Name = "textBoxState";
+            textBoxState.Size = new Size(250, 27);
+            textBoxState.TabIndex = 17;
+            // 
             // labelZip
+            // 
+            labelZip.Location = new Point(30, 390);
+            labelZip.Name = "labelZip";
+            labelZip.Size = new Size(120, 25);
+            labelZip.TabIndex = 18;
             labelZip.Text = "Zip Code:";
-            labelZip.Location = new System.Drawing.Point(30, 390);
-            labelZip.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxZip
-            textBoxZip.Location = new System.Drawing.Point(160, 390);
-            textBoxZip.Size = new System.Drawing.Size(250, 27);
+            // 
+            textBoxZip.Location = new Point(160, 390);
+            textBoxZip.Name = "textBoxZip";
+            textBoxZip.Size = new Size(250, 27);
+            textBoxZip.TabIndex = 19;
+            // 
             // labelDescription
+            // 
+            labelDescription.Location = new Point(30, 430);
+            labelDescription.Name = "labelDescription";
+            labelDescription.Size = new Size(120, 25);
+            labelDescription.TabIndex = 20;
             labelDescription.Text = "Description:";
-            labelDescription.Location = new System.Drawing.Point(30, 430);
-            labelDescription.Size = new System.Drawing.Size(120, 25);
+            // 
             // textBoxDescription
-            textBoxDescription.Location = new System.Drawing.Point(160, 430);
-            textBoxDescription.Size = new System.Drawing.Size(250, 60);
+            // 
+            textBoxDescription.Location = new Point(160, 430);
             textBoxDescription.Multiline = true;
+            textBoxDescription.Name = "textBoxDescription";
+            textBoxDescription.Size = new Size(250, 60);
+            textBoxDescription.TabIndex = 21;
+            // 
             // buttonRegister
+            // 
+            buttonRegister.BackColor = Color.Green;
+            buttonRegister.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonRegister.ForeColor = Color.White;
+            buttonRegister.Location = new Point(160, 510);
+            buttonRegister.Name = "buttonRegister";
+            buttonRegister.Size = new Size(250, 40);
+            buttonRegister.TabIndex = 22;
             buttonRegister.Text = "Register Property";
-            buttonRegister.Location = new System.Drawing.Point(160, 510);
-            buttonRegister.Size = new System.Drawing.Size(180, 35);
-            buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
-
-            // Add controls
+            buttonRegister.UseVisualStyleBackColor = false;
+            buttonRegister.Click += buttonRegister_Click;
+            // 
+            // RegisterPropertyForm
+            // 
+            ClientSize = new Size(460, 570);
             Controls.Add(labelTitle);
             Controls.Add(textBoxTitle);
             Controls.Add(labelType);
@@ -173,11 +270,9 @@ namespace RealEstateManager.Pages
             Controls.Add(labelDescription);
             Controls.Add(textBoxDescription);
             Controls.Add(buttonRegister);
-
             Name = "RegisterPropertyForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Property";
-            ClientSize = new System.Drawing.Size(460, 570);
             ResumeLayout(false);
             PerformLayout();
         }

@@ -99,7 +99,7 @@ namespace RealEstateManager.Pages
             dataGridViewPlots.Location = new Point(41, 154);
             dataGridViewPlots.Margin = new Padding(4);
             dataGridViewPlots.Name = "dataGridViewPlots";
-            dataGridViewPlots.ReadOnly = true;
+            dataGridViewPlots.ReadOnly = false;
             dataGridViewPlots.RowHeadersWidth = 51;
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewPlots.Size = new Size(976, 490);
@@ -117,6 +117,7 @@ namespace RealEstateManager.Pages
             buttonAddPlot.TabIndex = 6;
             buttonAddPlot.Text = "Add Plot";
             buttonAddPlot.UseVisualStyleBackColor = false;
+            buttonAddPlot.Click += buttonAddPlot_Click;
             // 
             // buttonEditPlot
             // 
@@ -130,6 +131,7 @@ namespace RealEstateManager.Pages
             buttonEditPlot.TabIndex = 7;
             buttonEditPlot.Text = "Edit Plot";
             buttonEditPlot.UseVisualStyleBackColor = false;
+            buttonEditPlot.Click += buttonEditPlot_Click;
             // 
             // buttonDeletePlot
             // 
@@ -143,6 +145,7 @@ namespace RealEstateManager.Pages
             buttonDeletePlot.TabIndex = 8;
             buttonDeletePlot.Text = "Delete Plot";
             buttonDeletePlot.UseVisualStyleBackColor = false;
+            buttonDeletePlot.Click += buttonDeletePlot_Click;
             // 
             // ManagePlotsForm
             // 

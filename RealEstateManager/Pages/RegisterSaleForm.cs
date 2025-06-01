@@ -8,6 +8,7 @@ namespace RealEstateManager.Pages
         public RegisterSaleForm()
         {
             InitializeComponent();
+            SetupPhoneNumberValidation();
             LoadProperties();
         }
 
@@ -85,7 +86,7 @@ namespace RealEstateManager.Pages
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string insert = @"INSERT INTO PropertySale
-                (PropertyId, PlotId, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate)
+                (PropertyId, PlotId, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
                 VALUES (@PropertyId, @PlotId, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
                 @ModifiedBy, @ModifiedDate)";
 
@@ -103,6 +104,7 @@ namespace RealEstateManager.Pages
                 cmd.Parameters.AddWithValue("@CreatedDate", createdDate);
                 cmd.Parameters.AddWithValue("@ModifiedBy", createdBy);
                 cmd.Parameters.AddWithValue("@ModifiedDate", createdDate);
+                cmd.Parameters.AddWithValue("@IsDeleted", false);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -131,6 +133,24 @@ namespace RealEstateManager.Pages
             {
                 labelPlotStatus.Text = "Status: -";
             }
+        }
+
+        private void SetupPhoneNumberValidation()
+        {
+            // Restrict phone number input to digits only and max 10 chars
+            textBoxCustomerPhone.KeyPress += (s, e) =>
+            {
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+                // Prevent more than 10 digits
+                if (!char.IsControl(e.KeyChar) && textBoxCustomerPhone.Text.Length >= 10)
+                {
+                    e.Handled = true;
+                }
+            };
+            textBoxCustomerPhone.MaxLength = 10;
         }
     }
 }

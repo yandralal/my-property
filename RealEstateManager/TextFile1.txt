@@ -51,7 +51,6 @@ CREATE TABLE Plot (
     PlotNumber NVARCHAR(50) NOT NULL,
     Area DECIMAL(18,2) NOT NULL,
     Status NVARCHAR(50) NOT NULL,
-    Owner NVARCHAR(100),
     CreatedBy NVARCHAR(255) NOT NULL,
     CreatedDate DATETIME NOT NULL,
     ModifiedBy NVARCHAR(255) NOT NULL,

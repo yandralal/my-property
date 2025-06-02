@@ -3,11 +3,12 @@ namespace RealEstateManager.Pages
     partial class RegisterPropertyForm
     {
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.GroupBox groupBoxPropertyDetails;
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.TextBox textBoxTitle;
         private System.Windows.Forms.Label labelType;
         private System.Windows.Forms.ComboBox comboBoxType;
-        private System.Windows.Forms.Label labelStatus;
+        private System.Windows.Forms.Label labelStatus; 
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.Label labelPrice;
         private System.Windows.Forms.TextBox textBoxPrice;
@@ -36,6 +37,7 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            groupBoxPropertyDetails = new GroupBox();
             labelTitle = new Label();
             textBoxTitle = new TextBox();
             labelType = new Label();
@@ -59,186 +61,265 @@ namespace RealEstateManager.Pages
             labelDescription = new Label();
             textBoxDescription = new TextBox();
             buttonRegister = new Button();
+            groupBoxPropertyDetails.SuspendLayout();
             SuspendLayout();
+            // 
+            // groupBoxPropertyDetails
+            // 
+            groupBoxPropertyDetails.BackColor = Color.AliceBlue;
+            groupBoxPropertyDetails.Controls.Add(labelTitle);
+            groupBoxPropertyDetails.Controls.Add(textBoxTitle);
+            groupBoxPropertyDetails.Controls.Add(labelType);
+            groupBoxPropertyDetails.Controls.Add(comboBoxType);
+            groupBoxPropertyDetails.Controls.Add(labelStatus);
+            groupBoxPropertyDetails.Controls.Add(comboBoxStatus);
+            groupBoxPropertyDetails.Controls.Add(labelPrice);
+            groupBoxPropertyDetails.Controls.Add(textBoxPrice);
+            groupBoxPropertyDetails.Controls.Add(labelOwner);
+            groupBoxPropertyDetails.Controls.Add(textBoxOwner);
+            groupBoxPropertyDetails.Controls.Add(labelPhone);
+            groupBoxPropertyDetails.Controls.Add(textBoxPhone);
+            groupBoxPropertyDetails.Controls.Add(labelAddress);
+            groupBoxPropertyDetails.Controls.Add(textBoxAddress);
+            groupBoxPropertyDetails.Controls.Add(labelCity);
+            groupBoxPropertyDetails.Controls.Add(textBoxCity);
+            groupBoxPropertyDetails.Controls.Add(labelState);
+            groupBoxPropertyDetails.Controls.Add(textBoxState);
+            groupBoxPropertyDetails.Controls.Add(labelZip);
+            groupBoxPropertyDetails.Controls.Add(textBoxZip);
+            groupBoxPropertyDetails.Controls.Add(labelDescription);
+            groupBoxPropertyDetails.Controls.Add(textBoxDescription);
+            groupBoxPropertyDetails.Controls.Add(buttonRegister);
+            groupBoxPropertyDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxPropertyDetails.ForeColor = Color.MidnightBlue;
+            groupBoxPropertyDetails.Location = new Point(20, 20);
+            groupBoxPropertyDetails.Name = "groupBoxPropertyDetails";
+            groupBoxPropertyDetails.Size = new Size(560, 630);
+            groupBoxPropertyDetails.TabIndex = 0;
+            groupBoxPropertyDetails.TabStop = false;
+            groupBoxPropertyDetails.Text = "Property Details";
             // 
             // labelTitle
             // 
-            labelTitle.Location = new Point(30, 30);
+            labelTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTitle.ForeColor = Color.DarkSlateGray;
+            labelTitle.Location = new Point(30, 54);
             labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(120, 25);
+            labelTitle.Size = new Size(140, 30);
             labelTitle.TabIndex = 0;
             labelTitle.Text = "Property Title:";
             // 
             // textBoxTitle
             // 
-            textBoxTitle.Location = new Point(160, 30);
+            textBoxTitle.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTitle.Font = new Font("Segoe UI", 10F);
+            textBoxTitle.Location = new Point(190, 51);
             textBoxTitle.Name = "textBoxTitle";
-            textBoxTitle.Size = new Size(250, 27);
+            textBoxTitle.Size = new Size(320, 30);
             textBoxTitle.TabIndex = 1;
             // 
             // labelType
             // 
-            labelType.Location = new Point(30, 70);
+            labelType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelType.ForeColor = Color.DarkSlateGray;
+            labelType.Location = new Point(30, 99);
             labelType.Name = "labelType";
-            labelType.Size = new Size(120, 25);
+            labelType.Size = new Size(140, 30);
             labelType.TabIndex = 2;
             labelType.Text = "Type:";
             // 
             // comboBoxType
             // 
             comboBoxType.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxType.Font = new Font("Segoe UI", 10F);
             comboBoxType.Items.AddRange(new object[] { "Residential", "Commercial", "Plot", "Other" });
-            comboBoxType.Location = new Point(160, 70);
+            comboBoxType.Location = new Point(190, 96);
             comboBoxType.Name = "comboBoxType";
-            comboBoxType.Size = new Size(250, 28);
+            comboBoxType.Size = new Size(320, 31);
             comboBoxType.TabIndex = 3;
             // 
             // labelStatus
             // 
-            labelStatus.Location = new Point(30, 110);
+            labelStatus.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelStatus.ForeColor = Color.DarkSlateGray;
+            labelStatus.Location = new Point(30, 144);
             labelStatus.Name = "labelStatus";
-            labelStatus.Size = new Size(120, 25);
+            labelStatus.Size = new Size(140, 30);
             labelStatus.TabIndex = 4;
             labelStatus.Text = "Status:";
             // 
             // comboBoxStatus
             // 
             comboBoxStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxStatus.Font = new Font("Segoe UI", 10F);
             comboBoxStatus.Items.AddRange(new object[] { "Available", "Sold", "Pending", "Rented" });
-            comboBoxStatus.Location = new Point(160, 110);
+            comboBoxStatus.Location = new Point(190, 141);
             comboBoxStatus.Name = "comboBoxStatus";
-            comboBoxStatus.Size = new Size(250, 28);
+            comboBoxStatus.Size = new Size(320, 31);
             comboBoxStatus.TabIndex = 5;
             // 
             // labelPrice
             // 
-            labelPrice.Location = new Point(30, 150);
+            labelPrice.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelPrice.ForeColor = Color.DarkSlateGray;
+            labelPrice.Location = new Point(30, 189);
             labelPrice.Name = "labelPrice";
-            labelPrice.Size = new Size(120, 25);
+            labelPrice.Size = new Size(140, 30);
             labelPrice.TabIndex = 6;
             labelPrice.Text = "Price:";
             // 
             // textBoxPrice
             // 
-            textBoxPrice.Location = new Point(160, 150);
+            textBoxPrice.BorderStyle = BorderStyle.FixedSingle;
+            textBoxPrice.Font = new Font("Segoe UI", 10F);
+            textBoxPrice.Location = new Point(190, 186);
             textBoxPrice.Name = "textBoxPrice";
-            textBoxPrice.Size = new Size(250, 27);
+            textBoxPrice.Size = new Size(320, 30);
             textBoxPrice.TabIndex = 7;
             // 
             // labelOwner
             // 
-            labelOwner.Location = new Point(30, 190);
+            labelOwner.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelOwner.ForeColor = Color.DarkSlateGray;
+            labelOwner.Location = new Point(30, 234);
             labelOwner.Name = "labelOwner";
-            labelOwner.Size = new Size(120, 25);
+            labelOwner.Size = new Size(140, 30);
             labelOwner.TabIndex = 8;
             labelOwner.Text = "Owner Name:";
             // 
             // textBoxOwner
             // 
-            textBoxOwner.Location = new Point(160, 190);
+            textBoxOwner.BorderStyle = BorderStyle.FixedSingle;
+            textBoxOwner.Font = new Font("Segoe UI", 10F);
+            textBoxOwner.Location = new Point(190, 231);
             textBoxOwner.Name = "textBoxOwner";
-            textBoxOwner.Size = new Size(250, 27);
+            textBoxOwner.Size = new Size(320, 30);
             textBoxOwner.TabIndex = 9;
             // 
             // labelPhone
             // 
-            labelPhone.Location = new Point(30, 230);
+            labelPhone.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelPhone.ForeColor = Color.DarkSlateGray;
+            labelPhone.Location = new Point(30, 279);
             labelPhone.Name = "labelPhone";
-            labelPhone.Size = new Size(120, 25);
+            labelPhone.Size = new Size(140, 30);
             labelPhone.TabIndex = 10;
             labelPhone.Text = "Phone Number:";
             // 
             // textBoxPhone
             // 
-            textBoxPhone.Location = new Point(160, 230);
+            textBoxPhone.BorderStyle = BorderStyle.FixedSingle;
+            textBoxPhone.Font = new Font("Segoe UI", 10F);
+            textBoxPhone.Location = new Point(190, 276);
             textBoxPhone.Name = "textBoxPhone";
-            textBoxPhone.Size = new Size(250, 27);
+            textBoxPhone.Size = new Size(320, 30);
             textBoxPhone.TabIndex = 11;
             // 
             // labelAddress
             // 
-            labelAddress.Location = new Point(30, 270);
+            labelAddress.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAddress.ForeColor = Color.DarkSlateGray;
+            labelAddress.Location = new Point(30, 324);
             labelAddress.Name = "labelAddress";
-            labelAddress.Size = new Size(120, 25);
+            labelAddress.Size = new Size(140, 30);
             labelAddress.TabIndex = 12;
             labelAddress.Text = "Address:";
             // 
             // textBoxAddress
             // 
-            textBoxAddress.Location = new Point(160, 270);
+            textBoxAddress.BorderStyle = BorderStyle.FixedSingle;
+            textBoxAddress.Font = new Font("Segoe UI", 10F);
+            textBoxAddress.Location = new Point(190, 321);
             textBoxAddress.Name = "textBoxAddress";
-            textBoxAddress.Size = new Size(250, 27);
+            textBoxAddress.Size = new Size(320, 30);
             textBoxAddress.TabIndex = 13;
             // 
             // labelCity
             // 
-            labelCity.Location = new Point(30, 310);
+            labelCity.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelCity.ForeColor = Color.DarkSlateGray;
+            labelCity.Location = new Point(30, 369);
             labelCity.Name = "labelCity";
-            labelCity.Size = new Size(120, 25);
+            labelCity.Size = new Size(140, 30);
             labelCity.TabIndex = 14;
             labelCity.Text = "City:";
             // 
             // textBoxCity
             // 
-            textBoxCity.Location = new Point(160, 310);
+            textBoxCity.BorderStyle = BorderStyle.FixedSingle;
+            textBoxCity.Font = new Font("Segoe UI", 10F);
+            textBoxCity.Location = new Point(190, 366);
             textBoxCity.Name = "textBoxCity";
-            textBoxCity.Size = new Size(250, 27);
+            textBoxCity.Size = new Size(320, 30);
             textBoxCity.TabIndex = 15;
             // 
             // labelState
             // 
-            labelState.Location = new Point(30, 350);
+            labelState.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelState.ForeColor = Color.DarkSlateGray;
+            labelState.Location = new Point(30, 414);
             labelState.Name = "labelState";
-            labelState.Size = new Size(120, 25);
+            labelState.Size = new Size(140, 30);
             labelState.TabIndex = 16;
             labelState.Text = "State:";
             // 
             // textBoxState
             // 
-            textBoxState.Location = new Point(160, 350);
+            textBoxState.BorderStyle = BorderStyle.FixedSingle;
+            textBoxState.Font = new Font("Segoe UI", 10F);
+            textBoxState.Location = new Point(190, 411);
             textBoxState.Name = "textBoxState";
-            textBoxState.Size = new Size(250, 27);
+            textBoxState.Size = new Size(320, 30);
             textBoxState.TabIndex = 17;
             // 
             // labelZip
             // 
-            labelZip.Location = new Point(30, 390);
+            labelZip.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelZip.ForeColor = Color.DarkSlateGray;
+            labelZip.Location = new Point(30, 459);
             labelZip.Name = "labelZip";
-            labelZip.Size = new Size(120, 25);
+            labelZip.Size = new Size(140, 30);
             labelZip.TabIndex = 18;
             labelZip.Text = "Zip Code:";
             // 
             // textBoxZip
             // 
-            textBoxZip.Location = new Point(160, 390);
+            textBoxZip.BorderStyle = BorderStyle.FixedSingle;
+            textBoxZip.Font = new Font("Segoe UI", 10F);
+            textBoxZip.Location = new Point(190, 456);
             textBoxZip.Name = "textBoxZip";
-            textBoxZip.Size = new Size(250, 27);
+            textBoxZip.Size = new Size(320, 30);
             textBoxZip.TabIndex = 19;
             // 
             // labelDescription
             // 
-            labelDescription.Location = new Point(30, 430);
+            labelDescription.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelDescription.ForeColor = Color.DarkSlateGray;
+            labelDescription.Location = new Point(30, 504);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(120, 25);
+            labelDescription.Size = new Size(140, 30);
             labelDescription.TabIndex = 20;
             labelDescription.Text = "Description:";
             // 
             // textBoxDescription
             // 
-            textBoxDescription.Location = new Point(160, 430);
+            textBoxDescription.BorderStyle = BorderStyle.FixedSingle;
+            textBoxDescription.Font = new Font("Segoe UI", 10F);
+            textBoxDescription.Location = new Point(190, 501);
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
-            textBoxDescription.Size = new Size(250, 60);
+            textBoxDescription.Size = new Size(320, 60);
             textBoxDescription.TabIndex = 21;
             // 
             // buttonRegister
             // 
             buttonRegister.BackColor = Color.Green;
-            buttonRegister.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonRegister.FlatStyle = FlatStyle.Flat;
+            buttonRegister.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonRegister.ForeColor = Color.White;
-            buttonRegister.Location = new Point(160, 510);
+            buttonRegister.Location = new Point(190, 579);
             buttonRegister.Name = "buttonRegister";
-            buttonRegister.Size = new Size(250, 40);
+            buttonRegister.Size = new Size(320, 35);
             buttonRegister.TabIndex = 22;
             buttonRegister.Text = "Register Property";
             buttonRegister.UseVisualStyleBackColor = false;
@@ -246,35 +327,14 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPropertyForm
             // 
-            ClientSize = new Size(460, 570);
-            Controls.Add(labelTitle);
-            Controls.Add(textBoxTitle);
-            Controls.Add(labelType);
-            Controls.Add(comboBoxType);
-            Controls.Add(labelStatus);
-            Controls.Add(comboBoxStatus);
-            Controls.Add(labelPrice);
-            Controls.Add(textBoxPrice);
-            Controls.Add(labelOwner);
-            Controls.Add(textBoxOwner);
-            Controls.Add(labelPhone);
-            Controls.Add(textBoxPhone);
-            Controls.Add(labelAddress);
-            Controls.Add(textBoxAddress);
-            Controls.Add(labelCity);
-            Controls.Add(textBoxCity);
-            Controls.Add(labelState);
-            Controls.Add(textBoxState);
-            Controls.Add(labelZip);
-            Controls.Add(textBoxZip);
-            Controls.Add(labelDescription);
-            Controls.Add(textBoxDescription);
-            Controls.Add(buttonRegister);
+            ClientSize = new Size(600, 670);
+            Controls.Add(groupBoxPropertyDetails);
             Name = "RegisterPropertyForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Property";
+            groupBoxPropertyDetails.ResumeLayout(false);
+            groupBoxPropertyDetails.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
     }
 }

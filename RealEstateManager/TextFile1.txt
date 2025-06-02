@@ -59,7 +59,6 @@ CREATE TABLE Plot (
 	FOREIGN KEY (PropertyId) REFERENCES Property(Id)
 );
 
-
 CREATE TABLE PropertySale (
     SaleId INT IDENTITY PRIMARY KEY,
     PropertyId INT NOT NULL,
@@ -75,5 +74,21 @@ CREATE TABLE PropertySale (
     ModifiedDate DATETIME NOT NULL,
     IsDeleted BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (PropertyId) REFERENCES Property(Id),
+    FOREIGN KEY (PlotId) REFERENCES Plot(Id)
+);
+
+CREATE TABLE PlotTransaction (
+    TransactionId INT IDENTITY(1,1) PRIMARY KEY,
+    PlotId INT NOT NULL,
+    TransactionDate DATETIME NOT NULL DEFAULT GETDATE(),
+    Amount DECIMAL(18,2) NOT NULL,
+    PaymentMethod NVARCHAR(50) NULL,
+    ReferenceNumber NVARCHAR(100) NULL,
+    Notes NVARCHAR(500) NULL,
+    CreatedBy NVARCHAR(100) NULL,
+    CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
+    ModifiedBy NVARCHAR(100) NULL,
+    ModifiedDate DATETIME NULL,
+    IsDeleted BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (PlotId) REFERENCES Plot(Id)
 );

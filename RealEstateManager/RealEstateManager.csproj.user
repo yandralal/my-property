@@ -16,6 +16,9 @@
     <Compile Update="Pages\PlotDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\PropertyDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\RegisterPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,10 +1,9 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Linq;
 
 namespace RealEstateManager.Pages
 {
-    public partial class PlotDetailsForm : Form
+    public partial class PlotDetailsForm : BaseForm
     {
         private readonly int _plotId;
 

@@ -5,7 +5,6 @@ namespace RealEstateManager
         private System.ComponentModel.IContainer components = null;
         private MenuStrip menuStripMain;
         private ToolStripMenuItem propertyMenu;
-        private ToolStripMenuItem registerPropertyMenuItem;
         private ToolStripMenuItem registerPlotMenuItem;
         private ToolStripMenuItem viewPropertiesMenuItem;
         private ToolStripMenuItem ownerDetailsMenuItem;
@@ -31,6 +30,16 @@ namespace RealEstateManager
         private System.Windows.Forms.DataGridView dataGridViewPlots;
         private System.Windows.Forms.Label labelProperties;
         private System.Windows.Forms.Label labelPlots;
+        private GroupBox groupBoxProperties;
+        private GroupBox groupBoxPlots;
+
+        // For Properties
+        private System.Windows.Forms.TextBox textBoxPropertyFilter;
+        private System.Windows.Forms.Label labelPropertyFilter;
+
+        // For Plots
+        private System.Windows.Forms.TextBox textBoxPlotFilter;
+        private System.Windows.Forms.Label labelPlotFilter;
 
         protected override void Dispose(bool disposing)
         {
@@ -47,9 +56,10 @@ namespace RealEstateManager
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             menuStripMain = new MenuStrip();
             propertyMenu = new ToolStripMenuItem();
-            registerPropertyMenuItem = new ToolStripMenuItem();
             registerPlotMenuItem = new ToolStripMenuItem();
             viewPropertiesMenuItem = new ToolStripMenuItem();
             ownerDetailsMenuItem = new ToolStripMenuItem();
@@ -76,15 +86,14 @@ namespace RealEstateManager
             dataGridViewPlots = new DataGridView();
             labelProperties = new Label();
             labelPlots = new Label();
+            groupBoxProperties = new GroupBox();
+            groupBoxPlots = new GroupBox();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
+            groupBoxProperties.SuspendLayout();
+            groupBoxPlots.SuspendLayout();
             SuspendLayout();
-            // 
-            // footerLabel
-            // 
-            footerLabel.Location = new Point(0, 772);
-            footerLabel.Size = new Size(1758, 32);
             // 
             // menuStripMain
             // 
@@ -95,23 +104,16 @@ namespace RealEstateManager
             menuStripMain.Items.AddRange(new ToolStripItem[] { propertyMenu, transactionsMenu, reportsMenu, communicationMenu, agentOperationsMenu, helpMenu });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
-            menuStripMain.Size = new Size(1758, 36);
+            menuStripMain.Size = new Size(1832, 36);
             menuStripMain.TabIndex = 1;
             menuStripMain.Text = "menuStripMain";
             // 
             // propertyMenu
             // 
-            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPropertyMenuItem, registerPlotMenuItem, viewPropertiesMenuItem, ownerDetailsMenuItem, registerPlotToolStripMenuItem });
+            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPlotMenuItem, viewPropertiesMenuItem, ownerDetailsMenuItem, registerPlotToolStripMenuItem });
             propertyMenu.Name = "propertyMenu";
             propertyMenu.Size = new Size(59, 32);
             propertyMenu.Text = "File";
-            // 
-            // registerPropertyMenuItem
-            // 
-            registerPropertyMenuItem.Name = "registerPropertyMenuItem";
-            registerPropertyMenuItem.Size = new Size(248, 32);
-            registerPropertyMenuItem.Text = "Property";
-            registerPropertyMenuItem.Click += PropertyMenuItem_Click;
             // 
             // registerPlotMenuItem
             // 
@@ -245,26 +247,35 @@ namespace RealEstateManager
             // 
             dataGridViewProperties.AllowUserToAddRows = false;
             dataGridViewProperties.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.Honeydew;
+            dataGridViewCellStyle1.BackColor = Color.AliceBlue;
             dataGridViewProperties.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewProperties.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewProperties.BackgroundColor = Color.AliceBlue;
-            dataGridViewProperties.ColumnHeadersHeight = 29;
+            dataGridViewProperties.BackgroundColor = Color.White;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = Color.White;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dataGridViewProperties.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle2.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridViewProperties.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewProperties.ColumnHeadersHeight = 29;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle3.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridViewProperties.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewProperties.EnableHeadersVisualStyles = false;
             dataGridViewProperties.GridColor = Color.LightGray;
-            dataGridViewProperties.Location = new Point(60, 139);
+            dataGridViewProperties.Location = new Point(20, 86);
             dataGridViewProperties.Name = "dataGridViewProperties";
             dataGridViewProperties.ReadOnly = true;
             dataGridViewProperties.RowHeadersWidth = 51;
             dataGridViewProperties.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewProperties.Size = new Size(1579, 218);
+            dataGridViewProperties.Size = new Size(1790, 209);
             dataGridViewProperties.TabIndex = 3;
             dataGridViewProperties.SelectionChanged += DataGridViewProperties_SelectionChanged;
             // 
@@ -272,10 +283,11 @@ namespace RealEstateManager
             // 
             buttonAddProperty.BackColor = Color.Green;
             buttonAddProperty.FlatStyle = FlatStyle.Flat;
-            buttonAddProperty.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            buttonAddProperty.Location = new Point(1399, 93);
+            buttonAddProperty.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonAddProperty.ForeColor = Color.White;
+            buttonAddProperty.Location = new Point(1564, 23);
             buttonAddProperty.Name = "buttonAddProperty";
-            buttonAddProperty.Size = new Size(240, 40);
+            buttonAddProperty.Size = new Size(240, 36);
             buttonAddProperty.TabIndex = 2;
             buttonAddProperty.Text = "Register New Property";
             buttonAddProperty.UseVisualStyleBackColor = false;
@@ -294,33 +306,42 @@ namespace RealEstateManager
             // 
             dataGridViewPlots.AllowUserToAddRows = false;
             dataGridViewPlots.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = Color.Honeydew;
-            dataGridViewPlots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewPlots.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewPlots.BackgroundColor = Color.AliceBlue;
-            dataGridViewPlots.ColumnHeadersHeight = 29;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = Color.Black;
-            dataGridViewCellStyle4.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle4.SelectionForeColor = Color.White;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dataGridViewPlots.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewPlots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewPlots.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewPlots.BackgroundColor = Color.White;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dataGridViewPlots.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewPlots.ColumnHeadersHeight = 29;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle6.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle6.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dataGridViewPlots.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewPlots.EnableHeadersVisualStyles = false;
             dataGridViewPlots.GridColor = Color.LightGray;
-            dataGridViewPlots.Location = new Point(60, 417);
+            dataGridViewPlots.Location = new Point(20, 73);
             dataGridViewPlots.Name = "dataGridViewPlots";
             dataGridViewPlots.ReadOnly = true;
             dataGridViewPlots.RowHeadersWidth = 51;
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewPlots.Size = new Size(1579, 200);
+            dataGridViewPlots.Size = new Size(1790, 500);
             dataGridViewPlots.TabIndex = 1;
             // 
             // labelProperties
             // 
             labelProperties.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelProperties.ForeColor = Color.Black;
-            labelProperties.Location = new Point(60, 112);
+            labelProperties.Location = new Point(20, 39);
             labelProperties.Name = "labelProperties";
             labelProperties.Size = new Size(400, 25);
             labelProperties.TabIndex = 4;
@@ -330,46 +351,101 @@ namespace RealEstateManager
             // 
             labelPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelPlots.ForeColor = Color.Black;
-            labelPlots.Location = new Point(60, 392);
+            labelPlots.Location = new Point(20, 35);
             labelPlots.Name = "labelPlots";
             labelPlots.Size = new Size(400, 25);
             labelPlots.TabIndex = 5;
             labelPlots.Text = "Plots (0)";
+            // 
+            // groupBoxProperties
+            // 
+            groupBoxProperties.BackColor = Color.AliceBlue;
+            groupBoxProperties.Controls.Add(labelProperties);
+            groupBoxProperties.Controls.Add(dataGridViewProperties);
+            groupBoxProperties.Controls.Add(buttonAddProperty);
+            groupBoxProperties.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxProperties.ForeColor = Color.MidnightBlue;
+            groupBoxProperties.Location = new Point(52, 60);
+            groupBoxProperties.Name = "groupBoxProperties";
+            groupBoxProperties.Padding = new Padding(15);
+            groupBoxProperties.Size = new Size(1830, 328);
+            groupBoxProperties.TabIndex = 1;
+            groupBoxProperties.TabStop = false;
+            groupBoxProperties.Text = "Properties";
+            // 
+            // groupBoxPlots
+            // 
+            groupBoxPlots.BackColor = Color.AliceBlue;
+            groupBoxPlots.Controls.Add(labelPlots);
+            groupBoxPlots.Controls.Add(dataGridViewPlots);
+            groupBoxPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxPlots.ForeColor = Color.MidnightBlue;
+            groupBoxPlots.Location = new Point(52, 413);
+            groupBoxPlots.Name = "groupBoxPlots";
+            groupBoxPlots.Padding = new Padding(15);
+            groupBoxPlots.Size = new Size(1830, 358);
+            groupBoxPlots.TabIndex = 2;
+            groupBoxPlots.TabStop = false;
+            groupBoxPlots.Text = "Plots";
             // 
             // LandingForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
-            ClientSize = new Size(1758, 804);
-            Controls.Add(labelPlots);
-            Controls.Add(labelProperties);
-            Controls.Add(dataGridViewPlots);
+            ClientSize = new Size(1832, 804);
+            Controls.Add(groupBoxPlots);
+            Controls.Add(groupBoxProperties);
             Controls.Add(menuStripMain);
-            Controls.Add(buttonAddProperty);
-            Controls.Add(dataGridViewProperties);
             Controls.Add(buttonManagePlots);
             ForeColor = Color.White;
             MainMenuStrip = menuStripMain;
             Name = "LandingForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Landing Page";
+            WindowState = FormWindowState.Maximized;
             Load += LandingForm_Load;
-            Controls.SetChildIndex(buttonManagePlots, 0);
-            Controls.SetChildIndex(dataGridViewProperties, 0);
-            Controls.SetChildIndex(buttonAddProperty, 0);
-            Controls.SetChildIndex(menuStripMain, 0);
-            Controls.SetChildIndex(footerLabel, 0);
-            Controls.SetChildIndex(dataGridViewPlots, 0);
-            Controls.SetChildIndex(labelProperties, 0);
-            Controls.SetChildIndex(labelPlots, 0);
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).EndInit();
+            groupBoxProperties.ResumeLayout(false);
+            groupBoxPlots.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
         private ToolStripMenuItem registerPlotToolStripMenuItem;
+
+        // Property Filter
+        private void InitializePropertyFilter()
+        {
+            labelPropertyFilter = new Label();
+            labelPropertyFilter.Text = "Filter:";
+            labelPropertyFilter.Location = new Point(20, 30);
+            labelPropertyFilter.Size = new Size(50, 25);
+
+            textBoxPropertyFilter = new TextBox();
+            textBoxPropertyFilter.Location = new Point(75, 30);
+            textBoxPropertyFilter.Size = new Size(250, 25);
+            textBoxPropertyFilter.TextChanged += textBoxPropertyFilter_TextChanged;
+            groupBoxProperties.Controls.Add(labelPropertyFilter);
+            groupBoxProperties.Controls.Add(textBoxPropertyFilter);
+        }
+
+        // Plot Filter
+        private void InitializePlotFilter()
+        {
+            labelPlotFilter = new Label();
+            labelPlotFilter.Text = "Filter:";
+            labelPlotFilter.Location = new Point(20, 30);
+            labelPlotFilter.Size = new Size(50, 25);
+
+            textBoxPlotFilter = new TextBox();
+            textBoxPlotFilter.Location = new Point(75, 30);
+            textBoxPlotFilter.Size = new Size(250, 25);
+            textBoxPlotFilter.TextChanged += textBoxPlotFilter_TextChanged;
+            groupBoxPlots.Controls.Add(labelPlotFilter);
+            groupBoxPlots.Controls.Add(textBoxPlotFilter);
+        }
     }
 }

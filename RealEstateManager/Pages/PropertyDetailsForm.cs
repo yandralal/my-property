@@ -112,8 +112,40 @@ namespace RealEstateManager.Pages
             if (string.IsNullOrEmpty(transactionId)) return;
             if (MessageBox.Show($"Are you sure you want to delete transaction {transactionId}?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                // TODO: Implement delete logic
-                MessageBox.Show($"Deleted Transaction: {transactionId}", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string query = "UPDATE PropertyTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";
+                try
+                {
+                    using (var conn = new SqlConnection(connectionString))
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TransactionId", transactionId);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    MessageBox.Show($"Deleted Transaction: {transactionId}", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Refresh this grid
+                    LoadPropertyDetails();
+
+                    // Refresh plot grid in LandingForm if open
+                    foreach (Form openForm in Application.OpenForms)
+                    {
+                        if (openForm is LandingForm landingForm)
+                        {
+                            // Try to get the propertyId from this PropertyDetailsForm
+                            int propertyId = _propertyId;
+
+                            // Refresh the plots for this property
+                            landingForm.LoadPlotsForProperty(propertyId);
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error deleting transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -149,17 +181,17 @@ namespace RealEstateManager.Pages
                 {
                     if (reader.Read())
                     {
-                        labelTitleValue.Text        = $"Title: {reader["Title"]}";
-                        labelTypeValue.Text         = $"Type: {reader["Type"]}";
-                        labelStatusValue.Text       = $"Status: {reader["Status"]}";
-                        labelPriceValue.Text        = $"Price: {reader["Price"]:C}";
-                        labelOwnerValue.Text        = $"Owner: {reader["Owner"]}";
-                        labelPhoneValue.Text        = $"Phone: {reader["Phone"]}";
-                        labelAddressValue.Text      = $"Address: {reader["Address"]}";
-                        labelCityValue.Text         = $"City: {reader["City"]}";
-                        labelStateValue.Text        = $"State: {reader["State"]}";
-                        labelZipValue.Text          = $"Zip: {reader["ZipCode"]}";
-                        labelDescriptionValue.Text  = $"Description: {reader["Description"]}";
+                        labelTitleValue.Text        = reader["Title"].ToString();
+                        labelTypeValue.Text         = reader["Type"].ToString();
+                        labelStatusValue.Text       = reader["Status"].ToString();
+                        labelPriceValue.Text        = string.Format("{0:C}", reader["Price"]);
+                        labelOwnerValue.Text        = reader["Owner"].ToString();
+                        labelPhoneValue.Text        = reader["Phone"].ToString();
+                        labelAddressValue.Text      = reader["Address"].ToString();
+                        labelCityValue.Text         = reader["City"].ToString();
+                        labelStateValue.Text        = reader["State"].ToString();
+                        labelZipValue.Text          = reader["ZipCode"].ToString();
+                        labelDescriptionValue.Text  = reader["Description"].ToString();
                     }
                 }
 

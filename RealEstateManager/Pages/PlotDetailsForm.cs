@@ -12,6 +12,9 @@ namespace RealEstateManager.Pages
             InitializeComponent();
             _plotId = plotId;
             LoadPlotDetails();
+            dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
+            dataGridViewTransactions.CellPainting += dataGridViewTransactions_CellPainting;
+            dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
         }
 
         private DataTable GetPlotTransactions(int plotId)
@@ -133,6 +136,156 @@ namespace RealEstateManager.Pages
             labelSaleAmount.Text = saleAmountStr;
             labelPaidAmount.Text = amountPaid.ToString("N2");
             labelBalanceAmount.Text = balance.ToString("N2");
+        }
+
+        private void DataGridViewTransactions_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            var dgv = dataGridViewTransactions;
+
+            // Remove any existing Action column to avoid duplicates and ensure it's always last
+            if (dgv.Columns.Contains("Action"))
+                dgv.Columns.Remove("Action");
+
+            // Add action image column as the last column
+            var actionCol = new DataGridViewImageColumn
+            {
+                Name = "Action",
+                HeaderText = "Action",
+                Width = 120,
+                ImageLayout = DataGridViewImageCellLayout.Normal
+            };
+            dgv.Columns.Add(actionCol);
+        }
+
+        private void dataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
+
+                // Load your icons from resources
+                var viewIcon = Properties.Resources.view;      // Replace with your actual resource names
+                var editIcon = Properties.Resources.edit;
+                var deleteIcon = Properties.Resources.delete1;
+
+                int iconWidth = 24, iconHeight = 24, padding = 12;
+                int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
+                int x = e.CellBounds.Left + padding;
+
+                // Draw view icon
+                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw edit icon
+                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw delete icon
+                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+
+                e.Handled = true;
+            }
+        }
+
+        private void DataGridViewTransactions_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
+            {
+                int iconWidth = 24, padding = 12;
+                int x = e.X - padding;
+                int iconIndex = x / (iconWidth + padding);
+
+                var row = dataGridViewTransactions.Rows[e.RowIndex];
+                var transactionId = row.Cells["TransactionId"].Value?.ToString();
+
+                switch (iconIndex)
+                {
+                    case 0:
+                        ViewTransaction(transactionId);
+                        break;
+                    case 1:
+                        EditTransaction(transactionId);
+                        break;
+                    case 2:
+                        DeleteTransaction(transactionId);
+                        break;
+                }
+            }
+        }
+
+        private void ViewTransaction(string? transactionId)
+        {
+            if (string.IsNullOrEmpty(transactionId)) return;
+            var form = new RegisterTransactionForm(transactionId, readOnly: true);
+            form.ShowDialog();
+        }
+
+        private void EditTransaction(string? transactionId)
+        {
+            if (string.IsNullOrEmpty(transactionId)) return;
+            var form = new RegisterTransactionForm(transactionId, readOnly: false);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                // Optionally refresh the grid here
+                var transactions = GetPlotTransactions(_plotId);
+                dataGridViewTransactions.DataSource = transactions;
+            }
+        }
+
+        private void DeleteTransaction(string? transactionId)
+        {
+            if (string.IsNullOrEmpty(transactionId)) return;
+            if (MessageBox.Show("Are you sure you want to delete this transaction?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string query = "UPDATE PlotTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";
+                try
+                {
+                    using (var conn = new SqlConnection(connectionString))
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TransactionId", transactionId);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    MessageBox.Show("Transaction deleted successfully.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Refresh the grid in this form
+                    var transactions = GetPlotTransactions(_plotId);
+                    dataGridViewTransactions.DataSource = transactions;
+
+                    // Refresh plot grid in LandingForm if open
+                    foreach (Form openForm in Application.OpenForms)
+                    {
+                        if (openForm is LandingForm landingForm)
+                        {
+                            // Find the propertyId for this plot
+                            int? propertyId = null;
+                            string propertyIdQuery = "SELECT PropertyId FROM Plot WHERE Id = @PlotId";
+                            using (var conn = new SqlConnection(connectionString))
+                            using (var cmd = new SqlCommand(propertyIdQuery, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@PlotId", _plotId);
+                                conn.Open();
+                                var result = cmd.ExecuteScalar();
+                                if (result != null && result != DBNull.Value)
+                                {
+                                    propertyId = Convert.ToInt32(result);
+                                }
+                            }
+                            if (propertyId.HasValue)
+                            {
+                                landingForm.LoadPlotsForProperty(propertyId.Value);
+                            }
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error deleting transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

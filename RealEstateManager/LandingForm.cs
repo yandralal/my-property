@@ -8,6 +8,7 @@ namespace RealEstateManager
     {
         private DataTable? _propertyTable;
         private DataTable? _plotTable;
+        public DataGridView DataGridViewProperties => dataGridViewProperties;
 
         public LandingForm()
         {
@@ -213,7 +214,7 @@ namespace RealEstateManager
             }
         }
 
-        private void LoadPlotsForProperty(int propertyId)
+        public void LoadPlotsForProperty(int propertyId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string plotQuery = @"
@@ -484,6 +485,10 @@ namespace RealEstateManager
                             //View
                             var viewForm = new PropertyDetailsForm(propertyId);
                             viewForm.ShowDialog();
+                            if (viewForm.ShowDialog() == DialogResult.OK)
+                            {
+                                LoadActiveProperties();
+                            }
                             break;
                         case 1:
                             // Edit
@@ -627,13 +632,6 @@ namespace RealEstateManager
                 Width = 150,
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
-
-            // Match the style to the rest of the grid
-            //actionCol.DefaultCellStyle.BackColor = dataGridViewProperties.DefaultCellStyle.BackColor;
-            //actionCol.DefaultCellStyle.ForeColor = dataGridViewProperties.DefaultCellStyle.ForeColor;
-            //actionCol.DefaultCellStyle.SelectionBackColor = dataGridViewProperties.DefaultCellStyle.SelectionBackColor;
-            //actionCol.DefaultCellStyle.SelectionForeColor = dataGridViewProperties.DefaultCellStyle.SelectionForeColor;
-            //actionCol.DefaultCellStyle.Font = dataGridViewProperties.DefaultCellStyle.Font;
 
             dgv.Columns.Add(actionCol);
         }

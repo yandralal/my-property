@@ -58,8 +58,22 @@ namespace RealEstateManager.Pages
 
             // Load transaction details from DB
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string query = @"SELECT PlotId, TransactionDate, Amount, PaymentMethod, ReferenceNumber, Notes, TransactionType
-                            FROM PlotTransaction WHERE TransactionId = @TransactionId AND IsDeleted = 0";
+            string query = @"
+                SELECT 
+                    pt.PlotId, 
+                    pt.TransactionDate, 
+                    pt.Amount, 
+                    pt.PaymentMethod, 
+                    pt.ReferenceNumber, 
+                    pt.Notes, 
+                    pt.TransactionType,
+                    p.PlotNumber,
+                    ps.SaleAmount
+                FROM PlotTransaction pt
+                INNER JOIN Plot p ON pt.PlotId = p.Id
+                LEFT JOIN PropertySale ps ON pt.PlotId = ps.PlotId
+                WHERE pt.TransactionId = @TransactionId AND pt.IsDeleted = 0";
+
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
             {
@@ -79,26 +93,26 @@ namespace RealEstateManager.Pages
                         textBoxNotes.Text = reader["Notes"]?.ToString() ?? "";
                         comboBoxTransactionType.Text = reader["TransactionType"]?.ToString() ?? "Credit";
 
-                        // Optionally, load sale amount and plot number for balance display
+                        // Set PlotNumber and SaleAmount from joined tables
+                        var plotNumberObj = reader["PlotNumber"];
+                        if (plotNumberObj != null)
+                        {
+                            textBoxPlotId.Text = plotNumberObj.ToString();
+                            textBoxPlotId.ReadOnly = true;
+                        }
+
+                        var saleAmountObj = reader["SaleAmount"];
+                        if (saleAmountObj != DBNull.Value)
+                        {
+                            textBoxSaleAmount.Text = Convert.ToDecimal(saleAmountObj).ToString("N2");
+                            textBoxSaleAmount.ReadOnly = true;
+                        }
+
+                        // Fetch and display amount paid till date
                         if (_plotId.HasValue)
                         {
                             _amountPaidTillDate = GetAmountPaidTillDate(_plotId.Value);
                             textBoxAmountPaidTillDate.Text = _amountPaidTillDate.ToString("N2");
-
-                            // You may want to load sale amount and plot number for this plot
-                            string plotQuery = "SELECT PlotNumber FROM Plot WHERE Id = @PlotId";
-                            using (var plotConn = new SqlConnection(connectionString))
-                            using (var plotCmd = new SqlCommand(plotQuery, plotConn))
-                            {
-                                plotCmd.Parameters.AddWithValue("@PlotId", _plotId.Value);
-                                plotConn.Open();
-                                var plotNumberObj = plotCmd.ExecuteScalar();
-                                if (plotNumberObj != null)
-                                {
-                                    textBoxPlotId.Text = plotNumberObj.ToString();
-                                    textBoxPlotId.ReadOnly = true;
-                                }
-                            }
                         }
                     }
                 }

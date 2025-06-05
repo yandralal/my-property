@@ -9,8 +9,8 @@ namespace RealEstateManager
         private ToolStripMenuItem viewPropertiesMenuItem;
         private ToolStripMenuItem ownerDetailsMenuItem;
         private ToolStripMenuItem transactionsMenu;
-        private ToolStripMenuItem viewTransactionsMenuItem;
-        private ToolStripMenuItem registerTransactionMenuItem;
+        private ToolStripMenuItem propertyTransactionsMenuItem;
+        private ToolStripMenuItem plotTransactionMenuItem;
         private ToolStripMenuItem reportsMenu;
         private ToolStripMenuItem viewReportsMenuItem;
         private ToolStripMenuItem helpMenu;
@@ -65,8 +65,8 @@ namespace RealEstateManager
             ownerDetailsMenuItem = new ToolStripMenuItem();
             registerPlotToolStripMenuItem = new ToolStripMenuItem();
             transactionsMenu = new ToolStripMenuItem();
-            viewTransactionsMenuItem = new ToolStripMenuItem();
-            registerTransactionMenuItem = new ToolStripMenuItem();
+            propertyTransactionsMenuItem = new ToolStripMenuItem();
+            plotTransactionMenuItem = new ToolStripMenuItem();
             reportsMenu = new ToolStripMenuItem();
             viewReportsMenuItem = new ToolStripMenuItem();
             communicationMenu = new ToolStripMenuItem();
@@ -142,23 +142,24 @@ namespace RealEstateManager
             // 
             // transactionsMenu
             // 
-            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { viewTransactionsMenuItem, registerTransactionMenuItem });
+            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem });
             transactionsMenu.Name = "transactionsMenu";
             transactionsMenu.Size = new Size(144, 32);
             transactionsMenu.Text = "Transactions";
             // 
-            // viewTransactionsMenuItem
+            // propertyTransactionsMenuItem
             // 
-            viewTransactionsMenuItem.Name = "viewTransactionsMenuItem";
-            viewTransactionsMenuItem.Size = new Size(291, 32);
-            viewTransactionsMenuItem.Text = "View Transactions";
+            propertyTransactionsMenuItem.Name = "propertyTransactionsMenuItem";
+            propertyTransactionsMenuItem.Size = new Size(296, 32);
+            propertyTransactionsMenuItem.Text = "Property Transaction";
+            propertyTransactionsMenuItem.Click += PropertyTransactionsMenuItem_Click;
             // 
-            // registerTransactionMenuItem
+            // plotTransactionMenuItem
             // 
-            registerTransactionMenuItem.Name = "registerTransactionMenuItem";
-            registerTransactionMenuItem.Size = new Size(291, 32);
-            registerTransactionMenuItem.Text = "Register Transaction";
-            registerTransactionMenuItem.Click += registerTransactionMenuItem_Click;
+            plotTransactionMenuItem.Name = "plotTransactionMenuItem";
+            plotTransactionMenuItem.Size = new Size(296, 32);
+            plotTransactionMenuItem.Text = "Plot Transaction";
+            plotTransactionMenuItem.Click += PlotTransactionMenuItem_Click;
             // 
             // reportsMenu
             // 
@@ -343,7 +344,7 @@ namespace RealEstateManager
             labelProperties.ForeColor = Color.Black;
             labelProperties.Location = new Point(20, 39);
             labelProperties.Name = "labelProperties";
-            labelProperties.Size = new Size(400, 25);
+            labelProperties.Size = new Size(400, 34);
             labelProperties.TabIndex = 4;
             labelProperties.Text = "Properties (0)";
             // 

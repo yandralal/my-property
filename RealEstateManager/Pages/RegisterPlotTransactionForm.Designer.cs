@@ -1,6 +1,6 @@
 namespace RealEstateManager.Pages
 {
-    partial class RegisterTransactionForm
+    partial class RegisterPlotTransactionForm
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.GroupBox groupBoxTransactionEntry;
@@ -166,6 +166,7 @@ namespace RealEstateManager.Pages
             textBoxAmount.Size = new Size(300, 30);
             textBoxAmount.TabIndex = 7;
             textBoxAmount.TextChanged += UpdateBalanceAmount;
+            this.textBoxAmount.Leave += new System.EventHandler(this.textBoxAmount_Leave);
             // 
             // labelBalanceAmount
             // 
@@ -314,6 +315,18 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.ResumeLayout(false);
             groupBoxTransactionEntry.PerformLayout();
             ResumeLayout(false);
+
+            // Set tab order (TabIndex) for all controls in logical order
+            this.textBoxPlotId.TabIndex = 0;
+            this.textBoxSaleAmount.TabIndex = 1;
+            this.textBoxAmountPaidTillDate.TabIndex = 2;
+            this.comboBoxTransactionType.TabIndex = 3;
+            this.textBoxAmount.TabIndex = 4;
+            this.comboBoxPaymentMethod.TabIndex = 5;
+            this.textBoxReferenceNumber.TabIndex = 6;
+            this.textBoxNotes.TabIndex = 7;
+            this.dateTimePickerTransactionDate.TabIndex = 8;
+            this.buttonSave.TabIndex = 9;
         }
     }
 }

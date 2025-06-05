@@ -14,13 +14,10 @@ namespace RealEstateManager
         {
             InitializeFooter();
             InitializeComponent();
-            this.WindowState = FormWindowState.Maximized; // Make the form full screen  
-            SetupPlotGrid(); // Call this first  
-
-            // Attach event handlers for the property grid before loading data  
+            this.WindowState = FormWindowState.Maximized;
+            SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
-            dataGridViewProperties.CellContentClick += DataGridViewProperties_CellContentClick;
-
+            dataGridViewProperties.CellMouseClick += dataGridViewProperties_CellMouseClick;
             LoadActiveProperties();
         }
 
@@ -57,7 +54,19 @@ namespace RealEstateManager
         public void LoadActiveProperties()
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string query = "SELECT Id, Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description FROM Property WHERE IsDeleted = 0";
+            string query = @"
+                SELECT 
+                    p.Id, 
+                    p.Title, 
+                    p.Type, 
+                    p.Status, 
+                    p.Price AS [BuyPrice], 
+                    p.Owner, 
+                    p.Description,
+                    ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
+                    (p.Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance
+                FROM Property p
+                WHERE p.IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
@@ -85,9 +94,6 @@ namespace RealEstateManager
 
             dataGridViewProperties.CellPainting -= dataGridViewProperties_CellPainting;
             dataGridViewProperties.CellPainting += dataGridViewProperties_CellPainting;
-
-            dataGridViewProperties.CellMouseClick -= dataGridViewProperties_CellMouseClick;
-            dataGridViewProperties.CellMouseClick += dataGridViewProperties_CellMouseClick;
         }
 
         private void SetupPlotGrid()
@@ -163,7 +169,7 @@ namespace RealEstateManager
                 HeaderText = "Amount Balance",
                 Width = 150
             });
-            
+
             var actionColumn = new DataGridViewImageColumn
             {
                 Name = "Action",
@@ -326,7 +332,7 @@ namespace RealEstateManager
 
         private void dataGridViewPlots_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "Action")
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "Action")
             {
                 int iconWidth = 24, padding = 16; // Match the padding used in CellPainting
                 int x = e.X - padding;
@@ -340,7 +346,7 @@ namespace RealEstateManager
                     var idCell = dataGridViewProperties.CurrentRow?.Cells["Id"];
                     if (idCell != null && int.TryParse(idCell.Value?.ToString(), out int parsedPropertyId))
                     {
-                        propertyId = parsedPropertyId; 
+                        propertyId = parsedPropertyId;
                     }
 
                     switch (iconIndex)
@@ -379,14 +385,18 @@ namespace RealEstateManager
                             break;
                         case 2:
                             // Delete
-                            // TODO: Confirm and delete plotId
+                            if (MessageBox.Show("Are you sure you want to delete this plot?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                            {
+                                DeletePlot(plotId);
+                                LoadPlotsForProperty(propertyId);
+                            }
                             break;
                     }
                 }
             }
         }
 
-        private void registerTransactionMenuItem_Click(object sender, EventArgs e)
+        private void PlotTransactionMenuItem_Click(object sender, EventArgs e)
         {
             // Optionally, pass the selected plot ID, sale amount, and plot number if a plot is selected in the grid
             int? plotId = null;
@@ -415,10 +425,10 @@ namespace RealEstateManager
                 }
             }
 
-            var transactionForm = new Pages.RegisterTransactionForm(plotId, saleAmount, plotNumber);
+            var transactionForm = new Pages.RegisterPlotTransactionForm(plotId, saleAmount, plotNumber);
             transactionForm.ShowDialog();
         }
-       
+
         private void AdjustGridAndGroupBoxHeight(DataGridView grid, GroupBox groupBox, int maxVisibleRows = 10, int minGridHeight = 100, int maxGridHeight = 500, int groupBoxExtra = 100)
         {
             int rowCount = grid.Rows.Count;
@@ -470,8 +480,9 @@ namespace RealEstateManager
 
         private void dataGridViewProperties_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0 && dataGridViewProperties.Columns[e.ColumnIndex].Name == "Action")
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewProperties.Columns[e.ColumnIndex].Name == "Action")
             {
+                // Existing logic
                 int iconWidth = 24, padding = 12;
                 int x = e.X - padding;
                 int iconIndex = x / (iconWidth + padding);
@@ -482,9 +493,8 @@ namespace RealEstateManager
                     switch (iconIndex)
                     {
                         case 0:
-                            //View
+                            // View
                             var viewForm = new PropertyDetailsForm(propertyId);
-                            viewForm.ShowDialog();
                             if (viewForm.ShowDialog() == DialogResult.OK)
                             {
                                 LoadActiveProperties();
@@ -519,6 +529,19 @@ namespace RealEstateManager
             using (var cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@Id", propertyId);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private void DeletePlot(int plotId)
+        {
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string query = "UPDATE Plot SET IsDeleted = 1 WHERE Id = @Id";
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Id", plotId);
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
@@ -562,68 +585,9 @@ namespace RealEstateManager
         {
             var dgv = dataGridViewProperties;
 
-            // Remove any existing Action column to avoid duplicates and ensure it's always last
+            // Remove and re-add Action column to ensure it's always last
             if (dgv.Columns.Contains("Action"))
                 dgv.Columns.Remove("Action");
-
-            // Set column headers and widths for property grid
-            if (dgv.Columns["Title"] != null)
-            {
-                dgv.Columns["Title"].HeaderText = "Title";
-                dgv.Columns["Title"].Width = 230;
-            }
-            if (dgv.Columns["Type"] != null)
-            {
-                dgv.Columns["Type"].HeaderText = "Type";
-                dgv.Columns["Type"].Width = 150;
-            }
-            if (dgv.Columns["Status"] != null)
-            {
-                dgv.Columns["Status"].HeaderText = "Status";
-                dgv.Columns["Status"].Width = 120;
-            }
-            if (dgv.Columns["Price"] != null)
-            {
-                dgv.Columns["Price"].HeaderText = "Price";
-                dgv.Columns["Price"].Width = 120;
-            }
-            if (dgv.Columns["Owner"] != null)
-            {
-                dgv.Columns["Owner"].HeaderText = "Owner";
-                dgv.Columns["Owner"].Width = 180;
-            }
-            if (dgv.Columns["Phone"] != null)
-            {
-                dgv.Columns["Phone"].HeaderText = "Phone";
-                dgv.Columns["Phone"].Width = 160;
-            }
-            if (dgv.Columns["Address"] != null)
-            {
-                dgv.Columns["Address"].HeaderText = "Address";
-                dgv.Columns["Address"].Width = 240;
-            }
-            if (dgv.Columns["City"] != null)
-            {
-                dgv.Columns["City"].HeaderText = "City";
-                dgv.Columns["City"].Width = 100;
-            }
-            if (dgv.Columns["Description"] != null)
-            {
-                dgv.Columns["Description"].HeaderText = "Description";
-                dgv.Columns["Description"].Width = 320;
-            }
-            if (dgv.Columns["Id"] != null)
-            {
-                dgv.Columns["Id"].Visible = false;
-            }
-            if (dgv.Columns["State"] != null)
-            {
-                dgv.Columns["State"].Visible = false;
-            }
-            if (dgv.Columns["ZipCode"] != null)
-            {
-                dgv.Columns["ZipCode"].Visible = false;
-            }
 
             var actionCol = new DataGridViewImageColumn
             {
@@ -632,8 +596,41 @@ namespace RealEstateManager
                 Width = 150,
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
-
             dgv.Columns.Add(actionCol);
+
+            // Set headers, widths, order, and AutoSizeMode
+            int displayIndex = 0;
+            void SetCol(string name, string header, int width, string? format = null)
+            {
+                if (dgv.Columns[name] != null)
+                {
+                    dgv.Columns[name].HeaderText = header;
+                    dgv.Columns[name].Width = width;
+                    dgv.Columns[name].DisplayIndex = displayIndex++;
+                    dgv.Columns[name].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    if (format != null)
+                        dgv.Columns[name].DefaultCellStyle.Format = format;
+                }
+            }
+
+            SetCol("Title", "Title", 230);
+            SetCol("Type", "Type", 150);
+            SetCol("Status", "Status", 120);
+            SetCol("Owner", "Owner", 190);
+            SetCol("BuyPrice", "Buy Price", 180, "N2");
+            SetCol("AmountPaid", "Amount Paid", 180, "N2");
+            SetCol("AmountBalance", "Amount Balance", 180, "N2");
+            SetCol("Description", "Description", 350);
+
+            if (dgv.Columns["Id"] != null)
+                dgv.Columns["Id"].Visible = false;
+
+            if (dgv.Columns["Action"] != null)
+            {
+                dgv.Columns["Action"].DisplayIndex = dgv.Columns.Count - 1;
+                dgv.Columns["Action"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["Action"].Width = 150; // Set a fixed width for the Action column
+            }
         }
 
         private void DataGridViewProperties_CellContentClick(object? sender, DataGridViewCellEventArgs e)
@@ -685,6 +682,39 @@ namespace RealEstateManager
                     LoadActiveProperties();
                 }
             }
+        }
+
+        private void PropertyTransactionsMenuItem_Click(object sender, EventArgs e)
+        {
+            // Optionally, pass the selected property ID, sale amount, and property number if a property is selected in the grid
+            int? propertyId = null;
+            decimal? saleAmount = null;
+            string? propertyNumber = null;
+
+            if (dataGridViewProperties.CurrentRow != null)
+            {
+                var idCell = dataGridViewProperties.CurrentRow.Cells["Id"];
+                var saleAmountCell = dataGridViewProperties.CurrentRow.Cells["BuyPrice"];
+                var propertyNumberCell = dataGridViewProperties.CurrentRow.Cells["Title"];
+
+                if (idCell != null && int.TryParse(idCell.Value?.ToString(), out int selectedPropertyId))
+                {
+                    propertyId = selectedPropertyId;
+                }
+
+                if (saleAmountCell != null && decimal.TryParse(saleAmountCell.Value?.ToString(), out decimal parsedSaleAmount))
+                {
+                    saleAmount = parsedSaleAmount;
+                }
+
+                if (propertyNumberCell != null)
+                {
+                    propertyNumber = propertyNumberCell.Value?.ToString();
+                }
+            }
+
+            var transactionForm = new Pages.RegisterPropertyTransactionForm(propertyId, saleAmount, propertyNumber);
+            transactionForm.ShowDialog();
         }
     }
 }

@@ -2,7 +2,7 @@ using Microsoft.Data.SqlClient;
 
 namespace RealEstateManager.Pages
 {
-    public partial class RegisterTransactionForm : Form
+    public partial class RegisterPlotTransactionForm : Form
     {
         private readonly int? _plotId;
         private readonly decimal? _saleAmount;
@@ -10,7 +10,7 @@ namespace RealEstateManager.Pages
         private decimal _amountPaidTillDate = 0;
         private readonly string? _transactionId;
 
-        public RegisterTransactionForm(int? plotId = null, decimal? saleAmount = null, string? plotNumber = "")
+        public RegisterPlotTransactionForm(int? plotId = null, decimal? saleAmount = null, string? plotNumber = "")
         {
             InitializeComponent();
             _plotId = plotId;
@@ -46,7 +46,7 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.SelectedIndex = 0; // Default to first item
         }
 
-        public RegisterTransactionForm(string transactionId, bool readOnly = false)
+        public RegisterPlotTransactionForm(string transactionId, bool readOnly = false)
         {
             InitializeComponent();
 
@@ -278,6 +278,14 @@ namespace RealEstateManager.Pages
             textBoxReferenceNumber.ReadOnly = readOnly;
             textBoxNotes.ReadOnly = readOnly;
             comboBoxTransactionType.Enabled = !readOnly;
+        }
+
+        private void textBoxAmount_Leave(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(textBoxAmount.Text, out decimal value))
+            {
+                textBoxAmount.Text = value.ToString("N2");
+            }
         }
     }
 }

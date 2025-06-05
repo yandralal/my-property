@@ -24,6 +24,7 @@ namespace RealEstateManager.Pages
             SELECT 
                 TransactionId,
                 TransactionDate,
+                TransactionType,      -- Add this line
                 Amount,
                 PaymentMethod,
                 ReferenceNumber,
@@ -115,20 +116,9 @@ namespace RealEstateManager.Pages
             // Load transactions and bind to grid
             var transactions = GetPlotTransactions(_plotId);
             dataGridViewTransactions.DataSource = transactions;
+            dataGridViewTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            if (dataGridViewTransactions.Columns["TransactionId"] != null)
-                dataGridViewTransactions.Columns["TransactionId"].HeaderText = "Transaction ID";
-            if (dataGridViewTransactions.Columns["TransactionDate"] != null)
-                dataGridViewTransactions.Columns["TransactionDate"].HeaderText = "Transaction Date";
-            if (dataGridViewTransactions.Columns["Amount"] != null)
-                dataGridViewTransactions.Columns["Amount"].HeaderText = "Amount";
-            if (dataGridViewTransactions.Columns["PaymentMethod"] != null)
-                dataGridViewTransactions.Columns["PaymentMethod"].HeaderText = "Payment Method";
-            if (dataGridViewTransactions.Columns["ReferenceNumber"] != null)
-                dataGridViewTransactions.Columns["ReferenceNumber"].HeaderText = "Reference Number";
-            if (dataGridViewTransactions.Columns["Notes"] != null)
-                dataGridViewTransactions.Columns["Notes"].HeaderText = "Notes";
-
+            
             // Set label texts with prefix
             labelCustomerName.Text = customerName;
             labelCustomerPhone.Text = customerPhone;
@@ -142,19 +132,70 @@ namespace RealEstateManager.Pages
         {
             var dgv = dataGridViewTransactions;
 
-            // Remove any existing Action column to avoid duplicates and ensure it's always last
-            if (dgv.Columns.Contains("Action"))
-                dgv.Columns.Remove("Action");
+            // Set to None so custom widths are respected
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-            // Add action image column as the last column
-            var actionCol = new DataGridViewImageColumn
+            // Add action column if not already present
+            if (!dgv.Columns.Contains("Action"))
             {
-                Name = "Action",
-                HeaderText = "Action",
-                Width = 120,
-                ImageLayout = DataGridViewImageCellLayout.Normal
-            };
-            dgv.Columns.Add(actionCol);
+                var actionCol = new DataGridViewImageColumn
+                {
+                    Name = "Action",
+                    HeaderText = "Action",
+                    Width = 120,
+                    ImageLayout = DataGridViewImageCellLayout.Normal
+                };
+                dgv.Columns.Add(actionCol);
+            }
+
+            if (dgv.Columns["TransactionId"] != null)
+            {
+                dgv.Columns["TransactionId"].HeaderText = "TRN #";
+                dgv.Columns["TransactionId"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["TransactionId"].Width = 80;
+            }
+            if (dgv.Columns["TransactionDate"] != null)
+            {
+                dgv.Columns["TransactionDate"].HeaderText = "TRN Date";
+                dgv.Columns["TransactionDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["TransactionDate"].Width = 180;
+                dgv.Columns["TransactionDate"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
+            }
+            if (dgv.Columns["TransactionType"] != null)
+            {
+                dgv.Columns["TransactionType"].HeaderText = "TRN Type";
+                dgv.Columns["TransactionType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["TransactionType"].Width = 100;
+            }
+            if (dgv.Columns["Amount"] != null)
+            {
+                dgv.Columns["Amount"].HeaderText = "Amount";
+                dgv.Columns["Amount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["Amount"].Width = 130;
+            }
+            if (dgv.Columns["PaymentMethod"] != null)
+            {
+                dgv.Columns["PaymentMethod"].HeaderText = "Payment Method";
+                dgv.Columns["PaymentMethod"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["PaymentMethod"].Width = 170;
+            }
+            if (dgv.Columns["ReferenceNumber"] != null)
+            {
+                dgv.Columns["ReferenceNumber"].HeaderText = "Reference #";
+                dgv.Columns["ReferenceNumber"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["ReferenceNumber"].Width = 140;
+            }
+            if (dgv.Columns["Notes"] != null)
+            {
+                dgv.Columns["Notes"].HeaderText = "Notes";
+                dgv.Columns["Notes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["Notes"].Width = 280;
+            }
+            if (dgv.Columns["Action"] != null)
+            {
+                dgv.Columns["Action"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["Action"].Width = 120;
+            }
         }
 
         private void dataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
@@ -216,14 +257,14 @@ namespace RealEstateManager.Pages
         private void ViewTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
-            var form = new RegisterTransactionForm(transactionId, readOnly: true);
+            var form = new RegisterPlotTransactionForm(transactionId, readOnly: true);
             form.ShowDialog();
         }
 
         private void EditTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
-            var form = new RegisterTransactionForm(transactionId, readOnly: false);
+            var form = new RegisterPlotTransactionForm(transactionId, readOnly: false);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 // Optionally refresh the grid here

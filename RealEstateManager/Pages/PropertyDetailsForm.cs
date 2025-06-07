@@ -227,6 +227,37 @@ namespace RealEstateManager.Pages
                     adapter.Fill(dt);
                     dataGridViewTransactions.DataSource = dt;
                 }
+
+                // Load summary details
+                string summaryQuery = @"
+                    SELECT 
+                        (SELECT COUNT(*) FROM Plot WHERE PropertyId = @Id AND IsDeleted = 0) AS TotalPlots,
+                        ISNULL((SELECT SUM(SaleAmount) FROM PlotSale ps INNER JOIN Plot p ON ps.PlotId = p.Id WHERE p.PropertyId = @Id AND p.IsDeleted = 0), 0) AS TotalSaleAmount,
+                        ISNULL((SELECT SUM(Amount) FROM PlotTransaction pt INNER JOIN Plot p ON pt.PlotId = p.Id WHERE p.PropertyId = @Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
+                        (SELECT Price FROM Property WHERE Id = @Id) AS BuyPrice
+                ";
+                using (var summaryCmd = new SqlCommand(summaryQuery, conn))
+                {
+                    summaryCmd.Parameters.AddWithValue("@Id", _propertyId);
+                    using (var reader = summaryCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int totalPlots = reader["TotalPlots"] is int tp ? tp : 0;
+                            decimal totalSaleAmount = reader["TotalSaleAmount"] is decimal tsa ? tsa : 0;
+                            decimal totalPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
+                            decimal buyPrice = reader["BuyPrice"] is decimal bp ? bp : 0;
+                            decimal totalBalance = totalSaleAmount - totalPaid;
+                            decimal profitLoss = totalSaleAmount - buyPrice;
+
+                            labelTotalPlotsValue.Text = totalPlots.ToString();
+                            labelTotalSaleAmountValue.Text = totalSaleAmount.ToString("N2");
+                            labelTotalPaidValue.Text = totalPaid.ToString("N2");
+                            labelTotalBalanceValue.Text = totalBalance.ToString("N2");
+                            labelTotalProfitLossValue.Text = profitLoss.ToString("N2");
+                        }
+                    }
+                }
             }
         }
 

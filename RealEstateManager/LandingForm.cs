@@ -196,8 +196,59 @@ namespace RealEstateManager
 
         private void registerSaleMenuItem_Click(object sender, EventArgs e)
         {
-            var registerSaleForm = new RegisterSaleForm();
-            registerSaleForm.ShowDialog();
+            // Ensure a property and a plot are selected
+            if (dataGridViewProperties.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a property.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (dataGridViewPlots.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a plot.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Get propertyId
+            var propertyIdCell = dataGridViewProperties.CurrentRow.Cells["Id"];
+            if (propertyIdCell == null || !int.TryParse(propertyIdCell.Value?.ToString(), out int propertyId))
+            {
+                MessageBox.Show("Invalid property selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Get plot details
+            var row = dataGridViewPlots.CurrentRow;
+            if (!int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId))
+            {
+                MessageBox.Show("Invalid plot selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            string plotNumber = row.Cells["PlotNumber"].Value?.ToString() ?? "";
+            string customerName = row.Cells["CustomerName"].Value?.ToString() ?? "";
+            string customerPhone = row.Cells["CustomerPhone"].Value?.ToString() ?? "";
+            string customerEmail = row.Cells["CustomerEmail"].Value?.ToString() ?? "";
+            string status = row.Cells["Status"].Value?.ToString() ?? "";
+            string area = row.Cells["Area"].Value?.ToString() ?? "";
+            string saleDate = row.Cells["SaleDate"].Value?.ToString() ?? "";
+            string salePrice = row.Cells["SalePrice"].Value?.ToString() ?? "";
+
+            var editForm = new RegisterSaleForm(
+                propertyId,
+                plotId,
+                plotNumber,
+                customerName,
+                customerPhone,
+                customerEmail,
+                status,
+                area,
+                saleDate,
+                salePrice
+            );
+            if (editForm.ShowDialog() == DialogResult.OK)
+            {
+                LoadPlotsForProperty(propertyId);
+                LoadActiveProperties();
+            }
         }
 
         private void DataGridViewProperties_SelectionChanged(object? sender, EventArgs e)
@@ -235,7 +286,7 @@ namespace RealEstateManager
                     ps.CustomerPhone AS CustomerPhone,
                     ps.CustomerEmail AS CustomerEmail
                 FROM Plot p
-                LEFT JOIN PropertySale ps ON p.Id = ps.PlotId
+                LEFT JOIN PlotSale ps ON p.Id = ps.PlotId
                 WHERE p.PropertyId = @PropertyId";
 
             using (var conn = new SqlConnection(connectionString))
@@ -334,14 +385,14 @@ namespace RealEstateManager
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "Action")
             {
-                int iconWidth = 24, padding = 16; // Match the padding used in CellPainting
+                int iconWidth = 24, padding = 16;
                 int x = e.X - padding;
                 int iconIndex = x / (iconWidth + padding);
 
                 var row = dataGridViewPlots.Rows[e.RowIndex];
                 if (int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId))
                 {
-                    int propertyId = 0; // Initialize propertyId to avoid CS0165
+                    int propertyId = 0; 
 
                     var idCell = dataGridViewProperties.CurrentRow?.Cells["Id"];
                     if (idCell != null && int.TryParse(idCell.Value?.ToString(), out int parsedPropertyId))
@@ -524,26 +575,135 @@ namespace RealEstateManager
         private void DeleteProperty(int propertyId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string query = "UPDATE Property SET IsDeleted = 1 WHERE Id = @Id";
-            using (var conn = new SqlConnection(connectionString))
-            using (var cmd = new SqlCommand(query, conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@Id", propertyId);
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var tran = conn.BeginTransaction())
+                    {
+                        // 1. Get all plot IDs under this property
+                        List<int> plotIds = new List<int>();
+                        using (var cmd = new SqlCommand("SELECT Id FROM Plot WHERE PropertyId = @PropertyId AND IsDeleted = 0", conn, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    plotIds.Add(reader.GetInt32(0));
+                                }
+                            }
+                        }
+
+                        if (plotIds.Count > 0)
+                        {
+                            // 2. Check if any plot is referenced in PlotSale
+                            string plotIdList = string.Join(",", plotIds);
+                            if (!string.IsNullOrEmpty(plotIdList))
+                            {
+                                using (var cmd = new SqlCommand($"SELECT COUNT(1) FROM PlotSale WHERE PlotId IN ({plotIdList})", conn, tran))
+                                {
+                                    var count = Convert.ToInt32(cmd.ExecuteScalar());
+                                    if (count > 0)
+                                    {
+                                        MessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        tran.Rollback();
+                                        return;
+                                    }
+                                }
+
+                                // 3. Check if any plot has a 'Sale' transaction in PlotTransaction
+                                using (var cmd = new SqlCommand($"SELECT COUNT(1) FROM PlotTransaction WHERE PlotId IN ({plotIdList}) AND TransactionType = 'Sale' AND IsDeleted = 0", conn, tran))
+                                {
+                                    var count = Convert.ToInt32(cmd.ExecuteScalar());
+                                    if (count > 0)
+                                    {
+                                        MessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        tran.Rollback();
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+                        // 4. Soft delete the property
+                        using (var cmd = new SqlCommand("UPDATE Property SET IsDeleted = 1 WHERE Id = @Id", conn, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@Id", propertyId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 5. Soft delete all plots under this property
+                        using (var cmd = new SqlCommand("UPDATE Plot SET IsDeleted = 1 WHERE PropertyId = @PropertyId", conn, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        tran.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting the property: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void DeletePlot(int plotId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string query = "UPDATE Plot SET IsDeleted = 1 WHERE Id = @Id";
-            using (var conn = new SqlConnection(connectionString))
-            using (var cmd = new SqlCommand(query, conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@Id", plotId);
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var tran = conn.BeginTransaction())
+                    {
+                        decimal salePrice = 0;
+                        decimal amountPaid = 0;
+
+                        // 1. Get SalePrice from PlotSale
+                        using (var cmd = new SqlCommand("SELECT ISNULL(SaleAmount, 0) FROM PlotSale WHERE PlotId = @PlotId", conn, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@PlotId", plotId);
+                            var result = cmd.ExecuteScalar();
+                            salePrice = result == DBNull.Value ? 0 : Convert.ToDecimal(result);
+                        }
+
+                        // 2. Get AmountPaid from PlotTransaction
+                        using (var cmd = new SqlCommand("SELECT ISNULL(SUM(Amount), 0) FROM PlotTransaction WHERE PlotId = @PlotId AND IsDeleted = 0", conn, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@PlotId", plotId);
+                            var result = cmd.ExecuteScalar();
+                            amountPaid = result == DBNull.Value ? 0 : Convert.ToDecimal(result);
+                        }
+
+                        decimal amountBalance = salePrice - amountPaid;
+
+                        // 3. Only allow delete if both are zero
+                        if (salePrice != 0 || amountBalance != 0)
+                        {
+                            MessageBox.Show("Cannot delete this plot because it has a sale record or outstanding balance.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            tran.Rollback();
+                            return;
+                        }
+
+                        // 4. Soft delete the plot
+                        using (var cmd = new SqlCommand("UPDATE Plot SET IsDeleted = 1 WHERE Id = @Id", conn, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@Id", plotId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        tran.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting the plot: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -715,6 +875,15 @@ namespace RealEstateManager
 
             var transactionForm = new Pages.RegisterPropertyTransactionForm(propertyId, saleAmount, propertyNumber);
             transactionForm.ShowDialog();
+        }
+
+        private void registerPlotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var registerForm = new Pages.RegisterPropertyForm();
+            if (registerForm.ShowDialog() == DialogResult.OK)
+            {
+                LoadActiveProperties(); // Refresh grid after adding
+            }
         }
     }
 }

@@ -70,7 +70,7 @@ namespace RealEstateManager.Pages
                     pt.Notes
                 FROM PropertyTransaction pt
                 INNER JOIN Property p ON pt.PropertyId = p.Id
-                LEFT JOIN PropertySale ps ON pt.PropertyId = ps.PropertyId
+                LEFT JOIN PlotSale ps ON pt.PropertyId = ps.PropertyId
                 WHERE pt.TransactionId = @TransactionId AND pt.IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))

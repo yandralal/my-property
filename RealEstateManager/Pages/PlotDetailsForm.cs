@@ -55,7 +55,7 @@ namespace RealEstateManager.Pages
                     ps.SaleDate, ps.SaleAmount, 
                     ps.CustomerName, ps.CustomerPhone, ps.CustomerEmail
                 FROM Plot p
-                LEFT JOIN PropertySale ps ON p.Id = ps.PlotId
+                LEFT JOIN PlotSale ps ON p.Id = ps.PlotId
                 WHERE p.Id = @PlotId";
 
             // Variables to hold values for use outside the reader scope
@@ -104,8 +104,7 @@ namespace RealEstateManager.Pages
                             var paidObj = transCmd.ExecuteScalar();
                             amountPaid = paidObj != DBNull.Value ? Convert.ToDecimal(paidObj) : 0;
                         }
-                        decimal saleAmount = reader["SaleAmount"] is decimal sa ? sa : 0;
-                        balance = saleAmount - amountPaid;
+                        balance = (reader["SaleAmount"] is decimal sa ? sa : 0) - amountPaid;
 
                         labelPaidAmount.Text = amountPaid.ToString("N2");
                         labelBalanceAmount.Text = balance.ToString("N2");
@@ -118,12 +117,11 @@ namespace RealEstateManager.Pages
             dataGridViewTransactions.DataSource = transactions;
             dataGridViewTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            
             // Set label texts with prefix
             labelCustomerName.Text = customerName;
             labelCustomerPhone.Text = customerPhone;
             labelCustomerEmail.Text = customerEmail;
-            labelSaleAmount.Text = saleAmountStr;
+            labelSaleAmount.Text = decimal.TryParse(saleAmountStr, out var saleAmount) ? saleAmount.ToString("N2") : "0.00";
             labelPaidAmount.Text = amountPaid.ToString("N2");
             labelBalanceAmount.Text = balance.ToString("N2");
         }

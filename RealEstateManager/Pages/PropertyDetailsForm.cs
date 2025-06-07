@@ -1,8 +1,5 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace RealEstateManager.Pages
 {
@@ -169,8 +166,13 @@ namespace RealEstateManager.Pages
         private void LoadPropertyDetails()
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string propertyQuery = @"SELECT Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description
-                                     FROM Property WHERE Id = @Id AND IsDeleted = 0";
+            string propertyQuery = @"
+                SELECT 
+                    Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description,
+                    ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
+                    (Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance
+                FROM Property p
+                WHERE Id = @Id AND IsDeleted = 0";
             string transactionQuery = @"
                 SELECT 
                     TransactionId,  
@@ -201,7 +203,6 @@ namespace RealEstateManager.Pages
                         labelTitleValue.Text        = reader["Title"].ToString();
                         labelTypeValue.Text         = reader["Type"].ToString();
                         labelStatusValue.Text       = reader["Status"].ToString();
-                        labelPriceValue.Text        = string.Format("{0:C}", reader["Price"]);
                         labelOwnerValue.Text        = reader["Owner"].ToString();
                         labelPhoneValue.Text        = reader["Phone"].ToString();
                         labelAddressValue.Text      = reader["Address"].ToString();
@@ -209,6 +210,13 @@ namespace RealEstateManager.Pages
                         labelStateValue.Text        = reader["State"].ToString();
                         labelZipValue.Text          = reader["ZipCode"].ToString();
                         labelDescriptionValue.Text  = reader["Description"].ToString();
+
+                        // Add these lines for Amount Paid and Balance
+                        decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
+                        decimal amountBalance = reader["AmountBalance"] is decimal ab ? ab : 0;
+                        labelPropertyBuyPrice.Text = string.Format("{0:C}", reader["Price"]);
+                        labelPropertyAmountPaid.Text = amountPaid.ToString("N2");
+                        labelPropertyBalance.Text = amountBalance.ToString("N2");
                     }
                 }
 

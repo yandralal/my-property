@@ -71,7 +71,7 @@ namespace RealEstateManager.Pages
                     ps.SaleAmount
                 FROM PlotTransaction pt
                 INNER JOIN Plot p ON pt.PlotId = p.Id
-                LEFT JOIN PropertySale ps ON pt.PlotId = ps.PlotId
+                LEFT JOIN PlotSale ps ON pt.PlotId = ps.PlotId
                 WHERE pt.TransactionId = @TransactionId AND pt.IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))

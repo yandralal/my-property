@@ -6,8 +6,6 @@ namespace RealEstateManager
         private MenuStrip menuStripMain;
         private ToolStripMenuItem propertyMenu;
         private ToolStripMenuItem registerPlotMenuItem;
-        private ToolStripMenuItem viewPropertiesMenuItem;
-        private ToolStripMenuItem ownerDetailsMenuItem;
         private ToolStripMenuItem transactionsMenu;
         private ToolStripMenuItem propertyTransactionsMenuItem;
         private ToolStripMenuItem plotTransactionMenuItem;
@@ -60,10 +58,8 @@ namespace RealEstateManager
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             menuStripMain = new MenuStrip();
             propertyMenu = new ToolStripMenuItem();
-            registerPlotMenuItem = new ToolStripMenuItem();
-            viewPropertiesMenuItem = new ToolStripMenuItem();
-            ownerDetailsMenuItem = new ToolStripMenuItem();
             registerPlotToolStripMenuItem = new ToolStripMenuItem();
+            registerPlotMenuItem = new ToolStripMenuItem();
             transactionsMenu = new ToolStripMenuItem();
             propertyTransactionsMenuItem = new ToolStripMenuItem();
             plotTransactionMenuItem = new ToolStripMenuItem();
@@ -110,35 +106,24 @@ namespace RealEstateManager
             // 
             // propertyMenu
             // 
-            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPlotMenuItem, viewPropertiesMenuItem, ownerDetailsMenuItem, registerPlotToolStripMenuItem });
+            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPlotToolStripMenuItem, registerPlotMenuItem });
             propertyMenu.Name = "propertyMenu";
             propertyMenu.Size = new Size(59, 32);
             propertyMenu.Text = "File";
             // 
-            // registerPlotMenuItem
-            // 
-            registerPlotMenuItem.Name = "registerPlotMenuItem";
-            registerPlotMenuItem.Size = new Size(248, 32);
-            registerPlotMenuItem.Text = "Register Plot";
-            registerPlotMenuItem.Click += ButtonManagePlots_Click;
-            // 
-            // viewPropertiesMenuItem
-            // 
-            viewPropertiesMenuItem.Name = "viewPropertiesMenuItem";
-            viewPropertiesMenuItem.Size = new Size(248, 32);
-            viewPropertiesMenuItem.Text = "View Properties";
-            // 
-            // ownerDetailsMenuItem
-            // 
-            ownerDetailsMenuItem.Name = "ownerDetailsMenuItem";
-            ownerDetailsMenuItem.Size = new Size(248, 32);
-            ownerDetailsMenuItem.Text = "Owner Details";
-            // 
             // registerPlotToolStripMenuItem
             // 
             registerPlotToolStripMenuItem.Name = "registerPlotToolStripMenuItem";
-            registerPlotToolStripMenuItem.Size = new Size(248, 32);
-            registerPlotToolStripMenuItem.Text = "Register Plot";
+            registerPlotToolStripMenuItem.Size = new Size(263, 32);
+            registerPlotToolStripMenuItem.Text = "Manage Property";
+            registerPlotToolStripMenuItem.Click += registerPlotToolStripMenuItem_Click;
+            // 
+            // registerPlotMenuItem
+            // 
+            registerPlotMenuItem.Name = "registerPlotMenuItem";
+            registerPlotMenuItem.Size = new Size(263, 32);
+            registerPlotMenuItem.Text = "Mnage Plots";
+            registerPlotMenuItem.Click += ButtonManagePlots_Click;
             // 
             // transactionsMenu
             // 
@@ -276,7 +261,7 @@ namespace RealEstateManager
             dataGridViewProperties.ReadOnly = true;
             dataGridViewProperties.RowHeadersWidth = 51;
             dataGridViewProperties.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewProperties.Size = new Size(1790, 209);
+            dataGridViewProperties.Size = new Size(1790, 232);
             dataGridViewProperties.TabIndex = 3;
             dataGridViewProperties.SelectionChanged += DataGridViewProperties_SelectionChanged;
             // 
@@ -286,7 +271,7 @@ namespace RealEstateManager
             buttonAddProperty.FlatStyle = FlatStyle.Flat;
             buttonAddProperty.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonAddProperty.ForeColor = Color.White;
-            buttonAddProperty.Location = new Point(1564, 23);
+            buttonAddProperty.Location = new Point(1564, 37);
             buttonAddProperty.Name = "buttonAddProperty";
             buttonAddProperty.Size = new Size(240, 36);
             buttonAddProperty.TabIndex = 2;
@@ -335,7 +320,7 @@ namespace RealEstateManager
             dataGridViewPlots.ReadOnly = true;
             dataGridViewPlots.RowHeadersWidth = 51;
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewPlots.Size = new Size(1790, 500);
+            dataGridViewPlots.Size = new Size(1790, 448);
             dataGridViewPlots.TabIndex = 1;
             // 
             // labelProperties
@@ -384,7 +369,7 @@ namespace RealEstateManager
             groupBoxPlots.Location = new Point(52, 413);
             groupBoxPlots.Name = "groupBoxPlots";
             groupBoxPlots.Padding = new Padding(15);
-            groupBoxPlots.Size = new Size(1830, 358);
+            groupBoxPlots.Size = new Size(1830, 535);
             groupBoxPlots.TabIndex = 2;
             groupBoxPlots.TabStop = false;
             groupBoxPlots.Text = "Plots";
@@ -394,7 +379,7 @@ namespace RealEstateManager
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
-            ClientSize = new Size(1832, 804);
+            ClientSize = new Size(1832, 956);
             Controls.Add(groupBoxPlots);
             Controls.Add(groupBoxProperties);
             Controls.Add(menuStripMain);

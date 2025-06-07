@@ -99,7 +99,6 @@ namespace RealEstateManager.Pages
             dataGridViewPlots.Location = new Point(41, 154);
             dataGridViewPlots.Margin = new Padding(4);
             dataGridViewPlots.Name = "dataGridViewPlots";
-            dataGridViewPlots.ReadOnly = false;
             dataGridViewPlots.RowHeadersWidth = 51;
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewPlots.Size = new Size(976, 490);
@@ -107,13 +106,14 @@ namespace RealEstateManager.Pages
             // 
             // buttonAddPlot
             // 
-            buttonAddPlot.BackColor = Color.DodgerBlue;
+            buttonAddPlot.BackColor = Color.Green;
             buttonAddPlot.FlatStyle = FlatStyle.Flat;
+            buttonAddPlot.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             buttonAddPlot.ForeColor = Color.White;
             buttonAddPlot.Location = new Point(41, 658);
             buttonAddPlot.Margin = new Padding(4);
             buttonAddPlot.Name = "buttonAddPlot";
-            buttonAddPlot.Size = new Size(165, 49);
+            buttonAddPlot.Size = new Size(165, 36);
             buttonAddPlot.TabIndex = 6;
             buttonAddPlot.Text = "Add Plot";
             buttonAddPlot.UseVisualStyleBackColor = false;
@@ -121,13 +121,14 @@ namespace RealEstateManager.Pages
             // 
             // buttonEditPlot
             // 
-            buttonEditPlot.BackColor = Color.DodgerBlue;
+            buttonEditPlot.BackColor = Color.Green;
             buttonEditPlot.FlatStyle = FlatStyle.Flat;
+            buttonEditPlot.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             buttonEditPlot.ForeColor = Color.White;
             buttonEditPlot.Location = new Point(220, 658);
             buttonEditPlot.Margin = new Padding(4);
             buttonEditPlot.Name = "buttonEditPlot";
-            buttonEditPlot.Size = new Size(165, 49);
+            buttonEditPlot.Size = new Size(165, 36);
             buttonEditPlot.TabIndex = 7;
             buttonEditPlot.Text = "Edit Plot";
             buttonEditPlot.UseVisualStyleBackColor = false;
@@ -135,24 +136,25 @@ namespace RealEstateManager.Pages
             // 
             // buttonDeletePlot
             // 
-            buttonDeletePlot.BackColor = Color.DodgerBlue;
+            buttonDeletePlot.BackColor = Color.Green;
             buttonDeletePlot.FlatStyle = FlatStyle.Flat;
+            buttonDeletePlot.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             buttonDeletePlot.ForeColor = Color.White;
             buttonDeletePlot.Location = new Point(399, 658);
             buttonDeletePlot.Margin = new Padding(4);
             buttonDeletePlot.Name = "buttonDeletePlot";
-            buttonDeletePlot.Size = new Size(165, 49);
+            buttonDeletePlot.Size = new Size(165, 36);
             buttonDeletePlot.TabIndex = 8;
             buttonDeletePlot.Text = "Delete Plot";
             buttonDeletePlot.UseVisualStyleBackColor = false;
-            buttonDeletePlot.Click += buttonDeletePlot_Click;
+            buttonDeletePlot.Click += buttonDeleteSelectedPlots_Click;
             // 
             // ManagePlotsForm
             // 
             AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
-            ClientSize = new Size(1072, 742);
+            ClientSize = new Size(1072, 710);
             Controls.Add(labelProperty);
             Controls.Add(comboBoxProperty);
             Controls.Add(labelPlotCount);

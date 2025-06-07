@@ -163,7 +163,7 @@ namespace RealEstateManager.Pages
             if (_isEditMode)
             {
                 // Update existing sale
-                string update = @"UPDATE PropertySale
+                string update = @"UPDATE PlotSale
                     SET CustomerName = @CustomerName, CustomerPhone = @CustomerPhone, CustomerEmail = @CustomerEmail,
                         SaleAmount = @SaleAmount, SaleDate = @SaleDate, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate
                     WHERE PlotId = @PlotId AND IsDeleted = 0";
@@ -192,7 +192,7 @@ namespace RealEstateManager.Pages
             else
             {
                 // Insert new sale
-                string insert = @"INSERT INTO PropertySale
+                string insert = @"INSERT INTO PlotSale
                     (PropertyId, PlotId, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
                     VALUES (@PropertyId, @PlotId, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
                     @ModifiedBy, @ModifiedDate)";

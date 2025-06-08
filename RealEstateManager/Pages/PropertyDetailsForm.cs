@@ -1,5 +1,12 @@
 using Microsoft.Data.SqlClient;
+using MigraDoc.DocumentObjectModel;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Reflection;
 
 namespace RealEstateManager.Pages
 {
@@ -343,6 +350,322 @@ namespace RealEstateManager.Pages
                         break;
                 }
             }
+        }
+
+        private void buttonGenerateReport_Click(object sender, EventArgs e)
+        {
+            // Use property title as file name, sanitized for file system
+            string propertyTitle = labelTitleValue.Text?.Trim() ?? "PropertyReport";
+            foreach (char c in Path.GetInvalidFileNameChars())
+                propertyTitle = propertyTitle.Replace(c, '_');
+            string fileName = propertyTitle + ".pdf";
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "PDF files (*.pdf)|*.pdf";
+                sfd.FileName = fileName;
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    GeneratePdfReport(sfd.FileName);
+                    MessageBox.Show("PDF report generated successfully.", "Report", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void GeneratePdfReport(string filePath)
+        {
+            PdfDocument document = new PdfDocument();
+            document.Info.Title = "Property Report";
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+
+            int margin = 40;
+            double y = margin;
+
+            // --- Header: Logo, Org Name, Address (2 lines) ---
+            // Prepare org info
+            string orgName = "Jay Maa Durga Housing Agency";
+            string orgAddressLine1 = "Building #1, Block #2, Mahakalkar Complex opp. Central Bank of India, Umred Road,";
+            string orgAddressLine2 = "Dighori, Nagpur - 440034";
+
+            // Logo
+            double logoWidth = 50, logoHeight = 50;
+            using (var logoStream = new MemoryStream())
+            {
+                Properties.Resources.logo.Save(logoStream, ImageFormat.Png);
+                logoStream.Position = 0;
+                XImage logo = XImage.FromStream(logoStream);
+                gfx.DrawImage(logo, margin, margin, logoWidth, logoHeight);
+            }
+
+            // Org name (centered, pulled up)
+            double orgNameY = margin + 4;
+            gfx.DrawString(
+                orgName,
+                new XFont("Segoe UI", 18, XFontStyleEx.Bold),
+                XBrushes.MidnightBlue,
+                new XRect(0, orgNameY, page.Width, 24),
+                XStringFormats.TopCenter
+            );
+
+            // Address line 1 (centered, just below org name)
+            double address1Y = orgNameY + 24 + 2;
+            gfx.DrawString(
+                orgAddressLine1,
+                new XFont("Segoe UI", 9, XFontStyleEx.Regular),
+                XBrushes.DimGray,
+                new XRect(0, address1Y, page.Width, 16),
+                XStringFormats.TopCenter
+            );
+
+            // Address line 2 (centered, just below line 1)
+            double address2Y = address1Y + 16;
+            gfx.DrawString(
+                orgAddressLine2,
+                new XFont("Segoe UI", 9, XFontStyleEx.Regular),
+                XBrushes.DimGray,
+                new XRect(0, address2Y, page.Width, 16),
+                XStringFormats.TopCenter
+            );
+
+            // Set y to just below the address lines, with a small gap before the horizontal line
+            y = margin + 4 + 24 + 2 + 16 + 16 + 8;
+
+            // --- Light horizontal line before Property Details ---
+            XPen lightPen = new XPen(XColors.LightGray, 1);
+            gfx.DrawLine(lightPen, margin, y, page.Width - margin, y);
+            y += 10;
+
+            // Property Details: 2 columns, titles bold, values aligned
+            (string Title, string Value)[] details = {
+                ("Title:", labelTitleValue.Text),
+                ("Type:", labelTypeValue.Text),
+                ("Status:", labelStatusValue.Text),
+                ("Owner:", labelOwnerValue.Text),
+                ("Phone:", labelPhoneValue.Text),
+                ("Address:", labelAddressValue.Text),
+                ("City:", labelCityValue.Text),
+                ("State:", labelStateValue.Text),
+                ("Zip:", labelZipValue.Text),
+                ("Description:", labelDescriptionValue.Text),
+                ("Buy Price:", labelPropertyBuyPrice.Text),
+                ("Amount Paid:", labelPropertyAmountPaid.Text),
+                ("Amount Balance:", labelPropertyBalance.Text)
+            };
+
+            double detailsX = margin;
+            double detailsY = y;
+
+            gfx.DrawString("Property Details", new XFont("Segoe UI", 14, XFontStyleEx.Bold), XBrushes.Black,
+                new XRect(detailsX, detailsY, page.Width - 2 * margin, 30), XStringFormats.TopLeft);
+            detailsY += 28;
+
+            // Split details into 2 columns
+            int detailsPerCol = (int)Math.Ceiling(details.Length / 2.0);
+            double colWidth = (page.Width - 2 * margin) / 2;
+            double leftX = margin;
+            double rightX = margin + colWidth;
+            double leftY = detailsY;
+            double rightY = detailsY;
+
+            // Calculate max title width for each column for alignment
+            var titleFont = new XFont("Segoe UI", 10, XFontStyleEx.Bold);
+            double leftMaxTitleWidth = 0, rightMaxTitleWidth = 0;
+            for (int i = 0; i < details.Length; i++)
+            {
+                double w = gfx.MeasureString(details[i].Title, titleFont).Width;
+                if (i < detailsPerCol)
+                {
+                    if (w > leftMaxTitleWidth) leftMaxTitleWidth = w;
+                }
+                else
+                {
+                    if (w > rightMaxTitleWidth) rightMaxTitleWidth = w;
+                }
+            }
+            double gap = 40;
+
+            for (int i = 0; i < details.Length; i++)
+            {
+                var (title, value) = details[i];
+                if (i < detailsPerCol)
+                {
+                    double tx = leftX;
+                    double ty = leftY;
+                    gfx.DrawString(title, titleFont, XBrushes.Black,
+                        new XRect(tx, ty, leftMaxTitleWidth, 18), XStringFormats.TopLeft);
+                    gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
+                        new XRect(tx + leftMaxTitleWidth + gap, ty, colWidth - leftMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
+                    leftY += 16;
+                }
+                else
+                {
+                    double tx = rightX;
+                    double ty = rightY;
+                    gfx.DrawString(title, titleFont, XBrushes.Black,
+                        new XRect(tx, ty, rightMaxTitleWidth, 18), XStringFormats.TopLeft);
+                    gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
+                        new XRect(tx + rightMaxTitleWidth + gap, ty, colWidth - rightMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
+                    rightY += 16;
+                }
+            }
+            y = Math.Max(leftY, rightY) + 10;
+
+            // --- Light horizontal line before Summary ---
+            gfx.DrawLine(lightPen, margin, y, page.Width - margin, y);
+            y += 10;
+
+            // Summary: 2 columns, titles bold, values aligned
+            (string Title, string Value)[] summary = {
+                ("Total Plots:", labelTotalPlotsValue.Text),
+                ("Total Sale Amount:", labelTotalSaleAmountValue.Text),
+                ("Total Paid:", labelTotalPaidValue.Text),
+                ("Total Balance:", labelTotalBalanceValue.Text),
+                ("Total Profit/Loss:", labelTotalProfitLossValue.Text)
+            };
+
+            double summaryX = margin;
+            double summaryY = y;
+
+            gfx.DrawString("Summary", new XFont("Segoe UI", 14, XFontStyleEx.Bold), XBrushes.Black,
+                new XRect(summaryX, summaryY, page.Width - 2 * margin, 30), XStringFormats.TopLeft);
+            summaryY += 28;
+
+            // Split summary into 2 columns
+            int summaryPerCol = (int)Math.Ceiling(summary.Length / 2.0);
+            double summaryColWidth = (page.Width - 2 * margin) / 2;
+            double summaryLeftX = margin;
+            double summaryRightX = margin + summaryColWidth;
+            double summaryLeftY = summaryY;
+            double summaryRightY = summaryY;
+
+            // Calculate max title width for each summary column for alignment
+            double summaryLeftMaxTitleWidth = 0, summaryRightMaxTitleWidth = 0;
+            for (int i = 0; i < summary.Length; i++)
+            {
+                double w = gfx.MeasureString(summary[i].Title, titleFont).Width;
+                if (i < summaryPerCol)
+                {
+                    if (w > summaryLeftMaxTitleWidth) summaryLeftMaxTitleWidth = w;
+                }
+                else
+                {
+                    if (w > summaryRightMaxTitleWidth) summaryRightMaxTitleWidth = w;
+                }
+            }
+
+            for (int i = 0; i < summary.Length; i++)
+            {
+                var (title, value) = summary[i];
+                if (i < summaryPerCol)
+                {
+                    double tx = summaryLeftX;
+                    double ty = summaryLeftY;
+                    gfx.DrawString(title, titleFont, XBrushes.Black,
+                        new XRect(tx, ty, summaryLeftMaxTitleWidth, 18), XStringFormats.TopLeft);
+                    gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
+                        new XRect(tx + summaryLeftMaxTitleWidth + gap, ty, summaryColWidth - summaryLeftMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
+                    summaryLeftY += 16;
+                }
+                else
+                {
+                    double tx = summaryRightX;
+                    double ty = summaryRightY;
+                    gfx.DrawString(title, titleFont, XBrushes.Black,
+                        new XRect(tx, ty, summaryRightMaxTitleWidth, 18), XStringFormats.TopLeft);
+                    gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
+                        new XRect(tx + summaryRightMaxTitleWidth + gap, ty, summaryColWidth - summaryRightMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
+                    summaryRightY += 16;
+                }
+            }
+            y = Math.Max(summaryLeftY, summaryRightY) + 10;
+
+            // --- Light horizontal line before Transactions ---
+            gfx.DrawLine(lightPen, margin, y, page.Width - margin, y);
+            y += 10;
+
+            // Transactions grid with borders
+            gfx.DrawString("Transactions", new XFont("Segoe UI", 12, XFontStyleEx.Bold), XBrushes.Black,
+                new XRect(margin, y, page.Width - 2 * margin, 20), XStringFormats.TopLeft);
+            y += 22;
+
+            var visibleColumns = dataGridViewTransactions.Columns
+                .Cast<DataGridViewColumn>()
+                .Where(c => c.Visible && c.Name != "Action")
+                .OrderBy(c => c.DisplayIndex)
+                .ToList();
+
+            // Set custom width for TRN Date column
+            int[] colWidths = new int[visibleColumns.Count];
+            int totalWidth = (int)(page.Width - 2 * margin);
+            int sumWidths = 0;
+            for (int i = 0; i < visibleColumns.Count; i++)
+            {
+                if (visibleColumns[i].Name == "Date")
+                    colWidths[i] = 200; // Increased width for TRN Date
+                else
+                    colWidths[i] = Math.Max(60, visibleColumns[i].Width);
+                sumWidths += colWidths[i];
+            }
+            if (sumWidths > totalWidth)
+            {
+                double scale = (double)totalWidth / sumWidths;
+                for (int i = 0; i < colWidths.Length; i++)
+                    colWidths[i] = (int)(colWidths[i] * scale);
+            }
+
+            int colX = margin;
+            int rowHeight = 20;
+            // Draw header row with borders, all headers in bold
+            for (int i = 0; i < visibleColumns.Count; i++)
+            {
+                gfx.DrawRectangle(XPens.Black, colX, y, colWidths[i], rowHeight);
+                gfx.DrawString(visibleColumns[i].HeaderText, new XFont("Segoe UI", 9, XFontStyleEx.Bold), XBrushes.Black,
+                    new XRect(colX + 2, y + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.TopLeft);
+                colX += colWidths[i];
+            }
+            y += rowHeight;
+
+            // Draw data rows with borders, format TRN Date column to AM/PM
+            int maxRows = 15;
+            int rowCount = 0;
+            for (int rowIdx = 0; rowIdx < dataGridViewTransactions.Rows.Count; rowIdx++)
+            {
+                var row = dataGridViewTransactions.Rows[rowIdx];
+                if (row.IsNewRow) continue;
+                colX = margin;
+                for (int i = 0; i < visibleColumns.Count; i++)
+                {
+                    gfx.DrawRectangle(XPens.Black, colX, y, colWidths[i], rowHeight);
+                    var col = visibleColumns[i];
+                    string value = row.Cells[col.Name].Value?.ToString() ?? "";
+
+                    // Format TRN Date column to AM/PM
+                    if (col.Name == "Date" && row.Cells[col.Name].Value is DateTime dt)
+                    {
+                        value = dt.ToString("dd/MM/yyyy hh:mm tt");
+                    }
+                    else if (col.Name == "Date" && DateTime.TryParse(value, out DateTime dt2))
+                    {
+                        value = dt2.ToString("dd/MM/yyyy hh:mm tt");
+                    }
+
+                    gfx.DrawString(value, new XFont("Segoe UI", 9), XBrushes.Black,
+                        new XRect(colX + 2, y + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.TopLeft);
+                    colX += colWidths[i];
+                }
+                y += rowHeight;
+                rowCount++;
+                if (rowCount >= maxRows) break;
+            }
+
+            // Footer
+            string footer = "© " + DateTime.Now.Year + " VVT Softwares Pvt. Ltd. All rights reserved.";
+            gfx.DrawString(footer, new XFont("Segoe UI", 8), XBrushes.Gray,
+                new XRect(margin, page.Height - margin, page.Width - 2 * margin, 20), XStringFormats.BottomLeft);
+
+            document.Save(filePath);
+            Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
         }
     }
 }

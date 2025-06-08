@@ -38,6 +38,7 @@ namespace RealEstateManager.Pages
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlotDetailsForm));
             labelPlotId = new Label();
             labelPlotNumber = new Label();
             labelStatus = new Label();
@@ -56,6 +57,7 @@ namespace RealEstateManager.Pages
             labelCustomerEmail = new Label();
             dataGridViewTransactions = new DataGridView();
             groupBoxPlotDetails = new GroupBox();
+            buttonGenerateReport = new Button();
             labelPaidAmountTitle = new Label();
             labelPlotIdTitle = new Label();
             labelBalanceAmountTitle = new Label();
@@ -251,6 +253,7 @@ namespace RealEstateManager.Pages
             // groupBoxPlotDetails
             // 
             groupBoxPlotDetails.BackColor = Color.AliceBlue;
+            groupBoxPlotDetails.Controls.Add(buttonGenerateReport);
             groupBoxPlotDetails.Controls.Add(labelPaidAmountTitle);
             groupBoxPlotDetails.Controls.Add(labelPlotIdTitle);
             groupBoxPlotDetails.Controls.Add(labelPaidAmount);
@@ -280,6 +283,20 @@ namespace RealEstateManager.Pages
             groupBoxPlotDetails.TabIndex = 0;
             groupBoxPlotDetails.TabStop = false;
             groupBoxPlotDetails.Text = "Plot && Customer Details";
+            // 
+            // buttonGenerateReport
+            // 
+            buttonGenerateReport.BackColor = Color.Green;
+            buttonGenerateReport.FlatStyle = FlatStyle.Flat;
+            buttonGenerateReport.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            buttonGenerateReport.ForeColor = Color.White;
+            buttonGenerateReport.Location = new Point(1112, 176);
+            buttonGenerateReport.Name = "buttonGenerateReport";
+            buttonGenerateReport.Size = new Size(159, 36);
+            buttonGenerateReport.TabIndex = 41;
+            buttonGenerateReport.Text = "Generate Report";
+            buttonGenerateReport.UseVisualStyleBackColor = false;
+            buttonGenerateReport.Click += buttonGenerateReport_Click;
             // 
             // labelPaidAmountTitle
             // 
@@ -412,6 +429,7 @@ namespace RealEstateManager.Pages
             Controls.Add(groupBoxPlotDetails);
             Controls.Add(groupBoxTransactionGrid);
             Font = new Font("Segoe UI", 10F);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PlotDetailsForm";
             Text = "Plot Details";
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).EndInit();
@@ -420,5 +438,6 @@ namespace RealEstateManager.Pages
             groupBoxTransactionGrid.ResumeLayout(false);
             ResumeLayout(false);
         }
+        private Button buttonGenerateReport;
     }
 }

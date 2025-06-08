@@ -30,6 +30,7 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterSaleForm));
             groupBoxSaleDetails = new GroupBox();
             labelProperty = new Label();
             comboBoxProperty = new ComboBox();
@@ -242,6 +243,7 @@ namespace RealEstateManager.Pages
             ClientSize = new Size(778, 496);
             Controls.Add(groupBoxSaleDetails);
             Font = new Font("Segoe UI", 12F);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "RegisterSaleForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Register Sale";

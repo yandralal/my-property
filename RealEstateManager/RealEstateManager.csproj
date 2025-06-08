@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <PackageReference Include="PdfSharp-MigraDoc-GDI" Version="6.2.0" />
     <PackageReference Include="System.Data.OleDb" Version="9.0.5" />
   </ItemGroup>
 

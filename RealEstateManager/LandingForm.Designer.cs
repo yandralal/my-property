@@ -56,6 +56,7 @@ namespace RealEstateManager
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LandingForm));
             menuStripMain = new MenuStrip();
             propertyMenu = new ToolStripMenuItem();
             registerPlotToolStripMenuItem = new ToolStripMenuItem();
@@ -385,6 +386,7 @@ namespace RealEstateManager
             Controls.Add(menuStripMain);
             Controls.Add(buttonManagePlots);
             ForeColor = Color.White;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
             Name = "LandingForm";
             StartPosition = FormStartPosition.CenterScreen;

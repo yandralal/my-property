@@ -28,34 +28,35 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
-            groupBoxTransactionEntry = new System.Windows.Forms.GroupBox();
-            labelPropertyId = new System.Windows.Forms.Label();
-            textBoxPropertyId = new System.Windows.Forms.TextBox();
-            labelSaleAmount = new System.Windows.Forms.Label();
-            textBoxSaleAmount = new System.Windows.Forms.TextBox();
-            labelAmountPaidTillDate = new System.Windows.Forms.Label();
-            textBoxAmountPaidTillDate = new System.Windows.Forms.TextBox();
-            labelAmount = new System.Windows.Forms.Label();
-            textBoxAmount = new System.Windows.Forms.TextBox();
-            labelBalanceAmount = new System.Windows.Forms.Label();
-            labelBalanceValue = new System.Windows.Forms.Label();
-            labelPaymentMethod = new System.Windows.Forms.Label();
-            comboBoxPaymentMethod = new System.Windows.Forms.ComboBox();
-            labelReferenceNumber = new System.Windows.Forms.Label();
-            textBoxReferenceNumber = new System.Windows.Forms.TextBox();
-            labelNotes = new System.Windows.Forms.Label();
-            textBoxNotes = new System.Windows.Forms.TextBox();
-            labelTransactionDate = new System.Windows.Forms.Label();
-            dateTimePickerTransactionDate = new System.Windows.Forms.DateTimePicker();
-            buttonSave = new System.Windows.Forms.Button();
-            labelTransactionType = new System.Windows.Forms.Label();
-            comboBoxTransactionType = new System.Windows.Forms.ComboBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterPropertyTransactionForm));
+            groupBoxTransactionEntry = new GroupBox();
+            labelPropertyId = new Label();
+            textBoxPropertyId = new TextBox();
+            labelSaleAmount = new Label();
+            textBoxSaleAmount = new TextBox();
+            labelAmountPaidTillDate = new Label();
+            textBoxAmountPaidTillDate = new TextBox();
+            labelAmount = new Label();
+            textBoxAmount = new TextBox();
+            labelBalanceAmount = new Label();
+            labelBalanceValue = new Label();
+            labelPaymentMethod = new Label();
+            comboBoxPaymentMethod = new ComboBox();
+            labelReferenceNumber = new Label();
+            textBoxReferenceNumber = new TextBox();
+            labelNotes = new Label();
+            textBoxNotes = new TextBox();
+            labelTransactionDate = new Label();
+            dateTimePickerTransactionDate = new DateTimePicker();
+            buttonSave = new Button();
+            labelTransactionType = new Label();
+            comboBoxTransactionType = new ComboBox();
             groupBoxTransactionEntry.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxTransactionEntry
             // 
-            groupBoxTransactionEntry.BackColor = System.Drawing.Color.AliceBlue;
+            groupBoxTransactionEntry.BackColor = Color.AliceBlue;
             groupBoxTransactionEntry.Controls.Add(labelPropertyId);
             groupBoxTransactionEntry.Controls.Add(textBoxPropertyId);
             groupBoxTransactionEntry.Controls.Add(labelSaleAmount);
@@ -77,253 +78,241 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Controls.Add(buttonSave);
             groupBoxTransactionEntry.Controls.Add(labelTransactionType);
             groupBoxTransactionEntry.Controls.Add(comboBoxTransactionType);
-            groupBoxTransactionEntry.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            groupBoxTransactionEntry.ForeColor = System.Drawing.Color.MidnightBlue;
-            groupBoxTransactionEntry.Location = new System.Drawing.Point(12, 12);
+            groupBoxTransactionEntry.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxTransactionEntry.ForeColor = Color.MidnightBlue;
+            groupBoxTransactionEntry.Location = new Point(12, 12);
             groupBoxTransactionEntry.Name = "groupBoxTransactionEntry";
-            groupBoxTransactionEntry.Padding = new System.Windows.Forms.Padding(15);
-            groupBoxTransactionEntry.Size = new System.Drawing.Size(620, 610);
+            groupBoxTransactionEntry.Padding = new Padding(15);
+            groupBoxTransactionEntry.Size = new Size(620, 610);
             groupBoxTransactionEntry.TabIndex = 0;
             groupBoxTransactionEntry.TabStop = false;
             groupBoxTransactionEntry.Text = "Transaction Entry";
             // 
             // labelPropertyId
             // 
-            labelPropertyId.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelPropertyId.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelPropertyId.Location = new System.Drawing.Point(20, 40);
+            labelPropertyId.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelPropertyId.ForeColor = Color.DarkSlateGray;
+            labelPropertyId.Location = new Point(20, 40);
             labelPropertyId.Name = "labelPropertyId";
-            labelPropertyId.Size = new System.Drawing.Size(120, 23);
+            labelPropertyId.Size = new Size(120, 23);
             labelPropertyId.TabIndex = 0;
             labelPropertyId.Text = "Property Number:";
             // 
             // textBoxPropertyId
             // 
-            textBoxPropertyId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            textBoxPropertyId.Font = new System.Drawing.Font("Segoe UI", 10F);
-            textBoxPropertyId.Location = new System.Drawing.Point(222, 37);
+            textBoxPropertyId.BorderStyle = BorderStyle.FixedSingle;
+            textBoxPropertyId.Font = new Font("Segoe UI", 10F);
+            textBoxPropertyId.Location = new Point(222, 37);
             textBoxPropertyId.Name = "textBoxPropertyId";
             textBoxPropertyId.ReadOnly = true;
-            textBoxPropertyId.Size = new System.Drawing.Size(300, 30);
-            textBoxPropertyId.TabIndex = 1;
+            textBoxPropertyId.Size = new Size(300, 30);
+            textBoxPropertyId.TabIndex = 0;
             // 
             // labelSaleAmount
             // 
-            labelSaleAmount.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelSaleAmount.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelSaleAmount.Location = new System.Drawing.Point(20, 86);
+            labelSaleAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelSaleAmount.ForeColor = Color.DarkSlateGray;
+            labelSaleAmount.Location = new Point(20, 86);
             labelSaleAmount.Name = "labelSaleAmount";
-            labelSaleAmount.Size = new System.Drawing.Size(120, 23);
+            labelSaleAmount.Size = new Size(120, 23);
             labelSaleAmount.TabIndex = 2;
             labelSaleAmount.Text = "Sale Amount:";
             // 
             // textBoxSaleAmount
             // 
-            textBoxSaleAmount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            textBoxSaleAmount.Font = new System.Drawing.Font("Segoe UI", 10F);
-            textBoxSaleAmount.Location = new System.Drawing.Point(222, 83);
+            textBoxSaleAmount.BorderStyle = BorderStyle.FixedSingle;
+            textBoxSaleAmount.Font = new Font("Segoe UI", 10F);
+            textBoxSaleAmount.Location = new Point(222, 83);
             textBoxSaleAmount.Name = "textBoxSaleAmount";
             textBoxSaleAmount.ReadOnly = true;
-            textBoxSaleAmount.Size = new System.Drawing.Size(300, 30);
-            textBoxSaleAmount.TabIndex = 3;
+            textBoxSaleAmount.Size = new Size(300, 30);
+            textBoxSaleAmount.TabIndex = 1;
             // 
             // labelAmountPaidTillDate
             // 
-            labelAmountPaidTillDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelAmountPaidTillDate.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelAmountPaidTillDate.Location = new System.Drawing.Point(20, 134);
+            labelAmountPaidTillDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAmountPaidTillDate.ForeColor = Color.DarkSlateGray;
+            labelAmountPaidTillDate.Location = new Point(20, 134);
             labelAmountPaidTillDate.Name = "labelAmountPaidTillDate";
-            labelAmountPaidTillDate.Size = new System.Drawing.Size(196, 23);
+            labelAmountPaidTillDate.Size = new Size(196, 23);
             labelAmountPaidTillDate.TabIndex = 4;
             labelAmountPaidTillDate.Text = "Amount Paid Till Date:";
             // 
             // textBoxAmountPaidTillDate
             // 
-            textBoxAmountPaidTillDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            textBoxAmountPaidTillDate.Font = new System.Drawing.Font("Segoe UI", 10F);
-            textBoxAmountPaidTillDate.Location = new System.Drawing.Point(222, 131);
+            textBoxAmountPaidTillDate.BorderStyle = BorderStyle.FixedSingle;
+            textBoxAmountPaidTillDate.Font = new Font("Segoe UI", 10F);
+            textBoxAmountPaidTillDate.Location = new Point(222, 131);
             textBoxAmountPaidTillDate.Name = "textBoxAmountPaidTillDate";
             textBoxAmountPaidTillDate.ReadOnly = true;
-            textBoxAmountPaidTillDate.Size = new System.Drawing.Size(300, 30);
-            textBoxAmountPaidTillDate.TabIndex = 5;
-            // 
-            // labelTransactionType
-            // 
-            labelTransactionType.AutoSize = true;
-            labelTransactionType.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelTransactionType.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelTransactionType.Location = new System.Drawing.Point(20, 181);
-            labelTransactionType.Name = "labelTransactionType";
-            labelTransactionType.Size = new System.Drawing.Size(149, 23);
-            labelTransactionType.TabIndex = 10;
-            labelTransactionType.Text = "Transaction Type:";
-            // 
-            // comboBoxTransactionType
-            // 
-            comboBoxTransactionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            comboBoxTransactionType.Font = new System.Drawing.Font("Segoe UI", 10F);
-            comboBoxTransactionType.Location = new System.Drawing.Point(222, 181);
-            comboBoxTransactionType.Name = "comboBoxTransactionType";
-            comboBoxTransactionType.Size = new System.Drawing.Size(300, 31);
-            comboBoxTransactionType.TabIndex = 11;
+            textBoxAmountPaidTillDate.Size = new Size(300, 30);
+            textBoxAmountPaidTillDate.TabIndex = 2;
             // 
             // labelAmount
             // 
-            labelAmount.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelAmount.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelAmount.Location = new System.Drawing.Point(20, 231);
+            labelAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAmount.ForeColor = Color.DarkSlateGray;
+            labelAmount.Location = new Point(20, 231);
             labelAmount.Name = "labelAmount";
-            labelAmount.Size = new System.Drawing.Size(140, 23);
+            labelAmount.Size = new Size(140, 23);
             labelAmount.TabIndex = 6;
             labelAmount.Text = "Amount To Pay:";
             // 
             // textBoxAmount
             // 
-            textBoxAmount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            textBoxAmount.Font = new System.Drawing.Font("Segoe UI", 10F);
-            textBoxAmount.Location = new System.Drawing.Point(222, 230);
+            textBoxAmount.BorderStyle = BorderStyle.FixedSingle;
+            textBoxAmount.Font = new Font("Segoe UI", 10F);
+            textBoxAmount.Location = new Point(222, 230);
             textBoxAmount.Name = "textBoxAmount";
-            textBoxAmount.Size = new System.Drawing.Size(300, 30);
-            textBoxAmount.TabIndex = 7;
+            textBoxAmount.Size = new Size(300, 30);
+            textBoxAmount.TabIndex = 4;
             textBoxAmount.TextChanged += UpdateBalanceAmount;
-            this.textBoxAmount.Leave += new System.EventHandler(this.textBoxAmount_Leave);
+            textBoxAmount.Leave += textBoxAmount_Leave;
             // 
             // labelBalanceAmount
             // 
-            labelBalanceAmount.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelBalanceAmount.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelBalanceAmount.Location = new System.Drawing.Point(20, 278);
+            labelBalanceAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelBalanceAmount.ForeColor = Color.DarkSlateGray;
+            labelBalanceAmount.Location = new Point(20, 278);
             labelBalanceAmount.Name = "labelBalanceAmount";
-            labelBalanceAmount.Size = new System.Drawing.Size(120, 23);
+            labelBalanceAmount.Size = new Size(120, 23);
             labelBalanceAmount.TabIndex = 8;
             labelBalanceAmount.Text = "Balance:";
             // 
             // labelBalanceValue
             // 
-            labelBalanceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            labelBalanceValue.Font = new System.Drawing.Font("Segoe UI", 10F);
-            labelBalanceValue.ForeColor = System.Drawing.Color.Black;
-            labelBalanceValue.Location = new System.Drawing.Point(222, 275);
+            labelBalanceValue.BorderStyle = BorderStyle.FixedSingle;
+            labelBalanceValue.Font = new Font("Segoe UI", 10F);
+            labelBalanceValue.ForeColor = Color.Black;
+            labelBalanceValue.Location = new Point(222, 275);
             labelBalanceValue.Name = "labelBalanceValue";
-            labelBalanceValue.Size = new System.Drawing.Size(300, 30);
+            labelBalanceValue.Size = new Size(300, 30);
             labelBalanceValue.TabIndex = 9;
             labelBalanceValue.Text = "0.00";
             // 
             // labelPaymentMethod
             // 
-            labelPaymentMethod.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelPaymentMethod.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelPaymentMethod.Location = new System.Drawing.Point(20, 323);
+            labelPaymentMethod.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelPaymentMethod.ForeColor = Color.DarkSlateGray;
+            labelPaymentMethod.Location = new Point(20, 323);
             labelPaymentMethod.Name = "labelPaymentMethod";
-            labelPaymentMethod.Size = new System.Drawing.Size(140, 23);
+            labelPaymentMethod.Size = new Size(140, 23);
             labelPaymentMethod.TabIndex = 10;
             labelPaymentMethod.Text = "Payment Method:";
             // 
             // comboBoxPaymentMethod
             // 
-            comboBoxPaymentMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            comboBoxPaymentMethod.Font = new System.Drawing.Font("Segoe UI", 10F);
+            comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxPaymentMethod.Font = new Font("Segoe UI", 10F);
             comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
-            comboBoxPaymentMethod.Location = new System.Drawing.Point(222, 320);
+            comboBoxPaymentMethod.Location = new Point(222, 320);
             comboBoxPaymentMethod.Name = "comboBoxPaymentMethod";
-            comboBoxPaymentMethod.Size = new System.Drawing.Size(300, 31);
-            comboBoxPaymentMethod.TabIndex = 11;
+            comboBoxPaymentMethod.Size = new Size(300, 31);
+            comboBoxPaymentMethod.TabIndex = 5;
             // 
             // labelReferenceNumber
             // 
-            labelReferenceNumber.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelReferenceNumber.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelReferenceNumber.Location = new System.Drawing.Point(20, 370);
+            labelReferenceNumber.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelReferenceNumber.ForeColor = Color.DarkSlateGray;
+            labelReferenceNumber.Location = new Point(20, 370);
             labelReferenceNumber.Name = "labelReferenceNumber";
-            labelReferenceNumber.Size = new System.Drawing.Size(120, 23);
+            labelReferenceNumber.Size = new Size(120, 23);
             labelReferenceNumber.TabIndex = 12;
             labelReferenceNumber.Text = "Reference #:";
             // 
             // textBoxReferenceNumber
             // 
-            textBoxReferenceNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            textBoxReferenceNumber.Font = new System.Drawing.Font("Segoe UI", 10F);
-            textBoxReferenceNumber.Location = new System.Drawing.Point(222, 367);
+            textBoxReferenceNumber.BorderStyle = BorderStyle.FixedSingle;
+            textBoxReferenceNumber.Font = new Font("Segoe UI", 10F);
+            textBoxReferenceNumber.Location = new Point(222, 367);
             textBoxReferenceNumber.Name = "textBoxReferenceNumber";
-            textBoxReferenceNumber.Size = new System.Drawing.Size(300, 30);
-            textBoxReferenceNumber.TabIndex = 13;
+            textBoxReferenceNumber.Size = new Size(300, 30);
+            textBoxReferenceNumber.TabIndex = 6;
             // 
             // labelNotes
             // 
-            labelNotes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelNotes.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelNotes.Location = new System.Drawing.Point(20, 415);
+            labelNotes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelNotes.ForeColor = Color.DarkSlateGray;
+            labelNotes.Location = new Point(20, 415);
             labelNotes.Name = "labelNotes";
-            labelNotes.Size = new System.Drawing.Size(120, 23);
+            labelNotes.Size = new Size(120, 23);
             labelNotes.TabIndex = 14;
             labelNotes.Text = "Notes:";
             // 
             // textBoxNotes
             // 
-            textBoxNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            textBoxNotes.Font = new System.Drawing.Font("Segoe UI", 10F);
-            textBoxNotes.Location = new System.Drawing.Point(222, 412);
+            textBoxNotes.BorderStyle = BorderStyle.FixedSingle;
+            textBoxNotes.Font = new Font("Segoe UI", 10F);
+            textBoxNotes.Location = new Point(222, 412);
             textBoxNotes.Multiline = true;
             textBoxNotes.Name = "textBoxNotes";
-            textBoxNotes.Size = new System.Drawing.Size(300, 60);
-            textBoxNotes.TabIndex = 15;
+            textBoxNotes.Size = new Size(300, 60);
+            textBoxNotes.TabIndex = 7;
             // 
             // labelTransactionDate
             // 
-            labelTransactionDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            labelTransactionDate.ForeColor = System.Drawing.Color.DarkSlateGray;
-            labelTransactionDate.Location = new System.Drawing.Point(20, 493);
+            labelTransactionDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTransactionDate.ForeColor = Color.DarkSlateGray;
+            labelTransactionDate.Location = new Point(20, 493);
             labelTransactionDate.Name = "labelTransactionDate";
-            labelTransactionDate.Size = new System.Drawing.Size(120, 23);
+            labelTransactionDate.Size = new Size(120, 23);
             labelTransactionDate.TabIndex = 16;
             labelTransactionDate.Text = "Date:";
             // 
             // dateTimePickerTransactionDate
             // 
-            dateTimePickerTransactionDate.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dateTimePickerTransactionDate.Location = new System.Drawing.Point(222, 490);
+            dateTimePickerTransactionDate.Font = new Font("Segoe UI", 10F);
+            dateTimePickerTransactionDate.Location = new Point(222, 490);
             dateTimePickerTransactionDate.Name = "dateTimePickerTransactionDate";
-            dateTimePickerTransactionDate.Size = new System.Drawing.Size(300, 30);
-            dateTimePickerTransactionDate.TabIndex = 17;
+            dateTimePickerTransactionDate.Size = new Size(300, 30);
+            dateTimePickerTransactionDate.TabIndex = 8;
             // 
             // buttonSave
             // 
-            buttonSave.BackColor = System.Drawing.Color.Green;
-            buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            buttonSave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            buttonSave.ForeColor = System.Drawing.Color.White;
-            buttonSave.Location = new System.Drawing.Point(222, 539);
+            buttonSave.BackColor = Color.Green;
+            buttonSave.FlatStyle = FlatStyle.Flat;
+            buttonSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonSave.ForeColor = Color.White;
+            buttonSave.Location = new Point(222, 539);
             buttonSave.Name = "buttonSave";
-            buttonSave.Size = new System.Drawing.Size(300, 40);
-            buttonSave.TabIndex = 16;
+            buttonSave.Size = new Size(300, 40);
+            buttonSave.TabIndex = 9;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = false;
             buttonSave.Click += ButtonSave_Click;
-
-            // Set tab order (TabIndex) for all controls in logical order
-            this.textBoxPropertyId.TabIndex = 0;
-            this.textBoxSaleAmount.TabIndex = 1;
-            this.textBoxAmountPaidTillDate.TabIndex = 2;
-            this.comboBoxTransactionType.TabIndex = 3;
-            this.textBoxAmount.TabIndex = 4;
-            this.comboBoxPaymentMethod.TabIndex = 5;
-            this.textBoxReferenceNumber.TabIndex = 6;
-            this.textBoxNotes.TabIndex = 7;
-            this.dateTimePickerTransactionDate.TabIndex = 8;
-            this.buttonSave.TabIndex = 9;
-
+            // 
+            // labelTransactionType
+            // 
+            labelTransactionType.AutoSize = true;
+            labelTransactionType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTransactionType.ForeColor = Color.DarkSlateGray;
+            labelTransactionType.Location = new Point(20, 181);
+            labelTransactionType.Name = "labelTransactionType";
+            labelTransactionType.Size = new Size(149, 23);
+            labelTransactionType.TabIndex = 10;
+            labelTransactionType.Text = "Transaction Type:";
+            // 
+            // comboBoxTransactionType
+            // 
+            comboBoxTransactionType.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTransactionType.Font = new Font("Segoe UI", 10F);
+            comboBoxTransactionType.Location = new Point(222, 181);
+            comboBoxTransactionType.Name = "comboBoxTransactionType";
+            comboBoxTransactionType.Size = new Size(300, 31);
+            comboBoxTransactionType.TabIndex = 3;
             // 
             // RegisterPropertyTransactionForm
             // 
-            BackColor = System.Drawing.Color.AliceBlue;
-            ClientSize = new System.Drawing.Size(644, 634);
+            BackColor = Color.AliceBlue;
+            ClientSize = new Size(644, 634);
             Controls.Add(groupBoxTransactionEntry);
-            Font = new System.Drawing.Font("Segoe UI", 10F);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            Font = new Font("Segoe UI", 10F);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "RegisterPropertyTransactionForm";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Register Property Transaction";
             groupBoxTransactionEntry.ResumeLayout(false);
             groupBoxTransactionEntry.PerformLayout();

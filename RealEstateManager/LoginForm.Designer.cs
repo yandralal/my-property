@@ -33,6 +33,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             panelLogin = new Panel();
             buttonShowPassword = new Button();
             pictureBoxLogo = new PictureBox();
@@ -73,7 +74,7 @@
             // 
             // pictureBoxLogo
             // 
-            pictureBoxLogo.Image = Properties.Resources.logo_jpg;
+            pictureBoxLogo.Image = Properties.Resources.logo;
             pictureBoxLogo.Location = new Point(160, 10);
             pictureBoxLogo.Name = "pictureBoxLogo";
             pictureBoxLogo.Size = new Size(70, 63);
@@ -142,6 +143,7 @@
             ClientSize = new Size(813, 513);
             Controls.Add(panelLogin);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;

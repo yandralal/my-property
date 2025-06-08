@@ -4,6 +4,11 @@ namespace RealEstateManager.Pages
     {
         protected Label? footerLabel;
 
+        private void InitializeComponent()
+        {
+
+        }
+
         public BaseForm()
         {
             this.BackColor = Color.AliceBlue;

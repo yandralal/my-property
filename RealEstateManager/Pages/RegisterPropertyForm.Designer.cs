@@ -37,6 +37,7 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterPropertyForm));
             groupBoxPropertyDetails = new GroupBox();
             labelTitle = new Label();
             textBoxTitle = new TextBox();
@@ -329,6 +330,7 @@ namespace RealEstateManager.Pages
             // 
             ClientSize = new Size(600, 670);
             Controls.Add(groupBoxPropertyDetails);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "RegisterPropertyForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Property";

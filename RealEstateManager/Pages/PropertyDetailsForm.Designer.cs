@@ -42,6 +42,7 @@ namespace RealEstateManager.Pages
         private Label labelTotalBalanceValue;
         private Label labelTotalProfitLossTitle;
         private Label labelTotalProfitLossValue;
+        private Button buttonGenerateReport;
 
         protected override void Dispose(bool disposing)
         {
@@ -55,6 +56,7 @@ namespace RealEstateManager.Pages
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertyDetailsForm));
             groupBoxTransactionGrid = new GroupBox();
             dataGridViewTransactions = new DataGridView();
             groupBoxPropertyDetails = new GroupBox();
@@ -95,6 +97,7 @@ namespace RealEstateManager.Pages
             labelTotalProfitLossTitle = new Label();
             labelTotalProfitLossValue = new Label();
             groupBoxSummary = new GroupBox();
+            buttonGenerateReport = new Button();
             label33 = new Label();
             label34 = new Label();
             groupBoxTransactionGrid.SuspendLayout();
@@ -182,9 +185,9 @@ namespace RealEstateManager.Pages
             groupBoxPropertyDetails.Controls.Add(labelPropertyBalance);
             groupBoxPropertyDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPropertyDetails.ForeColor = Color.MidnightBlue;
-            groupBoxPropertyDetails.Location = new Point(22, 13);
+            groupBoxPropertyDetails.Location = new Point(22, 25);
             groupBoxPropertyDetails.Name = "groupBoxPropertyDetails";
-            groupBoxPropertyDetails.Size = new Size(1290, 242);
+            groupBoxPropertyDetails.Size = new Size(1290, 230);
             groupBoxPropertyDetails.TabIndex = 4;
             groupBoxPropertyDetails.TabStop = false;
             groupBoxPropertyDetails.Text = "Property Details";
@@ -573,6 +576,7 @@ namespace RealEstateManager.Pages
             groupBoxSummary.Controls.Add(labelTotalBalanceTitle);
             groupBoxSummary.Controls.Add(labelTotalBalanceValue);
             groupBoxSummary.Controls.Add(labelTotalProfitLossTitle);
+            groupBoxSummary.Controls.Add(buttonGenerateReport);
             groupBoxSummary.Controls.Add(labelTotalProfitLossValue);
             groupBoxSummary.Controls.Add(labelTotalSaleAmountTitle);
             groupBoxSummary.Controls.Add(labelTotalPaidValue);
@@ -588,6 +592,20 @@ namespace RealEstateManager.Pages
             groupBoxSummary.TabIndex = 36;
             groupBoxSummary.TabStop = false;
             groupBoxSummary.Text = "Summary";
+            // 
+            // buttonGenerateReport
+            // 
+            buttonGenerateReport.BackColor = Color.Green;
+            buttonGenerateReport.FlatStyle = FlatStyle.Flat;
+            buttonGenerateReport.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            buttonGenerateReport.ForeColor = Color.White;
+            buttonGenerateReport.Location = new Point(1110, 94);
+            buttonGenerateReport.Name = "buttonGenerateReport";
+            buttonGenerateReport.Size = new Size(159, 36);
+            buttonGenerateReport.TabIndex = 40;
+            buttonGenerateReport.Text = "Generate Report";
+            buttonGenerateReport.UseVisualStyleBackColor = false;
+            buttonGenerateReport.Click += buttonGenerateReport_Click;
             // 
             // label33
             // 
@@ -616,6 +634,7 @@ namespace RealEstateManager.Pages
             Controls.Add(groupBoxSummary);
             Controls.Add(groupBoxTransactionGrid);
             Controls.Add(groupBoxPropertyDetails);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PropertyDetailsForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Property Details";

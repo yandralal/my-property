@@ -22,6 +22,7 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManagePlotsForm));
             labelProperty = new Label();
             comboBoxProperty = new ComboBox();
             labelPlotCount = new Label();
@@ -165,6 +166,7 @@ namespace RealEstateManager.Pages
             Controls.Add(buttonEditPlot);
             Controls.Add(buttonDeletePlot);
             Font = new Font("Segoe UI", 12F);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             Name = "ManagePlotsForm";
             StartPosition = FormStartPosition.CenterScreen;

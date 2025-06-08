@@ -1,12 +1,9 @@
 using Microsoft.Data.SqlClient;
-using MigraDoc.DocumentObjectModel;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Reflection;
 
 namespace RealEstateManager.Pages
 {
@@ -30,6 +27,10 @@ namespace RealEstateManager.Pages
 
             // Set to None so custom widths are respected
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+            // Set font styles to match PlotDetailsForm
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
             // Add action column if not already present
             if (!dgv.Columns.Contains("Action"))
@@ -68,6 +69,7 @@ namespace RealEstateManager.Pages
                 dgv.Columns["Amount"].HeaderText = "Amount";
                 dgv.Columns["Amount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dgv.Columns["Amount"].Width = 130;
+                dgv.Columns["Amount"].DefaultCellStyle.Format = "C"; // Currency format
             }
             if (dgv.Columns["PaymentMethod"] != null)
             {
@@ -222,8 +224,8 @@ namespace RealEstateManager.Pages
                         decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
                         decimal amountBalance = reader["AmountBalance"] is decimal ab ? ab : 0;
                         labelPropertyBuyPrice.Text = string.Format("{0:C}", reader["Price"]);
-                        labelPropertyAmountPaid.Text = amountPaid.ToString("N2");
-                        labelPropertyBalance.Text = amountBalance.ToString("N2");
+                        labelPropertyAmountPaid.Text = string.Format("{0:C}", amountPaid);
+                        labelPropertyBalance.Text = string.Format("{0:C}", amountBalance);
                     }
                 }
 
@@ -258,10 +260,10 @@ namespace RealEstateManager.Pages
                             decimal profitLoss = totalSaleAmount - buyPrice;
 
                             labelTotalPlotsValue.Text = totalPlots.ToString();
-                            labelTotalSaleAmountValue.Text = totalSaleAmount.ToString("N2");
-                            labelTotalPaidValue.Text = totalPaid.ToString("N2");
-                            labelTotalBalanceValue.Text = totalBalance.ToString("N2");
-                            labelTotalProfitLossValue.Text = profitLoss.ToString("N2");
+                            labelTotalSaleAmountValue.Text = string.Format("{0:C}", totalSaleAmount);
+                            labelTotalPaidValue.Text = string.Format("{0:C}", totalPaid);
+                            labelTotalBalanceValue.Text = string.Format("{0:C}", totalBalance);
+                            labelTotalProfitLossValue.Text = string.Format("{0:C}", profitLoss);
                         }
                     }
                 }

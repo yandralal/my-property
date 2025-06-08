@@ -1,8 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
+using RealEstateManager.Pages;
 
 namespace RealEstateManager
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : BaseForm
     {
         public LoginForm()
         {

@@ -3,7 +3,7 @@ using System.Data;
 
 namespace RealEstateManager.Pages
 {
-    public partial class ManagePlotsForm : Form
+    public partial class ManagePlotsForm : BaseForm
     {
         public ManagePlotsForm()
         {

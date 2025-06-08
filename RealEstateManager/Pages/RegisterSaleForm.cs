@@ -3,7 +3,7 @@ using System.Data;
 
 namespace RealEstateManager.Pages
 {
-    public partial class RegisterSaleForm : Form
+    public partial class RegisterSaleForm : BaseForm
     {
         private readonly bool _isEditMode;
         private readonly int? _editPlotId;

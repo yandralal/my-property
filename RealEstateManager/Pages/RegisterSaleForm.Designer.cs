@@ -1,6 +1,6 @@
 namespace RealEstateManager.Pages
 {
-    partial class RegisterSaleForm : Form
+    partial class RegisterSaleForm
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.GroupBox groupBoxSaleDetails;

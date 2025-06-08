@@ -179,6 +179,14 @@ namespace RealEstateManager
             };
             dataGridViewPlots.Columns.Add(actionColumn);
 
+            // Set currency formatting for monetary columns
+            if (dataGridViewPlots.Columns["SalePrice"] != null)
+                dataGridViewPlots.Columns["SalePrice"].DefaultCellStyle.Format = "C";
+            if (dataGridViewPlots.Columns["AmountPaid"] != null)
+                dataGridViewPlots.Columns["AmountPaid"].DefaultCellStyle.Format = "C";
+            if (dataGridViewPlots.Columns["AmountBalance"] != null)
+                dataGridViewPlots.Columns["AmountBalance"].DefaultCellStyle.Format = "C";
+
             dataGridViewPlots.CellContentClick -= dataGridViewPlots_CellContentClick;
             dataGridViewPlots.CellContentClick += dataGridViewPlots_CellContentClick;
 
@@ -326,9 +334,9 @@ namespace RealEstateManager
                         row["Status"].ToString(),
                         row["Area"].ToString(),
                         row["SaleDate"] == DBNull.Value ? "" : Convert.ToDateTime(row["SaleDate"]).ToShortDateString(),
-                        saleAmount == 0 ? "" : saleAmount.ToString("N2"),
-                        amountPaid.ToString("N2"),
-                        amountBalance.ToString("N2")
+                        saleAmount == 0 ? (object)DBNull.Value : saleAmount,      // Pass as decimal, not string
+                        amountPaid == 0 ? (object)DBNull.Value : amountPaid,      // Pass as decimal, not string
+                        amountBalance == 0 ? (object)DBNull.Value : amountBalance // Pass as decimal, not string
                     );
                 }
 
@@ -777,9 +785,9 @@ namespace RealEstateManager
             SetCol("Type", "Type", 150);
             SetCol("Status", "Status", 120);
             SetCol("Owner", "Owner", 190);
-            SetCol("BuyPrice", "Buy Price", 180, "N2");
-            SetCol("AmountPaid", "Amount Paid", 180, "N2");
-            SetCol("AmountBalance", "Amount Balance", 180, "N2");
+            SetCol("BuyPrice", "Buy Price", 180, "C");         // Currency format
+            SetCol("AmountPaid", "Amount Paid", 180, "C");     // Currency format
+            SetCol("AmountBalance", "Amount Balance", 180, "C");// Currency format
             SetCol("Description", "Description", 350);
 
             if (dgv.Columns["Id"] != null)

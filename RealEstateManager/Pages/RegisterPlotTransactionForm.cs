@@ -2,7 +2,7 @@ using Microsoft.Data.SqlClient;
 
 namespace RealEstateManager.Pages
 {
-    public partial class RegisterPlotTransactionForm : Form
+    public partial class RegisterPlotTransactionForm : BaseForm
     {
         private readonly int? _plotId;
         private readonly decimal? _saleAmount;

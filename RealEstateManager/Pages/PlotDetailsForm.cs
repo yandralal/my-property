@@ -19,15 +19,6 @@ namespace RealEstateManager.Pages
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
             dataGridViewTransactions.CellPainting += dataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
-
-            //buttonGenerateReport = new Button();
-            //buttonGenerateReport.Text = "Generate Report";
-            //buttonGenerateReport.AutoSize = true;
-            //buttonGenerateReport.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            //buttonGenerateReport.Location = new Point(420, 76);
-            //buttonGenerateReport.Click += buttonGenerateReport_Click;
-            //Controls.Add(buttonGenerateReport);
-            //buttonGenerateReport.BringToFront();
         }
 
         private DataTable GetPlotTransactions(int plotId)
@@ -121,6 +112,10 @@ namespace RealEstateManager.Pages
 
                         labelPaidAmount.Text = amountPaid.ToString("N2");
                         labelBalanceAmount.Text = balance.ToString("N2");
+
+                        // Format paid amount and balance as currency
+                        labelPaidAmount.Text = string.Format("{0:C}", amountPaid);
+                        labelBalanceAmount.Text = string.Format("{0:C}", balance);
                     }
                 }
             }
@@ -134,9 +129,11 @@ namespace RealEstateManager.Pages
             labelCustomerName.Text = customerName;
             labelCustomerPhone.Text = customerPhone;
             labelCustomerEmail.Text = customerEmail;
-            labelSaleAmount.Text = decimal.TryParse(saleAmountStr, out var saleAmount) ? saleAmount.ToString("N2") : "0.00";
+            labelSaleAmount.Text = decimal.TryParse(saleAmountStr, out var saleAmount) ? string.Format("{0:C}", saleAmount) : "0.00";
             labelPaidAmount.Text = amountPaid.ToString("N2");
             labelBalanceAmount.Text = balance.ToString("N2");
+            labelPaidAmount.Text = string.Format("{0:C}", amountPaid);
+            labelBalanceAmount.Text = string.Format("{0:C}", balance);
         }
 
         private void DataGridViewTransactions_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
@@ -183,6 +180,7 @@ namespace RealEstateManager.Pages
                 dgv.Columns["Amount"].HeaderText = "Amount";
                 dgv.Columns["Amount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dgv.Columns["Amount"].Width = 130;
+                dgv.Columns["Amount"].DefaultCellStyle.Format = "C"; // Currency format
             }
             if (dgv.Columns["PaymentMethod"] != null)
             {

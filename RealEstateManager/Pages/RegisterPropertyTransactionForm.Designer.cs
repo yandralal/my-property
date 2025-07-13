@@ -116,7 +116,7 @@ namespace RealEstateManager.Pages
             labelSaleAmount.Name = "labelSaleAmount";
             labelSaleAmount.Size = new Size(120, 23);
             labelSaleAmount.TabIndex = 2;
-            labelSaleAmount.Text = "Sale Amount:";
+            labelSaleAmount.Text = "Buy Amount:";
             // 
             // textBoxSaleAmount
             // 
@@ -303,6 +303,7 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPropertyTransactionForm
             // 
+            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.AliceBlue;
             ClientSize = new Size(644, 634);
             Controls.Add(groupBoxTransactionEntry);

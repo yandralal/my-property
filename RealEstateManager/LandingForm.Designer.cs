@@ -123,7 +123,7 @@ namespace RealEstateManager
             // 
             registerPlotMenuItem.Name = "registerPlotMenuItem";
             registerPlotMenuItem.Size = new Size(263, 32);
-            registerPlotMenuItem.Text = "Mnage Plots";
+            registerPlotMenuItem.Text = "Manage Plots";
             registerPlotMenuItem.Click += ButtonManagePlots_Click;
             // 
             // transactionsMenu
@@ -389,8 +389,7 @@ namespace RealEstateManager
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
             Name = "LandingForm";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Landing Page";
+            Text = "Jay Maa Durga Housing Agency";
             WindowState = FormWindowState.Maximized;
             Load += LandingForm_Load;
             menuStripMain.ResumeLayout(false);

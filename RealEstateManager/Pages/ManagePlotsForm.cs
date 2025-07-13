@@ -1,9 +1,10 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Drawing.Drawing2D;
 
 namespace RealEstateManager.Pages
 {
-    public partial class ManagePlotsForm : BaseForm
+    public partial class ManagePlotsForm : Form
     {
         public ManagePlotsForm()
         {
@@ -11,6 +12,20 @@ namespace RealEstateManager.Pages
             LoadProperties();
             SetupPlotGrid();
             buttonAddPlot.Enabled = false;
+            this.BackColor = Color.AliceBlue;
+            this.BackgroundImageLayout = ImageLayout.Stretch; // Or Tile, Center, Zoom
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            using (LinearGradientBrush brush = new LinearGradientBrush(
+                this.ClientRectangle,
+                Color.FromArgb(230, 240, 255), // Light blue
+                Color.FromArgb(100, 140, 220), // Deeper blue
+                LinearGradientMode.ForwardDiagonal))
+            {
+                e.Graphics.FillRectangle(brush, this.ClientRectangle);
+            }
         }
 
         // Add this property to manage plots for the selected property
@@ -40,7 +55,7 @@ namespace RealEstateManager.Pages
         {
             dataGridViewPlots.Columns.Clear();
             dataGridViewPlots.AutoGenerateColumns = false;
-            dataGridViewPlots.Height = 500;
+            dataGridViewPlots.Height = 430;
 
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {

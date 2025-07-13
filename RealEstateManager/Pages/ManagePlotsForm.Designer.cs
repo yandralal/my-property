@@ -102,7 +102,7 @@ namespace RealEstateManager.Pages
             dataGridViewPlots.Name = "dataGridViewPlots";
             dataGridViewPlots.RowHeadersWidth = 51;
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewPlots.Size = new Size(976, 490);
+            dataGridViewPlots.Size = new Size(976, 430);
             dataGridViewPlots.TabIndex = 5;
             // 
             // buttonAddPlot
@@ -111,7 +111,7 @@ namespace RealEstateManager.Pages
             buttonAddPlot.FlatStyle = FlatStyle.Flat;
             buttonAddPlot.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             buttonAddPlot.ForeColor = Color.White;
-            buttonAddPlot.Location = new Point(41, 658);
+            buttonAddPlot.Location = new Point(41, 605);
             buttonAddPlot.Margin = new Padding(4);
             buttonAddPlot.Name = "buttonAddPlot";
             buttonAddPlot.Size = new Size(165, 36);
@@ -126,7 +126,7 @@ namespace RealEstateManager.Pages
             buttonEditPlot.FlatStyle = FlatStyle.Flat;
             buttonEditPlot.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             buttonEditPlot.ForeColor = Color.White;
-            buttonEditPlot.Location = new Point(220, 658);
+            buttonEditPlot.Location = new Point(220, 605);
             buttonEditPlot.Margin = new Padding(4);
             buttonEditPlot.Name = "buttonEditPlot";
             buttonEditPlot.Size = new Size(165, 36);
@@ -141,7 +141,7 @@ namespace RealEstateManager.Pages
             buttonDeletePlot.FlatStyle = FlatStyle.Flat;
             buttonDeletePlot.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             buttonDeletePlot.ForeColor = Color.White;
-            buttonDeletePlot.Location = new Point(399, 658);
+            buttonDeletePlot.Location = new Point(399, 605);
             buttonDeletePlot.Margin = new Padding(4);
             buttonDeletePlot.Name = "buttonDeletePlot";
             buttonDeletePlot.Size = new Size(165, 36);
@@ -155,7 +155,7 @@ namespace RealEstateManager.Pages
             AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
-            ClientSize = new Size(1072, 710);
+            ClientSize = new Size(1072, 663);
             Controls.Add(labelProperty);
             Controls.Add(comboBoxProperty);
             Controls.Add(labelPlotCount);

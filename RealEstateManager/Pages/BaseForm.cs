@@ -8,6 +8,9 @@ namespace RealEstateManager.Pages
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
+            if (this.ClientRectangle.IsEmpty)
+                return;
+
             using (LinearGradientBrush brush = new LinearGradientBrush(
                 this.ClientRectangle,
                 Color.FromArgb(230, 240, 255), // Light blue

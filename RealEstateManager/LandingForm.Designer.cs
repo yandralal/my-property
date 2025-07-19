@@ -17,11 +17,8 @@ namespace RealEstateManager
         private ToolStripMenuItem communicationMenu;
         private ToolStripMenuItem sendMessageToAllMenuItem;
         private ToolStripMenuItem agentOperationsMenu;
-        private ToolStripMenuItem assignAgentMenuItem;
-        private ToolStripMenuItem scheduleSiteVisitMenuItem;
         private ToolStripMenuItem approveOfferMenuItem;
         private ToolStripMenuItem registerSaleMenuItem;
-        private ToolStripMenuItem handoverMenuItem;
         private System.Windows.Forms.DataGridView dataGridViewProperties;
         private System.Windows.Forms.Button buttonAddProperty;
         private System.Windows.Forms.Button buttonManagePlots;
@@ -58,25 +55,23 @@ namespace RealEstateManager
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LandingForm));
             menuStripMain = new MenuStrip();
-            propertyMenu = new ToolStripMenuItem();
-            registerPlotToolStripMenuItem = new ToolStripMenuItem();
-            registerPlotMenuItem = new ToolStripMenuItem();
             transactionsMenu = new ToolStripMenuItem();
             propertyTransactionsMenuItem = new ToolStripMenuItem();
             plotTransactionMenuItem = new ToolStripMenuItem();
+            agentTransactionToolStripMenuItem = new ToolStripMenuItem();
+            agentOperationsMenu = new ToolStripMenuItem();
+            approveOfferMenuItem = new ToolStripMenuItem();
+            registerSaleMenuItem = new ToolStripMenuItem();
             reportsMenu = new ToolStripMenuItem();
             viewReportsMenuItem = new ToolStripMenuItem();
             communicationMenu = new ToolStripMenuItem();
             sendMessageToAllMenuItem = new ToolStripMenuItem();
-            agentOperationsMenu = new ToolStripMenuItem();
-            assignAgentMenuItem = new ToolStripMenuItem();
-            scheduleSiteVisitMenuItem = new ToolStripMenuItem();
-            approveOfferMenuItem = new ToolStripMenuItem();
-            registerSaleMenuItem = new ToolStripMenuItem();
-            handoverMenuItem = new ToolStripMenuItem();
             helpMenu = new ToolStripMenuItem();
             helpMenuItem = new ToolStripMenuItem();
             aboutMenuItem = new ToolStripMenuItem();
+            propertyMenu = new ToolStripMenuItem();
+            registerPlotToolStripMenuItem = new ToolStripMenuItem();
+            registerPlotMenuItem = new ToolStripMenuItem();
             dataGridViewProperties = new DataGridView();
             buttonAddProperty = new Button();
             buttonManagePlots = new Button();
@@ -98,37 +93,16 @@ namespace RealEstateManager
             menuStripMain.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             menuStripMain.ForeColor = Color.Black;
             menuStripMain.ImageScalingSize = new Size(20, 20);
-            menuStripMain.Items.AddRange(new ToolStripItem[] { propertyMenu, transactionsMenu, reportsMenu, communicationMenu, agentOperationsMenu, helpMenu });
+            menuStripMain.Items.AddRange(new ToolStripItem[] { transactionsMenu, agentOperationsMenu, reportsMenu, communicationMenu, helpMenu });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
             menuStripMain.Size = new Size(1832, 36);
             menuStripMain.TabIndex = 1;
             menuStripMain.Text = "menuStripMain";
             // 
-            // propertyMenu
-            // 
-            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPlotToolStripMenuItem, registerPlotMenuItem });
-            propertyMenu.Name = "propertyMenu";
-            propertyMenu.Size = new Size(59, 32);
-            propertyMenu.Text = "File";
-            // 
-            // registerPlotToolStripMenuItem
-            // 
-            registerPlotToolStripMenuItem.Name = "registerPlotToolStripMenuItem";
-            registerPlotToolStripMenuItem.Size = new Size(263, 32);
-            registerPlotToolStripMenuItem.Text = "Manage Property";
-            registerPlotToolStripMenuItem.Click += registerPlotToolStripMenuItem_Click;
-            // 
-            // registerPlotMenuItem
-            // 
-            registerPlotMenuItem.Name = "registerPlotMenuItem";
-            registerPlotMenuItem.Size = new Size(263, 32);
-            registerPlotMenuItem.Text = "Manage Plots";
-            registerPlotMenuItem.Click += ButtonManagePlots_Click;
-            // 
             // transactionsMenu
             // 
-            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem });
+            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem });
             transactionsMenu.Name = "transactionsMenu";
             transactionsMenu.Size = new Size(144, 32);
             transactionsMenu.Text = "Transactions";
@@ -146,6 +120,34 @@ namespace RealEstateManager
             plotTransactionMenuItem.Size = new Size(296, 32);
             plotTransactionMenuItem.Text = "Plot Transaction";
             plotTransactionMenuItem.Click += PlotTransactionMenuItem_Click;
+            // 
+            // agentTransactionToolStripMenuItem
+            // 
+            agentTransactionToolStripMenuItem.Name = "agentTransactionToolStripMenuItem";
+            agentTransactionToolStripMenuItem.Size = new Size(296, 32);
+            agentTransactionToolStripMenuItem.Text = "Agent Transaction";
+            agentTransactionToolStripMenuItem.Click += AgentTransactionToolStripMenuItem_Click;
+            // 
+            // agentOperationsMenu
+            // 
+            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { approveOfferMenuItem, registerSaleMenuItem });
+            agentOperationsMenu.Name = "agentOperationsMenu";
+            agentOperationsMenu.Size = new Size(130, 32);
+            agentOperationsMenu.Text = "Operations";
+            // 
+            // approveOfferMenuItem
+            // 
+            approveOfferMenuItem.Name = "approveOfferMenuItem";
+            approveOfferMenuItem.Size = new Size(246, 32);
+            approveOfferMenuItem.Text = "Manage Agents";
+            approveOfferMenuItem.Click += ViewAllAgentsMenuItem_Click;
+            // 
+            // registerSaleMenuItem
+            // 
+            registerSaleMenuItem.Name = "registerSaleMenuItem";
+            registerSaleMenuItem.Size = new Size(246, 32);
+            registerSaleMenuItem.Text = "Register Sale";
+            registerSaleMenuItem.Click += RegisterSaleMenuItem_Click;
             // 
             // reportsMenu
             // 
@@ -173,44 +175,6 @@ namespace RealEstateManager
             sendMessageToAllMenuItem.Size = new Size(395, 32);
             sendMessageToAllMenuItem.Text = "Send Message to All Customers";
             // 
-            // agentOperationsMenu
-            // 
-            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { assignAgentMenuItem, scheduleSiteVisitMenuItem, approveOfferMenuItem, registerSaleMenuItem, handoverMenuItem });
-            agentOperationsMenu.Name = "agentOperationsMenu";
-            agentOperationsMenu.Size = new Size(193, 32);
-            agentOperationsMenu.Text = "Agent Operations";
-            // 
-            // assignAgentMenuItem
-            // 
-            assignAgentMenuItem.Name = "assignAgentMenuItem";
-            assignAgentMenuItem.Size = new Size(279, 32);
-            assignAgentMenuItem.Text = "Assign Agent";
-            // 
-            // scheduleSiteVisitMenuItem
-            // 
-            scheduleSiteVisitMenuItem.Name = "scheduleSiteVisitMenuItem";
-            scheduleSiteVisitMenuItem.Size = new Size(279, 32);
-            scheduleSiteVisitMenuItem.Text = "Schedule Site Visit";
-            // 
-            // approveOfferMenuItem
-            // 
-            approveOfferMenuItem.Name = "approveOfferMenuItem";
-            approveOfferMenuItem.Size = new Size(279, 32);
-            approveOfferMenuItem.Text = "Approve Offer";
-            // 
-            // registerSaleMenuItem
-            // 
-            registerSaleMenuItem.Name = "registerSaleMenuItem";
-            registerSaleMenuItem.Size = new Size(279, 32);
-            registerSaleMenuItem.Text = "Register Sale";
-            registerSaleMenuItem.Click += registerSaleMenuItem_Click;
-            // 
-            // handoverMenuItem
-            // 
-            handoverMenuItem.Name = "handoverMenuItem";
-            handoverMenuItem.Size = new Size(279, 32);
-            handoverMenuItem.Text = "Handover/Delivery";
-            // 
             // helpMenu
             // 
             helpMenu.DropDownItems.AddRange(new ToolStripItem[] { helpMenuItem, aboutMenuItem });
@@ -229,6 +193,27 @@ namespace RealEstateManager
             aboutMenuItem.Name = "aboutMenuItem";
             aboutMenuItem.Size = new Size(156, 32);
             aboutMenuItem.Text = "About";
+            // 
+            // propertyMenu
+            // 
+            propertyMenu.DropDownItems.AddRange(new ToolStripItem[] { registerPlotToolStripMenuItem, registerPlotMenuItem });
+            propertyMenu.Name = "propertyMenu";
+            propertyMenu.Size = new Size(59, 32);
+            propertyMenu.Text = "File";
+            // 
+            // registerPlotToolStripMenuItem
+            // 
+            registerPlotToolStripMenuItem.Name = "registerPlotToolStripMenuItem";
+            registerPlotToolStripMenuItem.Size = new Size(206, 26);
+            registerPlotToolStripMenuItem.Text = "Manage Property";
+            registerPlotToolStripMenuItem.Click += RegisterPlotToolStripMenuItem_Click;
+            // 
+            // registerPlotMenuItem
+            // 
+            registerPlotMenuItem.Name = "registerPlotMenuItem";
+            registerPlotMenuItem.Size = new Size(206, 26);
+            registerPlotMenuItem.Text = "Manage Plots";
+            registerPlotMenuItem.Click += ButtonManagePlots_Click;
             // 
             // dataGridViewProperties
             // 
@@ -272,9 +257,9 @@ namespace RealEstateManager
             buttonAddProperty.FlatStyle = FlatStyle.Flat;
             buttonAddProperty.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonAddProperty.ForeColor = Color.White;
-            buttonAddProperty.Location = new Point(1564, 37);
+            buttonAddProperty.Location = new Point(1411, 37);
             buttonAddProperty.Name = "buttonAddProperty";
-            buttonAddProperty.Size = new Size(240, 36);
+            buttonAddProperty.Size = new Size(215, 36);
             buttonAddProperty.TabIndex = 2;
             buttonAddProperty.Text = "Register New Property";
             buttonAddProperty.UseVisualStyleBackColor = false;
@@ -282,11 +267,16 @@ namespace RealEstateManager
             // 
             // buttonManagePlots
             // 
-            buttonManagePlots.Location = new Point(280, 187);
+            buttonManagePlots.BackColor = Color.Green;
+            buttonManagePlots.FlatStyle = FlatStyle.Flat;
+            buttonManagePlots.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonManagePlots.ForeColor = Color.White;
+            buttonManagePlots.Location = new Point(1653, 37);
             buttonManagePlots.Name = "buttonManagePlots";
-            buttonManagePlots.Size = new Size(180, 35);
-            buttonManagePlots.TabIndex = 1;
+            buttonManagePlots.Size = new Size(134, 36);
+            buttonManagePlots.TabIndex = 3;
             buttonManagePlots.Text = "Manage Plots";
+            buttonManagePlots.UseVisualStyleBackColor = false;
             buttonManagePlots.Click += ButtonManagePlots_Click;
             // 
             // dataGridViewPlots
@@ -350,6 +340,7 @@ namespace RealEstateManager
             groupBoxProperties.Controls.Add(labelProperties);
             groupBoxProperties.Controls.Add(dataGridViewProperties);
             groupBoxProperties.Controls.Add(buttonAddProperty);
+            groupBoxProperties.Controls.Add(buttonManagePlots);
             groupBoxProperties.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxProperties.ForeColor = Color.MidnightBlue;
             groupBoxProperties.Location = new Point(52, 60);
@@ -384,7 +375,6 @@ namespace RealEstateManager
             Controls.Add(groupBoxPlots);
             Controls.Add(groupBoxProperties);
             Controls.Add(menuStripMain);
-            Controls.Add(buttonManagePlots);
             ForeColor = Color.White;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
@@ -434,5 +424,6 @@ namespace RealEstateManager
             groupBoxPlots.Controls.Add(labelPlotFilter);
             groupBoxPlots.Controls.Add(textBoxPlotFilter);
         }
+        private ToolStripMenuItem agentTransactionToolStripMenuItem;
     }
 }

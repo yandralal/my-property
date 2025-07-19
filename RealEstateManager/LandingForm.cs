@@ -202,7 +202,7 @@ namespace RealEstateManager
 
         }
 
-        private void registerSaleMenuItem_Click(object sender, EventArgs e)
+        private void RegisterSaleMenuItem_Click(object sender, EventArgs e)
         {
             // Ensure a property and a plot are selected
             if (dataGridViewProperties.CurrentRow == null)
@@ -240,7 +240,7 @@ namespace RealEstateManager
             string saleDate = row.Cells["SaleDate"].Value?.ToString() ?? "";
             string salePrice = row.Cells["SalePrice"].Value?.ToString() ?? "";
 
-            var editForm = new RegisterSaleForm(
+            var editForm = new RegisterPlotSaleForm(
                 propertyId,
                 plotId,
                 plotNumber,
@@ -400,7 +400,7 @@ namespace RealEstateManager
                 var row = dataGridViewPlots.Rows[e.RowIndex];
                 if (int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId))
                 {
-                    int propertyId = 0; 
+                    int propertyId = 0;
 
                     var idCell = dataGridViewProperties.CurrentRow?.Cells["Id"];
                     if (idCell != null && int.TryParse(idCell.Value?.ToString(), out int parsedPropertyId))
@@ -425,7 +425,7 @@ namespace RealEstateManager
                             string saleDate = row.Cells["SaleDate"].Value?.ToString() ?? "";
                             string salePrice = row.Cells["SalePrice"].Value?.ToString() ?? "";
 
-                            var editForm = new RegisterSaleForm(
+                            var editForm = new RegisterPlotSaleForm(
                                 propertyId,
                                 plotId,
                                 plotNumber,
@@ -819,7 +819,7 @@ namespace RealEstateManager
         }
 
         // Helper methods for property actions
-        private void ViewProperty(string? propertyId)
+        private static void ViewProperty(string? propertyId)
         {
             if (int.TryParse(propertyId, out int id))
             {
@@ -885,13 +885,25 @@ namespace RealEstateManager
             transactionForm.ShowDialog();
         }
 
-        private void registerPlotToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RegisterPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var registerForm = new Pages.RegisterPropertyForm();
+            var registerForm = new RegisterPropertyForm();
             if (registerForm.ShowDialog() == DialogResult.OK)
             {
                 LoadActiveProperties(); // Refresh grid after adding
             }
+        }
+
+        private void ViewAllAgentsMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new ViewAllAgentsForm();
+            form.ShowDialog();
+        }
+
+        private void AgentTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new RegisterAgentTransactionForm();
+            form.ShowDialog();
         }
     }
 }

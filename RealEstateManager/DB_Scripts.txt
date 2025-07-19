@@ -1,5 +1,14 @@
-﻿
-CREATE TABLE [Login] (
+﻿DROP TABLE Login
+DROP TABLE PropertyTransaction
+DROP TABLE PlotSale
+DROP TABLE PlotTransaction
+DROP TABLE Plot
+DROP TABLE Property
+DROP TABLE AgentTransaction
+DROP TABLE Agent
+
+
+CREATE TABLE Login (
     UserID INT PRIMARY KEY,
     UserName NVARCHAR(50) NOT NULL UNIQUE,
     PasswordHash NVARCHAR(255) NOT NULL,
@@ -12,17 +21,7 @@ CREATE TABLE [Login] (
 );
 
 INSERT INTO [Login] (UserID, UserName, PasswordHash, FirstName, LastName, Email, MobileNo, Role, IsActive)
-VALUES (
-    1,
-    'YT',
-    'Password01',
-    'Yandralal',
-    'Thakre',
-    'yandralal@live.com',
-    '9637151024',
-    'Admin',
-    1
-);
+VALUES (1, 'YT', 'Password01', 'Yandralal', 'Thakre', 'yandralal@live.com', '9637151024', 'Admin', 1);
 
 CREATE TABLE Property (
     Id INT IDENTITY(1,1) PRIMARY KEY,
@@ -68,6 +67,8 @@ CREATE TABLE PlotSale (
     CustomerEmail NVARCHAR(100) NULL,
     SaleAmount DECIMAL(18,2) NOT NULL,
     SaleDate DATETIME NOT NULL,
+    AgentId INT NULL,
+    BrokerageAmount DECIMAL(18,2) NULL,
     CreatedBy NVARCHAR(255) NOT NULL,
     CreatedDate DATETIME NOT NULL,
     ModifiedBy NVARCHAR(255) NOT NULL,
@@ -110,3 +111,31 @@ CREATE TABLE [dbo].[PropertyTransaction](
 	IsDeleted BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (PropertyId) REFERENCES Property(Id)
 )
+
+CREATE TABLE Agent (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Contact NVARCHAR(50),
+    Agency NVARCHAR(100),
+    IsDeleted BIT NOT NULL DEFAULT 0,
+    CreatedDate DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+CREATE TABLE [dbo].[AgentTransaction] (
+    [TransactionId] INT IDENTITY(1,1) PRIMARY KEY,
+    [AgentId] INT NOT NULL,
+    [TransactionDate] DATETIME NOT NULL DEFAULT GETDATE(),
+    [Amount] DECIMAL(18,2) NOT NULL,
+    [PaymentMethod] NVARCHAR(50) NULL,
+    [ReferenceNumber] NVARCHAR(100) NULL,
+    [TransactionType] NVARCHAR(10) NOT NULL,
+    [Notes] NVARCHAR(500) NULL,
+    [CreatedBy] NVARCHAR(100) NULL,
+    [CreatedDate] DATETIME NOT NULL DEFAULT GETDATE(),
+    [ModifiedBy] NVARCHAR(100) NULL,
+    [ModifiedDate] DATETIME NULL,
+    [IsDeleted] BIT NOT NULL DEFAULT 0,
+    [PlotId] INT NULL,
+    FOREIGN KEY ([AgentId]) REFERENCES [Agent]([Id]),
+    FOREIGN KEY ([PlotId]) REFERENCES [Plot]([Id])
+);

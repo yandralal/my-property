@@ -7,6 +7,12 @@
     <Compile Update="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\AgentDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Pages\AgentRegistrationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -19,16 +25,22 @@
     <Compile Update="Pages\PropertyDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\RegisterAgentTransactionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\RegisterPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\RegisterPropertyTransactionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Pages\RegisterSaleForm.cs">
+    <Compile Update="Pages\RegisterPlotSaleForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\RegisterPlotTransactionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Pages\ViewAllAgentsForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

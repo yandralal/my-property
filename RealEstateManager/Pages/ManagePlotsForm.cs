@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using RealEstateManager.Entities;
 using System.Data;
 using System.Drawing.Drawing2D;
 
@@ -12,24 +13,10 @@ namespace RealEstateManager.Pages
             LoadProperties();
             SetupPlotGrid();
             buttonAddPlot.Enabled = false;
-            this.BackColor = Color.AliceBlue;
-            this.BackgroundImageLayout = ImageLayout.Stretch; // Or Tile, Center, Zoom
-        }
-
-        protected override void OnPaintBackground(PaintEventArgs e)
-        {
-            using (LinearGradientBrush brush = new LinearGradientBrush(
-                this.ClientRectangle,
-                Color.FromArgb(230, 240, 255), // Light blue
-                Color.FromArgb(100, 140, 220), // Deeper blue
-                LinearGradientMode.ForwardDiagonal))
-            {
-                e.Graphics.FillRectangle(brush, this.ClientRectangle);
-            }
         }
 
         // Add this property to manage plots for the selected property
-        private List<PlotModel> CurrentPlots { get; set; } = new List<PlotModel>();
+        private List<Plot> CurrentPlots { get; set; } = new List<Plot>();
 
         private void LoadProperties()
         {
@@ -55,7 +42,7 @@ namespace RealEstateManager.Pages
         {
             dataGridViewPlots.Columns.Clear();
             dataGridViewPlots.AutoGenerateColumns = false;
-            dataGridViewPlots.Height = 430;
+            dataGridViewPlots.Height = 363;
 
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -69,13 +56,15 @@ namespace RealEstateManager.Pages
             {
                 Name = "PlotNumber",
                 HeaderText = "Plot Number",
-                Width = 150
+                Width = 150,
+                ReadOnly = true
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Status",
                 HeaderText = "Status",
-                Width = 120
+                Width = 120,
+                ReadOnly = true
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -247,9 +236,10 @@ namespace RealEstateManager.Pages
             MessageBox.Show($"{savedCount} plot(s) added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LoadPlotsForProperty(propertyId);
             RefreshLandingFormGrids(propertyId);
+            this.Close();
         }
 
-        private void buttonDeletePlot_Click(object sender, EventArgs e)
+        private void ButtonDeletePlot_Click(object sender, EventArgs e)
         {
             if (comboBoxProperty.SelectedValue is not int propertyId)
             {
@@ -329,9 +319,10 @@ namespace RealEstateManager.Pages
             dataGridViewPlots.Rows.Remove(row);
             MessageBox.Show("Plot deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             RefreshLandingFormGrids(propertyId);
+            this.Close();
         }
 
-        private void buttonDeleteSelectedPlots_Click(object? sender, EventArgs e)
+        private void ButtonDeleteSelectedPlots_Click(object? sender, EventArgs e)
         {
             if (comboBoxProperty.SelectedValue is not int propertyId)
             {
@@ -420,9 +411,11 @@ namespace RealEstateManager.Pages
 
             LoadPlotsForProperty(propertyId);
             RefreshLandingFormGrids(propertyId);
+            if (deletedCount > 0)
+                this.Close();
         }
 
-        private void buttonEditPlot_Click(object? sender, EventArgs e)
+        private void ButtonEditPlot_Click(object? sender, EventArgs e)
         {
             if (comboBoxProperty.SelectedValue is not int propertyId)
             {
@@ -430,14 +423,11 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            var selectedRows = dataGridViewPlots.SelectedRows
-                .Cast<DataGridViewRow>()
-                .Where(r => !r.IsNewRow)
-                .ToList();
+            var allRows = dataGridViewPlots.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow).ToList();
 
-            if (selectedRows.Count == 0)
+            if (allRows.Count == 0)
             {
-                MessageBox.Show("Please select at least one plot to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No plots to update.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -449,7 +439,7 @@ namespace RealEstateManager.Pages
             using (var conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                foreach (var row in selectedRows)
+                foreach (var row in allRows)
                 {
                     if (!int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId) || plotId == 0)
                         continue;
@@ -461,28 +451,51 @@ namespace RealEstateManager.Pages
                     decimal.TryParse(areaText, out area);
                     if (area < 0) area = 0;
 
-                    string update = @"UPDATE Plot 
-                        SET PlotNumber=@PlotNumber, Status=@Status, Area=@Area, ModifiedBy=@ModifiedBy, ModifiedDate=@ModifiedDate 
-                        WHERE Id=@Id AND PropertyId=@PropertyId";
-
-                    using (var cmd = new SqlCommand(update, conn))
+                    // Fetch current DB values
+                    string select = @"SELECT PlotNumber, Status, Area FROM Plot WHERE Id=@Id AND PropertyId=@PropertyId";
+                    string dbPlotNumber = "", dbStatus = "";
+                    decimal dbArea = 0;
+                    using (var selectCmd = new SqlCommand(select, conn))
                     {
-                        cmd.Parameters.AddWithValue("@PlotNumber", plotNumber);
-                        cmd.Parameters.AddWithValue("@Status", status);
-                        cmd.Parameters.AddWithValue("@Area", area);
-                        cmd.Parameters.AddWithValue("@ModifiedBy", currentUser);
-                        cmd.Parameters.AddWithValue("@ModifiedDate", now);
-                        cmd.Parameters.AddWithValue("@Id", plotId);
-                        cmd.Parameters.AddWithValue("@PropertyId", propertyId);
-                        updatedCount += cmd.ExecuteNonQuery();
+                        selectCmd.Parameters.AddWithValue("@Id", plotId);
+                        selectCmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                        using (var reader = selectCmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                dbPlotNumber = reader["PlotNumber"].ToString() ?? "";
+                                dbStatus = reader["Status"].ToString() ?? "";
+                                dbArea = reader["Area"] != DBNull.Value ? Convert.ToDecimal(reader["Area"]) : 0;
+                            }
+                        }
+                    }
+
+                    // Only update if any value changed
+                    if (plotNumber != dbPlotNumber || status != dbStatus || area != dbArea)
+                    {
+                        string update = @"UPDATE Plot 
+                            SET PlotNumber=@PlotNumber, Status=@Status, Area=@Area, ModifiedBy=@ModifiedBy, ModifiedDate=@ModifiedDate 
+                            WHERE Id=@Id AND PropertyId=@PropertyId";
+
+                        using (var cmd = new SqlCommand(update, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@PlotNumber", plotNumber);
+                            cmd.Parameters.AddWithValue("@Status", status);
+                            cmd.Parameters.AddWithValue("@Area", area);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", currentUser);
+                            cmd.Parameters.AddWithValue("@ModifiedDate", now);
+                            cmd.Parameters.AddWithValue("@Id", plotId);
+                            cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                            updatedCount += cmd.ExecuteNonQuery();
+                        }
                     }
                 }
             }
 
             MessageBox.Show($"{updatedCount} plot(s) updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LoadPlotsForProperty(propertyId);
-            // Refresh property and plot grid in LandingForm
             RefreshLandingFormGrids(propertyId);
+            this.Close();
         }
 
         private void LoadPlotsForProperty(int propertyId)
@@ -507,7 +520,7 @@ namespace RealEstateManager.Pages
                 {
                     foreach (DataRow row in dt.Rows)
                     {
-                        var plot = new PlotModel
+                        var plot = new Plot
                         {
                             Id = row["Id"] as int?,
                             PlotNumber = row["PlotNumber"].ToString() ?? "",
@@ -545,7 +558,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void comboBoxProperty_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxProperty_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxProperty.SelectedValue is int propertyId)
             {
@@ -559,7 +572,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void numericUpDownPlotCount_ValueChanged(object? sender, EventArgs e)
+        private void NumericUpDownPlotCount_ValueChanged(object? sender, EventArgs e)
         {
             int addCount = (int)numericUpDownPlotCount.Value;
             if (addCount <= 0) {
@@ -584,10 +597,10 @@ namespace RealEstateManager.Pages
             }
 
             // Add new plots starting from next plot number
-            for (int i = 1; i <= addCount; i++)
+            for (int i = 1; i <= addCount; i++) 
             {
                 int newPlotNumber = maxPlotNumber + i;
-                var plot = new PlotModel
+                var plot = new Plot
                 {
                     PlotNumber = $"Plot-{newPlotNumber}",
                     Status = "Available",
@@ -601,7 +614,7 @@ namespace RealEstateManager.Pages
             buttonAddPlot.Enabled = addCount > 0;
         }
 
-        private void RefreshLandingFormGrids(int propertyId)
+        private static void RefreshLandingFormGrids(int propertyId)
         {
             // Find the open LandingForm instance
             foreach (Form form in Application.OpenForms)
@@ -614,19 +627,5 @@ namespace RealEstateManager.Pages
                 }
             }
         }
-    }
-
-    // Define a simple model for plot data
-    public class PlotModel
-    {
-        public int? Id { get; set; }
-        public string PlotNumber { get; set; } = "";
-        public string Status { get; set; } = "Available";
-        public decimal Area { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string? ModifiedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }

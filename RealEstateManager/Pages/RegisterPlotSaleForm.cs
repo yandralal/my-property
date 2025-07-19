@@ -3,14 +3,14 @@ using System.Data;
 
 namespace RealEstateManager.Pages
 {
-    public partial class RegisterSaleForm : BaseForm
+    public partial class RegisterPlotSaleForm : BaseForm
     {
         private readonly bool _isEditMode;
         private readonly int? _editPlotId;
         private readonly int? _editPropertyId;
 
         // Edit mode constructor
-        public RegisterSaleForm(
+        public RegisterPlotSaleForm(
             int propertyId,
             int plotId,
             string plotNumber,
@@ -61,14 +61,17 @@ namespace RealEstateManager.Pages
             {
                 buttonRegisterSale.Text = "Edit Sale";
             }
+
+            LoadAgents();
         }
 
         // Add mode constructor
-        public RegisterSaleForm()
+        public RegisterPlotSaleForm()
         {
             InitializeComponent();
             SetupPhoneNumberValidation();
             LoadProperties();
+            LoadAgents();
 
             // Set button text for add mode
             buttonRegisterSale.Text = "Register Sale";
@@ -128,6 +131,26 @@ namespace RealEstateManager.Pages
             }
         }
 
+        private void LoadAgents()
+        {
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string query = "SELECT Id, Name FROM Agent WHERE IsDeleted = 0";
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(query, conn))
+            using (var adapter = new SqlDataAdapter(cmd))
+            {
+                var dt = new DataTable();
+                conn.Open();
+                adapter.Fill(dt);
+
+                comboBoxAgent.DataSource = dt;
+                comboBoxAgent.DisplayMember = "Name";
+                comboBoxAgent.ValueMember = "Id";
+                comboBoxAgent.SelectedIndex = -1;
+            }
+        }
+
         private void ButtonRegisterSale_Click(object sender, EventArgs e)
         {
             int propertyId = 0;
@@ -164,7 +187,7 @@ namespace RealEstateManager.Pages
             {
                 // Update existing sale
                 string update = @"UPDATE PlotSale
-                    SET CustomerName = @CustomerName, CustomerPhone = @CustomerPhone, CustomerEmail = @CustomerEmail,
+                    SET AgentId = @AgentId, BrokerageAmount = @BrokerageAmount, CustomerName = @CustomerName, CustomerPhone = @CustomerPhone, CustomerEmail = @CustomerEmail,
                         SaleAmount = @SaleAmount, SaleDate = @SaleDate, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate
                     WHERE PlotId = @PlotId AND IsDeleted = 0";
 
@@ -172,6 +195,8 @@ namespace RealEstateManager.Pages
                 using (var cmd = new SqlCommand(update, conn))
                 {
                     cmd.Parameters.AddWithValue("@PlotId", plotId);
+                    cmd.Parameters.AddWithValue("@AgentId", comboBoxAgent.SelectedValue);
+                    cmd.Parameters.AddWithValue("@BrokerageAmount", string.IsNullOrEmpty(textBoxBrokerage.Text) ? 0 : Convert.ToDecimal(textBoxBrokerage.Text));
                     cmd.Parameters.AddWithValue("@CustomerName", customerName);
                     cmd.Parameters.AddWithValue("@CustomerPhone", customerPhone);
                     cmd.Parameters.AddWithValue("@CustomerEmail", (object?)customerEmail ?? DBNull.Value);
@@ -193,15 +218,17 @@ namespace RealEstateManager.Pages
             {
                 // Insert new sale
                 string insert = @"INSERT INTO PlotSale
-                    (PropertyId, PlotId, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
-                    VALUES (@PropertyId, @PlotId, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
+                    (PropertyId, PlotId, AgentId, BrokerageAmount, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+                    VALUES (@PropertyId, @PlotId, @AgentId, @BrokerageAmount, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
                     @ModifiedBy, @ModifiedDate)";
 
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(insert, conn))
                 {
                     cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                    cmd.Parameters.AddWithValue("@BrokerageAmount", string.IsNullOrEmpty(textBoxBrokerage.Text) ? 0 : Convert.ToDecimal(textBoxBrokerage.Text));
                     cmd.Parameters.AddWithValue("@PlotId", (object?)plotId ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@AgentId", comboBoxAgent.SelectedValue ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@CustomerName", customerName);
                     cmd.Parameters.AddWithValue("@CustomerPhone", customerPhone);
                     cmd.Parameters.AddWithValue("@CustomerEmail", (object?)customerEmail ?? DBNull.Value);
@@ -227,7 +254,7 @@ namespace RealEstateManager.Pages
             this.Close();
         }
 
-        private void comboBoxPlot_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxPlot_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxPlot.SelectedValue is int plotId)
             {

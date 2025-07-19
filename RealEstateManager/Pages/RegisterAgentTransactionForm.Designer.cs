@@ -1,0 +1,371 @@
+namespace RealEstateManager.Pages
+{
+    partial class RegisterAgentTransactionForm
+    {
+        private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Label labelAgentId;
+        private System.Windows.Forms.TextBox textBoxAgentId;
+        private System.Windows.Forms.Label labelTransactionDate;
+        private System.Windows.Forms.DateTimePicker dateTimePickerTransactionDate;
+        private System.Windows.Forms.Label labelAmount;
+        private System.Windows.Forms.TextBox textBoxAmount;
+        private System.Windows.Forms.Label labelPaymentMethod;
+        private System.Windows.Forms.ComboBox comboBoxPaymentMethod;
+        private System.Windows.Forms.Label labelReferenceNumber;
+        private System.Windows.Forms.TextBox textBoxReferenceNumber;
+        private System.Windows.Forms.Label labelNotes;
+        private System.Windows.Forms.TextBox textBoxNotes;
+        private System.Windows.Forms.Label labelTransactionType;
+        private System.Windows.Forms.ComboBox comboBoxTransactionType;
+        private System.Windows.Forms.Label labelPlotId;
+        private System.Windows.Forms.ComboBox comboBoxPlotNumber;
+        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.GroupBox groupBoxTransactionDetails;
+        private System.Windows.Forms.Label labelTotalBrokerage;
+        private System.Windows.Forms.TextBox textBoxTotalBrokerage;
+        private System.Windows.Forms.Label labelAmountPaidTillDate;
+        private System.Windows.Forms.TextBox textBoxAmountPaidTillDate;
+        private System.Windows.Forms.Label labelBalance;
+        private System.Windows.Forms.TextBox textBoxBalance;
+        private System.Windows.Forms.Label labelBalanceValue;
+
+        protected override void Dispose(bool disposing)         
+        {
+            if (disposing && (components != null))
+                components.Dispose();
+            base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            panelMain = new Panel();
+            groupBoxTransactionDetails = new GroupBox();
+            labelAgentId = new Label();
+            buttonSave = new Button();
+            textBoxAgentId = new TextBox();
+            labelTransactionDate = new Label();
+            dateTimePickerTransactionDate = new DateTimePicker();
+            labelAmount = new Label();
+            textBoxAmount = new TextBox();
+            labelPaymentMethod = new Label();
+            comboBoxPaymentMethod = new ComboBox();
+            labelReferenceNumber = new Label();
+            textBoxReferenceNumber = new TextBox();
+            labelNotes = new Label();
+            textBoxNotes = new TextBox();
+            labelTransactionType = new Label();
+            comboBoxTransactionType = new ComboBox();
+            labelPlotId = new Label();
+            comboBoxPlotNumber = new ComboBox();
+            labelTotalBrokerage = new Label();
+            textBoxTotalBrokerage = new TextBox();
+            labelAmountPaidTillDate = new Label();
+            textBoxAmountPaidTillDate = new TextBox();
+            labelBalance = new Label();
+            textBoxBalance = new TextBox();
+            labelBalanceValue = new Label();
+            panelMain.SuspendLayout();
+            groupBoxTransactionDetails.SuspendLayout();
+            SuspendLayout();
+            // 
+            // panelMain
+            // 
+            panelMain.BackColor = Color.WhiteSmoke;
+            panelMain.Controls.Add(groupBoxTransactionDetails);
+            panelMain.Dock = DockStyle.Fill;
+            panelMain.Location = new Point(0, 0);
+            panelMain.Name = "panelMain";
+            panelMain.Size = new Size(644, 696);
+            panelMain.TabIndex = 0;
+            // 
+            // groupBoxTransactionDetails
+            // 
+            groupBoxTransactionDetails.BackColor = Color.AliceBlue;
+            groupBoxTransactionDetails.Controls.Add(labelAgentId);
+            groupBoxTransactionDetails.Controls.Add(buttonSave);
+            groupBoxTransactionDetails.Controls.Add(textBoxAgentId);
+            groupBoxTransactionDetails.Controls.Add(labelTransactionDate);
+            groupBoxTransactionDetails.Controls.Add(dateTimePickerTransactionDate);
+            groupBoxTransactionDetails.Controls.Add(labelAmount);
+            groupBoxTransactionDetails.Controls.Add(textBoxAmount);
+            groupBoxTransactionDetails.Controls.Add(labelPaymentMethod);
+            groupBoxTransactionDetails.Controls.Add(comboBoxPaymentMethod);
+            groupBoxTransactionDetails.Controls.Add(labelReferenceNumber);
+            groupBoxTransactionDetails.Controls.Add(textBoxReferenceNumber);
+            groupBoxTransactionDetails.Controls.Add(labelNotes);
+            groupBoxTransactionDetails.Controls.Add(textBoxNotes);
+            groupBoxTransactionDetails.Controls.Add(labelTransactionType);
+            groupBoxTransactionDetails.Controls.Add(comboBoxTransactionType);
+            groupBoxTransactionDetails.Controls.Add(labelPlotId);
+            groupBoxTransactionDetails.Controls.Add(comboBoxPlotNumber);
+            groupBoxTransactionDetails.Controls.Add(labelTotalBrokerage);
+            groupBoxTransactionDetails.Controls.Add(textBoxTotalBrokerage);
+            groupBoxTransactionDetails.Controls.Add(labelAmountPaidTillDate);
+            groupBoxTransactionDetails.Controls.Add(textBoxAmountPaidTillDate);
+            groupBoxTransactionDetails.Controls.Add(labelBalance);
+            //groupBoxTransactionDetails.Controls.Add(textBoxBalance);
+            groupBoxTransactionDetails.Controls.Add(labelBalanceValue);
+            groupBoxTransactionDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxTransactionDetails.ForeColor = Color.MidnightBlue;
+            groupBoxTransactionDetails.Location = new Point(12, 12);
+            groupBoxTransactionDetails.Name = "groupBoxTransactionDetails";
+            groupBoxTransactionDetails.Padding = new Padding(15);
+            groupBoxTransactionDetails.Size = new Size(620, 677);
+            groupBoxTransactionDetails.TabIndex = 0;
+            groupBoxTransactionDetails.TabStop = false;
+            groupBoxTransactionDetails.Text = "Transaction Entry";
+            // 
+            // labelAgentId
+            // 
+            labelAgentId.AutoSize = true;
+            labelAgentId.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAgentId.ForeColor = Color.DarkSlateGray;
+            labelAgentId.Location = new Point(20, 50);
+            labelAgentId.Name = "labelAgentId";
+            labelAgentId.Size = new Size(87, 23);
+            labelAgentId.TabIndex = 0;
+            labelAgentId.Text = "Agent ID:";
+            // 
+            // buttonSave
+            // 
+            buttonSave.BackColor = Color.Green;
+            buttonSave.FlatStyle = FlatStyle.Flat;
+            buttonSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonSave.ForeColor = Color.White;
+            buttonSave.Location = new Point(222, 604);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new Size(300, 40);
+            buttonSave.TabIndex = 1;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = false;
+            buttonSave.Click += ButtonSave_Click;
+            // 
+            // textBoxAgentId
+            // 
+            textBoxAgentId.BorderStyle = BorderStyle.FixedSingle;
+            textBoxAgentId.Font = new Font("Segoe UI", 10F);
+            textBoxAgentId.Location = new Point(222, 47);
+            textBoxAgentId.Name = "textBoxAgentId";
+            textBoxAgentId.ReadOnly = true;
+            textBoxAgentId.Size = new Size(300, 30);
+            textBoxAgentId.TabIndex = 1;
+            // 
+            // labelTransactionDate
+            // 
+            labelTransactionDate.AutoSize = true;
+            labelTransactionDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTransactionDate.ForeColor = Color.DarkSlateGray;
+            labelTransactionDate.Location = new Point(22, 553);
+            labelTransactionDate.Name = "labelTransactionDate";
+            labelTransactionDate.Size = new Size(53, 23);
+            labelTransactionDate.TabIndex = 2;
+            labelTransactionDate.Text = "Date:";
+            // 
+            // dateTimePickerTransactionDate
+            // 
+            dateTimePickerTransactionDate.Font = new Font("Segoe UI", 10F);
+            dateTimePickerTransactionDate.Location = new Point(222, 550);
+            dateTimePickerTransactionDate.Name = "dateTimePickerTransactionDate";
+            dateTimePickerTransactionDate.Size = new Size(300, 30);
+            dateTimePickerTransactionDate.TabIndex = 3;
+            // 
+            // labelAmount
+            // 
+            labelAmount.AutoSize = true;
+            labelAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAmount.ForeColor = Color.DarkSlateGray;
+            labelAmount.Location = new Point(22, 288);
+            labelAmount.Name = "labelAmount";
+            labelAmount.Size = new Size(136, 23);
+            labelAmount.TabIndex = 4;
+            labelAmount.Text = "Amount To Pay:";
+            // 
+            // textBoxAmount
+            // 
+            textBoxAmount.BorderStyle = BorderStyle.FixedSingle;
+            textBoxAmount.Font = new Font("Segoe UI", 10F);
+            textBoxAmount.Location = new Point(222, 285);
+            textBoxAmount.Name = "textBoxAmount";
+            textBoxAmount.Size = new Size(300, 30);
+            textBoxAmount.TabIndex = 5;
+            // 
+            // labelPaymentMethod
+            // 
+            labelPaymentMethod.AutoSize = true;
+            labelPaymentMethod.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelPaymentMethod.ForeColor = Color.DarkSlateGray;
+            labelPaymentMethod.Location = new Point(22, 380);
+            labelPaymentMethod.Name = "labelPaymentMethod";
+            labelPaymentMethod.Size = new Size(153, 23);
+            labelPaymentMethod.TabIndex = 6;
+            labelPaymentMethod.Text = "Payment Method:";
+            // 
+            // comboBoxPaymentMethod
+            // 
+            comboBoxPaymentMethod.Font = new Font("Segoe UI", 10F);
+            comboBoxPaymentMethod.Location = new Point(222, 377);
+            comboBoxPaymentMethod.Name = "comboBoxPaymentMethod";
+            comboBoxPaymentMethod.Size = new Size(300, 31);
+            comboBoxPaymentMethod.TabIndex = 7;
+            // 
+            // labelReferenceNumber
+            // 
+            labelReferenceNumber.AutoSize = true;
+            labelReferenceNumber.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelReferenceNumber.ForeColor = Color.DarkSlateGray;
+            labelReferenceNumber.Location = new Point(22, 426);
+            labelReferenceNumber.Name = "labelReferenceNumber";
+            labelReferenceNumber.Size = new Size(109, 23);
+            labelReferenceNumber.TabIndex = 8;
+            labelReferenceNumber.Text = "Reference #:";
+            // 
+            // textBoxReferenceNumber
+            // 
+            textBoxReferenceNumber.BorderStyle = BorderStyle.FixedSingle;
+            textBoxReferenceNumber.Font = new Font("Segoe UI", 10F);
+            textBoxReferenceNumber.Location = new Point(222, 423);
+            textBoxReferenceNumber.Name = "textBoxReferenceNumber";
+            textBoxReferenceNumber.Size = new Size(300, 30);
+            textBoxReferenceNumber.TabIndex = 9;
+            // 
+            // labelNotes
+            // 
+            labelNotes.AutoSize = true;
+            labelNotes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelNotes.ForeColor = Color.DarkSlateGray;
+            labelNotes.Location = new Point(22, 472);
+            labelNotes.Name = "labelNotes";
+            labelNotes.Size = new Size(61, 23);
+            labelNotes.TabIndex = 10;
+            labelNotes.Text = "Notes:";
+            // 
+            // textBoxNotes
+            // 
+            textBoxNotes.BorderStyle = BorderStyle.FixedSingle;
+            textBoxNotes.Font = new Font("Segoe UI", 10F);
+            textBoxNotes.Location = new Point(222, 469);
+            textBoxNotes.Multiline = true;
+            textBoxNotes.Name = "textBoxNotes";
+            textBoxNotes.Size = new Size(300, 62);
+            textBoxNotes.TabIndex = 11;
+            // 
+            // labelTransactionType
+            // 
+            labelTransactionType.AutoSize = true;
+            labelTransactionType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTransactionType.ForeColor = Color.DarkSlateGray;
+            labelTransactionType.Location = new Point(22, 240);
+            labelTransactionType.Name = "labelTransactionType";
+            labelTransactionType.Size = new Size(149, 23);
+            labelTransactionType.TabIndex = 12;
+            labelTransactionType.Text = "Transaction Type:";
+            // 
+            // comboBoxTransactionType
+            // 
+            comboBoxTransactionType.Font = new Font("Segoe UI", 10F);
+            comboBoxTransactionType.Location = new Point(222, 237);
+            comboBoxTransactionType.Name = "comboBoxTransactionType";
+            comboBoxTransactionType.Size = new Size(300, 31);
+            comboBoxTransactionType.TabIndex = 13;
+            // 
+            // labelPlotId
+            // 
+            labelPlotId.AutoSize = true;
+            labelPlotId.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelPlotId.ForeColor = Color.DarkSlateGray;
+            labelPlotId.Location = new Point(22, 96);
+            labelPlotId.Name = "labelPlotId";
+            labelPlotId.Size = new Size(119, 23);
+            labelPlotId.TabIndex = 14;
+            labelPlotId.Text = "Plot Number:";
+            // 
+            // comboBoxPlotNumber
+            // 
+            comboBoxPlotNumber.Font = new Font("Segoe UI", 10F);
+            comboBoxPlotNumber.Location = new Point(222, 93);
+            comboBoxPlotNumber.Name = "comboBoxPlotNumber";
+            comboBoxPlotNumber.Size = new Size(300, 31);
+            comboBoxPlotNumber.TabIndex = 15;
+            // 
+            // labelTotalBrokerage
+            // 
+            labelTotalBrokerage.AutoSize = true;
+            labelTotalBrokerage.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalBrokerage.ForeColor = Color.DarkSlateGray;
+            labelTotalBrokerage.Location = new Point(22, 145);
+            labelTotalBrokerage.Name = "labelTotalBrokerage";
+            labelTotalBrokerage.Size = new Size(142, 23);
+            labelTotalBrokerage.TabIndex = 16;
+            labelTotalBrokerage.Text = "Total Brokerage:";
+            // 
+            // textBoxTotalBrokerage
+            // 
+            textBoxTotalBrokerage.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTotalBrokerage.Font = new Font("Segoe UI", 10F);
+            textBoxTotalBrokerage.Location = new Point(222, 142);
+            textBoxTotalBrokerage.Name = "textBoxTotalBrokerage";
+            textBoxTotalBrokerage.ReadOnly = true;
+            textBoxTotalBrokerage.Size = new Size(300, 30);
+            textBoxTotalBrokerage.TabIndex = 17;
+            // 
+            // labelAmountPaidTillDate
+            // 
+            labelAmountPaidTillDate.AutoSize = true;
+            labelAmountPaidTillDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAmountPaidTillDate.ForeColor = Color.DarkSlateGray;
+            labelAmountPaidTillDate.Location = new Point(22, 192);
+            labelAmountPaidTillDate.Name = "labelAmountPaidTillDate";
+            labelAmountPaidTillDate.Size = new Size(193, 23);
+            labelAmountPaidTillDate.TabIndex = 18;
+            labelAmountPaidTillDate.Text = "Amount Paid Till Date:";
+            // 
+            // textBoxAmountPaidTillDate
+            // 
+            textBoxAmountPaidTillDate.BorderStyle = BorderStyle.FixedSingle;
+            textBoxAmountPaidTillDate.Font = new Font("Segoe UI", 10F);
+            textBoxAmountPaidTillDate.Location = new Point(222, 189);
+            textBoxAmountPaidTillDate.Name = "textBoxAmountPaidTillDate";
+            textBoxAmountPaidTillDate.ReadOnly = true;
+            textBoxAmountPaidTillDate.Size = new Size(300, 30);
+            textBoxAmountPaidTillDate.TabIndex = 19;
+            // 
+            // labelBalance
+            // 
+            labelBalance.AutoSize = true;
+            labelBalance.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelBalance.ForeColor = Color.DarkSlateGray;
+            labelBalance.Location = new Point(22, 335);
+            labelBalance.Name = "labelBalance";
+            labelBalance.Size = new Size(76, 23);
+            labelBalance.TabIndex = 20;
+            labelBalance.Text = "Balance:";
+            // 
+            // labelBalanceValue
+            // 
+            labelBalanceValue.BorderStyle = BorderStyle.FixedSingle;
+            labelBalanceValue.Font = new Font("Segoe UI", 10F);
+            labelBalanceValue.ForeColor = Color.Black;
+            labelBalanceValue.Location = new Point(222, 332); // Keep the same as previous TextBox
+            labelBalanceValue.Name = "labelBalanceValue";
+            labelBalanceValue.Size = new Size(300, 30);
+            labelBalanceValue.TabIndex = 21;
+            labelBalanceValue.Text = "0.00";
+            labelBalanceValue.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // RegisterAgentTransactionForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            BackColor = Color.WhiteSmoke;
+            ClientSize = new Size(644, 696);
+            Controls.Add(panelMain);
+            Name = "RegisterAgentTransactionForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Register Agent Transaction";
+            panelMain.ResumeLayout(false);
+            groupBoxTransactionDetails.ResumeLayout(false);
+            groupBoxTransactionDetails.PerformLayout();
+            ResumeLayout(false);
+        }
+    }
+}

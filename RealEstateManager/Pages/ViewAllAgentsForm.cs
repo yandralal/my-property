@@ -1,0 +1,116 @@
+using RealEstateManager.Repositories;
+
+namespace RealEstateManager.Pages
+{
+    public partial class ViewAllAgentsForm : BaseForm
+    {
+        public ViewAllAgentsForm()
+        {
+            InitializeComponent();
+            LoadAgents();
+        }
+
+        private void LoadAgents()
+        {
+            var agents = AgentRepository.GetAllAgents();
+            dataGridViewAgents.DataSource = null;
+            dataGridViewAgents.Rows.Clear();
+            dataGridViewAgents.Columns.Clear();
+
+            dataGridViewAgents.AutoGenerateColumns = false;
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { Name = "Id", DataPropertyName = "Id", HeaderText = "ID", Visible = false });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", HeaderText = "Name", Width = 200 });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Contact", HeaderText = "Contact", Width = 180 });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Agency", HeaderText = "Agency", Width = 180 });
+
+            // Action column with icons
+            var actionCol = new DataGridViewImageColumn
+            {
+                Name = "Action",
+                HeaderText = "Action",
+                Width = 80, // Reduced from 130
+                ImageLayout = DataGridViewImageCellLayout.Normal
+            };
+            dataGridViewAgents.Columns.Add(actionCol);
+
+            dataGridViewAgents.DataSource = agents;
+
+            labelAgents.Text = $"Agents ({agents.Count})";
+        }
+
+        private void dataGridViewAgents_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewAgents.Columns[e.ColumnIndex].Name == "Action")
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
+
+                var viewIcon = Properties.Resources.view;      // Add view icon to your resources
+                var editIcon = Properties.Resources.edit;
+                var deleteIcon = Properties.Resources.delete1;
+
+                int iconWidth = 24, iconHeight = 24, padding = 8;
+                int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
+                int x = e.CellBounds.Left + padding;
+
+                // Draw view icon
+                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw edit icon
+                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw delete icon
+                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridViewAgents_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewAgents.Columns[e.ColumnIndex].Name == "Action")
+            {
+                int iconWidth = 24, padding = 8;
+                int x = e.X - padding;
+                int iconIndex = x / (iconWidth + padding);
+
+                int agentId = Convert.ToInt32(dataGridViewAgents.Rows[e.RowIndex].Cells["Id"].Value);
+                var agent = AgentRepository.GetAllAgents().Find(a => a.Id == agentId);
+
+                if (agent == null)
+                {
+                    MessageBox.Show("Agent not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                switch (iconIndex)
+                {
+                    case 0: // View
+                        var detailsForm = new AgentDetailsForm(agent);
+                        detailsForm.ShowDialog();
+                        break;
+                    case 1: // Edit
+                        var form = new AgentRegistrationForm(agent);
+                        if (form.ShowDialog() == DialogResult.OK)
+                            LoadAgents();
+                        break;
+                    case 2: // Delete
+                        if (MessageBox.Show("Are you sure you want to delete this agent?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        {
+                            AgentRepository.DeleteAgent(agentId);
+                            LoadAgents();
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void buttonRegisterAgent_Click(object sender, EventArgs e)
+        {
+            var form = new AgentRegistrationForm();
+            if (form.ShowDialog() == DialogResult.OK)
+                LoadAgents();
+        }
+    }
+}

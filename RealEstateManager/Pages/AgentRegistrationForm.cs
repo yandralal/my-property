@@ -10,6 +10,7 @@ namespace RealEstateManager.Pages
         public AgentRegistrationForm()
         {
             InitializeComponent();
+            groupBoxAgent.Text = "Agent Details";
         }
 
         // Overload for editing

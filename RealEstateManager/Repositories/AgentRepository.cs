@@ -6,6 +6,7 @@ namespace RealEstateManager.Repositories
     public static class AgentRepository
     {
         private static readonly string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+        public static event Action? AgentsChanged;
 
         public static void AddAgent(Agent agent)
         {
@@ -17,6 +18,7 @@ namespace RealEstateManager.Repositories
             cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
             conn.Open();
             cmd.ExecuteNonQuery();
+            AgentsChanged?.Invoke();
         }
 
         public static void UpdateAgent(Agent agent)
@@ -29,6 +31,7 @@ namespace RealEstateManager.Repositories
             cmd.Parameters.AddWithValue("@Agency", (object?)agent.Agency ?? DBNull.Value);
             conn.Open();
             cmd.ExecuteNonQuery();
+            AgentsChanged?.Invoke();
         }
 
         public static void DeleteAgent(int agentId)
@@ -38,6 +41,7 @@ namespace RealEstateManager.Repositories
             cmd.Parameters.AddWithValue("@Id", agentId);
             conn.Open();
             cmd.ExecuteNonQuery();
+            AgentsChanged?.Invoke();
         }
 
         public static List<Agent> GetAllAgents()

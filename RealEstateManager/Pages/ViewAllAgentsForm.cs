@@ -8,6 +8,20 @@ namespace RealEstateManager.Pages
         {
             InitializeComponent();
             LoadAgents();
+            AgentRepository.AgentsChanged += RefreshGrid;
+        }
+
+        private void RefreshGrid()
+        {
+            // Reload agents and bind to grid
+            var agents = AgentRepository.GetAllAgents();
+            dataGridViewAgents.DataSource = agents;
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            AgentRepository.AgentsChanged -= RefreshGrid;
+            base.OnFormClosed(e);
         }
 
         private void LoadAgents()
@@ -106,7 +120,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void buttonRegisterAgent_Click(object sender, EventArgs e)
+        private void ButtonRegisterAgent_Click(object sender, EventArgs e)
         {
             var form = new AgentRegistrationForm();
             if (form.ShowDialog() == DialogResult.OK)

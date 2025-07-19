@@ -130,7 +130,7 @@ namespace RealEstateManager
             // 
             // agentOperationsMenu
             // 
-            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { approveOfferMenuItem, registerSaleMenuItem });
+            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { registerSaleMenuItem, approveOfferMenuItem });
             agentOperationsMenu.Name = "agentOperationsMenu";
             agentOperationsMenu.Size = new Size(130, 32);
             agentOperationsMenu.Text = "Operations";

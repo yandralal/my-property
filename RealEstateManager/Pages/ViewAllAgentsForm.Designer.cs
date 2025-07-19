@@ -104,7 +104,7 @@ namespace RealEstateManager.Pages
             buttonRegisterAgent.TabIndex = 2;
             buttonRegisterAgent.Text = "Register Agent";
             buttonRegisterAgent.UseVisualStyleBackColor = false;
-            buttonRegisterAgent.Click += buttonRegisterAgent_Click;
+            buttonRegisterAgent.Click += ButtonRegisterAgent_Click;
             // 
             // ViewAllAgentsForm
             // 

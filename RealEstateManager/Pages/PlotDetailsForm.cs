@@ -13,15 +13,15 @@ namespace RealEstateManager.Pages
 
         public PlotDetailsForm(int plotId)
         {
-            InitializeComponent();
+            InitializeComponent();            
             _plotId = plotId;
             LoadPlotDetails();
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
-            dataGridViewTransactions.CellPainting += dataGridViewTransactions_CellPainting;
+            dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
         }
 
-        private DataTable GetPlotTransactions(int plotId)
+        private static DataTable GetPlotTransactions(int plotId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string query = @"
@@ -119,6 +119,12 @@ namespace RealEstateManager.Pages
                     }
                 }
             }
+            var (agentName, totalBrokerage, brokeragePaid, brokerageBalance) = DisplayAgentBrokerageDetails(_plotId);
+
+            labelAgentName.Text = agentName;
+            labelTotalBrokerage.Text = string.Format("{0:C}", totalBrokerage); 
+            labelBrokeragePaid.Text = string.Format("{0:C}", brokeragePaid);
+            labelBrokerageBalance.Text = string.Format("{0:C}", brokerageBalance); 
 
             // Load transactions and bind to grid
             var transactions = GetPlotTransactions(_plotId);
@@ -173,14 +179,14 @@ namespace RealEstateManager.Pages
             {
                 dgv.Columns["TransactionType"].HeaderText = "TRN Type";
                 dgv.Columns["TransactionType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["TransactionType"].Width = 100;
+                dgv.Columns["TransactionType"].Width = 120;
             }
             if (dgv.Columns["Amount"] != null)
             {
                 dgv.Columns["Amount"].HeaderText = "Amount";
                 dgv.Columns["Amount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Amount"].Width = 130;
-                dgv.Columns["Amount"].DefaultCellStyle.Format = "C"; // Currency format
+                dgv.Columns["Amount"].Width = 150;
+                dgv.Columns["Amount"].DefaultCellStyle.Format = "C"; 
             }
             if (dgv.Columns["PaymentMethod"] != null)
             {
@@ -192,13 +198,13 @@ namespace RealEstateManager.Pages
             {
                 dgv.Columns["ReferenceNumber"].HeaderText = "Reference #";
                 dgv.Columns["ReferenceNumber"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["ReferenceNumber"].Width = 140;
+                dgv.Columns["ReferenceNumber"].Width = 160;
             }
             if (dgv.Columns["Notes"] != null)
             {
                 dgv.Columns["Notes"].HeaderText = "Notes";
                 dgv.Columns["Notes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Notes"].Width = 280;
+                dgv.Columns["Notes"].Width = 250;
             }
             if (dgv.Columns["Action"] != null)
             {
@@ -207,7 +213,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void dataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        private void DataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -263,7 +269,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void ViewTransaction(string? transactionId)
+        private static void ViewTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
             var form = new RegisterPlotTransactionForm(transactionId, readOnly: true);
@@ -338,7 +344,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void buttonGenerateReport_Click(object? sender, EventArgs e)
+        private void ButtonGenerateReport_Click(object? sender, EventArgs e)
         {
             // Use property name and plot number as file name, sanitized for file system
             string propertyName = ""; // Default if not found
@@ -464,7 +470,11 @@ namespace RealEstateManager.Pages
                 ("Customer Email:", labelCustomerEmail.Text),
                 ("Sale Amount:", labelSaleAmount.Text),
                 ("Paid Amount:", labelPaidAmount.Text),
-                ("Balance:", labelBalanceAmount.Text)
+                ("Balance:", labelBalanceAmount.Text),
+                ("Agent Name:", labelAgentName.Text),
+                ("Total Brokerage:", labelTotalBrokerage.Text),
+                ("Brokerage Paid:", labelBrokeragePaid.Text),
+                ("Brokerage Balance:", labelBrokerageBalance.Text)
             };
 
             double detailsX = margin;
@@ -510,7 +520,7 @@ namespace RealEstateManager.Pages
                         new XRect(tx, ty, leftMaxTitleWidth, 18), XStringFormats.TopLeft);
                     gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
                         new XRect(tx + leftMaxTitleWidth + gap, ty, colWidth - leftMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
-                    leftY += 16;
+                    leftY += 20; // Increased from 16 to 20 for extra vertical gap
                 }
                 else
                 {
@@ -520,7 +530,7 @@ namespace RealEstateManager.Pages
                         new XRect(tx, ty, rightMaxTitleWidth, 18), XStringFormats.TopLeft);
                     gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
                         new XRect(tx + rightMaxTitleWidth + gap, ty, colWidth - rightMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
-                    rightY += 16;
+                    rightY += 20; // Increased from 16 to 20 for extra vertical gap
                 }
             }
             y = Math.Max(leftY, rightY) + 10;
@@ -636,6 +646,38 @@ namespace RealEstateManager.Pages
 
             document.Save(filePath);
             Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+        }
+
+        private static (string agentName, decimal totalBrokerage, decimal brokeragePaid, decimal brokerageBalance) DisplayAgentBrokerageDetails(int plotId)
+        {
+            string agentName = "-";
+            decimal totalBrokerage = 0, brokeragePaid = 0, brokerageBalance = 0;
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string query = @"
+                SELECT a.Name AS AgentName, 
+                       ISNULL(ps.BrokerageAmount, 0) AS TotalBrokerage,
+                       ISNULL((SELECT SUM(Amount) FROM AgentTransaction at WHERE at.AgentId = ps.AgentId AND at.PlotId = ps.PlotId AND at.IsDeleted = 0), 0) AS BrokeragePaid
+                FROM PlotSale ps
+                INNER JOIN Agent a ON ps.AgentId = a.Id
+                WHERE ps.PlotId = @PlotId AND ps.IsDeleted = 0";
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@PlotId", plotId);
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        agentName = reader["AgentName"]?.ToString() ?? "-";
+                        totalBrokerage = reader["TotalBrokerage"] != DBNull.Value ? Convert.ToDecimal(reader["TotalBrokerage"]) : 0;
+                        brokeragePaid = reader["BrokeragePaid"] != DBNull.Value ? Convert.ToDecimal(reader["BrokeragePaid"]) : 0;
+                        brokerageBalance = totalBrokerage - brokeragePaid;
+                    }
+                }
+            }
+            return (agentName, totalBrokerage, brokeragePaid, brokerageBalance);
         }
     }
 }

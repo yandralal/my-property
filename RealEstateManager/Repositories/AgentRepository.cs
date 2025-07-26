@@ -63,5 +63,42 @@ namespace RealEstateManager.Repositories
             }
             return agents;
         }
+
+        public static decimal GetTotalBrokerage(int agentId)
+        {
+            const string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            const string query = @"
+            SELECT ISNULL(SUM(BrokerageAmount), 0)
+            FROM PlotSale
+            WHERE AgentId = @AgentId AND IsDeleted = 0";
+
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@AgentId", agentId);
+            conn.Open();
+            var result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToDecimal(result) : 0m;
+        }
+
+        public static decimal GetTotalPaid(int agentId)
+        {
+            const string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            const string query = @"
+            SELECT ISNULL(SUM(Amount), 0)
+            FROM AgentTransaction
+            WHERE AgentId = @AgentId AND IsDeleted = 0";
+
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@AgentId", agentId);
+            conn.Open();
+            var result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToDecimal(result) : 0m;
+        }
+
+        public static void RaiseAgentsChanged()
+        {
+            AgentsChanged?.Invoke();
+        }
     }
 }

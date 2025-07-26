@@ -13,9 +13,22 @@ namespace RealEstateManager.Pages
 
         private void RefreshGrid()
         {
-            // Reload agents and bind to grid
-            var agents = AgentRepository.GetAllAgents();
+            // Reload agents and bind to grid with all transaction details
+            var agents = AgentRepository.GetAllAgents()
+                .Select(agent => new
+                {
+                    agent.Id,
+                    agent.Name,
+                    agent.Contact,
+                    agent.Agency,
+                    TotalBrokerage = AgentRepository.GetTotalBrokerage(agent.Id),
+                    Paid = AgentRepository.GetTotalPaid(agent.Id),
+                    Balance = AgentRepository.GetTotalBrokerage(agent.Id) - AgentRepository.GetTotalPaid(agent.Id)
+                })
+                .ToList();
+
             dataGridViewAgents.DataSource = agents;
+            labelAgents.Text = $"Agents ({agents.Count})";
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -26,24 +39,82 @@ namespace RealEstateManager.Pages
 
         private void LoadAgents()
         {
-            var agents = AgentRepository.GetAllAgents();
+            var agents = AgentRepository.GetAllAgents()
+                .Select(agent => new
+                {
+                    agent.Id,
+                    agent.Name,
+                    agent.Contact,
+                    agent.Agency,
+                    TotalBrokerage = AgentRepository.GetTotalBrokerage(agent.Id),
+                    Paid = AgentRepository.GetTotalPaid(agent.Id),
+                    Balance = AgentRepository.GetTotalBrokerage(agent.Id) - AgentRepository.GetTotalPaid(agent.Id)
+                })
+                .ToList();
+
             dataGridViewAgents.DataSource = null;
             dataGridViewAgents.Rows.Clear();
             dataGridViewAgents.Columns.Clear();
 
             dataGridViewAgents.AutoGenerateColumns = false;
-            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { Name = "Id", DataPropertyName = "Id", HeaderText = "ID", Visible = false });
-            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", HeaderText = "Name", Width = 200 });
-            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Contact", HeaderText = "Contact", Width = 180 });
-            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Agency", HeaderText = "Agency", Width = 180 });
+            dataGridViewAgents.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                Name = "Id",
+                DataPropertyName = "Id",
+                HeaderText = "ID",
+                Width = 80,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                Visible = false // Make sure this is true if you want to see the column
+            });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                DataPropertyName = "Name",
+                HeaderText = "Name",
+                Width = 200,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+            });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                DataPropertyName = "Contact",
+                HeaderText = "Contact",
+                Width = 120,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+            });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                DataPropertyName = "Agency",
+                HeaderText = "Agency",
+                Width = 120,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+            });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                DataPropertyName = "TotalBrokerage",
+                HeaderText = "Total Brokerage",
+                Width = 160,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+            });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                DataPropertyName = "Paid",
+                HeaderText = "Amount Paid",
+                Width = 150,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+            });
+            dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
+                DataPropertyName = "Balance",
+                HeaderText = "Balance",
+                Width = 120,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+            });
 
             // Action column with icons
             var actionCol = new DataGridViewImageColumn
             {
                 Name = "Action",
                 HeaderText = "Action",
-                Width = 80, // Reduced from 130
-                ImageLayout = DataGridViewImageCellLayout.Normal
+                Width = 120,
+                ImageLayout = DataGridViewImageCellLayout.Normal,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None
             };
             dataGridViewAgents.Columns.Add(actionCol);
 

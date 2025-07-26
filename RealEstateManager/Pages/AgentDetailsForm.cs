@@ -1,9 +1,6 @@
-using RealEstateManager.Entities;
-using System;
-using System.Windows.Forms;
-using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Drawing;
+using RealEstateManager.Entities;
+using System.Data;
 
 namespace RealEstateManager.Pages
 {
@@ -12,188 +9,14 @@ namespace RealEstateManager.Pages
         public AgentDetailsForm(Agent agent)
         {
             InitializeComponent();
-            InitializeAgentDetailsGroup();
-            InitializeTransactionGridGroup();
             DisplayAgent(agent);
             LoadAgentTransactions(agent.Id);
+            DisplayAgentFinancials(agent.Id);
 
             // Add event handlers for custom painting and clicks
             dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
         }
-
-        private void InitializeAgentDetailsGroup()
-        {
-            groupBoxAgentDetails = new GroupBox
-            {
-                Text = "Agent Details",
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                ForeColor = Color.MidnightBlue,
-                BackColor = Color.AliceBlue,
-                Location = new Point(20, 20),
-                Size = new Size(1280, 120),
-                Padding = new Padding(15)
-            };
-
-            labelIdTitle = new Label
-            {
-                Text = "Agent ID:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateGray,
-                Location = new Point(20, 40),
-                AutoSize = true
-            };
-            labelIdValue = new Label
-            {
-                Font = new Font("Segoe UI", 10F),
-                ForeColor = Color.Black,
-                Location = new Point(120, 40),
-                AutoSize = true
-            };
-
-            labelNameTitle = new Label
-            {
-                Text = "Name:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateGray,
-                Location = new Point(300, 40),
-                AutoSize = true
-            };
-            labelNameValue = new Label
-            {
-                Font = new Font("Segoe UI", 10F),
-                ForeColor = Color.Black,
-                Location = new Point(370, 40),
-                AutoSize = true
-            };
-
-            labelContactTitle = new Label
-            {
-                Text = "Contact:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateGray,
-                Location = new Point(600, 40),
-                AutoSize = true
-            };
-            labelContactValue = new Label
-            {
-                Font = new Font("Segoe UI", 10F),
-                ForeColor = Color.Black,
-                Location = new Point(690, 40),
-                AutoSize = true
-            };
-
-            labelAgencyTitle = new Label
-            {
-                Text = "Agency:",
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = Color.DarkSlateGray,
-                Location = new Point(900, 40),
-                AutoSize = true
-            };
-            labelAgencyValue = new Label
-            {
-                Font = new Font("Segoe UI", 10F),
-                ForeColor = Color.Black,
-                Location = new Point(980, 40),
-                AutoSize = true
-            };
-
-            groupBoxAgentDetails.Controls.Add(labelIdTitle);
-            groupBoxAgentDetails.Controls.Add(labelIdValue);
-            groupBoxAgentDetails.Controls.Add(labelNameTitle);
-            groupBoxAgentDetails.Controls.Add(labelNameValue);
-            groupBoxAgentDetails.Controls.Add(labelContactTitle);
-            groupBoxAgentDetails.Controls.Add(labelContactValue);
-            groupBoxAgentDetails.Controls.Add(labelAgencyTitle);
-            groupBoxAgentDetails.Controls.Add(labelAgencyValue);
-
-            Controls.Add(groupBoxAgentDetails);
-        }
-
-        private void InitializeTransactionGridGroup()
-        {
-            groupBoxTransactionGrid = new GroupBox
-            {
-                Text = "Transaction List",
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                ForeColor = Color.MidnightBlue,
-                BackColor = Color.AliceBlue,
-                Location = new Point(20, 160),
-                Size = new Size(1280, 370),
-                Padding = new Padding(15)
-            };
-
-            dataGridViewTransactions = new DataGridView
-            {
-                Dock = DockStyle.Fill,
-                AutoGenerateColumns = false,
-                BackgroundColor = Color.White,
-                AllowUserToAddRows = false,
-                AllowUserToDeleteRows = false,
-                ReadOnly = true,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.AliceBlue },
-                EnableHeadersVisualStyles = false,
-                GridColor = Color.LightSteelBlue
-            };
-
-            // Add columns
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "TransactionId",
-                HeaderText = "TRN #",
-                Width = 80
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "TransactionDate",
-                HeaderText = "TRN Date",
-                Width = 180,
-                DefaultCellStyle = { Format = "dd/MM/yyyy hh:mm tt" }
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "TransactionType",
-                HeaderText = "TRN Type",
-                Width = 100
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "Amount",
-                HeaderText = "Amount",
-                Width = 130,
-                DefaultCellStyle = { Format = "C" }
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "PaymentMethod",
-                HeaderText = "Payment Method",
-                Width = 170
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "ReferenceNumber",
-                HeaderText = "Reference #",
-                Width = 140
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "Notes",
-                HeaderText = "Notes",
-                Width = 280
-            });
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "PlotNumber",
-                HeaderText = "Plot Number",
-                Width = 120
-            });
-
-            groupBoxTransactionGrid.Controls.Add(dataGridViewTransactions);
-            Controls.Add(groupBoxTransactionGrid);
-        }
-
         private void DisplayAgent(Agent agent)
         {
             labelNameValue.Text = agent.Name;
@@ -202,28 +25,23 @@ namespace RealEstateManager.Pages
             labelIdValue.Text = agent.Id.ToString();
         }
 
-        private DataTable GetAgentTransactions(int agentId)
+        private static DataTable GetAgentTransactions(int agentId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string query = @"
                 SELECT 
-                    at.TransactionId,
-                    at.AgentId,
+                    pr.Title AS PropertyName,
+                    pl.PlotNumber AS PlotNumber,
                     at.TransactionDate,
+                    at.TransactionType,
                     at.Amount,
                     at.PaymentMethod,
                     at.ReferenceNumber,
-                    at.TransactionType,
                     at.Notes,
-                    at.CreatedBy,
-                    at.CreatedDate,
-                    at.ModifiedBy,
-                    at.ModifiedDate,
-                    at.IsDeleted,
-                    at.PlotId,
-                    p.PlotNumber
+                    at.TransactionId
                 FROM AgentTransaction at
-                LEFT JOIN Plot p ON at.PlotId = p.Id
+                LEFT JOIN Plot pl ON at.PlotId = pl.Id
+                LEFT JOIN Property pr ON pl.PropertyId = pr.Id
                 WHERE at.AgentId = @AgentId AND at.IsDeleted = 0
                 ORDER BY at.TransactionDate ASC";
 
@@ -243,18 +61,90 @@ namespace RealEstateManager.Pages
         {
             var transactions = GetAgentTransactions(agentId);
 
-            // Add the action column dynamically if not already present
-            if (dataGridViewTransactions.Columns["Action"] == null)
+            dataGridViewTransactions.DataSource = null;
+            dataGridViewTransactions.Columns.Clear();
+
+            dataGridViewTransactions.AutoGenerateColumns = false;
+            dataGridViewTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
             {
-                var actionCol = new DataGridViewImageColumn
-                {
-                    Name = "Action",
-                    HeaderText = "Action",
-                    Width = 120,
-                    ImageLayout = DataGridViewImageCellLayout.Normal
-                };
-                dataGridViewTransactions.Columns.Add(actionCol);
-            }
+                DataPropertyName = "TransactionId",
+                HeaderText = "TRN #",
+                Width = 70,
+                Name = "TransactionId"
+            });
+
+            var col = new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "PropertyName",
+                HeaderText = "Property",
+                Width = 130,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None // This line is important
+            };
+            dataGridViewTransactions.Columns.Add(col);
+
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "PlotNumber",
+                HeaderText = "Plot #",
+                Width = 100,
+                ReadOnly = true
+            });
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "TransactionDate",
+                HeaderText = "TRN Date",
+                Width = 180,
+                ReadOnly = true,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy hh:mm tt" }
+            });
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "TransactionType",
+                HeaderText = "TRN Type",
+                Width = 100,
+                ReadOnly = true
+            });
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Amount",
+                HeaderText = "Amount",
+                Width = 130,
+                ReadOnly = true,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
+            });
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "PaymentMethod",
+                HeaderText = "Payment Method",
+                Width = 160,
+                ReadOnly = true
+            });
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "ReferenceNumber",
+                HeaderText = "Ref #",
+                Width = 120,
+                ReadOnly = true
+            });
+            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Notes",
+                HeaderText = "Notes",
+                Width = 160,
+                ReadOnly = true
+            });
+
+            // Action column (last)
+            var actionCol = new DataGridViewImageColumn
+            {
+                Name = "Action",
+                HeaderText = "Action",
+                Width = 120,
+                ImageLayout = DataGridViewImageCellLayout.Normal
+            };
+            dataGridViewTransactions.Columns.Add(actionCol);
 
             dataGridViewTransactions.DataSource = transactions;
         }
@@ -320,15 +210,22 @@ namespace RealEstateManager.Pages
         private void ViewTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
-            // Implement your view logic here
-            MessageBox.Show($"View Transaction: {transactionId}", "View", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Open RegisterAgentTransactionForm in view mode
+            using var form = new RegisterAgentTransactionForm(transactionId, true);
+            form.ShowDialog();
         }
 
         private void EditTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
-            // Implement your edit logic here
-            MessageBox.Show($"Edit Transaction: {transactionId}", "Edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Open RegisterAgentTransactionForm in edit mode
+            using var form = new RegisterAgentTransactionForm(transactionId, false);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                int agentId = int.Parse(labelIdValue.Text);
+                LoadAgentTransactions(agentId);
+                DisplayAgentFinancials(agentId);
+            }
         }
 
         private void DeleteTransaction(string? transactionId)
@@ -337,9 +234,67 @@ namespace RealEstateManager.Pages
             if (MessageBox.Show("Are you sure you want to delete this transaction?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 // Implement your delete logic here
+                DeleteTransactionFromDatabase(transactionId); // <-- implement this method to actually delete from DB
+
                 MessageBox.Show($"Deleted Transaction: {transactionId}", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Optionally reload the grid after deletion
+
+                // Refresh the grid and agent financials
+                int agentId = int.Parse(labelIdValue.Text); // or keep agentId as a field
+                LoadAgentTransactions(agentId);
+                DisplayAgentFinancials(agentId);
             }
+        }
+
+        // Example implementation for deleting from DB
+        private void DeleteTransactionFromDatabase(string transactionId)
+        {
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string query = "UPDATE AgentTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@TransactionId", transactionId);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        private void DisplayAgentFinancials(int agentId)
+        {
+            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            decimal totalBrokerage = 0, amountPaid = 0;
+
+            // Total Brokerage
+            string brokerageQuery = @"
+                SELECT ISNULL(SUM(BrokerageAmount), 0)
+                FROM PlotSale
+                WHERE AgentId = @AgentId AND IsDeleted = 0";
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(brokerageQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@AgentId", agentId);
+                conn.Open();
+                var result = cmd.ExecuteScalar();
+                totalBrokerage = result != null ? Convert.ToDecimal(result) : 0;
+            }
+
+            // Amount Paid
+            string paidQuery = @"
+                SELECT ISNULL(SUM(Amount), 0)
+                FROM AgentTransaction
+                WHERE AgentId = @AgentId AND IsDeleted = 0";
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(paidQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@AgentId", agentId);
+                conn.Open();
+                var result = cmd.ExecuteScalar();
+                amountPaid = result != null ? Convert.ToDecimal(result) : 0;
+            }
+
+            decimal balance = totalBrokerage - amountPaid;
+
+            labelTotalBrokerageValue.Text = totalBrokerage.ToString("N2");
+            labelAmountPaidValue.Text = amountPaid.ToString("N2");
+            labelBalanceValue.Text = balance.ToString("N2");
         }
     }
 }

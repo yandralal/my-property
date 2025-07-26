@@ -905,5 +905,17 @@ namespace RealEstateManager
             var form = new RegisterAgentTransactionForm();
             form.ShowDialog();
         }
+
+        private void MiscTransactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new RegisterMiscTransactionForm();
+            form.ShowDialog();
+        }
+
+        private void PlotTransactionFilterMenuItem_Click(object sender, EventArgs e)
+        {
+            var filterForm = new RealEstateManager.Pages.PlotTransactionFilterForm();
+            filterForm.ShowDialog();
+        }
     }
 }

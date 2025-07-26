@@ -166,7 +166,7 @@ namespace RealEstateManager.Pages
             textBoxAmount.Size = new Size(300, 30);
             textBoxAmount.TabIndex = 4;
             textBoxAmount.TextChanged += UpdateBalanceAmount;
-            textBoxAmount.Leave += textBoxAmount_Leave;
+            textBoxAmount.Leave += TextBoxAmount_Leave;
             // 
             // labelBalanceAmount
             // 

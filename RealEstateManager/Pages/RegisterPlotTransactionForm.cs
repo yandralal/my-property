@@ -280,7 +280,7 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Enabled = !readOnly;
         }
 
-        private void textBoxAmount_Leave(object sender, EventArgs e)
+        private void TextBoxAmount_Leave(object sender, EventArgs e)
         {
             if (decimal.TryParse(textBoxAmount.Text, out decimal value))
             {

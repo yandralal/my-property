@@ -22,8 +22,18 @@ namespace RealEstateManager.Pages
             txtAgency.Text = agent.Agency;
         }
 
-        private void btnRegister_Click(object sender, EventArgs e)
+        private void BtnRegister_Click(object sender, EventArgs e)
         {
+            string contact = txtContact.Text.Trim();
+
+            // Validate contact number: must be exactly 10 digits and numeric
+            if (contact.Length != 10 || !contact.All(char.IsDigit))
+            {
+                MessageBox.Show("Please enter a valid 10-digit mobile number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtContact.Focus();
+                return;
+            }
+
             if (_editAgent == null)
             {
                 var agent = new Agent
@@ -43,17 +53,8 @@ namespace RealEstateManager.Pages
                 AgentRepository.UpdateAgent(_editAgent);
                 MessageBox.Show("Agent updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            this.DialogResult = DialogResult.OK;
             this.Close();
-        }
-
-        // Example delete logic (call this from a delete button or context menu)
-        private void DeleteAgent(int agentId)
-        {
-            if (MessageBox.Show("Are you sure you want to delete this agent?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-            {
-                AgentRepository.DeleteAgent(agentId);
-                MessageBox.Show("Agent deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
     }
 }

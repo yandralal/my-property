@@ -124,6 +124,8 @@ CREATE TABLE Agent (
 CREATE TABLE [dbo].[AgentTransaction] (
     [TransactionId] INT IDENTITY(1,1) PRIMARY KEY,
     [AgentId] INT NOT NULL,
+    [PlotId] INT NULL,
+    [PropertyId] INT NOT NULL,
     [TransactionDate] DATETIME NOT NULL DEFAULT GETDATE(),
     [Amount] DECIMAL(18,2) NOT NULL,
     [PaymentMethod] NVARCHAR(50) NULL,
@@ -135,7 +137,23 @@ CREATE TABLE [dbo].[AgentTransaction] (
     [ModifiedBy] NVARCHAR(100) NULL,
     [ModifiedDate] DATETIME NULL,
     [IsDeleted] BIT NOT NULL DEFAULT 0,
-    [PlotId] INT NULL,
     FOREIGN KEY ([AgentId]) REFERENCES [Agent]([Id]),
-    FOREIGN KEY ([PlotId]) REFERENCES [Plot]([Id])
+    FOREIGN KEY ([PlotId]) REFERENCES [Plot]([Id]),
+    FOREIGN KEY (PropertyId) REFERENCES Property(Id)
+);
+
+CREATE TABLE [dbo].[MiscTransaction] (
+    [TransactionId]     INT IDENTITY(1,1) PRIMARY KEY,
+    [TransactionDate]   DATETIME      NOT NULL,
+    [Amount]            DECIMAL(18,2) NOT NULL,
+    [PaymentMethod]     NVARCHAR(50)  NULL,
+    [ReferenceNumber]   NVARCHAR(100) NULL,
+    [Recipient]         NVARCHAR(200) NULL,
+    [Notes]             NVARCHAR(500) NULL,
+    [TransactionType]   NVARCHAR(20)  NOT NULL,
+    [CreatedBy]         NVARCHAR(100) NOT NULL,
+    [CreatedDate]       DATETIME      NOT NULL,
+    [ModifiedBy]        NVARCHAR(100) NULL,
+    [ModifiedDate]      DATETIME      NULL,
+    [IsDeleted]         BIT           NOT NULL DEFAULT 0
 );

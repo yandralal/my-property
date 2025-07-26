@@ -59,6 +59,7 @@ namespace RealEstateManager
             propertyTransactionsMenuItem = new ToolStripMenuItem();
             plotTransactionMenuItem = new ToolStripMenuItem();
             agentTransactionToolStripMenuItem = new ToolStripMenuItem();
+            miscTransactionToolStripMenuItem = new ToolStripMenuItem();
             agentOperationsMenu = new ToolStripMenuItem();
             approveOfferMenuItem = new ToolStripMenuItem();
             registerSaleMenuItem = new ToolStripMenuItem();
@@ -81,6 +82,7 @@ namespace RealEstateManager
             groupBoxProperties = new GroupBox();
             groupBoxPlots = new GroupBox();
             menuStripMain.SuspendLayout();
+            plotTransactionFilterMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
             groupBoxProperties.SuspendLayout();
@@ -102,7 +104,7 @@ namespace RealEstateManager
             // 
             // transactionsMenu
             // 
-            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem });
+            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem, miscTransactionToolStripMenuItem });
             transactionsMenu.Name = "transactionsMenu";
             transactionsMenu.Size = new Size(144, 32);
             transactionsMenu.Text = "Transactions";
@@ -127,6 +129,13 @@ namespace RealEstateManager
             agentTransactionToolStripMenuItem.Size = new Size(296, 32);
             agentTransactionToolStripMenuItem.Text = "Agent Transaction";
             agentTransactionToolStripMenuItem.Click += AgentTransactionToolStripMenuItem_Click;
+            //
+            // miscTransactionToolStripMenuItem
+            //
+            miscTransactionToolStripMenuItem.Name = "miscTransactionToolStripMenuItem";
+            miscTransactionToolStripMenuItem.Size = new Size(296, 32);
+            miscTransactionToolStripMenuItem.Text = "Misc Transaction";
+            miscTransactionToolStripMenuItem.Click += MiscTransactionToolStripMenuItem_Click;
             // 
             // agentOperationsMenu
             // 
@@ -151,7 +160,7 @@ namespace RealEstateManager
             // 
             // reportsMenu
             // 
-            reportsMenu.DropDownItems.AddRange(new ToolStripItem[] { viewReportsMenuItem });
+            reportsMenu.DropDownItems.AddRange(new ToolStripItem[] { viewReportsMenuItem, plotTransactionFilterMenuItem });
             reportsMenu.Name = "reportsMenu";
             reportsMenu.Size = new Size(100, 32);
             reportsMenu.Text = "Reports";
@@ -161,6 +170,14 @@ namespace RealEstateManager
             viewReportsMenuItem.Name = "viewReportsMenuItem";
             viewReportsMenuItem.Size = new Size(224, 32);
             viewReportsMenuItem.Text = "View Reports";
+            //
+            plotTransactionFilterMenuItem = new ToolStripMenuItem();
+            plotTransactionFilterMenuItem.Name = "plotTransactionFilterMenuItem";
+            plotTransactionFilterMenuItem.Size = new Size(224, 32);
+            plotTransactionFilterMenuItem.Text = "Plot Transactions";
+            plotTransactionFilterMenuItem.Click += PlotTransactionFilterMenuItem_Click;
+
+            reportsMenu.DropDownItems.Add(plotTransactionFilterMenuItem);
             // 
             // communicationMenu
             // 
@@ -425,5 +442,7 @@ namespace RealEstateManager
             groupBoxPlots.Controls.Add(textBoxPlotFilter);
         }
         private ToolStripMenuItem agentTransactionToolStripMenuItem;
+        private ToolStripMenuItem miscTransactionToolStripMenuItem;
+        private ToolStripMenuItem plotTransactionFilterMenuItem;
     }
 }

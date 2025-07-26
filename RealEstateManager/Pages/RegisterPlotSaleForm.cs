@@ -63,6 +63,28 @@ namespace RealEstateManager.Pages
             }
 
             LoadAgents();
+
+            if (_isEditMode && _editPlotId.HasValue)
+            {
+                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string query = "SELECT AgentId, BrokerageAmount FROM PlotSale WHERE PlotId = @PlotId AND IsDeleted = 0";
+                using (var conn = new SqlConnection(connectionString))
+                using (var cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@PlotId", _editPlotId.Value);
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if (!reader.IsDBNull(0))
+                                comboBoxAgent.SelectedValue = reader.GetInt32(0);
+                            if (!reader.IsDBNull(1))
+                                textBoxBrokerage.Text = reader.GetDecimal(1).ToString("0.##");
+                        }
+                    }
+                }
+            }
         }
 
         // Add mode constructor

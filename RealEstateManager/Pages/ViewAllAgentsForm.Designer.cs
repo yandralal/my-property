@@ -58,7 +58,6 @@ namespace RealEstateManager.Pages
             dataGridViewAgents.Location = new Point(15, 85);
             dataGridViewAgents.Name = "dataGridViewAgents";
             dataGridViewAgents.ReadOnly = true;
-            dataGridViewAgents.RowHeadersVisible = false;
             dataGridViewAgents.RowHeadersWidth = 51;
             dataGridViewAgents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewAgents.Size = new Size(1035, 437);
@@ -111,6 +110,7 @@ namespace RealEstateManager.Pages
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
+            BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1087, 554);
             Controls.Add(groupBoxAgents);
             Name = "ViewAllAgentsForm";

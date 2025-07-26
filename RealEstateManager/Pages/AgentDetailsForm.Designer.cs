@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace RealEstateManager.Pages
 {
     partial class AgentDetailsForm
@@ -6,8 +8,13 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.GroupBox groupBoxAgentDetails;
         private System.Windows.Forms.GroupBox groupBoxTransactionGrid;
         private System.Windows.Forms.DataGridView dataGridViewTransactions;
-        private System.Windows.Forms.Label labelNameTitle, labelContactTitle, labelAgencyTitle, labelIdTitle;
-        private System.Windows.Forms.Label labelNameValue, labelContactValue, labelAgencyValue, labelIdValue;
+        private System.Windows.Forms.Label labelIdTitle, labelIdValue;
+        private System.Windows.Forms.Label labelNameTitle, labelNameValue;
+        private System.Windows.Forms.Label labelContactTitle, labelContactValue;
+        private System.Windows.Forms.Label labelAgencyTitle, labelAgencyValue;
+        private System.Windows.Forms.Label labelTotalBrokerageTitle, labelTotalBrokerageValue;
+        private System.Windows.Forms.Label labelAmountPaidTitle, labelAmountPaidValue;
+        private System.Windows.Forms.Label labelBalanceTitle, labelBalanceValue;
 
         protected override void Dispose(bool disposing)
         {
@@ -19,6 +26,9 @@ namespace RealEstateManager.Pages
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentDetailsForm));
             groupBoxAgentDetails = new GroupBox();
             labelIdTitle = new Label();
             labelIdValue = new Label();
@@ -28,6 +38,12 @@ namespace RealEstateManager.Pages
             labelContactValue = new Label();
             labelAgencyTitle = new Label();
             labelAgencyValue = new Label();
+            labelTotalBrokerageTitle = new Label();
+            labelTotalBrokerageValue = new Label();
+            labelAmountPaidTitle = new Label();
+            labelAmountPaidValue = new Label();
+            labelBalanceTitle = new Label();
+            labelBalanceValue = new Label();
             groupBoxTransactionGrid = new GroupBox();
             dataGridViewTransactions = new DataGridView();
             actionCol = new DataGridViewImageColumn();
@@ -47,12 +63,18 @@ namespace RealEstateManager.Pages
             groupBoxAgentDetails.Controls.Add(labelContactValue);
             groupBoxAgentDetails.Controls.Add(labelAgencyTitle);
             groupBoxAgentDetails.Controls.Add(labelAgencyValue);
+            groupBoxAgentDetails.Controls.Add(labelTotalBrokerageTitle);
+            groupBoxAgentDetails.Controls.Add(labelTotalBrokerageValue);
+            groupBoxAgentDetails.Controls.Add(labelAmountPaidTitle);
+            groupBoxAgentDetails.Controls.Add(labelAmountPaidValue);
+            groupBoxAgentDetails.Controls.Add(labelBalanceTitle);
+            groupBoxAgentDetails.Controls.Add(labelBalanceValue);
             groupBoxAgentDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxAgentDetails.ForeColor = Color.MidnightBlue;
             groupBoxAgentDetails.Location = new Point(20, 20);
             groupBoxAgentDetails.Name = "groupBoxAgentDetails";
             groupBoxAgentDetails.Padding = new Padding(15);
-            groupBoxAgentDetails.Size = new Size(1280, 120);
+            groupBoxAgentDetails.Size = new Size(1347, 159);
             groupBoxAgentDetails.TabIndex = 0;
             groupBoxAgentDetails.TabStop = false;
             groupBoxAgentDetails.Text = "Agent Details";
@@ -141,16 +163,79 @@ namespace RealEstateManager.Pages
             labelAgencyValue.Size = new Size(0, 23);
             labelAgencyValue.TabIndex = 7;
             // 
+            // labelTotalBrokerageTitle
+            // 
+            labelTotalBrokerageTitle.AutoSize = true;
+            labelTotalBrokerageTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalBrokerageTitle.ForeColor = Color.DarkSlateGray;
+            labelTotalBrokerageTitle.Location = new Point(20, 90);
+            labelTotalBrokerageTitle.Name = "labelTotalBrokerageTitle";
+            labelTotalBrokerageTitle.Size = new Size(142, 23);
+            labelTotalBrokerageTitle.TabIndex = 8;
+            labelTotalBrokerageTitle.Text = "Total Brokerage:";
+            // 
+            // labelTotalBrokerageValue
+            // 
+            labelTotalBrokerageValue.AutoSize = true;
+            labelTotalBrokerageValue.Font = new Font("Segoe UI", 10F);
+            labelTotalBrokerageValue.ForeColor = Color.Black;
+            labelTotalBrokerageValue.Location = new Point(160, 90);
+            labelTotalBrokerageValue.Name = "labelTotalBrokerageValue";
+            labelTotalBrokerageValue.Size = new Size(0, 23);
+            labelTotalBrokerageValue.TabIndex = 9;
+            // 
+            // labelAmountPaidTitle
+            // 
+            labelAmountPaidTitle.AutoSize = true;
+            labelAmountPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelAmountPaidTitle.ForeColor = Color.DarkSlateGray;
+            labelAmountPaidTitle.Location = new Point(300, 90);
+            labelAmountPaidTitle.Name = "labelAmountPaidTitle";
+            labelAmountPaidTitle.Size = new Size(120, 23);
+            labelAmountPaidTitle.TabIndex = 10;
+            labelAmountPaidTitle.Text = "Amount Paid:";
+            // 
+            // labelAmountPaidValue
+            // 
+            labelAmountPaidValue.AutoSize = true;
+            labelAmountPaidValue.Font = new Font("Segoe UI", 10F);
+            labelAmountPaidValue.ForeColor = Color.Black;
+            labelAmountPaidValue.Location = new Point(420, 90);
+            labelAmountPaidValue.Name = "labelAmountPaidValue";
+            labelAmountPaidValue.Size = new Size(0, 23);
+            labelAmountPaidValue.TabIndex = 11;
+            // 
+            // labelBalanceTitle
+            // 
+            labelBalanceTitle.AutoSize = true;
+            labelBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelBalanceTitle.ForeColor = Color.DarkSlateGray;
+            labelBalanceTitle.Location = new Point(600, 90);
+            labelBalanceTitle.Name = "labelBalanceTitle";
+            labelBalanceTitle.Size = new Size(76, 23);
+            labelBalanceTitle.TabIndex = 12;
+            labelBalanceTitle.Text = "Balance:";
+            // 
+            // labelBalanceValue
+            // 
+            labelBalanceValue.AutoSize = true;
+            labelBalanceValue.Font = new Font("Segoe UI", 10F);
+            labelBalanceValue.ForeColor = Color.Black;
+            labelBalanceValue.Location = new Point(690, 90);
+            labelBalanceValue.Name = "labelBalanceValue";
+            labelBalanceValue.Size = new Size(0, 23);
+            labelBalanceValue.TabIndex = 13;
+            // 
             // groupBoxTransactionGrid
             // 
             groupBoxTransactionGrid.BackColor = Color.AliceBlue;
             groupBoxTransactionGrid.Controls.Add(dataGridViewTransactions);
             groupBoxTransactionGrid.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionGrid.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionGrid.Location = new Point(20, 160);
+            groupBoxTransactionGrid.Location = new Point(20, 192);
             groupBoxTransactionGrid.Name = "groupBoxTransactionGrid";
             groupBoxTransactionGrid.Padding = new Padding(15);
-            groupBoxTransactionGrid.Size = new Size(1280, 434);
+            groupBoxTransactionGrid.Size = new Size(1347, 396);
             groupBoxTransactionGrid.TabIndex = 1;
             groupBoxTransactionGrid.TabStop = false;
             groupBoxTransactionGrid.Text = "Transaction List";
@@ -159,34 +244,52 @@ namespace RealEstateManager.Pages
             // 
             dataGridViewTransactions.AllowUserToAddRows = false;
             dataGridViewTransactions.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = Color.AliceBlue;
+            dataGridViewTransactions.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewTransactions.BackgroundColor = Color.White;
-            dataGridViewTransactions.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridViewTransactions.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridViewTransactions.ColumnHeadersHeight = 29;
-            dataGridViewTransactions.Columns.AddRange(new DataGridViewColumn[] { actionCol });
-            dataGridViewTransactions.Dock = DockStyle.Fill;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.White;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle3.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridViewTransactions.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridViewTransactions.EnableHeadersVisualStyles = false;
             dataGridViewTransactions.GridColor = Color.LightSteelBlue;
-            dataGridViewTransactions.Location = new Point(15, 42);
+            dataGridViewTransactions.Location = new Point(10, 32);
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;
             dataGridViewTransactions.RowHeadersWidth = 51;
-            dataGridViewTransactions.Size = new Size(1250, 377);
-            dataGridViewTransactions.TabIndex = 0;
+            dataGridViewTransactions.Size = new Size(1326, 346);
+            dataGridViewTransactions.TabIndex = 1;
             // 
             // actionCol
             // 
             actionCol.MinimumWidth = 6;
             actionCol.Name = "actionCol";
             actionCol.ReadOnly = true;
+            actionCol.Width = 125;
             // 
             // AgentDetailsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(1320, 600);
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(1379, 600);
             Controls.Add(groupBoxAgentDetails);
             Controls.Add(groupBoxTransactionGrid);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AgentDetailsForm";
             Text = "Agent Details";
             groupBoxAgentDetails.ResumeLayout(false);

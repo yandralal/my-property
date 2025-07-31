@@ -43,6 +43,8 @@ namespace RealEstateManager.Pages
         private Label labelTotalProfitLossTitle;
         private Label labelTotalProfitLossValue;
         private Button buttonGenerateReport;
+        private Label labelKhasraNoTitle;
+        private Label labelKhasraNoValue;
 
         protected override void Dispose(bool disposing)
         {
@@ -86,6 +88,8 @@ namespace RealEstateManager.Pages
             labelPropertyAmountPaid = new Label();
             labelPropertyBalanceTitle = new Label();
             labelPropertyBalance = new Label();
+            labelKhasraNoTitle = new Label();
+            labelKhasraNoValue = new Label();
             labelTotalBalanceTitle = new Label();
             labelTotalBalanceValue = new Label();
             labelTotalPlotsTitle = new Label();
@@ -183,6 +187,8 @@ namespace RealEstateManager.Pages
             groupBoxPropertyDetails.Controls.Add(labelPropertyAmountPaid);
             groupBoxPropertyDetails.Controls.Add(labelPropertyBalanceTitle);
             groupBoxPropertyDetails.Controls.Add(labelPropertyBalance);
+            groupBoxPropertyDetails.Controls.Add(labelKhasraNoTitle);
+            groupBoxPropertyDetails.Controls.Add(labelKhasraNoValue);
             groupBoxPropertyDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPropertyDetails.ForeColor = Color.MidnightBlue;
             groupBoxPropertyDetails.Location = new Point(22, 25);
@@ -407,7 +413,7 @@ namespace RealEstateManager.Pages
             labelPropertyBuyPriceTitle.AutoSize = true;
             labelPropertyBuyPriceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyBuyPriceTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyBuyPriceTitle.Location = new Point(843, 47);
+            labelPropertyBuyPriceTitle.Location = new Point(843, 75);
             labelPropertyBuyPriceTitle.Name = "labelPropertyBuyPriceTitle";
             labelPropertyBuyPriceTitle.Size = new Size(89, 23);
             labelPropertyBuyPriceTitle.TabIndex = 22;
@@ -417,7 +423,7 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyBuyPrice.Font = new Font("Segoe UI", 10F);
             labelPropertyBuyPrice.ForeColor = Color.Black;
-            labelPropertyBuyPrice.Location = new Point(1003, 47);
+            labelPropertyBuyPrice.Location = new Point(1003, 75);
             labelPropertyBuyPrice.Name = "labelPropertyBuyPrice";
             labelPropertyBuyPrice.Size = new Size(233, 30);
             labelPropertyBuyPrice.TabIndex = 23;
@@ -428,7 +434,7 @@ namespace RealEstateManager.Pages
             labelPropertyAmountPaidTitle.AutoSize = true;
             labelPropertyAmountPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyAmountPaidTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyAmountPaidTitle.Location = new Point(843, 82);
+            labelPropertyAmountPaidTitle.Location = new Point(843, 109);
             labelPropertyAmountPaidTitle.Name = "labelPropertyAmountPaidTitle";
             labelPropertyAmountPaidTitle.Size = new Size(120, 23);
             labelPropertyAmountPaidTitle.TabIndex = 24;
@@ -438,7 +444,7 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyAmountPaid.Font = new Font("Segoe UI", 10F);
             labelPropertyAmountPaid.ForeColor = Color.Black;
-            labelPropertyAmountPaid.Location = new Point(1003, 82);
+            labelPropertyAmountPaid.Location = new Point(1003, 109);
             labelPropertyAmountPaid.Name = "labelPropertyAmountPaid";
             labelPropertyAmountPaid.Size = new Size(233, 30);
             labelPropertyAmountPaid.TabIndex = 25;
@@ -449,7 +455,7 @@ namespace RealEstateManager.Pages
             labelPropertyBalanceTitle.AutoSize = true;
             labelPropertyBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyBalanceTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyBalanceTitle.Location = new Point(843, 117);
+            labelPropertyBalanceTitle.Location = new Point(843, 144);
             labelPropertyBalanceTitle.Name = "labelPropertyBalanceTitle";
             labelPropertyBalanceTitle.Size = new Size(146, 23);
             labelPropertyBalanceTitle.TabIndex = 26;
@@ -459,11 +465,31 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyBalance.Font = new Font("Segoe UI", 10F);
             labelPropertyBalance.ForeColor = Color.Black;
-            labelPropertyBalance.Location = new Point(1003, 117);
+            labelPropertyBalance.Location = new Point(1003, 144);
             labelPropertyBalance.Name = "labelPropertyBalance";
             labelPropertyBalance.Size = new Size(233, 30);
             labelPropertyBalance.TabIndex = 27;
             labelPropertyBalance.Text = "0.00";
+            // 
+            // labelKhasraNoTitle
+            // 
+            labelKhasraNoTitle.AutoSize = true;
+            labelKhasraNoTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelKhasraNoTitle.ForeColor = Color.DarkSlateGray;
+            labelKhasraNoTitle.Location = new Point(843, 40);
+            labelKhasraNoTitle.Name = "labelKhasraNoTitle";
+            labelKhasraNoTitle.Size = new Size(96, 23);
+            labelKhasraNoTitle.TabIndex = 38;
+            labelKhasraNoTitle.Text = "Khasra No:";
+            // 
+            // labelKhasraNoValue
+            // 
+            labelKhasraNoValue.Font = new Font("Segoe UI", 10F);
+            labelKhasraNoValue.ForeColor = Color.Black;
+            labelKhasraNoValue.Location = new Point(1003, 40);
+            labelKhasraNoValue.Name = "labelKhasraNoValue";
+            labelKhasraNoValue.Size = new Size(233, 30);
+            labelKhasraNoValue.TabIndex = 39;
             // 
             // labelTotalBalanceTitle
             // 
@@ -630,6 +656,8 @@ namespace RealEstateManager.Pages
             // 
             // PropertyDetailsForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1319, 779);
             Controls.Add(groupBoxSummary);
             Controls.Add(groupBoxTransactionGrid);

@@ -34,7 +34,7 @@ namespace RealEstateManager.Pages
             if (!_propertyId.HasValue) return;
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string query = @"SELECT Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description
+            string query = @"SELECT Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo
                              FROM Property WHERE Id = @Id AND IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
@@ -57,6 +57,7 @@ namespace RealEstateManager.Pages
                         textBoxState.Text = reader["State"].ToString();
                         textBoxZip.Text = reader["ZipCode"].ToString();
                         textBoxDescription.Text = reader["Description"].ToString();
+                        textBoxKhasraNo.Text = reader["KhasraNo"]?.ToString() ?? "";
                     }
                 }
             }
@@ -105,6 +106,7 @@ namespace RealEstateManager.Pages
             string state = textBoxState.Text.Trim();
             string zip = textBoxZip.Text.Trim();
             string description = textBoxDescription.Text.Trim();
+            string khasraNo = textBoxKhasraNo.Text.Trim();
 
             // Validation
             if (string.IsNullOrWhiteSpace(title) ||
@@ -153,6 +155,7 @@ namespace RealEstateManager.Pages
                             Status = @Status,
                             Price = @Price,
                             Owner = @Owner,
+                            KhasraNo = @KhasraNo,
                             Phone = @Phone,
                             Address = @Address,
                             City = @City,
@@ -178,6 +181,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@ModifiedBy", modifiedBy);
                             cmd.Parameters.AddWithValue("@ModifiedDate", modifiedDate);
                             cmd.Parameters.AddWithValue("@Id", _propertyId.Value);
+                            cmd.Parameters.AddWithValue("@KhasraNo", khasraNo);
                             cmd.ExecuteNonQuery();
                         }
                         MessageBox.Show("Property updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -190,10 +194,10 @@ namespace RealEstateManager.Pages
                         int isDeleted = 0;
 
                         string insert = @"INSERT INTO Property
-                            ([Title], [Type], [Status], [Price], [Owner], [Phone], [Address], [City], [State], [ZipCode], [Description],
+                            ([Title], [Type], [Status], [Price], [Owner], [KhasraNo], [Phone], [Address], [City], [State], [ZipCode], [Description],
                              [CreatedBy], [CreatedDate], [ModifiedBy], [ModifiedDate], [IsDeleted])
                             VALUES
-                            (@Title, @Type, @Status, @Price, @Owner, @Phone, @Address, @City, @State, @ZipCode, @Description,
+                            (@Title, @Type, @Status, @Price, @Owner, @KhasraNo, @Phone, @Address, @City, @State, @ZipCode, @Description,
                              @CreatedBy, @CreatedDate, @ModifiedBy, @ModifiedDate, @IsDeleted)";
                         using (var cmd = new SqlCommand(insert, conn))
                         {
@@ -213,6 +217,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@ModifiedBy", modifiedBy);
                             cmd.Parameters.AddWithValue("@ModifiedDate", modifiedDate);
                             cmd.Parameters.AddWithValue("@IsDeleted", isDeleted);
+                            cmd.Parameters.AddWithValue("@KhasraNo", khasraNo);
                             cmd.ExecuteNonQuery();
                         }
                         MessageBox.Show("Property registered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

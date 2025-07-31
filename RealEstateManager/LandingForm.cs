@@ -64,7 +64,8 @@ namespace RealEstateManager
                     p.Owner, 
                     p.Description,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
-                    (p.Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance
+                    (p.Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance,
+                    p.KhasraNo
                 FROM Property p
                 WHERE p.IsDeleted = 0";
 
@@ -732,7 +733,7 @@ namespace RealEstateManager
             AdjustGridAndGroupBoxHeight(dataGridViewProperties, groupBoxProperties, 8, 120, 400, 100);
         }
 
-        private void textBoxPlotFilter_TextChanged(object sender, EventArgs e)
+        private void TextBoxPlotFilter_TextChanged(object sender, EventArgs e)
         {
             if (_plotTable == null) return;
             string filter = textBoxPlotFilter.Text.Replace("'", "''");
@@ -778,16 +779,18 @@ namespace RealEstateManager
                     dgv.Columns[name].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                     if (format != null)
                         dgv.Columns[name].DefaultCellStyle.Format = format;
+                    dgv.Columns[name].MinimumWidth = width;
                 }
             }
 
-            SetCol("Title", "Title", 230);
-            SetCol("Type", "Type", 150);
-            SetCol("Status", "Status", 120);
-            SetCol("Owner", "Owner", 190);
-            SetCol("BuyPrice", "Buy Price", 180, "C");         // Currency format
-            SetCol("AmountPaid", "Amount Paid", 180, "C");     // Currency format
-            SetCol("AmountBalance", "Amount Balance", 180, "C");// Currency format
+            SetCol("Title", "Property Name", 180);
+            SetCol("Type", "Type", 110);
+            SetCol("Status", "Status", 100);
+            SetCol("Owner", "Owner Name", 160);
+            SetCol("KhasraNo", "Khasra No", 120); // Move KhasraNo right after Owner
+            SetCol("BuyPrice", "Buy Price", 180, "C");
+            SetCol("AmountPaid", "Amount Paid", 180, "C");
+            SetCol("AmountBalance", "Amount Balance", 180, "C");
             SetCol("Description", "Description", 350);
 
             if (dgv.Columns["Id"] != null)
@@ -797,7 +800,8 @@ namespace RealEstateManager
             {
                 dgv.Columns["Action"].DisplayIndex = dgv.Columns.Count - 1;
                 dgv.Columns["Action"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Action"].Width = 150; // Set a fixed width for the Action column
+                dgv.Columns["Action"].Width = 150;
+                dgv.Columns["Action"].MinimumWidth = 150;
             }
         }
 
@@ -912,9 +916,9 @@ namespace RealEstateManager
             form.ShowDialog();
         }
 
-        private void PlotTransactionFilterMenuItem_Click(object sender, EventArgs e)
+        private void ViewReportsMenuItem_Click(object sender, EventArgs e)
         {
-            var filterForm = new RealEstateManager.Pages.PlotTransactionFilterForm();
+            var filterForm = new AllTransactionsFilterForm();
             filterForm.ShowDialog();
         }
     }

@@ -177,7 +177,7 @@ namespace RealEstateManager.Pages
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string propertyQuery = @"
                 SELECT 
-                    Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description,
+                    Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
                     (Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance
                 FROM Property p
@@ -219,6 +219,7 @@ namespace RealEstateManager.Pages
                         labelStateValue.Text        = reader["State"].ToString();
                         labelZipValue.Text          = reader["ZipCode"].ToString();
                         labelDescriptionValue.Text  = reader["Description"].ToString();
+                        labelKhasraNoValue.Text     = reader["KhasraNo"]?.ToString() ?? "";
 
                         // Add these lines for Amount Paid and Balance
                         decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;

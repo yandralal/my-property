@@ -13,6 +13,9 @@
     <Compile Update="Pages\AgentRegistrationForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\AllTransactionsFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -20,9 +23,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\PlotDetailsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Pages\PlotTransactionFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\PropertyDetailsForm.cs">

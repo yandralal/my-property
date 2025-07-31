@@ -27,6 +27,8 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelDescription;
         private System.Windows.Forms.TextBox textBoxDescription;
         private System.Windows.Forms.Button buttonRegister;
+        private System.Windows.Forms.Label labelKhasraNo;
+        private System.Windows.Forms.TextBox textBoxKhasraNo;
 
         protected override void Dispose(bool disposing)
         {
@@ -62,6 +64,8 @@ namespace RealEstateManager.Pages
             labelDescription = new Label();
             textBoxDescription = new TextBox();
             buttonRegister = new Button();
+            labelKhasraNo = new Label();
+            textBoxKhasraNo = new TextBox();
             groupBoxPropertyDetails.SuspendLayout();
             SuspendLayout();
             // 
@@ -91,11 +95,13 @@ namespace RealEstateManager.Pages
             groupBoxPropertyDetails.Controls.Add(labelDescription);
             groupBoxPropertyDetails.Controls.Add(textBoxDescription);
             groupBoxPropertyDetails.Controls.Add(buttonRegister);
+            groupBoxPropertyDetails.Controls.Add(labelKhasraNo);
+            groupBoxPropertyDetails.Controls.Add(textBoxKhasraNo);
             groupBoxPropertyDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPropertyDetails.ForeColor = Color.MidnightBlue;
             groupBoxPropertyDetails.Location = new Point(20, 20);
             groupBoxPropertyDetails.Name = "groupBoxPropertyDetails";
-            groupBoxPropertyDetails.Size = new Size(560, 630);
+            groupBoxPropertyDetails.Size = new Size(560, 694);
             groupBoxPropertyDetails.TabIndex = 0;
             groupBoxPropertyDetails.TabStop = false;
             groupBoxPropertyDetails.Text = "Property Details";
@@ -201,7 +207,7 @@ namespace RealEstateManager.Pages
             // 
             labelPhone.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPhone.ForeColor = Color.DarkSlateGray;
-            labelPhone.Location = new Point(30, 279);
+            labelPhone.Location = new Point(30, 333);
             labelPhone.Name = "labelPhone";
             labelPhone.Size = new Size(140, 30);
             labelPhone.TabIndex = 10;
@@ -211,7 +217,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxPhone.BorderStyle = BorderStyle.FixedSingle;
             textBoxPhone.Font = new Font("Segoe UI", 10F);
-            textBoxPhone.Location = new Point(190, 276);
+            textBoxPhone.Location = new Point(190, 330);
             textBoxPhone.Name = "textBoxPhone";
             textBoxPhone.Size = new Size(320, 30);
             textBoxPhone.TabIndex = 11;
@@ -220,7 +226,7 @@ namespace RealEstateManager.Pages
             // 
             labelAddress.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelAddress.ForeColor = Color.DarkSlateGray;
-            labelAddress.Location = new Point(30, 324);
+            labelAddress.Location = new Point(30, 378);
             labelAddress.Name = "labelAddress";
             labelAddress.Size = new Size(140, 30);
             labelAddress.TabIndex = 12;
@@ -230,7 +236,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxAddress.BorderStyle = BorderStyle.FixedSingle;
             textBoxAddress.Font = new Font("Segoe UI", 10F);
-            textBoxAddress.Location = new Point(190, 321);
+            textBoxAddress.Location = new Point(190, 375);
             textBoxAddress.Name = "textBoxAddress";
             textBoxAddress.Size = new Size(320, 30);
             textBoxAddress.TabIndex = 13;
@@ -239,7 +245,7 @@ namespace RealEstateManager.Pages
             // 
             labelCity.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelCity.ForeColor = Color.DarkSlateGray;
-            labelCity.Location = new Point(30, 369);
+            labelCity.Location = new Point(30, 423);
             labelCity.Name = "labelCity";
             labelCity.Size = new Size(140, 30);
             labelCity.TabIndex = 14;
@@ -249,7 +255,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxCity.BorderStyle = BorderStyle.FixedSingle;
             textBoxCity.Font = new Font("Segoe UI", 10F);
-            textBoxCity.Location = new Point(190, 366);
+            textBoxCity.Location = new Point(190, 420);
             textBoxCity.Name = "textBoxCity";
             textBoxCity.Size = new Size(320, 30);
             textBoxCity.TabIndex = 15;
@@ -258,7 +264,7 @@ namespace RealEstateManager.Pages
             // 
             labelState.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelState.ForeColor = Color.DarkSlateGray;
-            labelState.Location = new Point(30, 414);
+            labelState.Location = new Point(30, 468);
             labelState.Name = "labelState";
             labelState.Size = new Size(140, 30);
             labelState.TabIndex = 16;
@@ -268,7 +274,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxState.BorderStyle = BorderStyle.FixedSingle;
             textBoxState.Font = new Font("Segoe UI", 10F);
-            textBoxState.Location = new Point(190, 411);
+            textBoxState.Location = new Point(190, 465);
             textBoxState.Name = "textBoxState";
             textBoxState.Size = new Size(320, 30);
             textBoxState.TabIndex = 17;
@@ -277,7 +283,7 @@ namespace RealEstateManager.Pages
             // 
             labelZip.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelZip.ForeColor = Color.DarkSlateGray;
-            labelZip.Location = new Point(30, 459);
+            labelZip.Location = new Point(30, 513);
             labelZip.Name = "labelZip";
             labelZip.Size = new Size(140, 30);
             labelZip.TabIndex = 18;
@@ -287,7 +293,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxZip.BorderStyle = BorderStyle.FixedSingle;
             textBoxZip.Font = new Font("Segoe UI", 10F);
-            textBoxZip.Location = new Point(190, 456);
+            textBoxZip.Location = new Point(190, 510);
             textBoxZip.Name = "textBoxZip";
             textBoxZip.Size = new Size(320, 30);
             textBoxZip.TabIndex = 19;
@@ -296,7 +302,7 @@ namespace RealEstateManager.Pages
             // 
             labelDescription.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelDescription.ForeColor = Color.DarkSlateGray;
-            labelDescription.Location = new Point(30, 504);
+            labelDescription.Location = new Point(30, 558);
             labelDescription.Name = "labelDescription";
             labelDescription.Size = new Size(140, 30);
             labelDescription.TabIndex = 20;
@@ -306,7 +312,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxDescription.BorderStyle = BorderStyle.FixedSingle;
             textBoxDescription.Font = new Font("Segoe UI", 10F);
-            textBoxDescription.Location = new Point(190, 501);
+            textBoxDescription.Location = new Point(190, 555);
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.Size = new Size(320, 60);
@@ -318,7 +324,7 @@ namespace RealEstateManager.Pages
             buttonRegister.FlatStyle = FlatStyle.Flat;
             buttonRegister.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonRegister.ForeColor = Color.White;
-            buttonRegister.Location = new Point(190, 579);
+            buttonRegister.Location = new Point(190, 633);
             buttonRegister.Name = "buttonRegister";
             buttonRegister.Size = new Size(320, 35);
             buttonRegister.TabIndex = 22;
@@ -326,9 +332,30 @@ namespace RealEstateManager.Pages
             buttonRegister.UseVisualStyleBackColor = false;
             buttonRegister.Click += buttonRegister_Click;
             // 
+            // labelKhasraNo
+            // 
+            labelKhasraNo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelKhasraNo.ForeColor = Color.DarkSlateGray;
+            labelKhasraNo.Location = new Point(30, 282);
+            labelKhasraNo.Name = "labelKhasraNo";
+            labelKhasraNo.Size = new Size(140, 30);
+            labelKhasraNo.TabIndex = 20;
+            labelKhasraNo.Text = "Khasra No:";
+            // 
+            // textBoxKhasraNo
+            // 
+            textBoxKhasraNo.BorderStyle = BorderStyle.FixedSingle;
+            textBoxKhasraNo.Font = new Font("Segoe UI", 10F);
+            textBoxKhasraNo.Location = new Point(190, 279);
+            textBoxKhasraNo.Name = "textBoxKhasraNo";
+            textBoxKhasraNo.Size = new Size(320, 30);
+            textBoxKhasraNo.TabIndex = 21;
+            // 
             // RegisterPropertyForm
             // 
-            ClientSize = new Size(600, 670);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(600, 726);
             Controls.Add(groupBoxPropertyDetails);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "RegisterPropertyForm";

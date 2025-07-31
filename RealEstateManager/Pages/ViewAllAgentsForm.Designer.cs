@@ -60,7 +60,7 @@ namespace RealEstateManager.Pages
             dataGridViewAgents.ReadOnly = true;
             dataGridViewAgents.RowHeadersWidth = 51;
             dataGridViewAgents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewAgents.Size = new Size(1035, 437);
+            dataGridViewAgents.Size = new Size(1060, 437);
             dataGridViewAgents.TabIndex = 0;
             dataGridViewAgents.CellMouseClick += dataGridViewAgents_CellMouseClick;
             dataGridViewAgents.CellPainting += dataGridViewAgents_CellPainting;
@@ -86,7 +86,7 @@ namespace RealEstateManager.Pages
             groupBoxAgents.Location = new Point(20, 20);
             groupBoxAgents.Name = "groupBoxAgents";
             groupBoxAgents.Padding = new Padding(15);
-            groupBoxAgents.Size = new Size(1064, 529);
+            groupBoxAgents.Size = new Size(1084, 529);
             groupBoxAgents.TabIndex = 2;
             groupBoxAgents.TabStop = false;
             groupBoxAgents.Text = "Agent Details";
@@ -99,7 +99,7 @@ namespace RealEstateManager.Pages
             buttonRegisterAgent.ForeColor = Color.White;
             buttonRegisterAgent.Location = new Point(842, 31);
             buttonRegisterAgent.Name = "buttonRegisterAgent";
-            buttonRegisterAgent.Size = new Size(208, 40);
+            buttonRegisterAgent.Size = new Size(233, 40);
             buttonRegisterAgent.TabIndex = 2;
             buttonRegisterAgent.Text = "Register Agent";
             buttonRegisterAgent.UseVisualStyleBackColor = false;
@@ -111,7 +111,7 @@ namespace RealEstateManager.Pages
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1087, 554);
+            ClientSize = new Size(1107, 554);
             Controls.Add(groupBoxAgents);
             Name = "ViewAllAgentsForm";
             Text = "All Agents";

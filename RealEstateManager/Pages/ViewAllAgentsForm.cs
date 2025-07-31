@@ -90,21 +90,21 @@ namespace RealEstateManager.Pages
                 HeaderText = "Total Brokerage",
                 Width = 160,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
             });
             dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
                 DataPropertyName = "Paid",
                 HeaderText = "Amount Paid",
                 Width = 150,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
             });
             dataGridViewAgents.Columns.Add(new DataGridViewTextBoxColumn {
                 DataPropertyName = "Balance",
                 HeaderText = "Balance",
                 Width = 120,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
             });
 
             // Action column with icons

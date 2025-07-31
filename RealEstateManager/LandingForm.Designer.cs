@@ -182,7 +182,8 @@ namespace RealEstateManager
             // 
             sendMessageToAllMenuItem.Name = "sendMessageToAllMenuItem";
             sendMessageToAllMenuItem.Size = new Size(395, 32);
-            sendMessageToAllMenuItem.Text = "Send Message to All Customers";
+            sendMessageToAllMenuItem.Text = "Send Messages";
+            sendMessageToAllMenuItem.Click += SendMessageToAllMenuItem_Click;
             // 
             // helpMenu
             // 

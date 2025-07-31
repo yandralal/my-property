@@ -46,6 +46,9 @@
     <Compile Update="Pages\RegisterPlotTransactionForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\SendWhatsAppMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\ViewAllAgentsForm.cs">
       <SubType>Form</SubType>
     </Compile>

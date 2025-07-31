@@ -1,5 +1,8 @@
 using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.Web;
 
 namespace RealEstateManager.Pages
 {
@@ -41,6 +44,19 @@ namespace RealEstateManager.Pages
         private static bool IsInDesignMode()
         {
             return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+        }
+
+        public static void SendWhatsAppMessage(string phoneNumber, string message)
+        {
+            // Remove non-digits and ensure international format
+            string cleanedNumber = new string([.. phoneNumber.Where(char.IsDigit)]);
+            if (string.IsNullOrWhiteSpace(cleanedNumber)) return;
+            string url = $"https://wa.me/{cleanedNumber}?text={HttpUtility.UrlEncode(message)}";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
     }
 }

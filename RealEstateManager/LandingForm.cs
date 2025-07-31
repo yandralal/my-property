@@ -1,6 +1,8 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Pages;
 using System.Data;
+using System.Diagnostics;
+using System.Web;
 
 namespace RealEstateManager
 {
@@ -63,6 +65,7 @@ namespace RealEstateManager
                     p.Price AS [BuyPrice], 
                     p.Owner, 
                     p.Description,
+                    P.Phone,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
                     (p.Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance,
                     p.KhasraNo
@@ -78,6 +81,12 @@ namespace RealEstateManager
                 adapter.Fill(dt);
                 _propertyTable = dt; // Store for filtering
 
+                // Add a hidden Phone column if it doesn't exist
+                if (!dt.Columns.Contains("Phone"))
+                {
+                    dt.Columns.Add("Phone", typeof(string));
+                }
+
                 // Always clear columns and set AutoGenerateColumns before rebinding
                 dataGridViewProperties.DataSource = null;
                 dataGridViewProperties.Columns.Clear();
@@ -86,6 +95,10 @@ namespace RealEstateManager
 
                 // Defensive: force UI to update columns
                 dataGridViewProperties.Refresh();
+
+                // Hide the Phone column in the grid if it exists
+                if (dataGridViewProperties.Columns["Phone"] != null)
+                    dataGridViewProperties.Columns["Phone"].Visible = false;
 
                 // Update property count label
                 labelProperties.Text = $"Properties ({dt.Rows.Count})";
@@ -920,6 +933,40 @@ namespace RealEstateManager
         {
             var filterForm = new AllTransactionsFilterForm();
             filterForm.ShowDialog();
+        }
+
+        private void SendMessageToAllMenuItem_Click(object sender, EventArgs e)
+        {
+            // Show dialog to get the message
+            using var msgForm = new SendWhatsAppMessageForm();
+            if (msgForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            string message = msgForm.MessageText;
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                MessageBox.Show("Please enter a message.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Get the selected row
+            var selectedRow = dataGridViewProperties.CurrentRow;
+            if (selectedRow == null)
+            {
+                MessageBox.Show("Please select a property row to send the message.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string? phone = selectedRow.Cells["Phone"]?.Value?.ToString();
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                MessageBox.Show("No phone number found for the selected property.", "No Phone", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SendWhatsAppMessage(phone, message);
+
+            MessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

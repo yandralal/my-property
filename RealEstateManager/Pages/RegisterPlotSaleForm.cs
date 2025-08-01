@@ -24,6 +24,7 @@ namespace RealEstateManager.Pages
         )
         {
             InitializeComponent();
+            ApplyDesignerAppearance(); // <-- Ensure designer look
             SetupPhoneNumberValidation();
 
             _isEditMode = true;
@@ -91,12 +92,21 @@ namespace RealEstateManager.Pages
         public RegisterPlotSaleForm()
         {
             InitializeComponent();
+            ApplyDesignerAppearance(); // <-- Ensure designer look
             SetupPhoneNumberValidation();
             LoadProperties();
             LoadAgents();
 
             // Set button text for add mode
             buttonRegisterSale.Text = "Register Sale";
+        }
+
+        private void ApplyDesignerAppearance()
+        {
+            // These match the designer settings
+            this.BackColor = Color.FromArgb(245, 248, 255);
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            // Icon and other properties are set by designer, no need to repeat unless overridden elsewhere
         }
 
         private void LoadProperties()

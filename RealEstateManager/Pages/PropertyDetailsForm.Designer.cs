@@ -631,7 +631,7 @@ namespace RealEstateManager.Pages
             buttonGenerateReport.TabIndex = 40;
             buttonGenerateReport.Text = "Generate Report";
             buttonGenerateReport.UseVisualStyleBackColor = false;
-            buttonGenerateReport.Click += buttonGenerateReport_Click;
+            buttonGenerateReport.Click += ButtonGenerateReport_Click;
             // 
             // label33
             // 

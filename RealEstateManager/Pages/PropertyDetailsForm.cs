@@ -355,7 +355,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void buttonGenerateReport_Click(object sender, EventArgs e)
+        private void ButtonGenerateReport_Click(object sender, EventArgs e)
         {
             // Use property title as file name, sanitized for file system
             string propertyTitle = labelTitleValue.Text?.Trim() ?? "PropertyReport";
@@ -450,6 +450,7 @@ namespace RealEstateManager.Pages
                 ("City:", labelCityValue.Text),
                 ("State:", labelStateValue.Text),
                 ("Zip:", labelZipValue.Text),
+                ("Khasra No:", labelKhasraNoValue.Text),
                 ("Description:", labelDescriptionValue.Text),
                 ("Buy Price:", labelPropertyBuyPrice.Text),
                 ("Amount Paid:", labelPropertyAmountPaid.Text),
@@ -577,7 +578,7 @@ namespace RealEstateManager.Pages
                     gfx.DrawString(title, titleFont, XBrushes.Black,
                         new XRect(tx, ty, summaryRightMaxTitleWidth, 18), XStringFormats.TopLeft);
                     gfx.DrawString(value, new XFont("Segoe UI", 10), XBrushes.Black,
-                        new XRect(tx + summaryRightMaxTitleWidth + gap, ty, summaryColWidth - summaryRightMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
+                        new XRect(tx + rightMaxTitleWidth + gap, ty, summaryColWidth - rightMaxTitleWidth - gap, 18), XStringFormats.TopLeft);
                     summaryRightY += 16;
                 }
             }

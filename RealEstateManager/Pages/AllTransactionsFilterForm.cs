@@ -1,11 +1,9 @@
 using Microsoft.Data.SqlClient;
-using System;
 using System.Data;
-using System.Windows.Forms;
 
 namespace RealEstateManager.Pages
 {
-    public partial class AllTransactionsFilterForm : Form
+    public partial class AllTransactionsFilterForm : BaseForm
     {
         public AllTransactionsFilterForm()
         {
@@ -14,7 +12,7 @@ namespace RealEstateManager.Pages
             comboBoxType.SelectedIndex = 0;
             dateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
             dateTimePickerTo.Value = DateTime.Today;
-            ButtonFilter_Click(null, null); // Initial load
+            ButtonFilter_Click(this, EventArgs.Empty); // Initial load
         }
 
         private void ButtonFilter_Click(object sender, EventArgs e)

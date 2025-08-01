@@ -16,6 +16,9 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             groupBoxFilter = new GroupBox();
             labelType = new Label();
             comboBoxType = new ComboBox();
@@ -65,7 +68,7 @@ namespace RealEstateManager.Pages
             // 
             comboBoxType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxType.Font = new Font("Segoe UI", 10F);
-            comboBoxType.Location = new Point(182, 42);
+            comboBoxType.Location = new Point(202, 42);
             comboBoxType.Name = "comboBoxType";
             comboBoxType.Size = new Size(180, 31);
             comboBoxType.TabIndex = 1;
@@ -84,7 +87,7 @@ namespace RealEstateManager.Pages
             // dateTimePickerFrom
             // 
             dateTimePickerFrom.Font = new Font("Segoe UI", 10F);
-            dateTimePickerFrom.Location = new Point(525, 42);
+            dateTimePickerFrom.Location = new Point(544, 42);
             dateTimePickerFrom.Name = "dateTimePickerFrom";
             dateTimePickerFrom.Size = new Size(170, 30);
             dateTimePickerFrom.TabIndex = 3;
@@ -94,7 +97,7 @@ namespace RealEstateManager.Pages
             labelTo.AutoSize = true;
             labelTo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTo.ForeColor = Color.DarkSlateGray;
-            labelTo.Location = new Point(715, 47);
+            labelTo.Location = new Point(734, 47);
             labelTo.Name = "labelTo";
             labelTo.Size = new Size(76, 23);
             labelTo.TabIndex = 4;
@@ -103,7 +106,7 @@ namespace RealEstateManager.Pages
             // dateTimePickerTo
             // 
             dateTimePickerTo.Font = new Font("Segoe UI", 10F);
-            dateTimePickerTo.Location = new Point(795, 42);
+            dateTimePickerTo.Location = new Point(831, 42);
             dateTimePickerTo.Name = "dateTimePickerTo";
             dateTimePickerTo.Size = new Size(170, 30);
             dateTimePickerTo.TabIndex = 5;
@@ -114,7 +117,7 @@ namespace RealEstateManager.Pages
             buttonFilter.FlatStyle = FlatStyle.Flat;
             buttonFilter.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonFilter.ForeColor = Color.White;
-            buttonFilter.Location = new Point(985, 40);
+            buttonFilter.Location = new Point(1039, 40);
             buttonFilter.Name = "buttonFilter";
             buttonFilter.Size = new Size(120, 36);
             buttonFilter.TabIndex = 6;
@@ -139,30 +142,27 @@ namespace RealEstateManager.Pages
             // 
             dataGridViewResults.AllowUserToAddRows = false;
             dataGridViewResults.AllowUserToDeleteRows = false;
-            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            dataGridViewCellStyle1.BackColor = Color.AliceBlue;
-            dataGridViewResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.BackColor = Color.AliceBlue;
+            dataGridViewResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             dataGridViewResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewResults.BackgroundColor = Color.White;
-            var dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.MidnightBlue;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridViewResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle8.ForeColor = Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dataGridViewResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dataGridViewResults.ColumnHeadersHeight = 29;
-            var dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle3.ForeColor = Color.MidnightBlue;
-            dataGridViewCellStyle3.SelectionBackColor = Color.LightCyan;
-            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dataGridViewResults.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle9.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle9.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
+            dataGridViewResults.DefaultCellStyle = dataGridViewCellStyle9;
             dataGridViewResults.EnableHeadersVisualStyles = false;
             dataGridViewResults.GridColor = Color.LightGray;
             dataGridViewResults.Location = new Point(15, 35);
@@ -175,8 +175,8 @@ namespace RealEstateManager.Pages
             // 
             // AllTransactionsFilterForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
-            AutoScaleMode = AutoScaleMode.Font;
+            //AutoScaleDimensions = new SizeF(9F, 23F);
+            //AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(1380, 650);
             Controls.Add(groupBoxResults);

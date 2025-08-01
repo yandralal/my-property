@@ -29,7 +29,7 @@ namespace RealEstateManager
             {
                 Dock = DockStyle.Bottom,
                 Height = 32,
-                Text = "© 2025 RealEstateManager. All rights reserved.",
+                Text = "© 2025 Real Estate Manager. All rights reserved.",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Segoe UI", 10F, FontStyle.Italic),
                 BackColor = Color.FromArgb(30, 60, 114),
@@ -367,7 +367,7 @@ namespace RealEstateManager
                 var row = dataGridViewPlots.Rows[e.RowIndex];
                 if (int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId))
                 {
-                    var detailsForm = new Pages.PlotDetailsForm(plotId);
+                    var detailsForm = new PlotDetailsForm(plotId);
                     detailsForm.ShowDialog();
                 }
             }
@@ -498,7 +498,7 @@ namespace RealEstateManager
                 }
             }
 
-            var transactionForm = new Pages.RegisterPlotTransactionForm(plotId, saleAmount, plotNumber);
+            var transactionForm = new RegisterPlotTransactionForm(plotId, saleAmount, plotNumber);
             transactionForm.ShowDialog();
         }
 
@@ -967,6 +967,14 @@ namespace RealEstateManager
             SendWhatsAppMessage(phone, message);
 
             MessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ChangeBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var customizeForm = new CustomizeBackgroundForm())
+            {
+                customizeForm.ShowDialog();
+            }
         }
     }
 }

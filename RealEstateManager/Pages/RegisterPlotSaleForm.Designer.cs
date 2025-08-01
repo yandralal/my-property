@@ -86,7 +86,7 @@ namespace RealEstateManager.Pages
             groupBoxSaleDetails.ForeColor = Color.MidnightBlue;
             groupBoxSaleDetails.Location = new Point(25, 20);
             groupBoxSaleDetails.Name = "groupBoxSaleDetails";
-            groupBoxSaleDetails.Size = new Size(745, 557);
+            groupBoxSaleDetails.Size = new Size(673, 557);
             groupBoxSaleDetails.TabIndex = 0;
             groupBoxSaleDetails.TabStop = false;
             groupBoxSaleDetails.Text = "Sale Details";
@@ -137,7 +137,7 @@ namespace RealEstateManager.Pages
             labelPlotStatus.ForeColor = Color.DarkSlateGray;
             labelPlotStatus.Location = new Point(478, 98);
             labelPlotStatus.Name = "labelPlotStatus";
-            labelPlotStatus.Size = new Size(200, 30);
+            labelPlotStatus.Size = new Size(162, 30);
             labelPlotStatus.TabIndex = 4;
             labelPlotStatus.Text = "Status: -";
             // 
@@ -290,7 +290,7 @@ namespace RealEstateManager.Pages
             // RegisterPlotSaleForm
             // 
             BackColor = Color.FromArgb(245, 248, 255);
-            ClientSize = new Size(778, 582);
+            ClientSize = new Size(707, 582);
             Controls.Add(groupBoxSaleDetails);
             Font = new Font("Segoe UI", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");

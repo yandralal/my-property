@@ -1,9 +1,6 @@
-using System.Diagnostics;
-using System.Web;
-
 namespace RealEstateManager.Pages
 {
-    public partial class SendWhatsAppMessageForm : Form
+    public partial class SendWhatsAppMessageForm : BaseForm
     {
         public string MessageText => textBoxMessage.Text;
 

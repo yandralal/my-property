@@ -81,6 +81,7 @@ namespace RealEstateManager
             labelPlots = new Label();
             groupBoxProperties = new GroupBox();
             groupBoxPlots = new GroupBox();
+            changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
@@ -111,29 +112,29 @@ namespace RealEstateManager
             // propertyTransactionsMenuItem
             // 
             propertyTransactionsMenuItem.Name = "propertyTransactionsMenuItem";
-            propertyTransactionsMenuItem.Size = new Size(296, 32);
-            propertyTransactionsMenuItem.Text = "Property Transaction";
+            propertyTransactionsMenuItem.Size = new Size(232, 32);
+            propertyTransactionsMenuItem.Text = "Property";
             propertyTransactionsMenuItem.Click += PropertyTransactionsMenuItem_Click;
             // 
             // plotTransactionMenuItem
             // 
             plotTransactionMenuItem.Name = "plotTransactionMenuItem";
-            plotTransactionMenuItem.Size = new Size(296, 32);
-            plotTransactionMenuItem.Text = "Plot Transaction";
+            plotTransactionMenuItem.Size = new Size(232, 32);
+            plotTransactionMenuItem.Text = "Plot";
             plotTransactionMenuItem.Click += PlotTransactionMenuItem_Click;
             // 
             // agentTransactionToolStripMenuItem
             // 
             agentTransactionToolStripMenuItem.Name = "agentTransactionToolStripMenuItem";
-            agentTransactionToolStripMenuItem.Size = new Size(296, 32);
-            agentTransactionToolStripMenuItem.Text = "Agent Transaction";
+            agentTransactionToolStripMenuItem.Size = new Size(232, 32);
+            agentTransactionToolStripMenuItem.Text = "Agent";
             agentTransactionToolStripMenuItem.Click += AgentTransactionToolStripMenuItem_Click;
             // 
             // miscTransactionToolStripMenuItem
             // 
             miscTransactionToolStripMenuItem.Name = "miscTransactionToolStripMenuItem";
-            miscTransactionToolStripMenuItem.Size = new Size(296, 32);
-            miscTransactionToolStripMenuItem.Text = "Misc Transaction";
+            miscTransactionToolStripMenuItem.Size = new Size(232, 32);
+            miscTransactionToolStripMenuItem.Text = "Miscellaneous";
             miscTransactionToolStripMenuItem.Click += MiscTransactionToolStripMenuItem_Click;
             // 
             // agentOperationsMenu
@@ -181,13 +182,13 @@ namespace RealEstateManager
             // sendMessageToAllMenuItem
             // 
             sendMessageToAllMenuItem.Name = "sendMessageToAllMenuItem";
-            sendMessageToAllMenuItem.Size = new Size(395, 32);
+            sendMessageToAllMenuItem.Size = new Size(241, 32);
             sendMessageToAllMenuItem.Text = "Send Messages";
             sendMessageToAllMenuItem.Click += SendMessageToAllMenuItem_Click;
             // 
             // helpMenu
             // 
-            helpMenu.DropDownItems.AddRange(new ToolStripItem[] { helpMenuItem, aboutMenuItem });
+            helpMenu.DropDownItems.AddRange(new ToolStripItem[] { helpMenuItem, aboutMenuItem, changeBackgroundToolStripMenuItem });
             helpMenu.Name = "helpMenu";
             helpMenu.Size = new Size(70, 32);
             helpMenu.Text = "Help";
@@ -195,13 +196,13 @@ namespace RealEstateManager
             // helpMenuItem
             // 
             helpMenuItem.Name = "helpMenuItem";
-            helpMenuItem.Size = new Size(156, 32);
+            helpMenuItem.Size = new Size(315, 32);
             helpMenuItem.Text = "Help";
             // 
             // aboutMenuItem
             // 
             aboutMenuItem.Name = "aboutMenuItem";
-            aboutMenuItem.Size = new Size(156, 32);
+            aboutMenuItem.Size = new Size(315, 32);
             aboutMenuItem.Text = "About";
             // 
             // propertyMenu
@@ -376,6 +377,13 @@ namespace RealEstateManager
             groupBoxPlots.TabStop = false;
             groupBoxPlots.Text = "Plots";
             // 
+            // changeBackgroundToolStripMenuItem
+            // 
+            changeBackgroundToolStripMenuItem.Name = "changeBackgroundToolStripMenuItem";
+            changeBackgroundToolStripMenuItem.Size = new Size(315, 32);
+            changeBackgroundToolStripMenuItem.Text = "Customize Background";
+            changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
+            // 
             // LandingForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -437,5 +445,6 @@ namespace RealEstateManager
         }
         private ToolStripMenuItem agentTransactionToolStripMenuItem;
         private ToolStripMenuItem miscTransactionToolStripMenuItem;
+        private ToolStripMenuItem changeBackgroundToolStripMenuItem;
     }
 }

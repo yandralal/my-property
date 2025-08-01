@@ -1,11 +1,10 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
 using System.Data;
-using System.Drawing.Drawing2D;
 
 namespace RealEstateManager.Pages
 {
-    public partial class ManagePlotsForm : Form
+    public partial class ManagePlotsForm : BaseForm
     {
         public ManagePlotsForm()
         {

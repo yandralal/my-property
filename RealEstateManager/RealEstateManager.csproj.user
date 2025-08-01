@@ -19,6 +19,9 @@
     <Compile Update="Pages\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\CustomizeBackgroundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\ManagePlotsForm.cs">
       <SubType>Form</SubType>
     </Compile>

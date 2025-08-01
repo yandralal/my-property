@@ -7,7 +7,7 @@ namespace RealEstateManager.Pages
         private readonly int? _plotId;
         private readonly decimal? _saleAmount;
         private readonly string? _plotNumber;
-        private decimal _amountPaidTillDate = 0;
+        private readonly decimal _amountPaidTillDate = 0;
         private readonly string? _transactionId;
 
         public RegisterPlotTransactionForm(int? plotId = null, decimal? saleAmount = null, string? plotNumber = "")

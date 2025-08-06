@@ -18,6 +18,8 @@ namespace RealEstateManager.Pages
 
             comboBoxPaymentMethod.Items.Clear();
             comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
+
+            SetupAmountFormatting();
         }
 
         public RegisterMiscTransactionForm(string transactionId, bool readOnly = false)
@@ -64,6 +66,8 @@ namespace RealEstateManager.Pages
                     }
                 }
             }
+
+            SetupAmountFormatting();
 
             SetFieldsReadOnly(readOnly);
             buttonSave.Visible = !readOnly;
@@ -163,6 +167,18 @@ namespace RealEstateManager.Pages
             textBoxReferenceNumber.ReadOnly = readOnly;
             textBoxNotes.ReadOnly = readOnly;
             comboBoxTransactionType.Enabled = !readOnly;
+        }
+
+        // Add this method to your class:
+        private void SetupAmountFormatting()
+        {
+            textBoxAmount.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxAmount.Text, out decimal val))
+                {
+                    textBoxAmount.Text = val.ToString("F2");
+                }
+            };
         }
     }
 }

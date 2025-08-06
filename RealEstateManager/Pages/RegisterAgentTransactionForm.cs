@@ -26,6 +26,8 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.SelectedIndex = 0;
 
             textBoxAmount.TextChanged += UpdateBalanceAmount;
+
+            SetupAmountFormatting();
         }
 
         public RegisterAgentTransactionForm(string transactionId, bool readOnly = false)
@@ -116,6 +118,8 @@ namespace RealEstateManager.Pages
             buttonSave.Visible = !readOnly;
             buttonSave.Enabled = !readOnly;
             textBoxAmount.TextChanged += UpdateBalanceAmount;
+
+            SetupAmountFormatting();
         }
 
         public RegisterAgentTransactionForm()
@@ -136,6 +140,8 @@ namespace RealEstateManager.Pages
             textBoxTotalBrokerage.TextChanged += (s, e) => UpdateBalanceOnLoad();
             textBoxAmountPaidTillDate.TextChanged += TextBoxAmountPaidTillDate_TextChanged;
             textBoxAmount.TextChanged += UpdateBalanceAmount;
+
+            SetupAmountFormatting();
         }
 
         private void RegisterAgentTransactionForm_Load(object sender, EventArgs e)
@@ -449,6 +455,17 @@ namespace RealEstateManager.Pages
                 comboBoxPlotNumber.ValueMember = "Id";
                 comboBoxPlotNumber.SelectedIndex = -1;
             }
+        }
+
+        private void SetupAmountFormatting()
+        {
+            textBoxAmount.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxAmount.Text, out decimal val))
+                {
+                    textBoxAmount.Text = val.ToString("F2");
+                }
+            };
         }
     }
 }

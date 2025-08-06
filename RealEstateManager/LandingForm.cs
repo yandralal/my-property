@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using MigraDoc.DocumentObjectModel.Internals;
 using RealEstateManager.Pages;
 using System.Data;
 
@@ -159,7 +160,7 @@ namespace RealEstateManager
             {
                 Name = "CustomerPhone",
                 HeaderText = "Phone",
-                Width = 150
+                Width = 120
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -183,7 +184,7 @@ namespace RealEstateManager
             {
                 Name = "SaleDate",
                 HeaderText = "Sale Date",
-                Width = 160
+                Width = 190
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -220,6 +221,8 @@ namespace RealEstateManager
                 dataGridViewPlots.Columns["AmountPaid"].DefaultCellStyle.Format = "C";
             if (dataGridViewPlots.Columns["AmountBalance"] != null)
                 dataGridViewPlots.Columns["AmountBalance"].DefaultCellStyle.Format = "C";
+            if( dataGridViewPlots.Columns["SaleDate"] != null)
+                dataGridViewPlots.Columns["SaleDate"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
             dataGridViewPlots.CellContentClick -= dataGridViewPlots_CellContentClick;
             dataGridViewPlots.CellContentClick += dataGridViewPlots_CellContentClick;
@@ -229,6 +232,13 @@ namespace RealEstateManager
 
             dataGridViewPlots.CellMouseClick -= DataGridViewPlots_CellMouseClick;
             dataGridViewPlots.CellMouseClick += DataGridViewPlots_CellMouseClick;
+
+            // After all columns are added to dataGridViewPlots.Columns
+            foreach (DataGridViewColumn col in dataGridViewPlots.Columns)
+            {
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
+                col.Resizable = DataGridViewTriState.False; 
+            }
         }
 
         private void LandingForm_Load(object sender, EventArgs e)
@@ -371,10 +381,10 @@ namespace RealEstateManager
                         row["CustomerEmail"] == DBNull.Value ? "" : row["CustomerEmail"].ToString(),
                         row["Status"].ToString(),
                         row["Area"].ToString(),
-                        row["SaleDate"] == DBNull.Value ? "" : Convert.ToDateTime(row["SaleDate"]).ToShortDateString(),
-                        saleAmount == 0 ? (object)DBNull.Value : saleAmount,      // Pass as decimal, not string
-                        amountPaid == 0 ? (object)DBNull.Value : amountPaid,      // Pass as decimal, not string
-                        amountBalance == 0 ? (object)DBNull.Value : amountBalance // Pass as decimal, not string
+                        row["SaleDate"],
+                        saleAmount == 0 ? DBNull.Value : saleAmount,      // Pass as decimal, not string
+                        amountPaid == 0 ? DBNull.Value : amountPaid,      // Pass as decimal, not string
+                        amountBalance == 0 ? DBNull.Value : amountBalance // Pass as decimal, not string
                     );
                 }
 
@@ -792,7 +802,7 @@ namespace RealEstateManager
                     dgv.Columns[name].HeaderText = header;
                     dgv.Columns[name].Width = width;
                     dgv.Columns[name].DisplayIndex = displayIndex++;
-                    dgv.Columns[name].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    dgv.Columns[name].AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
                     if (format != null)
                         dgv.Columns[name].DefaultCellStyle.Format = format;
                     dgv.Columns[name].MinimumWidth = width;

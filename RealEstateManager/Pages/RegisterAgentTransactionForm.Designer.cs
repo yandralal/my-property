@@ -127,7 +127,6 @@ namespace RealEstateManager.Pages
             labelAgentId.Location = new Point(38, 95);
             labelAgentId.Name = "labelAgentId";
             labelAgentId.Size = new Size(64, 23);
-            labelAgentId.TabIndex = 0;
             labelAgentId.Text = "Agent:";
             // 
             // buttonSave
@@ -139,7 +138,7 @@ namespace RealEstateManager.Pages
             buttonSave.Location = new Point(240, 649);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(300, 40);
-            buttonSave.TabIndex = 1;
+            buttonSave.TabIndex = 11;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = false;
             buttonSave.Click += ButtonSave_Click;
@@ -161,7 +160,6 @@ namespace RealEstateManager.Pages
             labelTransactionDate.Location = new Point(40, 598);
             labelTransactionDate.Name = "labelTransactionDate";
             labelTransactionDate.Size = new Size(53, 23);
-            labelTransactionDate.TabIndex = 2;
             labelTransactionDate.Text = "Date:";
             // 
             // dateTimePickerTransactionDate
@@ -170,7 +168,7 @@ namespace RealEstateManager.Pages
             dateTimePickerTransactionDate.Location = new Point(240, 595);
             dateTimePickerTransactionDate.Name = "dateTimePickerTransactionDate";
             dateTimePickerTransactionDate.Size = new Size(300, 30);
-            dateTimePickerTransactionDate.TabIndex = 3;
+            dateTimePickerTransactionDate.TabIndex = 10;
             // 
             // labelAmount
             // 
@@ -180,7 +178,6 @@ namespace RealEstateManager.Pages
             labelAmount.Location = new Point(40, 333);
             labelAmount.Name = "labelAmount";
             labelAmount.Size = new Size(136, 23);
-            labelAmount.TabIndex = 4;
             labelAmount.Text = "Amount To Pay:";
             // 
             // textBoxAmount
@@ -190,7 +187,7 @@ namespace RealEstateManager.Pages
             textBoxAmount.Location = new Point(240, 330);
             textBoxAmount.Name = "textBoxAmount";
             textBoxAmount.Size = new Size(300, 30);
-            textBoxAmount.TabIndex = 5;
+            textBoxAmount.TabIndex = 6;
             // 
             // labelPaymentMethod
             // 
@@ -200,7 +197,6 @@ namespace RealEstateManager.Pages
             labelPaymentMethod.Location = new Point(40, 425);
             labelPaymentMethod.Name = "labelPaymentMethod";
             labelPaymentMethod.Size = new Size(153, 23);
-            labelPaymentMethod.TabIndex = 6;
             labelPaymentMethod.Text = "Payment Method:";
             // 
             // comboBoxPaymentMethod
@@ -220,7 +216,6 @@ namespace RealEstateManager.Pages
             labelReferenceNumber.Location = new Point(40, 471);
             labelReferenceNumber.Name = "labelReferenceNumber";
             labelReferenceNumber.Size = new Size(109, 23);
-            labelReferenceNumber.TabIndex = 8;
             labelReferenceNumber.Text = "Reference #:";
             // 
             // textBoxReferenceNumber
@@ -230,7 +225,7 @@ namespace RealEstateManager.Pages
             textBoxReferenceNumber.Location = new Point(240, 468);
             textBoxReferenceNumber.Name = "textBoxReferenceNumber";
             textBoxReferenceNumber.Size = new Size(300, 30);
-            textBoxReferenceNumber.TabIndex = 9;
+            textBoxReferenceNumber.TabIndex = 8;
             // 
             // labelNotes
             // 
@@ -240,7 +235,6 @@ namespace RealEstateManager.Pages
             labelNotes.Location = new Point(40, 517);
             labelNotes.Name = "labelNotes";
             labelNotes.Size = new Size(61, 23);
-            labelNotes.TabIndex = 10;
             labelNotes.Text = "Notes:";
             // 
             // textBoxNotes
@@ -251,7 +245,7 @@ namespace RealEstateManager.Pages
             textBoxNotes.Multiline = true;
             textBoxNotes.Name = "textBoxNotes";
             textBoxNotes.Size = new Size(300, 62);
-            textBoxNotes.TabIndex = 11;
+            textBoxNotes.TabIndex = 9;
             // 
             // labelTransactionType
             // 
@@ -261,7 +255,6 @@ namespace RealEstateManager.Pages
             labelTransactionType.Location = new Point(40, 285);
             labelTransactionType.Name = "labelTransactionType";
             labelTransactionType.Size = new Size(149, 23);
-            labelTransactionType.TabIndex = 12;
             labelTransactionType.Text = "Transaction Type:";
             // 
             // comboBoxTransactionType
@@ -271,7 +264,7 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Location = new Point(240, 282);
             comboBoxTransactionType.Name = "comboBoxTransactionType";
             comboBoxTransactionType.Size = new Size(300, 31);
-            comboBoxTransactionType.TabIndex = 13;
+            comboBoxTransactionType.TabIndex = 5;
             // 
             // labelPlotId
             // 
@@ -281,7 +274,6 @@ namespace RealEstateManager.Pages
             labelPlotId.Location = new Point(40, 141);
             labelPlotId.Name = "labelPlotId";
             labelPlotId.Size = new Size(119, 23);
-            labelPlotId.TabIndex = 14;
             labelPlotId.Text = "Plot Number:";
             // 
             // comboBoxPlotNumber
@@ -291,7 +283,7 @@ namespace RealEstateManager.Pages
             comboBoxPlotNumber.Location = new Point(240, 138);
             comboBoxPlotNumber.Name = "comboBoxPlotNumber";
             comboBoxPlotNumber.Size = new Size(300, 31);
-            comboBoxPlotNumber.TabIndex = 15;
+            comboBoxPlotNumber.TabIndex = 2;
             // 
             // labelTotalBrokerage
             // 
@@ -301,7 +293,6 @@ namespace RealEstateManager.Pages
             labelTotalBrokerage.Location = new Point(40, 190);
             labelTotalBrokerage.Name = "labelTotalBrokerage";
             labelTotalBrokerage.Size = new Size(142, 23);
-            labelTotalBrokerage.TabIndex = 16;
             labelTotalBrokerage.Text = "Total Brokerage:";
             // 
             // textBoxTotalBrokerage
@@ -312,7 +303,7 @@ namespace RealEstateManager.Pages
             textBoxTotalBrokerage.Name = "textBoxTotalBrokerage";
             textBoxTotalBrokerage.ReadOnly = true;
             textBoxTotalBrokerage.Size = new Size(300, 30);
-            textBoxTotalBrokerage.TabIndex = 17;
+            textBoxTotalBrokerage.TabIndex = 3;
             // 
             // labelAmountPaidTillDate
             // 
@@ -322,7 +313,6 @@ namespace RealEstateManager.Pages
             labelAmountPaidTillDate.Location = new Point(40, 237);
             labelAmountPaidTillDate.Name = "labelAmountPaidTillDate";
             labelAmountPaidTillDate.Size = new Size(193, 23);
-            labelAmountPaidTillDate.TabIndex = 18;
             labelAmountPaidTillDate.Text = "Amount Paid Till Date:";
             // 
             // textBoxAmountPaidTillDate
@@ -333,7 +323,7 @@ namespace RealEstateManager.Pages
             textBoxAmountPaidTillDate.Name = "textBoxAmountPaidTillDate";
             textBoxAmountPaidTillDate.ReadOnly = true;
             textBoxAmountPaidTillDate.Size = new Size(300, 30);
-            textBoxAmountPaidTillDate.TabIndex = 19;
+            textBoxAmountPaidTillDate.TabIndex = 4;
             // 
             // labelBalance
             // 
@@ -343,7 +333,6 @@ namespace RealEstateManager.Pages
             labelBalance.Location = new Point(40, 380);
             labelBalance.Name = "labelBalance";
             labelBalance.Size = new Size(76, 23);
-            labelBalance.TabIndex = 20;
             labelBalance.Text = "Balance:";
             // 
             // labelBalanceValue
@@ -354,7 +343,6 @@ namespace RealEstateManager.Pages
             labelBalanceValue.Location = new Point(240, 377);
             labelBalanceValue.Name = "labelBalanceValue";
             labelBalanceValue.Size = new Size(300, 30);
-            labelBalanceValue.TabIndex = 21;
             labelBalanceValue.Text = "0.00";
             labelBalanceValue.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -366,7 +354,6 @@ namespace RealEstateManager.Pages
             labelProperty.Location = new Point(38, 49);
             labelProperty.Name = "labelProperty";
             labelProperty.Size = new Size(85, 23);
-            labelProperty.TabIndex = 0;
             labelProperty.Text = "Property:";
             // 
             // comboBoxProperty

@@ -1,8 +1,6 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Pages;
 using System.Data;
-using System.Diagnostics;
-using System.Web;
 
 namespace RealEstateManager
 {
@@ -19,7 +17,7 @@ namespace RealEstateManager
             this.WindowState = FormWindowState.Maximized;
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
-            dataGridViewProperties.CellMouseClick += dataGridViewProperties_CellMouseClick;
+            dataGridViewProperties.CellMouseClick += DataGridViewProperties_CellMouseClick;
             LoadActiveProperties();
         }
 
@@ -53,7 +51,7 @@ namespace RealEstateManager
             managePlotsForm.ShowDialog();
         }
 
-        public void LoadActiveProperties()
+        public void LoadActiveProperties(int? selectedPropertyId = null)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string query = @"
@@ -65,10 +63,11 @@ namespace RealEstateManager
                     p.Price AS [BuyPrice], 
                     p.Owner, 
                     p.Description,
-                    P.Phone,
+                    p.Phone,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
                     (p.Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance,
-                    p.KhasraNo
+                    p.KhasraNo,
+                    p.Area
                 FROM Property p
                 WHERE p.IsDeleted = 0";
 
@@ -104,7 +103,28 @@ namespace RealEstateManager
                 labelProperties.Text = $"Properties ({dt.Rows.Count})";
             }
 
-            AdjustGridAndGroupBoxHeight(dataGridViewProperties, groupBoxProperties, 8, 120, 400, 100);
+            // Set Area column header, width, and format
+            if (dataGridViewProperties.Columns["Area"] != null)
+            {
+                dataGridViewProperties.Columns["Area"].HeaderText = "Area (sq.ft)";
+                dataGridViewProperties.Columns["Area"].Width = 120;
+                dataGridViewProperties.Columns["Area"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridViewProperties.Columns["Area"].DefaultCellStyle.Format = "N2";
+            }
+
+            // Restore selection if possible
+            if (selectedPropertyId.HasValue)
+            {
+                foreach (DataGridViewRow row in dataGridViewProperties.Rows)
+                {
+                    if (row.Cells["Id"].Value != null && Convert.ToInt32(row.Cells["Id"].Value) == selectedPropertyId.Value)
+                    {
+                        row.Selected = true;
+                        dataGridViewProperties.CurrentCell = row.Cells["Title"]; // or any visible column
+                        break;
+                    }
+                }
+            }
 
             dataGridViewProperties.CellPainting -= dataGridViewProperties_CellPainting;
             dataGridViewProperties.CellPainting += dataGridViewProperties_CellPainting;
@@ -127,7 +147,7 @@ namespace RealEstateManager
             {
                 Name = "PlotNumber",
                 HeaderText = "Plot #",
-                Width = 100
+                Width = 110
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -145,7 +165,7 @@ namespace RealEstateManager
             {
                 Name = "CustomerEmail",
                 HeaderText = "Email",
-                Width = 230
+                Width = 225
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -156,39 +176,39 @@ namespace RealEstateManager
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Area",
-                HeaderText = "Area",
-                Width = 130
+                HeaderText = "Area (sq.ft)",
+                Width = 120
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "SaleDate",
                 HeaderText = "Sale Date",
-                Width = 140
+                Width = 160
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "SalePrice",
                 HeaderText = "Sale Price",
-                Width = 150
+                Width = 155
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "AmountPaid",
                 HeaderText = "Amount Paid",
-                Width = 150
+                Width = 155
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "AmountBalance",
                 HeaderText = "Amount Balance",
-                Width = 150
+                Width = 155
             });
 
             var actionColumn = new DataGridViewImageColumn
             {
                 Name = "Action",
                 HeaderText = "Action",
-                Width = 150,
+                Width = 140,
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
             dataGridViewPlots.Columns.Add(actionColumn);
@@ -207,8 +227,8 @@ namespace RealEstateManager
             dataGridViewPlots.CellPainting -= dataGridViewPlots_CellPainting;
             dataGridViewPlots.CellPainting += dataGridViewPlots_CellPainting;
 
-            dataGridViewPlots.CellMouseClick -= dataGridViewPlots_CellMouseClick;
-            dataGridViewPlots.CellMouseClick += dataGridViewPlots_CellMouseClick;
+            dataGridViewPlots.CellMouseClick -= DataGridViewPlots_CellMouseClick;
+            dataGridViewPlots.CellMouseClick += DataGridViewPlots_CellMouseClick;
         }
 
         private void LandingForm_Load(object sender, EventArgs e)
@@ -254,6 +274,10 @@ namespace RealEstateManager
             string saleDate = row.Cells["SaleDate"].Value?.ToString() ?? "";
             string salePrice = row.Cells["SalePrice"].Value?.ToString() ?? "";
 
+            int? selectedPropertyId = null;
+            if (dataGridViewProperties.CurrentRow != null)
+                selectedPropertyId = Convert.ToInt32(dataGridViewProperties.CurrentRow.Cells["Id"].Value);
+
             var editForm = new RegisterPlotSaleForm(
                 propertyId,
                 plotId,
@@ -269,7 +293,7 @@ namespace RealEstateManager
             if (editForm.ShowDialog() == DialogResult.OK)
             {
                 LoadPlotsForProperty(propertyId);
-                LoadActiveProperties();
+                LoadActiveProperties(selectedPropertyId);
             }
         }
 
@@ -357,7 +381,7 @@ namespace RealEstateManager
                 labelPlots.Text = $"Plots ({dt.Rows.Count})";
             }
 
-            AdjustGridAndGroupBoxHeight(dataGridViewPlots, groupBoxPlots, 10, 120, 500, 80);
+            //AdjustGridAndGroupBoxHeight(dataGridViewPlots, groupBoxPlots, 10, 120, 500, 80);
         }
 
         private void dataGridViewPlots_CellContentClick(object? sender, DataGridViewCellEventArgs e)
@@ -403,7 +427,7 @@ namespace RealEstateManager
             }
         }
 
-        private void dataGridViewPlots_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridViewPlots_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -421,7 +445,7 @@ namespace RealEstateManager
                     {
                         propertyId = parsedPropertyId;
                     }
-
+                    
                     switch (iconIndex)
                     {
                         case 0:
@@ -502,25 +526,6 @@ namespace RealEstateManager
             transactionForm.ShowDialog();
         }
 
-        private void AdjustGridAndGroupBoxHeight(DataGridView grid, GroupBox groupBox, int maxVisibleRows = 10, int minGridHeight = 100, int maxGridHeight = 500, int groupBoxExtra = 100)
-        {
-            int rowCount = grid.Rows.Count;
-            int rowHeight = grid.RowTemplate.Height;
-            int headerHeight = grid.ColumnHeadersHeight;
-            int border = 2; // for grid border/padding
-
-            // Show up to maxVisibleRows, but not more than maxGridHeight
-            int visibleRows = Math.Min(rowCount, maxVisibleRows);
-            int newGridHeight = headerHeight + (rowHeight * visibleRows) + border;
-
-            // Clamp grid height
-            newGridHeight = Math.Max(minGridHeight, Math.Min(newGridHeight, maxGridHeight));
-            grid.Height = newGridHeight;
-
-            int minGroupBoxHeight = newGridHeight + 200;
-            groupBox.Height = Math.Max(minGroupBoxHeight, groupBox.MinimumSize.Height);
-        }
-
         private void dataGridViewProperties_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewProperties.Columns[e.ColumnIndex].Name == "Action")
@@ -551,7 +556,7 @@ namespace RealEstateManager
             }
         }
 
-        private void dataGridViewProperties_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridViewProperties_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewProperties.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -729,7 +734,7 @@ namespace RealEstateManager
             }
         }
 
-        private void textBoxPropertyFilter_TextChanged(object sender, EventArgs e)
+        private void TextBoxPropertyFilter_TextChanged(object sender, EventArgs e)
         {
             if (_propertyTable == null) return;
             string filter = textBoxPropertyFilter.Text.Replace("'", "''");
@@ -743,7 +748,6 @@ namespace RealEstateManager
                 ((DataView)dataGridViewProperties.DataSource).RowFilter =
                     $"Title LIKE '%{filter}%' OR Type LIKE '%{filter}%' OR Status LIKE '%{filter}%' OR Owner LIKE '%{filter}%'";
             }
-            AdjustGridAndGroupBoxHeight(dataGridViewProperties, groupBoxProperties, 8, 120, 400, 100);
         }
 
         private void TextBoxPlotFilter_TextChanged(object sender, EventArgs e)
@@ -760,7 +764,6 @@ namespace RealEstateManager
                 ((DataView)dataGridViewPlots.DataSource).RowFilter =
                     $"PlotNumber LIKE '%{filter}%' OR CustomerName LIKE '%{filter}%' OR Status LIKE '%{filter}%'";
             }
-            AdjustGridAndGroupBoxHeight(dataGridViewPlots, groupBoxPlots, 10, 120, 500, 100);
         }
 
         private void DataGridViewProperties_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
@@ -800,11 +803,12 @@ namespace RealEstateManager
             SetCol("Type", "Type", 110);
             SetCol("Status", "Status", 100);
             SetCol("Owner", "Owner Name", 160);
-            SetCol("KhasraNo", "Khasra No", 120); // Move KhasraNo right after Owner
-            SetCol("BuyPrice", "Buy Price", 180, "C");
-            SetCol("AmountPaid", "Amount Paid", 180, "C");
-            SetCol("AmountBalance", "Amount Balance", 180, "C");
-            SetCol("Description", "Description", 350);
+            SetCol("KhasraNo", "Khasra No", 110); // Move KhasraNo right after Owner
+            SetCol("Area", "Area (sq.ft)", 120);
+            SetCol("BuyPrice", "Buy Price", 160, "C");
+            SetCol("AmountPaid", "Amount Paid", 160, "C");
+            SetCol("AmountBalance", "Amount Balance", 155, "C");
+            SetCol("Description", "Description", 330);
 
             if (dgv.Columns["Id"] != null)
                 dgv.Columns["Id"].Visible = false;

@@ -6,9 +6,9 @@ namespace RealEstateManager.Pages
     public partial class RegisterPropertyForm : BaseForm
     {
         private readonly int? _propertyId;
-        private bool _isEditMode;
+        private readonly bool _isEditMode;
 
-        // Add an overloaded constructor for edit mode
+        // Edit mode constructor
         public RegisterPropertyForm(int propertyId)
         {
             InitializeComponent();
@@ -16,6 +16,7 @@ namespace RealEstateManager.Pages
             _isEditMode = true;
             SetupPhoneNumberValidation();
             SetupPriceFormatting();
+            SetupAreaFormatting();
             LoadPropertyDetails();
             buttonRegister.Text = "Update Property";
             this.Text = "Edit Property";
@@ -27,6 +28,7 @@ namespace RealEstateManager.Pages
             _isEditMode = false;
             SetupPhoneNumberValidation();
             SetupPriceFormatting();
+            SetupAreaFormatting();
         }
 
         private void LoadPropertyDetails()
@@ -34,7 +36,7 @@ namespace RealEstateManager.Pages
             if (!_propertyId.HasValue) return;
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
-            string query = @"SELECT Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo
+            string query = @"SELECT Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo, Area
                              FROM Property WHERE Id = @Id AND IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
@@ -58,6 +60,7 @@ namespace RealEstateManager.Pages
                         textBoxZip.Text = reader["ZipCode"].ToString();
                         textBoxDescription.Text = reader["Description"].ToString();
                         textBoxKhasraNo.Text = reader["KhasraNo"]?.ToString() ?? "";
+                        textBoxArea.Text = reader["Area"] != DBNull.Value ? Convert.ToDecimal(reader["Area"]).ToString("F2") : "";
                     }
                 }
             }
@@ -92,6 +95,17 @@ namespace RealEstateManager.Pages
             };
         }
 
+        private void SetupAreaFormatting()
+        {
+            textBoxArea.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxArea.Text, out decimal val))
+                {
+                    textBoxArea.Text = val.ToString("F2");
+                }
+            };
+        }
+
         private void buttonRegister_Click(object sender, EventArgs e)
         {
             // Collect data
@@ -107,6 +121,7 @@ namespace RealEstateManager.Pages
             string zip = textBoxZip.Text.Trim();
             string description = textBoxDescription.Text.Trim();
             string khasraNo = textBoxKhasraNo.Text.Trim();
+            string areaText = textBoxArea.Text.Trim();
 
             // Validation
             if (string.IsNullOrWhiteSpace(title) ||
@@ -114,7 +129,8 @@ namespace RealEstateManager.Pages
                 string.IsNullOrWhiteSpace(status) ||
                 string.IsNullOrWhiteSpace(priceText) ||
                 string.IsNullOrWhiteSpace(owner) ||
-                string.IsNullOrWhiteSpace(phone))
+                string.IsNullOrWhiteSpace(phone) ||
+                string.IsNullOrWhiteSpace(areaText))
             {
                 MessageBox.Show("Please fill in all required fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -127,6 +143,14 @@ namespace RealEstateManager.Pages
                 return;
             }
             string price = priceValue.ToString("F2"); // Format as .00
+
+            // Area validation and formatting
+            if (!decimal.TryParse(areaText, out decimal areaValue) || areaValue < 0)
+            {
+                MessageBox.Show("Please enter a valid non-negative area.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string area = areaValue.ToString("F2");
 
             // Phone number validation: exactly 10 digits
             if (!Regex.IsMatch(phone, @"^\d{10}$"))
@@ -162,6 +186,7 @@ namespace RealEstateManager.Pages
                             State = @State,
                             ZipCode = @ZipCode,
                             Description = @Description,
+                            Area = @Area,
                             ModifiedBy = @ModifiedBy,
                             ModifiedDate = @ModifiedDate
                             WHERE Id = @Id AND IsDeleted = 0";
@@ -182,23 +207,24 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@ModifiedDate", modifiedDate);
                             cmd.Parameters.AddWithValue("@Id", _propertyId.Value);
                             cmd.Parameters.AddWithValue("@KhasraNo", khasraNo);
+                            cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
                         MessageBox.Show("Property updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        // Insert new property (existing code)
+                        // Insert new property
                         string createdBy = modifiedBy;
                         string createdDate = modifiedDate;
                         int isDeleted = 0;
 
                         string insert = @"INSERT INTO Property
                             ([Title], [Type], [Status], [Price], [Owner], [KhasraNo], [Phone], [Address], [City], [State], [ZipCode], [Description],
-                             [CreatedBy], [CreatedDate], [ModifiedBy], [ModifiedDate], [IsDeleted])
+                             [Area], [CreatedBy], [CreatedDate], [ModifiedBy], [ModifiedDate], [IsDeleted])
                             VALUES
                             (@Title, @Type, @Status, @Price, @Owner, @KhasraNo, @Phone, @Address, @City, @State, @ZipCode, @Description,
-                             @CreatedBy, @CreatedDate, @ModifiedBy, @ModifiedDate, @IsDeleted)";
+                             @Area, @CreatedBy, @CreatedDate, @ModifiedBy, @ModifiedDate, @IsDeleted)";
                         using (var cmd = new SqlCommand(insert, conn))
                         {
                             cmd.Parameters.AddWithValue("@Title", title);
@@ -218,6 +244,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@ModifiedDate", modifiedDate);
                             cmd.Parameters.AddWithValue("@IsDeleted", isDeleted);
                             cmd.Parameters.AddWithValue("@KhasraNo", khasraNo);
+                            cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
                         MessageBox.Show("Property registered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

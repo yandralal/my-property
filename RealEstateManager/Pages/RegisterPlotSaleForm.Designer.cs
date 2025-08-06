@@ -77,11 +77,11 @@ namespace RealEstateManager.Pages
             groupBoxSaleDetails.Controls.Add(textBoxSaleAmount);
             groupBoxSaleDetails.Controls.Add(labelSaleDate);
             groupBoxSaleDetails.Controls.Add(dateTimePickerSaleDate);
-            groupBoxSaleDetails.Controls.Add(buttonRegisterSale);
             groupBoxSaleDetails.Controls.Add(labelAgent);
             groupBoxSaleDetails.Controls.Add(comboBoxAgent);
             groupBoxSaleDetails.Controls.Add(labelBrokerage);
             groupBoxSaleDetails.Controls.Add(textBoxBrokerage);
+            groupBoxSaleDetails.Controls.Add(buttonRegisterSale);
             groupBoxSaleDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxSaleDetails.ForeColor = Color.MidnightBlue;
             groupBoxSaleDetails.Location = new Point(25, 20);
@@ -158,7 +158,7 @@ namespace RealEstateManager.Pages
             textBoxCustomerName.Location = new Point(200, 145);
             textBoxCustomerName.Name = "textBoxCustomerName";
             textBoxCustomerName.Size = new Size(250, 30);
-            textBoxCustomerName.TabIndex = 6;
+            textBoxCustomerName.TabIndex = 2;
             // 
             // labelCustomerPhone
             // 
@@ -177,7 +177,7 @@ namespace RealEstateManager.Pages
             textBoxCustomerPhone.Location = new Point(200, 195);
             textBoxCustomerPhone.Name = "textBoxCustomerPhone";
             textBoxCustomerPhone.Size = new Size(250, 30);
-            textBoxCustomerPhone.TabIndex = 8;
+            textBoxCustomerPhone.TabIndex = 3;
             // 
             // labelCustomerEmail
             // 
@@ -196,7 +196,7 @@ namespace RealEstateManager.Pages
             textBoxCustomerEmail.Location = new Point(200, 245);
             textBoxCustomerEmail.Name = "textBoxCustomerEmail";
             textBoxCustomerEmail.Size = new Size(250, 30);
-            textBoxCustomerEmail.TabIndex = 10;
+            textBoxCustomerEmail.TabIndex = 4;
             // 
             // labelSaleAmount
             // 
@@ -215,7 +215,7 @@ namespace RealEstateManager.Pages
             textBoxSaleAmount.Location = new Point(200, 295);
             textBoxSaleAmount.Name = "textBoxSaleAmount";
             textBoxSaleAmount.Size = new Size(250, 30);
-            textBoxSaleAmount.TabIndex = 12;
+            textBoxSaleAmount.TabIndex = 5;
             // 
             // labelSaleDate
             // 
@@ -233,7 +233,7 @@ namespace RealEstateManager.Pages
             dateTimePickerSaleDate.Location = new Point(200, 345);
             dateTimePickerSaleDate.Name = "dateTimePickerSaleDate";
             dateTimePickerSaleDate.Size = new Size(250, 30);
-            dateTimePickerSaleDate.TabIndex = 14;
+            dateTimePickerSaleDate.TabIndex = 6;
             // 
             // buttonRegisterSale
             // 
@@ -244,7 +244,7 @@ namespace RealEstateManager.Pages
             buttonRegisterSale.Location = new Point(200, 485);
             buttonRegisterSale.Name = "buttonRegisterSale";
             buttonRegisterSale.Size = new Size(250, 35);
-            buttonRegisterSale.TabIndex = 15;
+            buttonRegisterSale.TabIndex = 9;
             buttonRegisterSale.Text = "Register Sale";
             buttonRegisterSale.UseVisualStyleBackColor = false;
             buttonRegisterSale.Click += ButtonRegisterSale_Click;
@@ -266,7 +266,7 @@ namespace RealEstateManager.Pages
             comboBoxAgent.Location = new Point(200, 395);
             comboBoxAgent.Name = "comboBoxAgent";
             comboBoxAgent.Size = new Size(250, 31);
-            comboBoxAgent.TabIndex = 17;
+            comboBoxAgent.TabIndex = 7;
             // 
             // labelBrokerage
             // 
@@ -285,7 +285,7 @@ namespace RealEstateManager.Pages
             textBoxBrokerage.Location = new Point(200, 435);
             textBoxBrokerage.Name = "textBoxBrokerage";
             textBoxBrokerage.Size = new Size(250, 30);
-            textBoxBrokerage.TabIndex = 19;
+            textBoxBrokerage.TabIndex = 8;
             // 
             // RegisterPlotSaleForm
             // 

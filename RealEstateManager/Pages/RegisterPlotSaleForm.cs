@@ -24,14 +24,14 @@ namespace RealEstateManager.Pages
         )
         {
             InitializeComponent();
-            ApplyDesignerAppearance(); // <-- Ensure designer look
             SetupPhoneNumberValidation();
+            textBoxSaleAmount.Leave += FormatDecimalTextBoxOnLeave;
+            textBoxBrokerage.Leave += FormatDecimalTextBoxOnLeave;
 
             _isEditMode = true;
             _editPlotId = plotId;
             _editPropertyId = propertyId;
 
-            // Load properties and set selected property
             LoadProperties();
             comboBoxProperty.SelectedValue = propertyId;
 
@@ -43,7 +43,9 @@ namespace RealEstateManager.Pages
             textBoxCustomerName.Text = customerName;
             textBoxCustomerPhone.Text = customerPhone;
             textBoxCustomerEmail.Text = customerEmail;
-            textBoxSaleAmount.Text = salePrice;
+            textBoxSaleAmount.Text = decimal.TryParse(salePrice, out var saleAmt)
+                ? saleAmt.ToString("0.00")
+                : "0.00";
             if (DateTime.TryParse(saleDate, out var dt))
                 dateTimePickerSaleDate.Value = dt;
             else
@@ -81,7 +83,9 @@ namespace RealEstateManager.Pages
                             if (!reader.IsDBNull(0))
                                 comboBoxAgent.SelectedValue = reader.GetInt32(0);
                             if (!reader.IsDBNull(1))
-                                textBoxBrokerage.Text = reader.GetDecimal(1).ToString("0.##");
+                                textBoxBrokerage.Text = reader.GetDecimal(1).ToString("0.00");
+                            else
+                                textBoxBrokerage.Text = "0.00";
                         }
                     }
                 }
@@ -92,21 +96,12 @@ namespace RealEstateManager.Pages
         public RegisterPlotSaleForm()
         {
             InitializeComponent();
-            ApplyDesignerAppearance(); // <-- Ensure designer look
             SetupPhoneNumberValidation();
+            textBoxSaleAmount.Leave += FormatDecimalTextBoxOnLeave;
+            textBoxBrokerage.Leave += FormatDecimalTextBoxOnLeave;
             LoadProperties();
             LoadAgents();
-
-            // Set button text for add mode
             buttonRegisterSale.Text = "Register Sale";
-        }
-
-        private void ApplyDesignerAppearance()
-        {
-            // These match the designer settings
-            this.BackColor = Color.FromArgb(245, 248, 255);
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            // Icon and other properties are set by designer, no need to repeat unless overridden elsewhere
         }
 
         private void LoadProperties()
@@ -323,6 +318,18 @@ namespace RealEstateManager.Pages
                 }
             };
             textBoxCustomerPhone.MaxLength = 10;
+        }
+
+        // Add this method to handle formatting for both fields
+        private void FormatDecimalTextBoxOnLeave(object? sender, EventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (decimal.TryParse(tb.Text, out var value))
+                    tb.Text = value.ToString("0.00");
+                else
+                    tb.Text = "0.00";
+            }
         }
 
         // Helper method to set plot status to Booked

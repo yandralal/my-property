@@ -10,7 +10,7 @@ namespace RealEstateManager.Pages
     public partial class PropertyDetailsForm : BaseForm
     {
         private readonly int _propertyId;
-
+        
         public PropertyDetailsForm(int propertyId)
         {
             InitializeComponent();
@@ -177,7 +177,7 @@ namespace RealEstateManager.Pages
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string propertyQuery = @"
                 SELECT 
-                    Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo,
+                    Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo, Area,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
                     (Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance
                 FROM Property p
@@ -220,8 +220,8 @@ namespace RealEstateManager.Pages
                         labelZipValue.Text          = reader["ZipCode"].ToString();
                         labelDescriptionValue.Text  = reader["Description"].ToString();
                         labelKhasraNoValue.Text     = reader["KhasraNo"]?.ToString() ?? "";
+                        labelAreaValue.Text         = reader["Area"] != DBNull.Value ? Convert.ToDecimal(reader["Area"]).ToString("N2"): "";
 
-                        // Add these lines for Amount Paid and Balance
                         decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
                         decimal amountBalance = reader["AmountBalance"] is decimal ab ? ab : 0;
                         labelPropertyBuyPrice.Text = string.Format("{0:C}", reader["Price"]);
@@ -451,6 +451,7 @@ namespace RealEstateManager.Pages
                 ("State:", labelStateValue.Text),
                 ("Zip:", labelZipValue.Text),
                 ("Khasra No:", labelKhasraNoValue.Text),
+                ("Area (sq.ft):", labelAreaValue.Text),
                 ("Description:", labelDescriptionValue.Text),
                 ("Buy Price:", labelPropertyBuyPrice.Text),
                 ("Amount Paid:", labelPropertyAmountPaid.Text),

@@ -70,6 +70,7 @@ namespace RealEstateManager
             helpMenu = new ToolStripMenuItem();
             helpMenuItem = new ToolStripMenuItem();
             aboutMenuItem = new ToolStripMenuItem();
+            changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
             propertyMenu = new ToolStripMenuItem();
             registerPlotToolStripMenuItem = new ToolStripMenuItem();
             registerPlotMenuItem = new ToolStripMenuItem();
@@ -81,7 +82,6 @@ namespace RealEstateManager
             labelPlots = new Label();
             groupBoxProperties = new GroupBox();
             groupBoxPlots = new GroupBox();
-            changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
@@ -148,7 +148,7 @@ namespace RealEstateManager
             // 
             registerSaleMenuItem.Name = "registerSaleMenuItem";
             registerSaleMenuItem.Size = new Size(246, 32);
-            registerSaleMenuItem.Text = "Register Sale";
+            registerSaleMenuItem.Text = "Sale Plot";
             registerSaleMenuItem.Click += RegisterSaleMenuItem_Click;
             // 
             // approveOfferMenuItem
@@ -176,8 +176,8 @@ namespace RealEstateManager
             // 
             communicationMenu.DropDownItems.AddRange(new ToolStripItem[] { sendMessageToAllMenuItem });
             communicationMenu.Name = "communicationMenu";
-            communicationMenu.Size = new Size(175, 32);
-            communicationMenu.Text = "Communication";
+            communicationMenu.Size = new Size(150, 32);
+            communicationMenu.Text = "Notifications";
             // 
             // sendMessageToAllMenuItem
             // 
@@ -204,6 +204,13 @@ namespace RealEstateManager
             aboutMenuItem.Name = "aboutMenuItem";
             aboutMenuItem.Size = new Size(315, 32);
             aboutMenuItem.Text = "About";
+            // 
+            // changeBackgroundToolStripMenuItem
+            // 
+            changeBackgroundToolStripMenuItem.Name = "changeBackgroundToolStripMenuItem";
+            changeBackgroundToolStripMenuItem.Size = new Size(315, 32);
+            changeBackgroundToolStripMenuItem.Text = "Customize Background";
+            changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
             // 
             // propertyMenu
             // 
@@ -377,13 +384,6 @@ namespace RealEstateManager
             groupBoxPlots.TabStop = false;
             groupBoxPlots.Text = "Plots";
             // 
-            // changeBackgroundToolStripMenuItem
-            // 
-            changeBackgroundToolStripMenuItem.Name = "changeBackgroundToolStripMenuItem";
-            changeBackgroundToolStripMenuItem.Size = new Size(315, 32);
-            changeBackgroundToolStripMenuItem.Text = "Customize Background";
-            changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
-            // 
             // LandingForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -423,7 +423,7 @@ namespace RealEstateManager
             textBoxPropertyFilter = new TextBox();
             textBoxPropertyFilter.Location = new Point(75, 30);
             textBoxPropertyFilter.Size = new Size(250, 25);
-            textBoxPropertyFilter.TextChanged += textBoxPropertyFilter_TextChanged;
+            textBoxPropertyFilter.TextChanged += TextBoxPropertyFilter_TextChanged;
             groupBoxProperties.Controls.Add(labelPropertyFilter);
             groupBoxProperties.Controls.Add(textBoxPropertyFilter);
         }

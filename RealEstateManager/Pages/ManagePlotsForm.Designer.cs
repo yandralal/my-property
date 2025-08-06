@@ -193,8 +193,6 @@ namespace RealEstateManager.Pages
             // 
             // ManagePlotsForm
             // 
-            AutoScaleDimensions = new SizeF(11F, 28F);
-            AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             ClientSize = new Size(1072, 596);
             Controls.Add(groupBoxPlots);

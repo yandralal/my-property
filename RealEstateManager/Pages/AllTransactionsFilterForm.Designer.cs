@@ -2,7 +2,6 @@ namespace RealEstateManager.Pages
 {
     partial class AllTransactionsFilterForm
     {
-        private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.GroupBox groupBoxFilter;
         private System.Windows.Forms.Label labelType;
         private System.Windows.Forms.ComboBox comboBoxType;

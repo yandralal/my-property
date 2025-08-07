@@ -16,7 +16,7 @@ namespace RealEstateManager.Pages
             InitializeComponent();
             _propertyId = propertyId;
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
-            dataGridViewTransactions.CellPainting += dataGridViewTransactions_CellPainting;
+            dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
             LoadPropertyDetails();
         }
@@ -238,6 +238,11 @@ namespace RealEstateManager.Pages
                     dataGridViewTransactions.DataSource = dt;
                 }
 
+                decimal totalSaleAmount = 0;
+                decimal buyPrice = 0;
+                decimal totalPaid = 0;
+                decimal totalBalance = 0;
+
                 // Load summary details
                 string summaryQuery = @"
                     SELECT 
@@ -249,29 +254,45 @@ namespace RealEstateManager.Pages
                 using (var summaryCmd = new SqlCommand(summaryQuery, conn))
                 {
                     summaryCmd.Parameters.AddWithValue("@Id", _propertyId);
+                   
                     using (var reader = summaryCmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             int totalPlots = reader["TotalPlots"] is int tp ? tp : 0;
-                            decimal totalSaleAmount = reader["TotalSaleAmount"] is decimal tsa ? tsa : 0;
-                            decimal totalPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
-                            decimal buyPrice = reader["BuyPrice"] is decimal bp ? bp : 0;
-                            decimal totalBalance = totalSaleAmount - totalPaid;
-                            decimal profitLoss = totalSaleAmount - buyPrice;
+                            totalSaleAmount = reader["TotalSaleAmount"] is decimal tsa ? tsa : 0;
+                            totalPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
+                            buyPrice = reader["BuyPrice"] is decimal bp ? bp : 0;
+                            totalBalance = totalSaleAmount - totalPaid;
 
                             labelTotalPlotsValue.Text = totalPlots.ToString();
                             labelTotalSaleAmountValue.Text = string.Format("{0:C}", totalSaleAmount);
                             labelTotalPaidValue.Text = string.Format("{0:C}", totalPaid);
                             labelTotalBalanceValue.Text = string.Format("{0:C}", totalBalance);
-                            labelTotalProfitLossValue.Text = string.Format("{0:C}", profitLoss);
                         }
                     }
                 }
+
+                string brokerageQuery = @"
+                    SELECT ISNULL(SUM(BrokerageAmount), 0) AS TotalBrokerage
+                    FROM PlotSale ps
+                    INNER JOIN Plot p ON ps.PlotId = p.Id
+                    WHERE p.PropertyId = @Id AND p.IsDeleted = 0";
+                decimal totalBrokerage = 0;
+                using (var brokerageCmd = new SqlCommand(brokerageQuery, conn))
+                {
+                    brokerageCmd.Parameters.AddWithValue("@Id", _propertyId);
+                    var result = brokerageCmd.ExecuteScalar();
+                    totalBrokerage = result is decimal b ? b : 0;
+                    labelTotalBrokeragePaidValue.Text = string.Format("{0:C}", totalBrokerage);
+                }
+
+                decimal profitLoss = totalSaleAmount - buyPrice - totalBrokerage;
+                labelTotalProfitLossValue.Text = string.Format("{0:C}", profitLoss);
             }
         }
 
-        private DataTable GetPropertyTransactions(int propertyId)
+        private static DataTable GetPropertyTransactions(int propertyId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string query = @"
@@ -299,7 +320,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void dataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        private void DataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -315,15 +336,18 @@ namespace RealEstateManager.Pages
                 int x = e.CellBounds.Left + padding;
 
                 // Draw view icon
-                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                if (viewIcon != null)
+                    e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw edit icon
-                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                if (editIcon != null)
+                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw delete icon
-                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                if (deleteIcon != null)
+                    e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
             }
@@ -525,6 +549,8 @@ namespace RealEstateManager.Pages
                 ("Total Plots:", labelTotalPlotsValue.Text),
                 ("Total Sale Amount:", labelTotalSaleAmountValue.Text),
                 ("Total Paid:", labelTotalPaidValue.Text),
+                ("Total Brokerage Paid:", labelTotalBrokeragePaidValue.Text),
+                ("Brokerage Balance:", labelBrokerageBalanceValue.Text),
                 ("Total Balance:", labelTotalBalanceValue.Text),
                 ("Total Profit/Loss:", labelTotalProfitLossValue.Text)
             };

@@ -3,7 +3,6 @@ namespace RealEstateManager.Pages
     partial class RegisterMiscTransactionForm
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.GroupBox groupBoxTransactionDetails;
         private System.Windows.Forms.Label labelRecipient;
         private System.Windows.Forms.TextBox textBoxRecipient;
@@ -30,7 +29,6 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
-            panelMain = new Panel();
             groupBoxTransactionDetails = new GroupBox();
             labelRecipient = new Label();
             textBoxRecipient = new TextBox();
@@ -47,22 +45,11 @@ namespace RealEstateManager.Pages
             labelTransactionType = new Label();
             comboBoxTransactionType = new ComboBox();
             buttonSave = new Button();
-            panelMain.SuspendLayout();
-            groupBoxTransactionDetails.SuspendLayout();
             SuspendLayout();
-            // 
-            // panelMain
-            // 
-            panelMain.BackColor = Color.WhiteSmoke;
-            panelMain.Controls.Add(groupBoxTransactionDetails);
-            panelMain.Dock = DockStyle.Fill;
-            panelMain.Location = new Point(0, 0);
-            panelMain.Name = "panelMain";
-            panelMain.Size = new Size(638, 501);
-            panelMain.TabIndex = 0;
             // 
             // groupBoxTransactionDetails
             // 
+            groupBoxTransactionDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBoxTransactionDetails.BackColor = Color.AliceBlue;
             groupBoxTransactionDetails.Controls.Add(labelRecipient);
             groupBoxTransactionDetails.Controls.Add(textBoxRecipient);
@@ -81,10 +68,10 @@ namespace RealEstateManager.Pages
             groupBoxTransactionDetails.Controls.Add(buttonSave);
             groupBoxTransactionDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionDetails.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionDetails.Location = new Point(12, 12);
+            groupBoxTransactionDetails.Location = new Point(24, 24);
             groupBoxTransactionDetails.Name = "groupBoxTransactionDetails";
             groupBoxTransactionDetails.Padding = new Padding(15);
-            groupBoxTransactionDetails.Size = new Size(620, 482);
+            groupBoxTransactionDetails.Size = new Size(598, 463);
             groupBoxTransactionDetails.TabIndex = 0;
             groupBoxTransactionDetails.TabStop = false;
             groupBoxTransactionDetails.Text = "Transaction Entry";
@@ -248,12 +235,11 @@ namespace RealEstateManager.Pages
             AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(638, 501);
-            Controls.Add(panelMain);
+            ClientSize = new Size(646, 511);
+            Controls.Add(groupBoxTransactionDetails);
             Name = "RegisterMiscTransactionForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Miscellaneous Transaction";
-            panelMain.ResumeLayout(false);
             groupBoxTransactionDetails.ResumeLayout(false);
             groupBoxTransactionDetails.PerformLayout();
             ResumeLayout(false);

@@ -233,11 +233,13 @@ namespace RealEstateManager.Pages
                 x += iconWidth + padding;
 
                 // Draw edit icon
-                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                if (editIcon != null)
+                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw delete icon
-                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                if (deleteIcon != null)
+                    e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
             }
@@ -405,7 +407,6 @@ namespace RealEstateManager.Pages
             Properties.Resources.logo.Save(logoStream, ImageFormat.Png);
             logoStream.Position = 0;
             logo = XImage.FromStream(logoStream);
-            // Do not dispose logoStream until the PDF generation is complete.
 
             string orgName = "Jay Maa Durga Housing Agency";
             string orgAddressLine1 = "Building #1, Block #2, Mahakalkar Complex opp. Central Bank of India, Umred Road,";

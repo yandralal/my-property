@@ -47,6 +47,10 @@ namespace RealEstateManager.Pages
         private Label labelKhasraNoValue;
         private Label labelAreaTitle;
         private Label labelAreaValue;
+        private Label labelTotalBrokeragePaidTitle;
+        private Label labelTotalBrokeragePaidValue;
+        private Label labelBrokerageBalanceTitle;
+        private Label labelBrokerageBalanceValue;
 
         protected override void Dispose(bool disposing)
         {
@@ -104,6 +108,10 @@ namespace RealEstateManager.Pages
             labelTotalPaidValue = new Label();
             labelTotalProfitLossTitle = new Label();
             labelTotalProfitLossValue = new Label();
+            labelTotalBrokeragePaidTitle = new Label();
+            labelTotalBrokeragePaidValue = new Label();
+            labelBrokerageBalanceTitle = new Label();
+            labelBrokerageBalanceValue = new Label();
             groupBoxSummary = new GroupBox();
             buttonGenerateReport = new Button();
             label33 = new Label();
@@ -120,7 +128,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionGrid.Controls.Add(dataGridViewTransactions);
             groupBoxTransactionGrid.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionGrid.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionGrid.Location = new Point(22, 431);
+            groupBoxTransactionGrid.Location = new Point(22, 438);
             groupBoxTransactionGrid.Name = "groupBoxTransactionGrid";
             groupBoxTransactionGrid.Padding = new Padding(15);
             groupBoxTransactionGrid.Size = new Size(1290, 341);
@@ -507,6 +515,7 @@ namespace RealEstateManager.Pages
             labelKhasraNoValue.Name = "labelKhasraNoValue";
             labelKhasraNoValue.Size = new Size(233, 30);
             labelKhasraNoValue.TabIndex = 39;
+            labelKhasraNoValue.Text = "Khasra No:";
             // 
             // labelAreaValue
             // 
@@ -523,7 +532,7 @@ namespace RealEstateManager.Pages
             labelTotalBalanceTitle.AutoSize = true;
             labelTotalBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalBalanceTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalBalanceTitle.Location = new Point(420, 41);
+            labelTotalBalanceTitle.Location = new Point(420, 42);
             labelTotalBalanceTitle.Name = "labelTotalBalanceTitle";
             labelTotalBalanceTitle.Size = new Size(120, 23);
             labelTotalBalanceTitle.TabIndex = 34;
@@ -533,7 +542,7 @@ namespace RealEstateManager.Pages
             // 
             labelTotalBalanceValue.Font = new Font("Segoe UI", 10F);
             labelTotalBalanceValue.ForeColor = Color.Black;
-            labelTotalBalanceValue.Location = new Point(580, 41);
+            labelTotalBalanceValue.Location = new Point(608, 35);
             labelTotalBalanceValue.Name = "labelTotalBalanceValue";
             labelTotalBalanceValue.Size = new Size(233, 30);
             labelTotalBalanceValue.TabIndex = 35;
@@ -607,7 +616,7 @@ namespace RealEstateManager.Pages
             labelTotalProfitLossTitle.AutoSize = true;
             labelTotalProfitLossTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalProfitLossTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalProfitLossTitle.Location = new Point(420, 76);
+            labelTotalProfitLossTitle.Location = new Point(843, 41);
             labelTotalProfitLossTitle.Name = "labelTotalProfitLossTitle";
             labelTotalProfitLossTitle.Size = new Size(146, 23);
             labelTotalProfitLossTitle.TabIndex = 36;
@@ -617,34 +626,80 @@ namespace RealEstateManager.Pages
             // 
             labelTotalProfitLossValue.Font = new Font("Segoe UI", 10F);
             labelTotalProfitLossValue.ForeColor = Color.Black;
-            labelTotalProfitLossValue.Location = new Point(580, 76);
+            labelTotalProfitLossValue.Location = new Point(1003, 41);
             labelTotalProfitLossValue.Name = "labelTotalProfitLossValue";
             labelTotalProfitLossValue.Size = new Size(233, 30);
             labelTotalProfitLossValue.TabIndex = 37;
             labelTotalProfitLossValue.Text = "0.00";
             // 
+            // labelTotalBrokeragePaidTitle
+            // 
+            labelTotalBrokeragePaidTitle.AutoSize = true;
+            labelTotalBrokeragePaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalBrokeragePaidTitle.ForeColor = Color.DarkSlateGray;
+            labelTotalBrokeragePaidTitle.Location = new Point(420, 76);
+            labelTotalBrokeragePaidTitle.Name = "labelTotalBrokeragePaidTitle";
+            labelTotalBrokeragePaidTitle.Size = new Size(182, 23);
+            labelTotalBrokeragePaidTitle.TabIndex = 42;
+            labelTotalBrokeragePaidTitle.Text = "Total Brokerage Paid:";
+            // 
+            // labelTotalBrokeragePaidValue
+            // 
+            labelTotalBrokeragePaidValue.Font = new Font("Segoe UI", 10F);
+            labelTotalBrokeragePaidValue.ForeColor = Color.Black;
+            labelTotalBrokeragePaidValue.Location = new Point(608, 72);
+            labelTotalBrokeragePaidValue.Name = "labelTotalBrokeragePaidValue";
+            labelTotalBrokeragePaidValue.Size = new Size(233, 30);
+            labelTotalBrokeragePaidValue.TabIndex = 43;
+            labelTotalBrokeragePaidValue.Text = "0.00";
+            // 
+            // labelBrokerageBalanceTitle
+            // 
+            labelBrokerageBalanceTitle.AutoSize = true;
+            labelBrokerageBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelBrokerageBalanceTitle.ForeColor = Color.DarkSlateGray;
+            labelBrokerageBalanceTitle.Location = new Point(420, 111);
+            labelBrokerageBalanceTitle.Name = "labelBrokerageBalanceTitle";
+            labelBrokerageBalanceTitle.Size = new Size(164, 23);
+            labelBrokerageBalanceTitle.TabIndex = 44;
+            labelBrokerageBalanceTitle.Text = "Brokerage Balance:";
+            // 
+            // labelBrokerageBalanceValue
+            // 
+            labelBrokerageBalanceValue.Font = new Font("Segoe UI", 10F);
+            labelBrokerageBalanceValue.ForeColor = Color.Black;
+            labelBrokerageBalanceValue.Location = new Point(608, 107);
+            labelBrokerageBalanceValue.Name = "labelBrokerageBalanceValue";
+            labelBrokerageBalanceValue.Size = new Size(233, 30);
+            labelBrokerageBalanceValue.TabIndex = 45;
+            labelBrokerageBalanceValue.Text = "0.00";
+            // 
             // groupBoxSummary
             // 
             groupBoxSummary.BackColor = Color.AliceBlue;
+            groupBoxSummary.Controls.Add(labelTotalPlotsTitle);
+            groupBoxSummary.Controls.Add(labelTotalPlotsValue);
+            groupBoxSummary.Controls.Add(labelTotalSaleAmountTitle);
+            groupBoxSummary.Controls.Add(labelTotalSaleAmountValue);
+            groupBoxSummary.Controls.Add(labelTotalPaidTitle);
+            groupBoxSummary.Controls.Add(labelTotalPaidValue);
             groupBoxSummary.Controls.Add(labelTotalBalanceTitle);
             groupBoxSummary.Controls.Add(labelTotalBalanceValue);
+            groupBoxSummary.Controls.Add(labelTotalBrokeragePaidTitle);
+            groupBoxSummary.Controls.Add(labelTotalBrokeragePaidValue);
+            groupBoxSummary.Controls.Add(labelBrokerageBalanceTitle);
+            groupBoxSummary.Controls.Add(labelBrokerageBalanceValue);
             groupBoxSummary.Controls.Add(labelTotalProfitLossTitle);
-            groupBoxSummary.Controls.Add(buttonGenerateReport);
             groupBoxSummary.Controls.Add(labelTotalProfitLossValue);
-            groupBoxSummary.Controls.Add(labelTotalSaleAmountTitle);
-            groupBoxSummary.Controls.Add(labelTotalPaidValue);
-            groupBoxSummary.Controls.Add(labelTotalPaidTitle);
-            groupBoxSummary.Controls.Add(labelTotalSaleAmountValue);
-            groupBoxSummary.Controls.Add(labelTotalPlotsValue);
-            groupBoxSummary.Controls.Add(labelTotalPlotsTitle);
+            groupBoxSummary.Controls.Add(buttonGenerateReport);
             groupBoxSummary.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxSummary.ForeColor = Color.MidnightBlue;
-            groupBoxSummary.Location = new Point(22, 264);
+            groupBoxSummary.Location = new Point(22, 270);
             groupBoxSummary.Name = "groupBoxSummary";
             groupBoxSummary.Size = new Size(1290, 149);
             groupBoxSummary.TabIndex = 36;
             groupBoxSummary.TabStop = false;
-            groupBoxSummary.Text = "Summary";
+            groupBoxSummary.Text = "Plots Summary";
             // 
             // buttonGenerateReport
             // 
@@ -685,7 +740,7 @@ namespace RealEstateManager.Pages
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1331, 779);
+            ClientSize = new Size(1331, 796);
             Controls.Add(groupBoxSummary);
             Controls.Add(groupBoxTransactionGrid);
             Controls.Add(groupBoxPropertyDetails);
@@ -703,6 +758,6 @@ namespace RealEstateManager.Pages
         }
         private GroupBox groupBoxSummary;
         private Label label33;
-        private Label label34;       
+        private Label label34;
     }
 }

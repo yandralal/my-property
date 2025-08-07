@@ -2,7 +2,6 @@ namespace RealEstateManager.Pages
 {
     partial class AgentRegistrationForm
     {
-        private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.GroupBox groupBoxAgent;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.TextBox txtName;

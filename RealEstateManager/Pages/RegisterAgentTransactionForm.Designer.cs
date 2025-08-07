@@ -20,7 +20,6 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelPlotId;
         private System.Windows.Forms.ComboBox comboBoxPlotNumber;
         private System.Windows.Forms.Button buttonSave;
-        private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.GroupBox groupBoxTransactionDetails;
         private System.Windows.Forms.Label labelTotalBrokerage;
         private System.Windows.Forms.TextBox textBoxTotalBrokerage;
@@ -40,7 +39,6 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
-            panelMain = new Panel();
             groupBoxTransactionDetails = new GroupBox();
             labelAgentId = new Label();
             buttonSave = new Button();
@@ -67,22 +65,12 @@ namespace RealEstateManager.Pages
             labelBalanceValue = new Label();
             labelProperty = new Label();
             comboBoxProperty = new ComboBox();
-            panelMain.SuspendLayout();
             groupBoxTransactionDetails.SuspendLayout();
             SuspendLayout();
             // 
-            // panelMain
-            // 
-            panelMain.BackColor = Color.WhiteSmoke;
-            panelMain.Controls.Add(groupBoxTransactionDetails);
-            panelMain.Dock = DockStyle.Fill;
-            panelMain.Location = new Point(0, 0);
-            panelMain.Name = "panelMain";
-            panelMain.Size = new Size(644, 731);
-            panelMain.TabIndex = 0;
-            // 
             // groupBoxTransactionDetails
             // 
+            groupBoxTransactionDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBoxTransactionDetails.BackColor = Color.AliceBlue;
             groupBoxTransactionDetails.Controls.Add(labelAgentId);
             groupBoxTransactionDetails.Controls.Add(buttonSave);
@@ -111,10 +99,10 @@ namespace RealEstateManager.Pages
             groupBoxTransactionDetails.Controls.Add(comboBoxProperty);
             groupBoxTransactionDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionDetails.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionDetails.Location = new Point(12, 12);
+            groupBoxTransactionDetails.Location = new Point(24, 24);
             groupBoxTransactionDetails.Name = "groupBoxTransactionDetails";
             groupBoxTransactionDetails.Padding = new Padding(15);
-            groupBoxTransactionDetails.Size = new Size(620, 707);
+            groupBoxTransactionDetails.Size = new Size(596, 683);
             groupBoxTransactionDetails.TabIndex = 0;
             groupBoxTransactionDetails.TabStop = false;
             groupBoxTransactionDetails.Text = "Transaction Entry";
@@ -135,7 +123,7 @@ namespace RealEstateManager.Pages
             buttonSave.FlatStyle = FlatStyle.Flat;
             buttonSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(240, 649);
+            buttonSave.Location = new Point(240, 617);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(300, 40);
             buttonSave.TabIndex = 11;
@@ -157,7 +145,7 @@ namespace RealEstateManager.Pages
             labelTransactionDate.AutoSize = true;
             labelTransactionDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTransactionDate.ForeColor = Color.DarkSlateGray;
-            labelTransactionDate.Location = new Point(40, 598);
+            labelTransactionDate.Location = new Point(40, 558);
             labelTransactionDate.Name = "labelTransactionDate";
             labelTransactionDate.Size = new Size(53, 23);
             labelTransactionDate.Text = "Date:";
@@ -165,7 +153,7 @@ namespace RealEstateManager.Pages
             // dateTimePickerTransactionDate
             // 
             dateTimePickerTransactionDate.Font = new Font("Segoe UI", 10F);
-            dateTimePickerTransactionDate.Location = new Point(240, 595);
+            dateTimePickerTransactionDate.Location = new Point(240, 555);
             dateTimePickerTransactionDate.Name = "dateTimePickerTransactionDate";
             dateTimePickerTransactionDate.Size = new Size(300, 30);
             dateTimePickerTransactionDate.TabIndex = 10;
@@ -371,11 +359,10 @@ namespace RealEstateManager.Pages
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(644, 731);
-            Controls.Add(panelMain);
+            Controls.Add(groupBoxTransactionDetails); // Add group box directly
             Name = "RegisterAgentTransactionForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Agent Transaction";
-            panelMain.ResumeLayout(false);
             groupBoxTransactionDetails.ResumeLayout(false);
             groupBoxTransactionDetails.PerformLayout();
             ResumeLayout(false);

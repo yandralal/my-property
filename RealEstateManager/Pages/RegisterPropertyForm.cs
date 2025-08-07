@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using System.Text.RegularExpressions;
+using static CustomMessageType; 
 
 namespace RealEstateManager.Pages
 {
@@ -132,14 +133,14 @@ namespace RealEstateManager.Pages
                 string.IsNullOrWhiteSpace(phone) ||
                 string.IsNullOrWhiteSpace(areaText))
             {
-                MessageBox.Show("Please fill in all required fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("Please fill in all required fields.", "Validation Error", Warning);
                 return;
             }
 
             // Price validation and formatting
             if (!decimal.TryParse(priceText, out decimal priceValue) || priceValue < 0)
             {
-                MessageBox.Show("Please enter a valid non-negative price.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("Please enter a valid non-negative price.", "Validation Error", Warning);
                 return;
             }
             string price = priceValue.ToString("F2"); // Format as .00
@@ -147,7 +148,7 @@ namespace RealEstateManager.Pages
             // Area validation and formatting
             if (!decimal.TryParse(areaText, out decimal areaValue) || areaValue < 0)
             {
-                MessageBox.Show("Please enter a valid non-negative area.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("Please enter a valid non-negative area.", "Validation Error", Warning);
                 return;
             }
             string area = areaValue.ToString("F2");
@@ -155,7 +156,7 @@ namespace RealEstateManager.Pages
             // Phone number validation: exactly 10 digits
             if (!Regex.IsMatch(phone, @"^\d{10}$"))
             {
-                MessageBox.Show("Please enter a valid 10-digit phone number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("Please enter a valid 10-digit phone number.", "Validation Error", Warning);
                 return;
             }
 
@@ -210,7 +211,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
-                        MessageBox.Show("Property updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CustomMessageBox.Show("Property updated successfully!", "Success", CustomMessageType.Info);
                     }
                     else
                     {
@@ -247,7 +248,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
-                        MessageBox.Show("Property registered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CustomMessageBox.Show("Property registered successfully!", "Success", CustomMessageType.Info);
                     }
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -255,7 +256,7 @@ namespace RealEstateManager.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error saving property: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomMessageBox.Show("An error occurred: " + ex.Message, "Error", Error);
             }
         }
     }

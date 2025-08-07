@@ -11,6 +11,7 @@ namespace RealEstateManager.Pages
         {
             InitializeComponent();
             groupBoxAgent.Text = "Agent Details";
+            txtContact.KeyPress += TxtContact_KeyPress;
         }
 
         // Overload for editing
@@ -29,7 +30,7 @@ namespace RealEstateManager.Pages
             // Validate contact number: must be exactly 10 digits and numeric
             if (contact.Length != 10 || !contact.All(char.IsDigit))
             {
-                MessageBox.Show("Please enter a valid 10-digit mobile number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("Please enter a valid 10-digit mobile number.", "Error", CustomMessageType.Error);
                 txtContact.Focus();
                 return;
             }
@@ -55,6 +56,15 @@ namespace RealEstateManager.Pages
             }
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void TxtContact_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow only digits and control keys (e.g., backspace)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

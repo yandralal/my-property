@@ -1,7 +1,7 @@
 using Microsoft.Data.SqlClient;
-using MigraDoc.DocumentObjectModel.Internals;
 using RealEstateManager.Pages;
 using System.Data;
+using static CustomMessageType;
 
 namespace RealEstateManager
 {
@@ -221,7 +221,7 @@ namespace RealEstateManager
                 dataGridViewPlots.Columns["AmountPaid"].DefaultCellStyle.Format = "C";
             if (dataGridViewPlots.Columns["AmountBalance"] != null)
                 dataGridViewPlots.Columns["AmountBalance"].DefaultCellStyle.Format = "C";
-            if( dataGridViewPlots.Columns["SaleDate"] != null)
+            if (dataGridViewPlots.Columns["SaleDate"] != null)
                 dataGridViewPlots.Columns["SaleDate"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
             dataGridViewPlots.CellContentClick -= dataGridViewPlots_CellContentClick;
@@ -237,7 +237,7 @@ namespace RealEstateManager
             foreach (DataGridViewColumn col in dataGridViewPlots.Columns)
             {
                 col.AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
-                col.Resizable = DataGridViewTriState.False; 
+                col.Resizable = DataGridViewTriState.False;
             }
         }
 
@@ -251,12 +251,12 @@ namespace RealEstateManager
             // Ensure a property and a plot are selected
             if (dataGridViewProperties.CurrentRow == null)
             {
-                MessageBox.Show("Please select a property.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CustomMessageBox.Show("Please select a property.", "Info", Info);
                 return;
             }
             if (dataGridViewPlots.CurrentRow == null)
             {
-                MessageBox.Show("Please select a plot.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CustomMessageBox.Show("Please select a plot.", "Info", Info);
                 return;
             }
 
@@ -264,7 +264,7 @@ namespace RealEstateManager
             var propertyIdCell = dataGridViewProperties.CurrentRow.Cells["Id"];
             if (propertyIdCell == null || !int.TryParse(propertyIdCell.Value?.ToString(), out int propertyId))
             {
-                MessageBox.Show("Invalid property selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomMessageBox.Show("Invalid property selection.", "Error", Error);
                 return;
             }
 
@@ -272,7 +272,7 @@ namespace RealEstateManager
             var row = dataGridViewPlots.CurrentRow;
             if (!int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId))
             {
-                MessageBox.Show("Invalid plot selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomMessageBox.Show("Invalid plot selection.", "Error", Error);
                 return;
             }
             string plotNumber = row.Cells["PlotNumber"].Value?.ToString() ?? "";
@@ -455,7 +455,7 @@ namespace RealEstateManager
                     {
                         propertyId = parsedPropertyId;
                     }
-                    
+
                     switch (iconIndex)
                     {
                         case 0:
@@ -492,11 +492,9 @@ namespace RealEstateManager
                             break;
                         case 2:
                             // Delete
-                            if (MessageBox.Show("Are you sure you want to delete this plot?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                            {
-                                DeletePlot(plotId);
-                                LoadPlotsForProperty(propertyId);
-                            }
+                            CustomMessageBox.Show("Are you sure you want to delete this plot?", "Confirm Delete", Warning);
+                            DeletePlot(plotId);
+                            LoadPlotsForProperty(propertyId);
                             break;
                     }
                 }
@@ -598,11 +596,10 @@ namespace RealEstateManager
                             break;
                         case 2:
                             // Delete
-                            if (MessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                            {
-                                DeleteProperty(propertyId);
-                                LoadActiveProperties();
-                            }
+                            CustomMessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", Warning);
+                            DeleteProperty(propertyId);
+                            LoadActiveProperties();
+
                             break;
                     }
                 }
@@ -644,7 +641,7 @@ namespace RealEstateManager
                                     var count = Convert.ToInt32(cmd.ExecuteScalar());
                                     if (count > 0)
                                     {
-                                        MessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        CustomMessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", Error);
                                         tran.Rollback();
                                         return;
                                     }
@@ -656,7 +653,7 @@ namespace RealEstateManager
                                     var count = Convert.ToInt32(cmd.ExecuteScalar());
                                     if (count > 0)
                                     {
-                                        MessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        CustomMessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", Error);
                                         tran.Rollback();
                                         return;
                                     }
@@ -684,7 +681,7 @@ namespace RealEstateManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while deleting the property: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomMessageBox.Show("An error occurred while deleting the property: " + ex.Message, "Error", Error);
             }
         }
 
@@ -722,7 +719,7 @@ namespace RealEstateManager
                         // 3. Only allow delete if both are zero
                         if (salePrice != 0 || amountBalance != 0)
                         {
-                            MessageBox.Show("Cannot delete this plot because it has a sale record or outstanding balance.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            CustomMessageBox.Show("Cannot delete this plot because it has a sale record or outstanding balance.", "Delete Not Allowed", Error);
                             tran.Rollback();
                             return;
                         }
@@ -740,7 +737,7 @@ namespace RealEstateManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while deleting the plot: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomMessageBox.Show("An error occurred while deleting the plot: " + ex.Message, "Error", Error);
             }
         }
 
@@ -875,11 +872,9 @@ namespace RealEstateManager
         {
             if (int.TryParse(propertyId, out int id))
             {
-                if (MessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    DeleteProperty(id);
-                    LoadActiveProperties();
-                }
+                CustomMessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", Warning);
+                DeleteProperty(id);
+                LoadActiveProperties();
             }
         }
 
@@ -959,7 +954,7 @@ namespace RealEstateManager
             string message = msgForm.MessageText;
             if (string.IsNullOrWhiteSpace(message))
             {
-                MessageBox.Show("Please enter a message.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CustomMessageBox.Show("Please enter a message.", "Info", Info);
                 return;
             }
 
@@ -967,20 +962,20 @@ namespace RealEstateManager
             var selectedRow = dataGridViewProperties.CurrentRow;
             if (selectedRow == null)
             {
-                MessageBox.Show("Please select a property row to send the message.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("Please select a property row to send the message.", "No Selection", Warning);
                 return;
             }
 
             string? phone = selectedRow.Cells["Phone"]?.Value?.ToString();
             if (string.IsNullOrWhiteSpace(phone))
             {
-                MessageBox.Show("No phone number found for the selected property.", "No Phone", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CustomMessageBox.Show("No phone number found for the selected property.", "No Phone", Warning);
                 return;
             }
 
             SendWhatsAppMessage(phone, message);
 
-            MessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CustomMessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", Info);
         }
 
         private void ChangeBackgroundToolStripMenuItem_Click(object sender, EventArgs e)

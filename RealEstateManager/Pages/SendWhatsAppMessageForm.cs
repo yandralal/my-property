@@ -1,6 +1,6 @@
 namespace RealEstateManager.Pages
 {
-    public partial class SendWhatsAppMessageForm : BaseForm
+    public partial class SendWhatsAppMessageForm : Form
     {
         public string MessageText => textBoxMessage.Text;
 

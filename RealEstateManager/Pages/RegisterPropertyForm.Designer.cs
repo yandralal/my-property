@@ -330,9 +330,9 @@ namespace RealEstateManager.Pages
             buttonRegister.FlatStyle = FlatStyle.Flat;
             buttonRegister.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonRegister.ForeColor = Color.White;
-            buttonRegister.Location = new Point(190, 676);
+            buttonRegister.Location = new Point(235, 673);
             buttonRegister.Name = "buttonRegister";
-            buttonRegister.Size = new Size(320, 35);
+            buttonRegister.Size = new Size(233, 40);
             buttonRegister.TabIndex = 13;
             buttonRegister.Text = "Register Property";
             buttonRegister.UseVisualStyleBackColor = false;
@@ -378,7 +378,6 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPropertyForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(600, 765);
             Controls.Add(groupBoxPropertyDetails);

@@ -12,7 +12,7 @@ namespace RealEstateManager.Pages
             comboBoxType.SelectedIndex = 0;
             dateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
             dateTimePickerTo.Value = DateTime.Today;
-            ButtonFilter_Click(this, EventArgs.Empty); // Initial load
+            ButtonFilter_Click(this, EventArgs.Empty); 
         }
 
         private void ButtonFilter_Click(object sender, EventArgs e)
@@ -115,6 +115,7 @@ namespace RealEstateManager.Pages
                 dataGridViewResults.Columns.Clear();
                 dataGridViewResults.AutoGenerateColumns = false;
                 dataGridViewResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dataGridViewResults.AllowUserToResizeColumns = false; 
 
                 // Always add columns, even if no data
                 if (dt.Columns.Contains("TransactionId"))

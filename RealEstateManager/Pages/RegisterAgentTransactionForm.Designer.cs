@@ -39,6 +39,7 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterAgentTransactionForm));
             groupBoxTransactionDetails = new GroupBox();
             labelAgentId = new Label();
             buttonSave = new Button();
@@ -102,7 +103,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionDetails.Location = new Point(24, 24);
             groupBoxTransactionDetails.Name = "groupBoxTransactionDetails";
             groupBoxTransactionDetails.Padding = new Padding(15);
-            groupBoxTransactionDetails.Size = new Size(596, 683);
+            groupBoxTransactionDetails.Size = new Size(585, 681);
             groupBoxTransactionDetails.TabIndex = 0;
             groupBoxTransactionDetails.TabStop = false;
             groupBoxTransactionDetails.Text = "Transaction Entry";
@@ -115,6 +116,7 @@ namespace RealEstateManager.Pages
             labelAgentId.Location = new Point(38, 95);
             labelAgentId.Name = "labelAgentId";
             labelAgentId.Size = new Size(64, 23);
+            labelAgentId.TabIndex = 0;
             labelAgentId.Text = "Agent:";
             // 
             // buttonSave
@@ -148,6 +150,7 @@ namespace RealEstateManager.Pages
             labelTransactionDate.Location = new Point(40, 558);
             labelTransactionDate.Name = "labelTransactionDate";
             labelTransactionDate.Size = new Size(53, 23);
+            labelTransactionDate.TabIndex = 12;
             labelTransactionDate.Text = "Date:";
             // 
             // dateTimePickerTransactionDate
@@ -166,6 +169,7 @@ namespace RealEstateManager.Pages
             labelAmount.Location = new Point(40, 333);
             labelAmount.Name = "labelAmount";
             labelAmount.Size = new Size(136, 23);
+            labelAmount.TabIndex = 13;
             labelAmount.Text = "Amount To Pay:";
             // 
             // textBoxAmount
@@ -185,6 +189,7 @@ namespace RealEstateManager.Pages
             labelPaymentMethod.Location = new Point(40, 425);
             labelPaymentMethod.Name = "labelPaymentMethod";
             labelPaymentMethod.Size = new Size(153, 23);
+            labelPaymentMethod.TabIndex = 14;
             labelPaymentMethod.Text = "Payment Method:";
             // 
             // comboBoxPaymentMethod
@@ -204,6 +209,7 @@ namespace RealEstateManager.Pages
             labelReferenceNumber.Location = new Point(40, 471);
             labelReferenceNumber.Name = "labelReferenceNumber";
             labelReferenceNumber.Size = new Size(109, 23);
+            labelReferenceNumber.TabIndex = 15;
             labelReferenceNumber.Text = "Reference #:";
             // 
             // textBoxReferenceNumber
@@ -223,6 +229,7 @@ namespace RealEstateManager.Pages
             labelNotes.Location = new Point(40, 517);
             labelNotes.Name = "labelNotes";
             labelNotes.Size = new Size(61, 23);
+            labelNotes.TabIndex = 16;
             labelNotes.Text = "Notes:";
             // 
             // textBoxNotes
@@ -243,6 +250,7 @@ namespace RealEstateManager.Pages
             labelTransactionType.Location = new Point(40, 285);
             labelTransactionType.Name = "labelTransactionType";
             labelTransactionType.Size = new Size(149, 23);
+            labelTransactionType.TabIndex = 17;
             labelTransactionType.Text = "Transaction Type:";
             // 
             // comboBoxTransactionType
@@ -262,6 +270,7 @@ namespace RealEstateManager.Pages
             labelPlotId.Location = new Point(40, 141);
             labelPlotId.Name = "labelPlotId";
             labelPlotId.Size = new Size(119, 23);
+            labelPlotId.TabIndex = 18;
             labelPlotId.Text = "Plot Number:";
             // 
             // comboBoxPlotNumber
@@ -281,6 +290,7 @@ namespace RealEstateManager.Pages
             labelTotalBrokerage.Location = new Point(40, 190);
             labelTotalBrokerage.Name = "labelTotalBrokerage";
             labelTotalBrokerage.Size = new Size(142, 23);
+            labelTotalBrokerage.TabIndex = 19;
             labelTotalBrokerage.Text = "Total Brokerage:";
             // 
             // textBoxTotalBrokerage
@@ -301,6 +311,7 @@ namespace RealEstateManager.Pages
             labelAmountPaidTillDate.Location = new Point(40, 237);
             labelAmountPaidTillDate.Name = "labelAmountPaidTillDate";
             labelAmountPaidTillDate.Size = new Size(193, 23);
+            labelAmountPaidTillDate.TabIndex = 20;
             labelAmountPaidTillDate.Text = "Amount Paid Till Date:";
             // 
             // textBoxAmountPaidTillDate
@@ -321,6 +332,7 @@ namespace RealEstateManager.Pages
             labelBalance.Location = new Point(40, 380);
             labelBalance.Name = "labelBalance";
             labelBalance.Size = new Size(76, 23);
+            labelBalance.TabIndex = 21;
             labelBalance.Text = "Balance:";
             // 
             // labelBalanceValue
@@ -331,6 +343,7 @@ namespace RealEstateManager.Pages
             labelBalanceValue.Location = new Point(240, 377);
             labelBalanceValue.Name = "labelBalanceValue";
             labelBalanceValue.Size = new Size(300, 30);
+            labelBalanceValue.TabIndex = 22;
             labelBalanceValue.Text = "0.00";
             labelBalanceValue.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -342,6 +355,7 @@ namespace RealEstateManager.Pages
             labelProperty.Location = new Point(38, 49);
             labelProperty.Name = "labelProperty";
             labelProperty.Size = new Size(85, 23);
+            labelProperty.TabIndex = 23;
             labelProperty.Text = "Property:";
             // 
             // comboBoxProperty
@@ -352,14 +366,15 @@ namespace RealEstateManager.Pages
             comboBoxProperty.Name = "comboBoxProperty";
             comboBoxProperty.Size = new Size(300, 31);
             comboBoxProperty.TabIndex = 0;
-            //
+            // 
             // RegisterAgentTransactionForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(644, 731);
-            Controls.Add(groupBoxTransactionDetails); // Add group box directly
+            ClientSize = new Size(633, 729);
+            Controls.Add(groupBoxTransactionDetails);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "RegisterAgentTransactionForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Agent Transaction";

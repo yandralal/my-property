@@ -28,19 +28,19 @@ namespace RealEstateManager.Pages
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseForm));
+            SuspendLayout();
             // 
             // BaseForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            //this.BackColor = System.Drawing.Color.White; // Default, can be overridden
-            //this.ClientSize = new System.Drawing.Size(800, 600);
-            //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-            this.Name = "BaseForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BaseForm";
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(282, 253);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "BaseForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "BaseForm";
+            ResumeLayout(false);
         }
 
         #endregion

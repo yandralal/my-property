@@ -15,9 +15,10 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AllTransactionsFilterForm));
             groupBoxFilter = new GroupBox();
             labelType = new Label();
             comboBoxType = new ComboBox();
@@ -47,7 +48,7 @@ namespace RealEstateManager.Pages
             groupBoxFilter.ForeColor = Color.MidnightBlue;
             groupBoxFilter.Location = new Point(20, 20);
             groupBoxFilter.Name = "groupBoxFilter";
-            groupBoxFilter.Size = new Size(1348, 95);
+            groupBoxFilter.Size = new Size(1492, 95);
             groupBoxFilter.TabIndex = 0;
             groupBoxFilter.TabStop = false;
             groupBoxFilter.Text = "Filter Transactions";
@@ -118,9 +119,9 @@ namespace RealEstateManager.Pages
             buttonFilter.ForeColor = Color.White;
             buttonFilter.Location = new Point(1039, 40);
             buttonFilter.Name = "buttonFilter";
-            buttonFilter.Size = new Size(120, 36);
+            buttonFilter.Size = new Size(184, 36);
             buttonFilter.TabIndex = 6;
-            buttonFilter.Text = "Filter";
+            buttonFilter.Text = "Filter Transactions";
             buttonFilter.UseVisualStyleBackColor = false;
             buttonFilter.Click += ButtonFilter_Click;
             // 
@@ -132,7 +133,7 @@ namespace RealEstateManager.Pages
             groupBoxResults.ForeColor = Color.MidnightBlue;
             groupBoxResults.Location = new Point(20, 137);
             groupBoxResults.Name = "groupBoxResults";
-            groupBoxResults.Size = new Size(1348, 500);
+            groupBoxResults.Size = new Size(1492, 500);
             groupBoxResults.TabIndex = 1;
             groupBoxResults.TabStop = false;
             groupBoxResults.Text = "Filtered Transactions";
@@ -141,27 +142,27 @@ namespace RealEstateManager.Pages
             // 
             dataGridViewResults.AllowUserToAddRows = false;
             dataGridViewResults.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle7.BackColor = Color.AliceBlue;
-            dataGridViewResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.BackColor = Color.AliceBlue;
+            dataGridViewResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewResults.BackgroundColor = Color.White;
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = Color.MidnightBlue;
-            dataGridViewCellStyle8.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle8.ForeColor = Color.White;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
-            dataGridViewResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridViewResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridViewResults.ColumnHeadersHeight = 29;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle9.ForeColor = Color.MidnightBlue;
-            dataGridViewCellStyle9.SelectionBackColor = Color.LightCyan;
-            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
-            dataGridViewResults.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle3.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridViewResults.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridViewResults.EnableHeadersVisualStyles = false;
             dataGridViewResults.GridColor = Color.LightGray;
             dataGridViewResults.Location = new Point(15, 35);
@@ -169,18 +170,18 @@ namespace RealEstateManager.Pages
             dataGridViewResults.ReadOnly = true;
             dataGridViewResults.RowHeadersWidth = 51;
             dataGridViewResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewResults.Size = new Size(1318, 450);
+            dataGridViewResults.Size = new Size(1462, 450);
             dataGridViewResults.TabIndex = 0;
             // 
             // AllTransactionsFilterForm
             // 
-            //AutoScaleDimensions = new SizeF(9F, 23F);
-            //AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(1380, 650);
+            ClientSize = new Size(1530, 655);
             Controls.Add(groupBoxResults);
             Controls.Add(groupBoxFilter);
             Font = new Font("Segoe UI", 10F);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AllTransactionsFilterForm";
             Text = "Filter All Transactions";
             groupBoxFilter.ResumeLayout(false);

@@ -17,9 +17,10 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewAllAgentsForm));
             dataGridViewAgents = new DataGridView();
             labelAgents = new Label();
             groupBoxAgents = new GroupBox();
@@ -32,27 +33,27 @@ namespace RealEstateManager.Pages
             // 
             dataGridViewAgents.AllowUserToAddRows = false;
             dataGridViewAgents.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.AliceBlue;
-            dataGridViewAgents.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.BackColor = Color.AliceBlue;
+            dataGridViewAgents.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             dataGridViewAgents.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewAgents.BackgroundColor = Color.White;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.MidnightBlue;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridViewAgents.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle8.ForeColor = Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dataGridViewAgents.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dataGridViewAgents.ColumnHeadersHeight = 29;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle3.ForeColor = Color.MidnightBlue;
-            dataGridViewCellStyle3.SelectionBackColor = Color.LightCyan;
-            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dataGridViewAgents.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle9.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle9.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
+            dataGridViewAgents.DefaultCellStyle = dataGridViewCellStyle9;
             dataGridViewAgents.EnableHeadersVisualStyles = false;
             dataGridViewAgents.GridColor = Color.LightGray;
             dataGridViewAgents.Location = new Point(15, 85);
@@ -86,7 +87,7 @@ namespace RealEstateManager.Pages
             groupBoxAgents.Location = new Point(20, 20);
             groupBoxAgents.Name = "groupBoxAgents";
             groupBoxAgents.Padding = new Padding(15);
-            groupBoxAgents.Size = new Size(1084, 529);
+            groupBoxAgents.Size = new Size(1091, 534);
             groupBoxAgents.TabIndex = 2;
             groupBoxAgents.TabStop = false;
             groupBoxAgents.Text = "Agent Details";
@@ -107,12 +108,12 @@ namespace RealEstateManager.Pages
             // 
             // ViewAllAgentsForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1107, 554);
+            ClientSize = new Size(1127, 571);
             Controls.Add(groupBoxAgents);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ViewAllAgentsForm";
             Text = "All Agents";
             ((System.ComponentModel.ISupportInitialize)dataGridViewAgents).EndInit();

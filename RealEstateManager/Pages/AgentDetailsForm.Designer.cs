@@ -286,7 +286,7 @@ namespace RealEstateManager.Pages
             AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1379, 600);
+            ClientSize = new Size(1384, 603);
             Controls.Add(groupBoxAgentDetails);
             Controls.Add(groupBoxTransactionGrid);
             Icon = (Icon)resources.GetObject("$this.Icon");

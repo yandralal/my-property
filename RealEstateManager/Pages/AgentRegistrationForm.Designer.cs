@@ -36,7 +36,7 @@ namespace RealEstateManager.Pages
             groupBoxAgent.Controls.Add(txtAgency);
             groupBoxAgent.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxAgent.ForeColor = Color.MidnightBlue;
-            groupBoxAgent.Location = new Point(12, 12);
+            groupBoxAgent.Location = new Point(19, 18);
             groupBoxAgent.Name = "groupBoxAgent";
             groupBoxAgent.Size = new Size(565, 253);
             groupBoxAgent.TabIndex = 0;
@@ -119,7 +119,7 @@ namespace RealEstateManager.Pages
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(589, 279);
+            ClientSize = new Size(600, 286);
             Controls.Add(groupBoxAgent);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AgentRegistrationForm";

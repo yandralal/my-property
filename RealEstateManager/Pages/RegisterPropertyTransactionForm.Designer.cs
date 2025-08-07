@@ -80,10 +80,10 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Controls.Add(comboBoxTransactionType);
             groupBoxTransactionEntry.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionEntry.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionEntry.Location = new Point(12, 12);
+            groupBoxTransactionEntry.Location = new Point(17, 25);
             groupBoxTransactionEntry.Name = "groupBoxTransactionEntry";
             groupBoxTransactionEntry.Padding = new Padding(15);
-            groupBoxTransactionEntry.Size = new Size(620, 610);
+            groupBoxTransactionEntry.Size = new Size(611, 610);
             groupBoxTransactionEntry.TabIndex = 0;
             groupBoxTransactionEntry.TabStop = false;
             groupBoxTransactionEntry.Text = "Transaction Entry";
@@ -271,11 +271,11 @@ namespace RealEstateManager.Pages
             // 
             buttonSave.BackColor = Color.Green;
             buttonSave.FlatStyle = FlatStyle.Flat;
-            buttonSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(222, 539);
+            buttonSave.Location = new Point(255, 540);
             buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(300, 40);
+            buttonSave.Size = new Size(233, 40);
             buttonSave.TabIndex = 9;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = false;
@@ -303,14 +303,12 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPropertyTransactionForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.AliceBlue;
-            ClientSize = new Size(644, 634);
+            ClientSize = new Size(647, 656);
             Controls.Add(groupBoxTransactionEntry);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MaximizeBox = false;
             MinimizeBox = false;
             Name = "RegisterPropertyTransactionForm";
             StartPosition = FormStartPosition.CenterParent;

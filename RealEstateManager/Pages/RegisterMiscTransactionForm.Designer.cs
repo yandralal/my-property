@@ -29,6 +29,7 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterMiscTransactionForm));
             groupBoxTransactionDetails = new GroupBox();
             labelRecipient = new Label();
             textBoxRecipient = new TextBox();
@@ -45,6 +46,7 @@ namespace RealEstateManager.Pages
             labelTransactionType = new Label();
             comboBoxTransactionType = new ComboBox();
             buttonSave = new Button();
+            groupBoxTransactionDetails.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxTransactionDetails
@@ -81,7 +83,7 @@ namespace RealEstateManager.Pages
             labelRecipient.AutoSize = true;
             labelRecipient.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelRecipient.ForeColor = Color.DarkSlateGray;
-            labelRecipient.Location = new Point(40, 49);
+            labelRecipient.Location = new Point(52, 61);
             labelRecipient.Name = "labelRecipient";
             labelRecipient.Size = new Size(90, 23);
             labelRecipient.TabIndex = 0;
@@ -101,7 +103,7 @@ namespace RealEstateManager.Pages
             labelTransactionDate.AutoSize = true;
             labelTransactionDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTransactionDate.ForeColor = Color.DarkSlateGray;
-            labelTransactionDate.Location = new Point(40, 95);
+            labelTransactionDate.Location = new Point(52, 107);
             labelTransactionDate.Name = "labelTransactionDate";
             labelTransactionDate.Size = new Size(53, 23);
             labelTransactionDate.TabIndex = 2;
@@ -120,7 +122,7 @@ namespace RealEstateManager.Pages
             labelAmount.AutoSize = true;
             labelAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelAmount.ForeColor = Color.DarkSlateGray;
-            labelAmount.Location = new Point(40, 141);
+            labelAmount.Location = new Point(52, 153);
             labelAmount.Name = "labelAmount";
             labelAmount.Size = new Size(80, 23);
             labelAmount.TabIndex = 4;
@@ -140,7 +142,7 @@ namespace RealEstateManager.Pages
             labelPaymentMethod.AutoSize = true;
             labelPaymentMethod.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPaymentMethod.ForeColor = Color.DarkSlateGray;
-            labelPaymentMethod.Location = new Point(40, 187);
+            labelPaymentMethod.Location = new Point(52, 199);
             labelPaymentMethod.Name = "labelPaymentMethod";
             labelPaymentMethod.Size = new Size(153, 23);
             labelPaymentMethod.TabIndex = 6;
@@ -160,7 +162,7 @@ namespace RealEstateManager.Pages
             labelReferenceNumber.AutoSize = true;
             labelReferenceNumber.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelReferenceNumber.ForeColor = Color.DarkSlateGray;
-            labelReferenceNumber.Location = new Point(40, 233);
+            labelReferenceNumber.Location = new Point(52, 245);
             labelReferenceNumber.Name = "labelReferenceNumber";
             labelReferenceNumber.Size = new Size(109, 23);
             labelReferenceNumber.TabIndex = 8;
@@ -180,7 +182,7 @@ namespace RealEstateManager.Pages
             labelNotes.AutoSize = true;
             labelNotes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelNotes.ForeColor = Color.DarkSlateGray;
-            labelNotes.Location = new Point(40, 279);
+            labelNotes.Location = new Point(52, 291);
             labelNotes.Name = "labelNotes";
             labelNotes.Size = new Size(61, 23);
             labelNotes.TabIndex = 10;
@@ -201,7 +203,7 @@ namespace RealEstateManager.Pages
             labelTransactionType.AutoSize = true;
             labelTransactionType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTransactionType.ForeColor = Color.DarkSlateGray;
-            labelTransactionType.Location = new Point(40, 355);
+            labelTransactionType.Location = new Point(52, 367);
             labelTransactionType.Name = "labelTransactionType";
             labelTransactionType.Size = new Size(149, 23);
             labelTransactionType.TabIndex = 12;
@@ -237,6 +239,7 @@ namespace RealEstateManager.Pages
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(646, 511);
             Controls.Add(groupBoxTransactionDetails);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "RegisterMiscTransactionForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Miscellaneous Transaction";

@@ -174,7 +174,7 @@ namespace RealEstateManager.Pages
             groupBoxPlots.Controls.Add(labelGridTitle);
             groupBoxPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPlots.ForeColor = Color.MidnightBlue;
-            groupBoxPlots.Location = new Point(20, 10);
+            groupBoxPlots.Location = new Point(24, 21);
             groupBoxPlots.Name = "groupBoxPlots";
             groupBoxPlots.Size = new Size(1030, 580);
             groupBoxPlots.TabIndex = 0;
@@ -194,13 +194,12 @@ namespace RealEstateManager.Pages
             // ManagePlotsForm
             // 
             BackColor = Color.FromArgb(245, 248, 255);
-            ClientSize = new Size(1072, 596);
+            ClientSize = new Size(1076, 620);
             Controls.Add(groupBoxPlots);
             Font = new Font("Segoe UI", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             Name = "ManagePlotsForm";
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "Manage Plots";
             ((System.ComponentModel.ISupportInitialize)numericUpDownPlotCount).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).EndInit();

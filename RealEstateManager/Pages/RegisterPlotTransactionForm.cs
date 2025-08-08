@@ -160,9 +160,66 @@ namespace RealEstateManager.Pages
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount))
+            // Validate Transaction Date (should not be in the future)
+            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
             {
-                MessageBox.Show("Please enter a valid amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerTransactionDate.Focus();
+                return;
+            }
+
+            // Validate Amount
+            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid, positive amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
+                return;
+            }
+
+            // Validate Transaction Type
+            if (string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
+            {
+                MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxTransactionType.Focus();
+                return;
+            }
+
+            // Validate Payment Method
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPaymentMethod.Focus();
+                return;
+            }
+
+            // Validate Reference Number (optional, but if provided, at least 3 chars)
+            if (!string.IsNullOrWhiteSpace(textBoxReferenceNumber.Text) && textBoxReferenceNumber.Text.Trim().Length < 3)
+            {
+                MessageBox.Show("Reference number must be at least 3 characters if provided.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxReferenceNumber.Focus();
+                return;
+            }
+
+            // Validate PlotId
+            if (!_plotId.HasValue)
+            {
+                MessageBox.Show("Plot information is missing. Please select a plot.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Validate Sale Amount (should be positive)
+            if (!decimal.TryParse(textBoxSaleAmount.Text, out decimal saleAmount) || saleAmount <= 0)
+            {
+                MessageBox.Show("Sale amount must be a valid, positive number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxSaleAmount.Focus();
+                return;
+            }
+
+            // Validate Amount Paid Till Date (should not exceed sale amount)
+            if (_amountPaidTillDate + amount > saleAmount)
+            {
+                MessageBox.Show("Total paid amount cannot exceed sale amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBoxAmount.Focus();
                 return;
             }
 
@@ -171,7 +228,6 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
             string userName = Environment.UserName;
-
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (!string.IsNullOrEmpty(_transactionId))
@@ -251,7 +307,7 @@ namespace RealEstateManager.Pages
             this.Close();
         }
 
-        private void UpdateBalanceAmount(object sender, EventArgs e)
+        private void UpdateBalanceAmount(object? sender, EventArgs e)
         {
             decimal saleAmount = 0;
             decimal newPaid = 0;

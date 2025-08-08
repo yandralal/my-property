@@ -2,7 +2,6 @@ namespace RealEstateManager.Pages
 {
     partial class PlotDetailsForm
     {
-        private System.ComponentModel.IContainer components = null;
         private Label labelPlotId;
         private Label labelPlotNumber;
         private Label labelStatus;

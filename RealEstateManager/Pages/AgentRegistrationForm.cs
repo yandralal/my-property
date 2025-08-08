@@ -25,12 +25,21 @@ namespace RealEstateManager.Pages
 
         private void BtnRegister_Click(object sender, EventArgs e)
         {
+            string name = txtName.Text.Trim();
             string contact = txtContact.Text.Trim();
 
-            // Validate contact number: must be exactly 10 digits and numeric
-            if (contact.Length != 10 || !contact.All(char.IsDigit))
+            // Name validation: required, at least 3 chars, only letters and spaces
+            if (string.IsNullOrWhiteSpace(name) || name.Length < 3 || !name.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
             {
-                CustomMessageBox.Show("Please enter a valid 10-digit mobile number.", "Error", CustomMessageType.Error);
+                MessageBox.Show("Please enter a valid agent name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtName.Focus();
+                return;
+            }
+
+            // Phone validation: must be exactly 10 digits and numeric, starts with 6-9
+            if (contact.Length != 10 || !contact.All(char.IsDigit) || !"6789".Contains(contact[0]))
+            {
+                MessageBox.Show("Please enter a valid 10-digit mobile number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtContact.Focus();
                 return;
             }
@@ -39,8 +48,8 @@ namespace RealEstateManager.Pages
             {
                 var agent = new Agent
                 {
-                    Name = txtName.Text,
-                    Contact = txtContact.Text,
+                    Name = name,
+                    Contact = contact,
                     Agency = txtAgency.Text
                 };
                 AgentRepository.AddAgent(agent);
@@ -48,8 +57,8 @@ namespace RealEstateManager.Pages
             }
             else
             {
-                _editAgent.Name = txtName.Text;
-                _editAgent.Contact = txtContact.Text;
+                _editAgent.Name = name;
+                _editAgent.Contact = contact;
                 _editAgent.Agency = txtAgency.Text;
                 AgentRepository.UpdateAgent(_editAgent);
                 MessageBox.Show("Agent updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -58,7 +67,7 @@ namespace RealEstateManager.Pages
             this.Close();
         }
 
-        private void TxtContact_KeyPress(object sender, KeyPressEventArgs e)
+        private void TxtContact_KeyPress(object? sender, KeyPressEventArgs e)
         {
             // Allow only digits and control keys (e.g., backspace)
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))

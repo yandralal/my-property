@@ -149,7 +149,6 @@ namespace RealEstateManager.Pages
             dataGridViewTransactions.DataSource = transactions;
         }
 
-        // Custom painting for the action column to show view, edit, delete icons
         private void DataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
@@ -165,16 +164,19 @@ namespace RealEstateManager.Pages
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Draw view icon
-                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
+                if (e.Graphics != null)
+                {
+                    // Draw view icon
+                    e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                    x += iconWidth + padding;
 
-                // Draw edit icon
-                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
+                    // Draw edit icon
+                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                    x += iconWidth + padding;
 
-                // Draw delete icon
-                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                    // Draw delete icon
+                    e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                }
 
                 e.Handled = true;
             }
@@ -207,7 +209,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void ViewTransaction(string? transactionId)
+        private static void ViewTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
             // Open RegisterAgentTransactionForm in view mode
@@ -246,7 +248,7 @@ namespace RealEstateManager.Pages
         }
 
         // Example implementation for deleting from DB
-        private void DeleteTransactionFromDatabase(string transactionId)
+        private static void DeleteTransactionFromDatabase(string transactionId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string query = "UPDATE AgentTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";

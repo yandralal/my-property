@@ -336,7 +336,7 @@ namespace RealEstateManager.Pages
             buttonRegister.TabIndex = 13;
             buttonRegister.Text = "Register Property";
             buttonRegister.UseVisualStyleBackColor = false;
-            buttonRegister.Click += buttonRegister_Click;
+            buttonRegister.Click += ButtonRegister_Click;
             // 
             // labelKhasraNo
             // 

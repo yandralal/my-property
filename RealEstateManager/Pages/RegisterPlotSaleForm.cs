@@ -180,39 +180,100 @@ namespace RealEstateManager.Pages
 
         private void ButtonRegisterSale_Click(object sender, EventArgs e)
         {
+            // Validate property selection
             int propertyId = 0;
             int? plotId = null;
-
             if (_isEditMode && _editPlotId.HasValue)
             {
-                // In edit mode, use the plotId passed in
                 plotId = _editPlotId;
+                propertyId = _editPropertyId ?? 0;
             }
             else
             {
-                propertyId = Convert.ToInt32(comboBoxProperty.SelectedValue);
+                if (comboBoxProperty.SelectedValue == null || !int.TryParse(comboBoxProperty.SelectedValue.ToString(), out propertyId) || propertyId == 0)
+                {
+                    MessageBox.Show("Please select a property.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    comboBoxProperty.Focus();
+                    return;
+                }
                 plotId = comboBoxPlot.SelectedValue as int?;
+                if (plotId == null || (int)plotId == 0)
+                {
+                    MessageBox.Show("Please select a plot.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    comboBoxPlot.Focus();
+                    return;
+                }
             }
 
+            // Validate customer name
             string customerName = textBoxCustomerName.Text.Trim();
-            string customerPhone = textBoxCustomerPhone.Text.Trim();
-            string customerEmail = textBoxCustomerEmail.Text.Trim();
-            decimal saleAmount = decimal.TryParse(textBoxSaleAmount.Text, out var amt) ? amt : 0;
-            DateTime saleDate = dateTimePickerSaleDate.Value;
-            string createdBy = Environment.UserName;
-            DateTime createdDate = DateTime.Now;
-
-            if ((!_isEditMode && propertyId == 0) || string.IsNullOrWhiteSpace(customerName) || string.IsNullOrWhiteSpace(customerPhone) || saleAmount <= 0)
+            if (string.IsNullOrWhiteSpace(customerName) || customerName.Length < 3 || !customerName.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
             {
-                MessageBox.Show("Please fill all required fields.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid customer name (at least 3 letters, letters and spaces only).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCustomerName.Focus();
                 return;
             }
+
+            // Validate customer phone
+            string customerPhone = textBoxCustomerPhone.Text.Trim();
+            if (customerPhone.Length != 10 || !customerPhone.All(char.IsDigit) || !"6789".Contains(customerPhone[0]))
+            {
+                MessageBox.Show("Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCustomerPhone.Focus();
+                return;
+            }
+
+            // Validate sale amount
+            decimal saleAmount = decimal.TryParse(textBoxSaleAmount.Text, out var amt) ? amt : 0;
+            if (saleAmount <= 0)
+            {
+                MessageBox.Show("Please enter a valid sale amount greater than zero.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxSaleAmount.Focus();
+                return;
+            }
+
+            // Validate sale date (not in future)
+            DateTime saleDate = dateTimePickerSaleDate.Value;
+            if (saleDate.Date > DateTime.Today)
+            {
+                MessageBox.Show("Sale date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerSaleDate.Focus();
+                return;
+            }
+
+            // Validate agent selection
+            if (comboBoxAgent.SelectedValue == null || !int.TryParse(comboBoxAgent.SelectedValue.ToString(), out int agentId) || agentId == 0)
+            {
+                MessageBox.Show("Please select an agent.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxAgent.Focus();
+                return;
+            }
+
+            // Validate brokerage amount (optional, but if provided, must be >= 0)
+            decimal brokerageAmount = 0;
+            if (!string.IsNullOrWhiteSpace(textBoxBrokerage.Text) && (!decimal.TryParse(textBoxBrokerage.Text, out brokerageAmount) || brokerageAmount < 0))
+            {
+                MessageBox.Show("Please enter a valid brokerage amount (zero or positive).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxBrokerage.Focus();
+                return;
+            }
+
+            // Validate customer email (optional, but if provided, must be valid format)
+            string customerEmail = textBoxCustomerEmail.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(customerEmail) && !System.Text.RegularExpressions.Regex.IsMatch(customerEmail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("Please enter a valid email address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCustomerEmail.Focus();
+                return;
+            }
+
+            string createdBy = Environment.UserName;
+            DateTime createdDate = DateTime.Now;
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (_isEditMode)
             {
-                // Update existing sale
                 string update = @"UPDATE PlotSale
                     SET AgentId = @AgentId, BrokerageAmount = @BrokerageAmount, CustomerName = @CustomerName, CustomerPhone = @CustomerPhone, CustomerEmail = @CustomerEmail,
                         SaleAmount = @SaleAmount, SaleDate = @SaleDate, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate
@@ -222,8 +283,8 @@ namespace RealEstateManager.Pages
                 using (var cmd = new SqlCommand(update, conn))
                 {
                     cmd.Parameters.AddWithValue("@PlotId", plotId);
-                    cmd.Parameters.AddWithValue("@AgentId", comboBoxAgent.SelectedValue);
-                    cmd.Parameters.AddWithValue("@BrokerageAmount", string.IsNullOrEmpty(textBoxBrokerage.Text) ? 0 : Convert.ToDecimal(textBoxBrokerage.Text));
+                    cmd.Parameters.AddWithValue("@AgentId", agentId);
+                    cmd.Parameters.AddWithValue("@BrokerageAmount", brokerageAmount);
                     cmd.Parameters.AddWithValue("@CustomerName", customerName);
                     cmd.Parameters.AddWithValue("@CustomerPhone", customerPhone);
                     cmd.Parameters.AddWithValue("@CustomerEmail", (object?)customerEmail ?? DBNull.Value);
@@ -234,8 +295,6 @@ namespace RealEstateManager.Pages
 
                     conn.Open();
                     cmd.ExecuteNonQuery();
-
-                    // Set plot status to Booked
                     SetPlotStatusToBooked(conn, plotId);
                 }
 
@@ -243,7 +302,6 @@ namespace RealEstateManager.Pages
             }
             else
             {
-                // Insert new sale
                 string insert = @"INSERT INTO PlotSale
                     (PropertyId, PlotId, AgentId, BrokerageAmount, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
                     VALUES (@PropertyId, @PlotId, @AgentId, @BrokerageAmount, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
@@ -253,9 +311,9 @@ namespace RealEstateManager.Pages
                 using (var cmd = new SqlCommand(insert, conn))
                 {
                     cmd.Parameters.AddWithValue("@PropertyId", propertyId);
-                    cmd.Parameters.AddWithValue("@BrokerageAmount", string.IsNullOrEmpty(textBoxBrokerage.Text) ? 0 : Convert.ToDecimal(textBoxBrokerage.Text));
+                    cmd.Parameters.AddWithValue("@BrokerageAmount", brokerageAmount);
                     cmd.Parameters.AddWithValue("@PlotId", (object?)plotId ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AgentId", comboBoxAgent.SelectedValue ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@AgentId", agentId);
                     cmd.Parameters.AddWithValue("@CustomerName", customerName);
                     cmd.Parameters.AddWithValue("@CustomerPhone", customerPhone);
                     cmd.Parameters.AddWithValue("@CustomerEmail", (object?)customerEmail ?? DBNull.Value);
@@ -269,8 +327,6 @@ namespace RealEstateManager.Pages
 
                     conn.Open();
                     cmd.ExecuteNonQuery();
-
-                    // Set plot status to Booked
                     SetPlotStatusToBooked(conn, plotId);
                 }
 

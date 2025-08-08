@@ -2,7 +2,6 @@ namespace RealEstateManager.Pages
 {
     partial class RegisterPropertyTransactionForm
     {
-        private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.GroupBox groupBoxTransactionEntry;
         private System.Windows.Forms.Label labelPropertyId;
         private System.Windows.Forms.TextBox textBoxPropertyId;

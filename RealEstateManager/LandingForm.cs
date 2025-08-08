@@ -1,7 +1,6 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Pages;
 using System.Data;
-using static CustomMessageType;
 
 namespace RealEstateManager
 {
@@ -13,12 +12,14 @@ namespace RealEstateManager
 
         public LandingForm()
         {
-            InitializeFooter();
             InitializeComponent();
+            InitializeFooter(); 
             this.WindowState = FormWindowState.Maximized;
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
             dataGridViewProperties.CellMouseClick += DataGridViewProperties_CellMouseClick;
+            dataGridViewProperties.CellFormatting += DataGridViewProperties_CellFormatting;
+            dataGridViewPlots.CellFormatting += DataGridViewPlots_CellFormatting;
             LoadActiveProperties();
         }
 
@@ -28,13 +29,14 @@ namespace RealEstateManager
             {
                 Dock = DockStyle.Bottom,
                 Height = 32,
-                Text = "© 2025 Real Estate Manager. All rights reserved.",
+                Text = "© " + DateTime.Now.Year + " VVT Softwares Pvt. Ltd. All rights reserved.",
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Segoe UI", 10F, FontStyle.Italic),
                 BackColor = Color.FromArgb(30, 60, 114),
                 ForeColor = Color.White
             };
-            Controls.Add(footerLabel);
+            this.Controls.Add(footerLabel);
+            this.Controls.SetChildIndex(footerLabel, 0);
         }
 
         private void ButtonAddProperty_Click(object sender, EventArgs e)
@@ -127,8 +129,8 @@ namespace RealEstateManager
                 }
             }
 
-            dataGridViewProperties.CellPainting -= dataGridViewProperties_CellPainting;
-            dataGridViewProperties.CellPainting += dataGridViewProperties_CellPainting;
+            dataGridViewProperties.CellPainting -= DataGridViewProperties_CellPainting;
+            dataGridViewProperties.CellPainting += DataGridViewProperties_CellPainting;
         }
 
         private void SetupPlotGrid()
@@ -224,11 +226,11 @@ namespace RealEstateManager
             if (dataGridViewPlots.Columns["SaleDate"] != null)
                 dataGridViewPlots.Columns["SaleDate"].DefaultCellStyle.Format = "dd/MM/yyyy hh:mm tt";
 
-            dataGridViewPlots.CellContentClick -= dataGridViewPlots_CellContentClick;
-            dataGridViewPlots.CellContentClick += dataGridViewPlots_CellContentClick;
+            dataGridViewPlots.CellContentClick -= DataGridViewPlots_CellContentClick;
+            dataGridViewPlots.CellContentClick += DataGridViewPlots_CellContentClick;
 
-            dataGridViewPlots.CellPainting -= dataGridViewPlots_CellPainting;
-            dataGridViewPlots.CellPainting += dataGridViewPlots_CellPainting;
+            dataGridViewPlots.CellPainting -= DataGridViewPlots_CellPainting;
+            dataGridViewPlots.CellPainting += DataGridViewPlots_CellPainting;
 
             dataGridViewPlots.CellMouseClick -= DataGridViewPlots_CellMouseClick;
             dataGridViewPlots.CellMouseClick += DataGridViewPlots_CellMouseClick;
@@ -251,12 +253,12 @@ namespace RealEstateManager
             // Ensure a property and a plot are selected
             if (dataGridViewProperties.CurrentRow == null)
             {
-                CustomMessageBox.Show("Please select a property.", "Info", Info);
+                MessageBox.Show("Please select a property.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             if (dataGridViewPlots.CurrentRow == null)
             {
-                CustomMessageBox.Show("Please select a plot.", "Info", Info);
+                MessageBox.Show("Please select a plot.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -264,7 +266,7 @@ namespace RealEstateManager
             var propertyIdCell = dataGridViewProperties.CurrentRow.Cells["Id"];
             if (propertyIdCell == null || !int.TryParse(propertyIdCell.Value?.ToString(), out int propertyId))
             {
-                CustomMessageBox.Show("Invalid property selection.", "Error", Error);
+                MessageBox.Show("Invalid property selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -272,7 +274,7 @@ namespace RealEstateManager
             var row = dataGridViewPlots.CurrentRow;
             if (!int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId))
             {
-                CustomMessageBox.Show("Invalid plot selection.", "Error", Error);
+                MessageBox.Show("Invalid plot selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             string plotNumber = row.Cells["PlotNumber"].Value?.ToString() ?? "";
@@ -394,7 +396,7 @@ namespace RealEstateManager
             //AdjustGridAndGroupBoxHeight(dataGridViewPlots, groupBoxPlots, 10, 120, 500, 80);
         }
 
-        private void dataGridViewPlots_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        private void DataGridViewPlots_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "ViewDetails")
             {
@@ -407,7 +409,7 @@ namespace RealEstateManager
             }
         }
 
-        private void dataGridViewPlots_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        private void DataGridViewPlots_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -423,15 +425,15 @@ namespace RealEstateManager
                 int x = e.CellBounds.Left + padding;
 
                 // Draw view icon
-                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                e?.Graphics?.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw edit icon
-                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                e?.Graphics?.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw delete icon
-                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                e?.Graphics?.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
             }
@@ -492,9 +494,12 @@ namespace RealEstateManager
                             break;
                         case 2:
                             // Delete
-                            CustomMessageBox.Show("Are you sure you want to delete this plot?", "Confirm Delete", Warning);
-                            DeletePlot(plotId);
-                            LoadPlotsForProperty(propertyId);
+                            var result = MessageBox.Show("Are you sure you want to delete this plot?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result == DialogResult.Yes)
+                            {
+                                DeletePlot(plotId);
+                                LoadPlotsForProperty(propertyId);
+                            }
                             break;
                     }
                 }
@@ -534,7 +539,7 @@ namespace RealEstateManager
             transactionForm.ShowDialog();
         }
 
-        private void dataGridViewProperties_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        private void DataGridViewProperties_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewProperties.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -550,15 +555,15 @@ namespace RealEstateManager
                 int x = e.CellBounds.Left + padding;
 
                 // Draw view icon
-                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                e?.Graphics?.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw edit icon
-                e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                e?.Graphics?.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw delete icon
-                e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                e?.Graphics?.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
             }
@@ -596,17 +601,19 @@ namespace RealEstateManager
                             break;
                         case 2:
                             // Delete
-                            CustomMessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", Warning);
-                            DeleteProperty(propertyId);
-                            LoadActiveProperties();
-
+                            var result = MessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result == DialogResult.Yes)
+                            {
+                                DeleteProperty(propertyId);
+                                LoadActiveProperties();
+                            }
                             break;
                     }
                 }
             }
         }
 
-        private void DeleteProperty(int propertyId)
+        private static void DeleteProperty(int propertyId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             try
@@ -641,7 +648,7 @@ namespace RealEstateManager
                                     var count = Convert.ToInt32(cmd.ExecuteScalar());
                                     if (count > 0)
                                     {
-                                        CustomMessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", Error);
+                                        MessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         tran.Rollback();
                                         return;
                                     }
@@ -653,7 +660,7 @@ namespace RealEstateManager
                                     var count = Convert.ToInt32(cmd.ExecuteScalar());
                                     if (count > 0)
                                     {
-                                        CustomMessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", Error);
+                                        MessageBox.Show("Cannot delete this property because one or more plots have already been sold.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         tran.Rollback();
                                         return;
                                     }
@@ -681,11 +688,11 @@ namespace RealEstateManager
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show("An error occurred while deleting the property: " + ex.Message, "Error", Error);
+                MessageBox.Show("An error occurred while deleting the property: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void DeletePlot(int plotId)
+        private static void DeletePlot(int plotId)
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             try
@@ -719,7 +726,7 @@ namespace RealEstateManager
                         // 3. Only allow delete if both are zero
                         if (salePrice != 0 || amountBalance != 0)
                         {
-                            CustomMessageBox.Show("Cannot delete this plot because it has a sale record or outstanding balance.", "Delete Not Allowed", Error);
+                            MessageBox.Show("Cannot delete this plot because it has a sale record or outstanding balance.", "Delete Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             tran.Rollback();
                             return;
                         }
@@ -737,7 +744,7 @@ namespace RealEstateManager
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show("An error occurred while deleting the plot: " + ex.Message, "Error", Error);
+                MessageBox.Show("An error occurred while deleting the plot: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -872,9 +879,12 @@ namespace RealEstateManager
         {
             if (int.TryParse(propertyId, out int id))
             {
-                CustomMessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", Warning);
-                DeleteProperty(id);
-                LoadActiveProperties();
+                var result = MessageBox.Show("Are you sure you want to delete this property?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    DeleteProperty(id);
+                    LoadActiveProperties();
+                }
             }
         }
 
@@ -954,7 +964,7 @@ namespace RealEstateManager
             string message = msgForm.MessageText;
             if (string.IsNullOrWhiteSpace(message))
             {
-                CustomMessageBox.Show("Please enter a message.", "Info", Info);
+                MessageBox.Show("Please enter a message.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -962,20 +972,20 @@ namespace RealEstateManager
             var selectedRow = dataGridViewProperties.CurrentRow;
             if (selectedRow == null)
             {
-                CustomMessageBox.Show("Please select a property row to send the message.", "No Selection", Warning);
+                MessageBox.Show("Please select a property row to send the message.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string? phone = selectedRow.Cells["Phone"]?.Value?.ToString();
             if (string.IsNullOrWhiteSpace(phone))
             {
-                CustomMessageBox.Show("No phone number found for the selected property.", "No Phone", Warning);
+                MessageBox.Show("No phone number found for the selected property.", "No Phone", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             SendWhatsAppMessage(phone, message);
 
-            CustomMessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", Info);
+            MessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ChangeBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
@@ -983,6 +993,30 @@ namespace RealEstateManager
             using (var customizeForm = new CustomizeBackgroundForm())
             {
                 customizeForm.ShowDialog();
+            }
+        }
+
+        private void DataGridViewPlots_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridViewPlots.Columns[e.ColumnIndex].Name == "AmountBalance")
+            {
+                if (e.Value == null || e.Value == DBNull.Value)
+                {
+                    e.Value = "NILL";
+                    e.FormattingApplied = true;
+                }
+            }
+        }
+
+        private void DataGridViewProperties_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridViewProperties.Columns[e.ColumnIndex].Name == "AmountBalance")
+            {
+                if (e.Value == null || e.Value == DBNull.Value)
+                {
+                    e.Value = "NILL";
+                    e.FormattingApplied = true;
+                }
             }
         }
     }

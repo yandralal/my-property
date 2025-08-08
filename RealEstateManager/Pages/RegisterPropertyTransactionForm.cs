@@ -150,9 +150,66 @@ namespace RealEstateManager.Pages
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount))
+            // Validate property selection
+            if (!_propertyId.HasValue)
             {
-                MessageBox.Show("Please enter a valid amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Property information is missing. Please select a property.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Validate transaction date (not in future)
+            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error" , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerTransactionDate.Focus();
+                return;
+            }
+
+            // Validate amount
+            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid, positive amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
+                return;
+            }
+
+            // Validate transaction type
+            if (string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
+            {
+                MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxTransactionType.Focus();
+                return;
+            }
+
+            // Validate payment method
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPaymentMethod.Focus();
+                return;
+            }
+
+            // Validate reference number (optional, but if provided, at least 3 chars)
+            if (!string.IsNullOrWhiteSpace(textBoxReferenceNumber.Text) && textBoxReferenceNumber.Text.Trim().Length < 3)
+            {
+                MessageBox.Show("Reference number must be at least 3 characters if provided.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxReferenceNumber.Focus();
+                return;
+            }
+
+            // Validate sale amount (should be positive)
+            if (!decimal.TryParse(textBoxSaleAmount.Text, out decimal saleAmount) || saleAmount <= 0)
+            {
+                MessageBox.Show("Sale amount must be a valid, positive number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxSaleAmount.Focus();
+                return;
+            }
+
+            // Validate amount paid till date (should not exceed sale amount)
+            if (_amountPaidTillDate + amount > saleAmount)
+            {
+                MessageBox.Show("Total paid amount cannot exceed sale amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
                 return;
             }
 
@@ -161,7 +218,6 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
             string userName = Environment.UserName;
-
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (!string.IsNullOrEmpty(_transactionId))

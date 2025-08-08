@@ -1,6 +1,5 @@
 using Microsoft.Data.SqlClient;
 using System.Text.RegularExpressions;
-using static CustomMessageType; 
 
 namespace RealEstateManager.Pages
 {
@@ -107,7 +106,7 @@ namespace RealEstateManager.Pages
             };
         }
 
-        private void buttonRegister_Click(object sender, EventArgs e)
+        private void ButtonRegister_Click(object sender, EventArgs e)
         {
             // Collect data
             string title = textBoxTitle.Text.Trim();
@@ -124,43 +123,91 @@ namespace RealEstateManager.Pages
             string khasraNo = textBoxKhasraNo.Text.Trim();
             string areaText = textBoxArea.Text.Trim();
 
-            // Validation
-            if (string.IsNullOrWhiteSpace(title) ||
-                string.IsNullOrWhiteSpace(type) ||
-                string.IsNullOrWhiteSpace(status) ||
-                string.IsNullOrWhiteSpace(priceText) ||
-                string.IsNullOrWhiteSpace(owner) ||
-                string.IsNullOrWhiteSpace(phone) ||
-                string.IsNullOrWhiteSpace(areaText))
+            // Mandatory field validation
+            if (string.IsNullOrWhiteSpace(title))
             {
-                CustomMessageBox.Show("Please fill in all required fields.", "Validation Error", Warning);
+                MessageBox.Show("Property title is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxTitle.Focus();
                 return;
             }
-
-            // Price validation and formatting
+            if (title.Length < 3)
+            {
+                MessageBox.Show("Property title must be at least 3 characters.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxTitle.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(type))
+            {
+                MessageBox.Show("Property type is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxType.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(status))
+            {
+                MessageBox.Show("Property status is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxStatus.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(priceText))
+            {
+                MessageBox.Show("Price is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxPrice.Focus();
+                return;
+            }
             if (!decimal.TryParse(priceText, out decimal priceValue) || priceValue < 0)
             {
-                CustomMessageBox.Show("Please enter a valid non-negative price.", "Validation Error", Warning);
+                MessageBox.Show("Please enter a valid non-negative price.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxPrice.Focus();
                 return;
             }
-            string price = priceValue.ToString("F2"); // Format as .00
+            string price = priceValue.ToString("F2");
 
-            // Area validation and formatting
+            if (string.IsNullOrWhiteSpace(owner))
+            {
+                MessageBox.Show("Owner name is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxOwner.Focus();
+                return;
+            }
+            if (owner.Length < 3 || !owner.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+            {
+                MessageBox.Show("Owner name must be at least 3 letters and contain only letters and spaces.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxOwner.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                MessageBox.Show("Phone number is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxPhone.Focus();
+                return;
+            }
+            if (!Regex.IsMatch(phone, @"^[6-9]\d{9}$"))
+            {
+                MessageBox.Show("Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxPhone.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(areaText))
+            {
+                MessageBox.Show("Area is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxArea.Focus();
+                return;
+            }
             if (!decimal.TryParse(areaText, out decimal areaValue) || areaValue < 0)
             {
-                CustomMessageBox.Show("Please enter a valid non-negative area.", "Validation Error", Warning);
+                MessageBox.Show("Please enter a valid non-negative area.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxArea.Focus();
                 return;
             }
             string area = areaValue.ToString("F2");
 
-            // Phone number validation: exactly 10 digits
-            if (!Regex.IsMatch(phone, @"^\d{10}$"))
+            // Optional: Validate zip code (if provided, must be 6 digits)
+            if (!string.IsNullOrWhiteSpace(zip) && !Regex.IsMatch(zip, @"^\d{6}$"))
             {
-                CustomMessageBox.Show("Please enter a valid 10-digit phone number.", "Validation Error", Warning);
+                MessageBox.Show("Please enter a valid 6-digit zip code.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxZip.Focus();
                 return;
             }
 
-            // Audit fields
             string modifiedBy = Environment.UserName;
             string modifiedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -211,7 +258,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
-                        CustomMessageBox.Show("Property updated successfully!", "Success", CustomMessageType.Info);
+                        MessageBox.Show("Property updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -248,7 +295,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
-                        CustomMessageBox.Show("Property registered successfully!", "Success", CustomMessageType.Info);
+                        MessageBox.Show("Property registered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -256,7 +303,7 @@ namespace RealEstateManager.Pages
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show("An error occurred: " + ex.Message, "Error", Error);
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

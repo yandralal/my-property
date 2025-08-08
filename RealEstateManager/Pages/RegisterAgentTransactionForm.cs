@@ -22,7 +22,7 @@ namespace RealEstateManager.Pages
             }
 
             comboBoxTransactionType.Items.Clear();
-            comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
+            comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
             comboBoxTransactionType.SelectedIndex = 0;
 
             textBoxAmount.TextChanged += UpdateBalanceAmount;
@@ -37,7 +37,7 @@ namespace RealEstateManager.Pages
 
             // Ensure payment methods are loaded
             comboBoxPaymentMethod.Items.Clear();
-            comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
+            comboBoxPaymentMethod.Items.AddRange(["Cash", "Cheque", "Bank Transfer", "Other"]);
 
             // Load agents and properties first
             LoadAgents();
@@ -178,18 +178,82 @@ namespace RealEstateManager.Pages
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
+            // Validate agent selection
             if (comboBoxAgent.SelectedItem is not Agent selectedAgent)
             {
                 MessageBox.Show("Please select an agent.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 comboBoxAgent.Focus();
                 return;
             }
-
             int agentId = selectedAgent.Id;
 
-            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount))
+            // Validate property selection
+            if (comboBoxProperty.SelectedValue == null || !int.TryParse(comboBoxProperty.SelectedValue.ToString(), out int propertyId))
             {
-                MessageBox.Show("Please enter a valid amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a property.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxProperty.Focus();
+                return;
+            }
+
+            // Validate plot selection (optional, but if visible and required)
+            if (comboBoxPlotNumber.DataSource != null && comboBoxPlotNumber.SelectedValue == null)
+            {
+                MessageBox.Show("Please select a plot number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPlotNumber.Focus();
+                return;
+            }
+            int? plotId = null;
+            if (comboBoxPlotNumber.SelectedValue != null && int.TryParse(comboBoxPlotNumber.SelectedValue.ToString(), out int parsedPlotId))
+                plotId = parsedPlotId;
+
+            // Validate transaction date (not in future)
+            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerTransactionDate.Focus();
+                return;
+            }
+
+            // Validate amount
+            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid, positive amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
+                return;
+            }
+
+            // Validate transaction type
+            if (string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
+            {
+                MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxTransactionType.Focus();
+                return;
+            }
+
+            // Validate payment method
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPaymentMethod.Focus();
+                return;
+            }
+
+            // Validate reference number (optional, but if provided, at least 3 chars)
+            if (!string.IsNullOrWhiteSpace(textBoxReferenceNumber.Text) && textBoxReferenceNumber.Text.Trim().Length < 3)
+            {
+                MessageBox.Show("Reference number must be at least 3 characters if provided.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxReferenceNumber.Focus();
+                return;
+            }
+
+            // Validate brokerage logic (amount paid + new amount should not exceed total brokerage)
+            decimal paidTillDate = 0;
+            decimal.TryParse(textBoxTotalBrokerage.Text, out decimal totalBrokerage);
+            decimal.TryParse(textBoxAmountPaidTillDate.Text, out paidTillDate);
+            if ((paidTillDate + amount) > totalBrokerage)
+            {
+                MessageBox.Show("Total paid amount cannot exceed total brokerage.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBoxAmount.Focus();
                 return;
             }
 
@@ -198,12 +262,6 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
             string userName = Environment.UserName;
-
-            // Use SelectedValue for plotId
-            int? plotId = null;
-            if (comboBoxPlotNumber.SelectedValue != null && int.TryParse(comboBoxPlotNumber.SelectedValue.ToString(), out int parsedPlotId))
-                plotId = parsedPlotId;
-
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (!string.IsNullOrEmpty(_transactionId))
@@ -255,11 +313,7 @@ namespace RealEstateManager.Pages
                 using (var cmd = new SqlCommand(insert, conn))
                 {
                     cmd.Parameters.AddWithValue("@AgentId", agentId);
-
-                    // Get PropertyId from comboBoxProperty
-                    int propertyId = comboBoxProperty.SelectedValue is int val ? val : Convert.ToInt32(comboBoxProperty.SelectedValue);
                     cmd.Parameters.AddWithValue("@PropertyId", propertyId);
-
                     cmd.Parameters.AddWithValue("@TransactionDate", dateTimePickerTransactionDate.Value);
                     cmd.Parameters.AddWithValue("@Amount", amount);
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
@@ -302,7 +356,7 @@ namespace RealEstateManager.Pages
             LoadPlots();
         }
 
-        private void ComboBoxAgent_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxAgent_SelectedIndexChanged(object? sender, EventArgs e)
         {
             LoadPlots(); // Your existing method to reload plots for the agent
             UpdateTotalBrokerage();
@@ -310,7 +364,7 @@ namespace RealEstateManager.Pages
             UpdateBalance();
         }
 
-        private void ComboBoxPlotNumber_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxPlotNumber_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateTotalBrokerage();
             UpdateAmountPaidTillDate();
@@ -417,14 +471,14 @@ namespace RealEstateManager.Pages
         }
 
         // Called when amount paid till date changes
-        private void TextBoxAmountPaidTillDate_TextChanged(object sender, EventArgs e)
+        private void TextBoxAmountPaidTillDate_TextChanged(object? sender, EventArgs e)
         {
             decimal.TryParse(textBoxAmountPaidTillDate.Text, out _amountPaidTillDate);
             UpdateBalanceOnLoad();
         }
 
         // Called when amount to pay (new payment) changes
-        private void UpdateBalanceAmount(object sender, EventArgs e)
+        private void UpdateBalanceAmount(object? sender, EventArgs e)
         {
             decimal totalBrokerage = 0;
             decimal newPaid = 0;

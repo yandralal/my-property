@@ -1,6 +1,4 @@
 using Microsoft.Data.SqlClient;
-using System.Data;
-using System.Windows.Forms;
 
 namespace RealEstateManager.Pages
 {
@@ -13,11 +11,11 @@ namespace RealEstateManager.Pages
             InitializeComponent();
 
             comboBoxTransactionType.Items.Clear();
-            comboBoxTransactionType.Items.AddRange(new object[] { "Credit", "Debit" });
+            comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
             comboBoxTransactionType.SelectedIndex = 0;
 
             comboBoxPaymentMethod.Items.Clear();
-            comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
+            comboBoxPaymentMethod.Items.AddRange(["Cash", "Cheque", "Bank Transfer", "Other"]);
 
             SetupAmountFormatting();
         }
@@ -28,10 +26,10 @@ namespace RealEstateManager.Pages
             _transactionId = transactionId;
 
             comboBoxTransactionType.Items.Clear();
-            comboBoxTransactionType.Items.AddRange(new object[] { "Credit", "Debit" });
+            comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
 
             comboBoxPaymentMethod.Items.Clear();
-            comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
+            comboBoxPaymentMethod.Items.AddRange(["Cash", "Cheque", "Bank Transfer", "Other"]);
 
             // Load transaction details from DB
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -75,9 +73,51 @@ namespace RealEstateManager.Pages
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount))
+            // Validate transaction date (not in future)
+            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
             {
-                MessageBox.Show("Please enter a valid amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerTransactionDate.Focus();
+                return;
+            }
+
+            // Validate amount
+            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid, positive amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
+                return;
+            }
+
+            // Validate transaction type
+            if (string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
+            {
+                MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxTransactionType.Focus();
+                return;
+            }
+
+            // Validate payment method
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPaymentMethod.Focus();
+                return;
+            }
+
+            // Validate recipient (required, at least 3 chars)
+            if (string.IsNullOrWhiteSpace(textBoxRecipient.Text) || textBoxRecipient.Text.Trim().Length < 3)
+            {
+                MessageBox.Show("Please enter a valid recipient name (at least 3 characters).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxRecipient.Focus();
+                return;
+            }
+
+            // Validate reference number (optional, but if provided, at least 3 chars)
+            if (!string.IsNullOrWhiteSpace(textBoxReferenceNumber.Text) && textBoxReferenceNumber.Text.Trim().Length < 3)
+            {
+                MessageBox.Show("Reference number must be at least 3 characters if provided.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxReferenceNumber.Focus();
                 return;
             }
 
@@ -85,9 +125,8 @@ namespace RealEstateManager.Pages
             string referenceNumber = textBoxReferenceNumber.Text;
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
-            string recipient = textBoxRecipient.Text; // <-- Add this line
+            string recipient = textBoxRecipient.Text;
             string userName = Environment.UserName;
-
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (!string.IsNullOrEmpty(_transactionId))
@@ -113,7 +152,7 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@Amount", amount);
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
                     cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
-                    cmd.Parameters.AddWithValue("@Recipient", recipient); // <-- Add this line
+                    cmd.Parameters.AddWithValue("@Recipient", recipient);
                     cmd.Parameters.AddWithValue("@Notes", notes);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
                     cmd.Parameters.AddWithValue("@ModifiedBy", userName);
@@ -142,7 +181,7 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@Amount", amount);
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
                     cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
-                    cmd.Parameters.AddWithValue("@Recipient", recipient); // <-- Add this line
+                    cmd.Parameters.AddWithValue("@Recipient", recipient);
                     cmd.Parameters.AddWithValue("@Notes", notes);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
                     cmd.Parameters.AddWithValue("@CreatedBy", userName);

@@ -10,7 +10,7 @@ namespace RealEstateManager.Pages
     public partial class PropertyDetailsForm : BaseForm
     {
         private readonly int _propertyId;
-        
+
         public PropertyDetailsForm(int propertyId)
         {
             InitializeComponent();
@@ -209,18 +209,18 @@ namespace RealEstateManager.Pages
                 {
                     if (reader.Read())
                     {
-                        labelTitleValue.Text        = reader["Title"].ToString();
-                        labelTypeValue.Text         = reader["Type"].ToString();
-                        labelStatusValue.Text       = reader["Status"].ToString();
-                        labelOwnerValue.Text        = reader["Owner"].ToString();
-                        labelPhoneValue.Text        = reader["Phone"].ToString();
-                        labelAddressValue.Text      = reader["Address"].ToString();
-                        labelCityValue.Text         = reader["City"].ToString();
-                        labelStateValue.Text        = reader["State"].ToString();
-                        labelZipValue.Text          = reader["ZipCode"].ToString();
-                        labelDescriptionValue.Text  = reader["Description"].ToString();
-                        labelKhasraNoValue.Text     = reader["KhasraNo"]?.ToString() ?? "";
-                        labelAreaValue.Text         = reader["Area"] != DBNull.Value ? Convert.ToDecimal(reader["Area"]).ToString("N2"): "";
+                        labelTitleValue.Text = reader["Title"].ToString();
+                        labelTypeValue.Text = reader["Type"].ToString();
+                        labelStatusValue.Text = reader["Status"].ToString();
+                        labelOwnerValue.Text = reader["Owner"].ToString();
+                        labelPhoneValue.Text = reader["Phone"].ToString();
+                        labelAddressValue.Text = reader["Address"].ToString();
+                        labelCityValue.Text = reader["City"].ToString();
+                        labelStateValue.Text = reader["State"].ToString();
+                        labelZipValue.Text = reader["ZipCode"].ToString();
+                        labelDescriptionValue.Text = reader["Description"].ToString();
+                        labelKhasraNoValue.Text = reader["KhasraNo"]?.ToString() ?? "";
+                        labelAreaValue.Text = reader["Area"] != DBNull.Value ? Convert.ToDecimal(reader["Area"]).ToString("N2") : "";
 
                         decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
                         decimal amountBalance = reader["AmountBalance"] is decimal ab ? ab : 0;
@@ -254,7 +254,7 @@ namespace RealEstateManager.Pages
                 using (var summaryCmd = new SqlCommand(summaryQuery, conn))
                 {
                     summaryCmd.Parameters.AddWithValue("@Id", _propertyId);
-                   
+
                     using (var reader = summaryCmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -322,7 +322,7 @@ namespace RealEstateManager.Pages
 
         private void DataGridViewTransactions_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
+            if (e != null && e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewTransactions.Columns[e.ColumnIndex].Name == "Action")
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
@@ -336,17 +336,17 @@ namespace RealEstateManager.Pages
                 int x = e.CellBounds.Left + padding;
 
                 // Draw view icon
-                if (viewIcon != null)
+                if (viewIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw edit icon
-                if (editIcon != null)
+                if (editIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw delete icon
-                if (deleteIcon != null)
+                if (deleteIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
@@ -395,6 +395,7 @@ namespace RealEstateManager.Pages
                 {
                     GeneratePdfReport(sfd.FileName);
                     MessageBox.Show("PDF report generated successfully.", "Report", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 }
             }
         }
@@ -431,7 +432,7 @@ namespace RealEstateManager.Pages
                 orgName,
                 new XFont("Segoe UI", 18, XFontStyleEx.Bold),
                 XBrushes.MidnightBlue,
-                new XRect(0, orgNameY, page.Width, 24),
+                new XRect(0, orgNameY, page.Width.Point, 24),
                 XStringFormats.TopCenter
             );
 
@@ -441,7 +442,7 @@ namespace RealEstateManager.Pages
                 orgAddressLine1,
                 new XFont("Segoe UI", 9, XFontStyleEx.Regular),
                 XBrushes.DimGray,
-                new XRect(0, address1Y, page.Width, 16),
+                new XRect(0, address1Y, page.Width.Point, 16),
                 XStringFormats.TopCenter
             );
 
@@ -451,7 +452,7 @@ namespace RealEstateManager.Pages
                 orgAddressLine2,
                 new XFont("Segoe UI", 9, XFontStyleEx.Regular),
                 XBrushes.DimGray,
-                new XRect(0, address2Y, page.Width, 16),
+                new XRect(0, address2Y, page.Width.Point, 16),
                 XStringFormats.TopCenter
             );
 
@@ -460,7 +461,7 @@ namespace RealEstateManager.Pages
 
             // --- Light horizontal line before Property Details ---
             XPen lightPen = new XPen(XColors.LightGray, 1);
-            gfx.DrawLine(lightPen, margin, y, page.Width - margin, y);
+            gfx.DrawLine(lightPen, margin, y, page.Width.Point - margin, y);
             y += 10;
 
             // Property Details: 2 columns, titles bold, values aligned
@@ -486,12 +487,12 @@ namespace RealEstateManager.Pages
             double detailsY = y;
 
             gfx.DrawString("Property Details", new XFont("Segoe UI", 14, XFontStyleEx.Bold), XBrushes.Black,
-                new XRect(detailsX, detailsY, page.Width - 2 * margin, 30), XStringFormats.TopLeft);
+                new XRect(detailsX, detailsY, page.Width.Point - 2 * margin, 30), XStringFormats.TopLeft);
             detailsY += 28;
 
             // Split details into 2 columns
             int detailsPerCol = (int)Math.Ceiling(details.Length / 2.0);
-            double colWidth = (page.Width - 2 * margin) / 2;
+            double colWidth = (page.Width.Point - 2 * margin) / 2;
             double leftX = margin;
             double rightX = margin + colWidth;
             double leftY = detailsY;
@@ -541,7 +542,7 @@ namespace RealEstateManager.Pages
             y = Math.Max(leftY, rightY) + 10;
 
             // --- Light horizontal line before Summary ---
-            gfx.DrawLine(lightPen, margin, y, page.Width - margin, y);
+            gfx.DrawLine(lightPen, margin, y, page.Width.Point - margin, y);
             y += 10;
 
             // Summary: 2 columns, titles bold, values aligned
@@ -559,12 +560,12 @@ namespace RealEstateManager.Pages
             double summaryY = y;
 
             gfx.DrawString("Summary", new XFont("Segoe UI", 14, XFontStyleEx.Bold), XBrushes.Black,
-                new XRect(summaryX, summaryY, page.Width - 2 * margin, 30), XStringFormats.TopLeft);
+                new XRect(summaryX, summaryY, page.Width.Point - 2 * margin, 30), XStringFormats.TopLeft);
             summaryY += 28;
 
             // Split summary into 2 columns
             int summaryPerCol = (int)Math.Ceiling(summary.Length / 2.0);
-            double summaryColWidth = (page.Width - 2 * margin) / 2;
+            double summaryColWidth = (page.Width.Point - 2 * margin) / 2;
             double summaryLeftX = margin;
             double summaryRightX = margin + summaryColWidth;
             double summaryLeftY = summaryY;
@@ -612,12 +613,12 @@ namespace RealEstateManager.Pages
             y = Math.Max(summaryLeftY, summaryRightY) + 10;
 
             // --- Light horizontal line before Transactions ---
-            gfx.DrawLine(lightPen, margin, y, page.Width - margin, y);
+            gfx.DrawLine(lightPen, margin, y, page.Width.Point - margin, y);
             y += 10;
 
             // Transactions grid with borders
             gfx.DrawString("Transactions", new XFont("Segoe UI", 12, XFontStyleEx.Bold), XBrushes.Black,
-                new XRect(margin, y, page.Width - 2 * margin, 20), XStringFormats.TopLeft);
+                new XRect(margin, y, page.Width.Point - 2 * margin, 20), XStringFormats.TopLeft);
             y += 22;
 
             var visibleColumns = dataGridViewTransactions.Columns
@@ -628,7 +629,7 @@ namespace RealEstateManager.Pages
 
             // Set custom width for TRN Date column
             int[] colWidths = new int[visibleColumns.Count];
-            int totalWidth = (int)(page.Width - 2 * margin);
+            int totalWidth = (int)(page.Width.Point - 2 * margin);
             int sumWidths = 0;
             for (int i = 0; i < visibleColumns.Count; i++)
             {
@@ -681,8 +682,7 @@ namespace RealEstateManager.Pages
                         value = dt2.ToString("dd/MM/yyyy hh:mm tt");
                     }
 
-                    gfx.DrawString(value, new XFont("Segoe UI", 9), XBrushes.Black,
-                        new XRect(colX + 2, y + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.TopLeft);
+                    gfx.DrawString(value, new XFont("Segoe UI", 9), XBrushes.Black, new XRect(colX + 2, y + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.TopLeft);
                     colX += colWidths[i];
                 }
                 y += rowHeight;
@@ -692,8 +692,7 @@ namespace RealEstateManager.Pages
 
             // Footer
             string footer = "© " + DateTime.Now.Year + " VVT Softwares Pvt. Ltd. All rights reserved.";
-            gfx.DrawString(footer, new XFont("Segoe UI", 8), XBrushes.Gray,
-                new XRect(margin, page.Height - margin, page.Width - 2 * margin, 20), XStringFormats.BottomLeft);
+            gfx.DrawString(footer, new XFont("Segoe UI", 8), XBrushes.Gray, new XRect(margin, page.Height.Point - margin, page.Width.Point - 2 * margin, 20), XStringFormats.BottomLeft);
 
             document.Save(filePath);
             Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });

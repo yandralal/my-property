@@ -125,7 +125,6 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            // If numericUpDownPlotCount is disabled, enable it and return (for your earlier logic)
             if (!numericUpDownPlotCount.Enabled)
             {
                 numericUpDownPlotCount.Enabled = true;
@@ -134,11 +133,9 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            // --- Area validation ---
             foreach (DataGridViewRow row in dataGridViewPlots.Rows)
             {
                 if (row.IsNewRow) continue;
-
                 var areaCell = row.Cells["Area"];
                 string areaText = areaCell.Value?.ToString() ?? "";
                 if (string.IsNullOrWhiteSpace(areaText) ||
@@ -154,9 +151,7 @@ namespace RealEstateManager.Pages
                     areaCell.Value = 0m;
                 }
             }
-            // --- End Area validation ---
 
-            // --- Duplicate PlotNumber validation in grid ---
             var plotNumbersInGrid = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (DataGridViewRow row in dataGridViewPlots.Rows)
             {
@@ -169,7 +164,6 @@ namespace RealEstateManager.Pages
                     return;
                 }
             }
-            // --- End Duplicate PlotNumber validation in grid ---
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             int savedCount = 0;
@@ -182,8 +176,6 @@ namespace RealEstateManager.Pages
                 foreach (DataGridViewRow row in dataGridViewPlots.Rows)
                 {
                     if (row.IsNewRow) continue;
-
-                    // Only add if Id cell is empty (new row, not yet in DB)
                     var idCell = row.Cells["Id"].Value;
                     if (idCell != null && !string.IsNullOrWhiteSpace(idCell.ToString()))
                         continue;
@@ -200,7 +192,6 @@ namespace RealEstateManager.Pages
                     if (string.IsNullOrWhiteSpace(plotNumber))
                         continue;
 
-                    // --- Check for duplicate PlotNumber in DB for this property ---
                     using (var checkCmd = new SqlCommand("SELECT COUNT(1) FROM Plot WHERE PropertyId = @PropertyId AND PlotNumber = @PlotNumber AND IsDeleted = 0", conn))
                     {
                         checkCmd.Parameters.AddWithValue("@PropertyId", propertyId);
@@ -212,7 +203,6 @@ namespace RealEstateManager.Pages
                             continue;
                         }
                     }
-                    // --- End DB duplicate check ---
 
                     string insert = @"INSERT INTO Plot (PropertyId, PlotNumber, Status, Area, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted) 
                         VALUES (@PropertyId, @PlotNumber, @Status, @Area, @CreatedBy, @CreatedDate, @ModifiedBy, @ModifiedDate, @IsDeleted)";
@@ -255,20 +245,16 @@ namespace RealEstateManager.Pages
 
             if (!int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId) || plotId == 0)
             {
-                // Just remove from grid if not saved in DB
                 dataGridViewPlots.Rows.Remove(row);
                 return;
             }
 
-            // Check in PlotSale and PlotTransaction tables before allowing deletion
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             bool isSold = false;
 
             using (var conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
-                // Check PlotSale table
                 using (var cmd = new SqlCommand("SELECT COUNT(1) FROM PlotSale WHERE PlotId = @PlotId", conn))
                 {
                     cmd.Parameters.AddWithValue("@PlotId", plotId);
@@ -278,8 +264,6 @@ namespace RealEstateManager.Pages
                         isSold = true;
                     }
                 }
-
-                // Check PlotTransaction table if not already found in PlotSale
                 if (!isSold)
                 {
                     using (var cmd = new SqlCommand("SELECT COUNT(1) FROM PlotTransaction WHERE PlotId = @PlotId", conn))
@@ -310,7 +294,6 @@ namespace RealEstateManager.Pages
             {
                 cmd.Parameters.AddWithValue("@Id", plotId);
                 cmd.Parameters.AddWithValue("@PropertyId", propertyId);
-
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
@@ -342,7 +325,6 @@ namespace RealEstateManager.Pages
 
             if (MessageBox.Show($"Are you sure you want to delete {selectedRows.Count} selected plot(s)?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             int deletedCount = 0;
 
@@ -353,16 +335,12 @@ namespace RealEstateManager.Pages
                 {
                     if (!int.TryParse(row.Cells["Id"].Value?.ToString(), out int plotId) || plotId == 0)
                     {
-                        // Not saved in DB, just remove from grid
                         dataGridViewPlots.Rows.Remove(row);
                         deletedCount++;
                         continue;
                     }
 
-                    // Check in PlotSale and PlotTransaction tables before allowing deletion
                     bool isSold = false;
-
-                    // Check PlotSale table
                     using (var cmd = new SqlCommand("SELECT COUNT(1) FROM PlotSale WHERE PlotId = @PlotId", conn))
                     {
                         cmd.Parameters.AddWithValue("@PlotId", plotId);
@@ -372,8 +350,6 @@ namespace RealEstateManager.Pages
                             isSold = true;
                         }
                     }
-
-                    // Check PlotTransaction table if not already found in PlotSale
                     if (!isSold)
                     {
                         using (var cmd = new SqlCommand("SELECT COUNT(1) FROM PlotTransaction WHERE PlotId = @PlotId", conn))
@@ -393,7 +369,6 @@ namespace RealEstateManager.Pages
                         continue;
                     }
 
-                    // Delete from DB
                     using (var cmd = new SqlCommand("DELETE FROM Plot WHERE Id=@Id AND PropertyId=@PropertyId", conn))
                     {
                         cmd.Parameters.AddWithValue("@Id", plotId);
@@ -446,11 +421,9 @@ namespace RealEstateManager.Pages
                     string plotNumber = row.Cells["PlotNumber"].Value?.ToString() ?? "";
                     string status = row.Cells["Status"].Value?.ToString() ?? "";
                     string areaText = row.Cells["Area"].Value?.ToString() ?? "0";
-                    decimal area = 0;
-                    decimal.TryParse(areaText, out area);
+                    decimal.TryParse(areaText, out decimal area);
                     if (area < 0) area = 0;
 
-                    // Fetch current DB values
                     string select = @"SELECT PlotNumber, Status, Area FROM Plot WHERE Id=@Id AND PropertyId=@PropertyId";
                     string dbPlotNumber = "", dbStatus = "";
                     decimal dbArea = 0;
@@ -469,7 +442,6 @@ namespace RealEstateManager.Pages
                         }
                     }
 
-                    // Only update if any value changed
                     if (plotNumber != dbPlotNumber || status != dbStatus || area != dbArea)
                     {
                         string update = @"UPDATE Plot 

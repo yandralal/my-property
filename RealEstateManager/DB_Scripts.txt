@@ -1,11 +1,12 @@
-﻿DROP TABLE Login
-DROP TABLE PropertyTransaction
-DROP TABLE PlotSale
-DROP TABLE PlotTransaction
-DROP TABLE Plot
-DROP TABLE Property
-DROP TABLE AgentTransaction
-DROP TABLE Agent
+﻿IF OBJECT_ID('dbo.MiscTransaction', 'U') IS NOT NULL DROP TABLE dbo.MiscTransaction;
+IF OBJECT_ID('dbo.PropertyTransaction', 'U') IS NOT NULL DROP TABLE dbo.PropertyTransaction;
+IF OBJECT_ID('dbo.PlotTransaction', 'U') IS NOT NULL DROP TABLE dbo.PlotTransaction;
+IF OBJECT_ID('dbo.PlotSale', 'U') IS NOT NULL DROP TABLE dbo.PlotSale;
+IF OBJECT_ID('dbo.AgentTransaction', 'U') IS NOT NULL DROP TABLE dbo.AgentTransaction;
+IF OBJECT_ID('dbo.Plot', 'U') IS NOT NULL DROP TABLE dbo.Plot;
+IF OBJECT_ID('dbo.Property', 'U') IS NOT NULL DROP TABLE dbo.Property;
+IF OBJECT_ID('dbo.Agent', 'U') IS NOT NULL DROP TABLE dbo.Agent;
+IF OBJECT_ID('dbo.Login', 'U') IS NOT NULL DROP TABLE dbo.Login;
 
 
 CREATE TABLE Login (

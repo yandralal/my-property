@@ -206,6 +206,11 @@ namespace RealEstateManager
                 HeaderText = "Amount Balance",
                 Width = 155
             });
+            dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "HasSale",
+                Visible = false
+            });
 
             var actionColumn = new DataGridViewImageColumn
             {
@@ -342,10 +347,11 @@ namespace RealEstateManager
                     ps.SaleAmount,
                     ps.CustomerName AS CustomerName,
                     ps.CustomerPhone AS CustomerPhone,
-                    ps.CustomerEmail AS CustomerEmail
+                    ps.CustomerEmail AS CustomerEmail,
+                    CASE WHEN ps.PlotId IS NOT NULL THEN 1 ELSE 0 END AS HasSale
                 FROM Plot p
                 LEFT JOIN PlotSale ps ON p.Id = ps.PlotId
-                WHERE p.PropertyId = @PropertyId";
+                WHERE p.PropertyId = @PropertyId AND p.IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(plotQuery, conn))
@@ -384,9 +390,10 @@ namespace RealEstateManager
                         row["Status"].ToString(),
                         row["Area"].ToString(),
                         row["SaleDate"],
-                        saleAmount == 0 ? DBNull.Value : saleAmount,      // Pass as decimal, not string
-                        amountPaid == 0 ? DBNull.Value : amountPaid,      // Pass as decimal, not string
-                        amountBalance == 0 ? DBNull.Value : amountBalance // Pass as decimal, not string
+                        saleAmount == 0 ? DBNull.Value : saleAmount,
+                        amountPaid == 0 ? DBNull.Value : amountPaid,
+                        amountBalance == 0 ? DBNull.Value : amountBalance,
+                        row["HasSale"]
                     );
                 }
 
@@ -452,10 +459,23 @@ namespace RealEstateManager
                 {
                     int propertyId = 0;
 
-                    var idCell = dataGridViewProperties.CurrentRow?.Cells["Id"];
-                    if (idCell != null && int.TryParse(idCell.Value?.ToString(), out int parsedPropertyId))
+                    if (dataGridViewProperties.CurrentRow != null && dataGridViewProperties.CurrentRow.Cells["Id"].Value != null)
                     {
-                        propertyId = parsedPropertyId;
+                        var idCell = dataGridViewProperties.CurrentRow.Cells["Id"];
+                        if (int.TryParse(idCell.Value?.ToString(), out propertyId) && propertyId > 0)
+                        {
+                            // propertyId is valid, proceed
+                        }
+                        else
+                        {
+                            MessageBox.Show("Please select a valid property.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please select a property.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
 
                     switch (iconIndex)
@@ -465,7 +485,14 @@ namespace RealEstateManager
                             var detailsForm = new PlotDetailsForm(plotId);
                             detailsForm.ShowDialog();
                             break;
-                        case 1:
+                        case 1: // Edit
+                            var hasSaleCell = row.Cells["HasSale"];
+                            bool hasSale = hasSaleCell.Value != null && hasSaleCell.Value.ToString() == "1";
+                            if (!hasSale)
+                            {
+                                MessageBox.Show("Edit is disabled because there is no sale entry for this plot.", "Edit Disabled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
                             string plotNumber = row.Cells["PlotNumber"].Value?.ToString() ?? "";
                             string customerName = row.Cells["CustomerName"].Value?.ToString() ?? "";
                             string customerPhone = row.Cells["CustomerPhone"].Value?.ToString() ?? "";

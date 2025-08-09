@@ -129,7 +129,7 @@ namespace RealEstateManager.Pages
             buttonAddPlot.TabIndex = 6;
             buttonAddPlot.Text = "Add Plot";
             buttonAddPlot.UseVisualStyleBackColor = false;
-            buttonAddPlot.Click += buttonAddPlot_Click;
+            buttonAddPlot.Click += ButtonAddPlot_Click;
             // 
             // buttonEditPlot
             // 

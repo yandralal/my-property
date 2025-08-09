@@ -209,7 +209,7 @@ namespace RealEstateManager.Pages
             string customerName = textBoxCustomerName.Text.Trim();
             if (string.IsNullOrWhiteSpace(customerName) || customerName.Length < 3 || !customerName.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
             {
-                MessageBox.Show("Please enter a valid customer name (at least 3 letters, letters and spaces only).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid customer name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxCustomerName.Focus();
                 return;
             }
@@ -218,7 +218,7 @@ namespace RealEstateManager.Pages
             string customerPhone = textBoxCustomerPhone.Text.Trim();
             if (customerPhone.Length != 10 || !customerPhone.All(char.IsDigit) || !"6789".Contains(customerPhone[0]))
             {
-                MessageBox.Show("Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid 10-digit mobile number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxCustomerPhone.Focus();
                 return;
             }
@@ -241,21 +241,25 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            // Validate agent selection
-            if (comboBoxAgent.SelectedValue == null || !int.TryParse(comboBoxAgent.SelectedValue.ToString(), out int agentId) || agentId == 0)
-            {
-                MessageBox.Show("Please select an agent.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBoxAgent.Focus();
-                return;
-            }
-
-            // Validate brokerage amount (optional, but if provided, must be >= 0)
+            int agentId = 0;
             decimal brokerageAmount = 0;
-            if (!string.IsNullOrWhiteSpace(textBoxBrokerage.Text) && (!decimal.TryParse(textBoxBrokerage.Text, out brokerageAmount) || brokerageAmount < 0))
+
+            bool agentSelected = comboBoxAgent.SelectedValue != null && int.TryParse(comboBoxAgent.SelectedValue.ToString(), out agentId) && agentId > 0;
+
+            if (agentSelected)
             {
-                MessageBox.Show("Please enter a valid brokerage amount (zero or positive).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxBrokerage.Focus();
-                return;
+                if (!decimal.TryParse(textBoxBrokerage.Text, out brokerageAmount) || brokerageAmount <= 0)
+                {
+                    MessageBox.Show("Please enter a valid brokerage amount greater than zero when an agent is selected.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBoxBrokerage.Focus();
+                    return;
+                }
+            }
+            else
+            {
+                // No agent selected, brokerage can be blank or zero
+                brokerageAmount = 0;
+                textBoxBrokerage.Text = "0.00";
             }
 
             // Validate customer email (optional, but if provided, must be valid format)
@@ -266,7 +270,7 @@ namespace RealEstateManager.Pages
                 textBoxCustomerEmail.Focus();
                 return;
             }
-
+            
             string createdBy = Environment.UserName;
             DateTime createdDate = DateTime.Now;
 

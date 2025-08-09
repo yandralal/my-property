@@ -117,7 +117,7 @@ namespace RealEstateManager.Pages
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
-        private void buttonAddPlot_Click(object? sender, EventArgs e)
+        private void ButtonAddPlot_Click(object? sender, EventArgs e)
         {
             if (comboBoxProperty.SelectedValue is not int propertyId)
             {
@@ -473,7 +473,7 @@ namespace RealEstateManager.Pages
         {
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             string query = @"SELECT Id, PlotNumber, Status, Area, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted 
-                     FROM Plot WHERE PropertyId = @PropertyId";
+                     FROM Plot WHERE PropertyId = @PropertyId AND IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
@@ -590,9 +590,9 @@ namespace RealEstateManager.Pages
             // Find the open LandingForm instance
             foreach (Form form in Application.OpenForms)
             {
-                if (form is RealEstateManager.LandingForm landingForm)
+                if (form is LandingForm landingForm)
                 {
-                    landingForm.LoadActiveProperties();
+                    landingForm.LoadActiveProperties(propertyId);
                     landingForm.LoadPlotsForProperty(propertyId);
                     break;
                 }

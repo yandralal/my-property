@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using System.Configuration;
 using System.Data;
 
 namespace RealEstateManager.Pages
@@ -21,7 +22,7 @@ namespace RealEstateManager.Pages
             DateTime fromDate = dateTimePickerFrom.Value.Date;
             DateTime toDate = dateTimePickerTo.Value.Date.AddDays(1).AddTicks(-1);
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "";
             switch (type)
             {

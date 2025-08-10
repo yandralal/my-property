@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Pages;
+using System.Configuration; 
 using System.Data;
 
 namespace RealEstateManager
@@ -56,7 +57,7 @@ namespace RealEstateManager
 
         public void LoadActiveProperties(int? selectedPropertyId = null)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     p.Id, 
@@ -339,7 +340,7 @@ namespace RealEstateManager
 
         public void LoadPlotsForProperty(int propertyId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string plotQuery = @"
                 SELECT 
                     p.Id, 
@@ -700,7 +701,7 @@ namespace RealEstateManager
 
         private static void DeleteProperty(int propertyId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             try
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -785,7 +786,7 @@ namespace RealEstateManager
 
         private static void DeletePlot(int plotId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             try
             {
                 using (var conn = new SqlConnection(connectionString))

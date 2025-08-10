@@ -1,3 +1,4 @@
+using System.Configuration;
 using Microsoft.Data.SqlClient;
 
 namespace RealEstateManager.Pages
@@ -32,7 +33,7 @@ namespace RealEstateManager.Pages
             comboBoxPaymentMethod.Items.AddRange(["Cash", "Cheque", "Bank Transfer", "Other"]);
 
             // Load transaction details from DB
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     TransactionDate,
@@ -127,7 +128,7 @@ namespace RealEstateManager.Pages
             string transactionType = comboBoxTransactionType.Text;
             string recipient = textBoxRecipient.Text;
             string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
             if (!string.IsNullOrEmpty(_transactionId))
             {

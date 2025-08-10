@@ -1,3 +1,4 @@
+using System.Configuration;
 using Microsoft.Data.SqlClient;
 
 namespace RealEstateManager.Pages
@@ -57,7 +58,7 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
 
             // Load transaction details from DB
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     pt.PlotId, 
@@ -133,7 +134,7 @@ namespace RealEstateManager.Pages
 
         private static decimal GetAmountPaidTillDate(int plotId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT ISNULL(SUM(Amount), 0) FROM PlotTransaction WHERE PlotId = @PlotId AND IsDeleted = 0";
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
@@ -228,7 +229,7 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
             string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
             if (!string.IsNullOrEmpty(_transactionId))
             {
@@ -293,12 +294,27 @@ namespace RealEstateManager.Pages
                 MessageBox.Show("Transaction registered successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            // Refresh grid in LandingForm if open
+            // Refresh grid in LandingForm if open and select the property
+            int? propertyId = null;
+            if (_plotId.HasValue)
+            {
+                string query = "SELECT PropertyId FROM Plot WHERE Id = @PlotId";
+                using (var conn = new SqlConnection(connectionString))
+                using (var cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@PlotId", _plotId.Value);
+                    conn.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        propertyId = Convert.ToInt32(result);
+                }
+            }
+
             foreach (Form openForm in Application.OpenForms)
             {
                 if (openForm is LandingForm landingForm)
                 {
-                    landingForm.LoadActiveProperties();
+                    landingForm.LoadActiveProperties(propertyId);
                     break;
                 }
             }

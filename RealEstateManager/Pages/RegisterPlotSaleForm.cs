@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using System.Configuration;
 using System.Data;
 
 namespace RealEstateManager.Pages
@@ -69,7 +70,7 @@ namespace RealEstateManager.Pages
 
             if (_isEditMode && _editPlotId.HasValue)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = "SELECT AgentId, BrokerageAmount FROM PlotSale WHERE PlotId = @PlotId AND IsDeleted = 0";
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(query, conn))
@@ -106,7 +107,7 @@ namespace RealEstateManager.Pages
 
         private void LoadProperties()
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT Id, Title FROM Property WHERE IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
@@ -139,7 +140,7 @@ namespace RealEstateManager.Pages
 
         private void LoadPlots(int propertyId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT Id, PlotNumber FROM Plot WHERE PropertyId = @PropertyId";
 
             using (var conn = new SqlConnection(connectionString))
@@ -160,7 +161,7 @@ namespace RealEstateManager.Pages
 
         private void LoadAgents()
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT Id, Name FROM Agent WHERE IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
@@ -274,7 +275,7 @@ namespace RealEstateManager.Pages
             string createdBy = (!string.IsNullOrEmpty(LoggedInUserId))  ? LoggedInUserId.ToString() : Environment.UserName;
             DateTime createdDate = DateTime.Now;
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
             if (_isEditMode)
             {
@@ -343,7 +344,7 @@ namespace RealEstateManager.Pages
         {
             if (comboBoxPlot.SelectedValue is int plotId)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = "SELECT Status FROM Plot WHERE Id = @PlotId";
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(query, conn))

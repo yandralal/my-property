@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using System.Configuration;
 using System.Text.RegularExpressions;
 
 namespace RealEstateManager.Pages
@@ -35,7 +36,7 @@ namespace RealEstateManager.Pages
         {
             if (!_propertyId.HasValue) return;
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"SELECT Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo, Area
                              FROM Property WHERE Id = @Id AND IsDeleted = 0";
 
@@ -211,7 +212,7 @@ namespace RealEstateManager.Pages
             string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
             string modifiedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
             try
             {

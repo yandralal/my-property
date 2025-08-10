@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
+using System.Configuration;
 using System.Data;
 
 namespace RealEstateManager.Pages
@@ -27,7 +28,7 @@ namespace RealEstateManager.Pages
 
         private static DataTable GetAgentTransactions(int agentId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     pr.Title AS PropertyName,
@@ -250,7 +251,7 @@ namespace RealEstateManager.Pages
         // Example implementation for deleting from DB
         private static void DeleteTransactionFromDatabase(string transactionId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "UPDATE AgentTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";
             using var conn = new SqlConnection(connectionString);
             using var cmd = new SqlCommand(query, conn);
@@ -261,7 +262,7 @@ namespace RealEstateManager.Pages
 
         private void DisplayAgentFinancials(int agentId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             decimal totalBrokerage = 0, amountPaid = 0;
 
             // Total Brokerage

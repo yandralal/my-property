@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -23,7 +24,7 @@ namespace RealEstateManager.Pages
 
         private static DataTable GetPlotTransactions(int plotId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
             SELECT 
                 TransactionId,
@@ -51,7 +52,7 @@ namespace RealEstateManager.Pages
 
         private void LoadPlotDetails()
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     p.Id, p.PlotNumber, p.Status, p.Area, p.PropertyId,
@@ -300,7 +301,7 @@ namespace RealEstateManager.Pages
             if (string.IsNullOrEmpty(transactionId)) return;
             if (MessageBox.Show("Are you sure you want to delete this transaction?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = "UPDATE PlotTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";
                 try
                 {
@@ -355,7 +356,7 @@ namespace RealEstateManager.Pages
             // Try to get property name from database if not available on the form
             if (labelPlotId.Text is string plotIdStr && int.TryParse(plotIdStr, out int plotId))
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = "SELECT pr.Title FROM Property pr INNER JOIN Plot p ON pr.Id = p.PropertyId WHERE p.Id = @PlotId";
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(query, conn))
@@ -655,7 +656,7 @@ namespace RealEstateManager.Pages
         {
             string agentName = "-";
             decimal totalBrokerage = 0, brokeragePaid = 0, brokerageBalance = 0;
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT a.Name AS AgentName, 
                        ISNULL(ps.BrokerageAmount, 0) AS TotalBrokerage,

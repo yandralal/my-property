@@ -1,3 +1,4 @@
+using System.Configuration;
 using Microsoft.Data.SqlClient;
 
 namespace RealEstateManager.Pages
@@ -56,7 +57,7 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
 
             // Load transaction details from DB
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     pt.PropertyId, 
@@ -123,7 +124,7 @@ namespace RealEstateManager.Pages
 
         private static decimal GetAmountPaidTillDate(int propertyId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT ISNULL(SUM(Amount), 0) FROM PropertyTransaction WHERE PropertyId = @PropertyId AND IsDeleted = 0";
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
@@ -218,7 +219,7 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
             string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
             if (!string.IsNullOrEmpty(_transactionId))
             {

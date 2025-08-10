@@ -2,6 +2,7 @@ using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
 using RealEstateManager.Repositories;
 using System.Data;
+using System.Configuration; 
 
 namespace RealEstateManager.Pages
 {
@@ -47,7 +48,7 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
 
             // Load transaction details from DB
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     at.AgentId,
@@ -160,7 +161,7 @@ namespace RealEstateManager.Pages
 
         private void LoadProperties()
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT Id, Title FROM Property WHERE IsDeleted = 0";
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
@@ -262,7 +263,7 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
             string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
             if (!string.IsNullOrEmpty(_transactionId))
             {
@@ -377,7 +378,7 @@ namespace RealEstateManager.Pages
         {
             if (comboBoxProperty.SelectedValue is int propertyId && comboBoxAgent.SelectedValue is int agentId)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = @"SELECT p.Id, p.PlotNumber 
                                  FROM Plot p
                                  INNER JOIN PlotSale ps ON p.Id = ps.PlotId
@@ -409,7 +410,7 @@ namespace RealEstateManager.Pages
                 comboBoxPlotNumber.SelectedValue is int plotId &&
                 comboBoxProperty.SelectedValue is int propertyId)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = @"SELECT ISNULL(BrokerageAmount, 0) 
                                  FROM PlotSale 
                                  WHERE AgentId = @AgentId AND PlotId = @PlotId AND PropertyId = @PropertyId AND IsDeleted = 0";
@@ -434,7 +435,7 @@ namespace RealEstateManager.Pages
         {
             if (comboBoxAgent.SelectedValue is int agentId && comboBoxPlotNumber.SelectedValue is int plotId)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = @"SELECT ISNULL(SUM(Amount), 0) 
                                  FROM AgentTransaction 
                                  WHERE AgentId = @AgentId AND PlotId = @PlotId AND IsDeleted = 0";
@@ -488,7 +489,7 @@ namespace RealEstateManager.Pages
         // Helper to load plots for a specific property and agent
         private void LoadPlotsForPropertyAndAgent(int propertyId, int agentId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"SELECT p.Id, p.PlotNumber 
                              FROM Plot p
                              INNER JOIN PlotSale ps ON p.Id = ps.PlotId

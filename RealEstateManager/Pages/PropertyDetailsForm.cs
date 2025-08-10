@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -138,7 +139,7 @@ namespace RealEstateManager.Pages
             if (string.IsNullOrEmpty(transactionId)) return;
             if (MessageBox.Show("Are you sure you want to delete this transaction?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
                 string query = "UPDATE PropertyTransaction SET IsDeleted = 1 WHERE TransactionId = @TransactionId";
                 try
                 {
@@ -174,7 +175,7 @@ namespace RealEstateManager.Pages
 
         private void LoadPropertyDetails()
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string propertyQuery = @"
                 SELECT 
                     Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo, Area,
@@ -294,7 +295,7 @@ namespace RealEstateManager.Pages
 
         private static DataTable GetPropertyTransactions(int propertyId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
                     TransactionId,  

@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
+using System.Configuration;
 using System.Data;
 
 namespace RealEstateManager.Pages
@@ -19,7 +20,7 @@ namespace RealEstateManager.Pages
 
         private void LoadProperties()
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "SELECT Id, Title FROM Property WHERE IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
@@ -165,7 +166,7 @@ namespace RealEstateManager.Pages
                 }
             }
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             int savedCount = 0;
             string currentUser = Environment.UserName;
             DateTime now = DateTime.Now;
@@ -249,7 +250,7 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             bool isSold = false;
 
             using (var conn = new SqlConnection(connectionString))
@@ -325,7 +326,7 @@ namespace RealEstateManager.Pages
 
             if (MessageBox.Show($"Are you sure you want to delete {selectedRows.Count} selected plot(s)?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             int deletedCount = 0;
 
             using (var conn = new SqlConnection(connectionString))
@@ -405,7 +406,7 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string currentUser = Environment.UserName;
             DateTime now = DateTime.Now;
             int updatedCount = 0;
@@ -471,7 +472,7 @@ namespace RealEstateManager.Pages
 
         private void LoadPlotsForProperty(int propertyId)
         {
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"SELECT Id, PlotNumber, Status, Area, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted 
                      FROM Plot WHERE PropertyId = @PropertyId AND IsDeleted = 0";
 

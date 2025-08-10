@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using System.Configuration;
 
 namespace RealEstateManager.Pages
 {
@@ -28,7 +29,7 @@ namespace RealEstateManager.Pages
         private void ButtonApply_Click(object? sender, EventArgs e)
         {
             string colorHex = ColorTranslator.ToHtml(previewPanel.BackColor);
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand("UPDATE Login SET BackgroundColor = @Color WHERE UserName = @UserName", conn))
             {

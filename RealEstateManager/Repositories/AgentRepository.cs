@@ -1,11 +1,12 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
+using System.Configuration;
 
 namespace RealEstateManager.Repositories
 {
     public static class AgentRepository
     {
-        private static readonly string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
         public static event Action? AgentsChanged;
 
         public static void AddAgent(Agent agent)
@@ -66,7 +67,6 @@ namespace RealEstateManager.Repositories
 
         public static decimal GetTotalBrokerage(int agentId)
         {
-            const string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             const string query = @"
             SELECT ISNULL(SUM(BrokerageAmount), 0)
             FROM PlotSale
@@ -82,7 +82,6 @@ namespace RealEstateManager.Repositories
 
         public static decimal GetTotalPaid(int agentId)
         {
-            const string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             const string query = @"
             SELECT ISNULL(SUM(Amount), 0)
             FROM AgentTransaction

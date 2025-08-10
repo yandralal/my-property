@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using RealEstateManager.Pages;
+using System.Configuration; // <-- Add this
 
 namespace RealEstateManager
 {
@@ -22,7 +23,7 @@ namespace RealEstateManager
                 return;
             }
 
-            string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString; 
             bool isValid = false;
             string userName = string.Empty;
 
@@ -92,7 +93,7 @@ namespace RealEstateManager
             buttonShowPassword.Text = textBoxPassword.UseSystemPasswordChar ? "👁‍🗨" : "👁";
         }
 
-        private void TextBoxPassword_KeyDown(object sender, KeyEventArgs e)
+        private void TextBoxPassword_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

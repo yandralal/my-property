@@ -60,7 +60,6 @@
             panelLogin.Location = new Point(200, 75);
             panelLogin.Name = "panelLogin";
             panelLogin.Size = new Size(400, 363);
-            panelLogin.TabIndex = 0;
             // 
             // buttonShowPassword
             // 
@@ -68,9 +67,8 @@
             buttonShowPassword.Location = new Point(315, 200);
             buttonShowPassword.Name = "buttonShowPassword";
             buttonShowPassword.Size = new Size(35, 34);
-            buttonShowPassword.TabIndex = 0;
             buttonShowPassword.Text = "👁";
-            buttonShowPassword.Click += buttonShowPassword_Click;
+            buttonShowPassword.Click += ButtonShowPassword_Click;
             // 
             // pictureBoxLogo
             // 
@@ -79,7 +77,6 @@
             pictureBoxLogo.Name = "pictureBoxLogo";
             pictureBoxLogo.Size = new Size(70, 63);
             pictureBoxLogo.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBoxLogo.TabIndex = 1;
             pictureBoxLogo.TabStop = false;
             // 
             // labelTitle
@@ -89,7 +86,7 @@
             labelTitle.Location = new Point(0, 100);
             labelTitle.Name = "labelTitle";
             labelTitle.Size = new Size(400, 40);
-            labelTitle.TabIndex = 2;
+            labelTitle.TabIndex = 5;
             labelTitle.Text = "Sign In";
             labelTitle.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -100,7 +97,7 @@
             textBoxUsername.Name = "textBoxUsername";
             textBoxUsername.PlaceholderText = "Username";
             textBoxUsername.Size = new Size(300, 34);
-            textBoxUsername.TabIndex = 3;
+            textBoxUsername.TabIndex = 0;
             // 
             // textBoxPassword
             // 
@@ -109,7 +106,7 @@
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.PlaceholderText = "Password";
             textBoxPassword.Size = new Size(267, 34);
-            textBoxPassword.TabIndex = 4;
+            textBoxPassword.TabIndex = 1;
             textBoxPassword.UseSystemPasswordChar = true;
             // 
             // buttonLogin
@@ -121,7 +118,7 @@
             buttonLogin.Location = new Point(50, 290);
             buttonLogin.Name = "buttonLogin";
             buttonLogin.Size = new Size(300, 40);
-            buttonLogin.TabIndex = 5;
+            buttonLogin.TabIndex = 2;
             buttonLogin.Text = "Login";
             buttonLogin.UseVisualStyleBackColor = false;
             buttonLogin.Click += ButtonLogin_Click;
@@ -132,7 +129,7 @@
             checkBoxRemember.Location = new Point(50, 250);
             checkBoxRemember.Name = "checkBoxRemember";
             checkBoxRemember.Size = new Size(150, 24);
-            checkBoxRemember.TabIndex = 6;
+            checkBoxRemember.TabIndex = 3;
             checkBoxRemember.Text = "Remember Me";
             // 
             // LoginForm

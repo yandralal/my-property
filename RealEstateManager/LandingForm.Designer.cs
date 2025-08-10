@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace RealEstateManager
 {
     partial class LandingForm
@@ -91,9 +93,9 @@ namespace RealEstateManager
             // 
             // menuStripMain
             // 
-            menuStripMain.BackColor = Color.DodgerBlue;
+            menuStripMain.BackColor = SystemColors.Control;
+            menuStripMain.ForeColor = SystemColors.ControlText;
             menuStripMain.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            menuStripMain.ForeColor = Color.Black;
             menuStripMain.ImageScalingSize = new Size(20, 20);
             menuStripMain.Items.AddRange(new ToolStripItem[] { transactionsMenu, agentOperationsMenu, reportsMenu, communicationMenu, helpMenu });
             menuStripMain.Location = new Point(0, 0);
@@ -354,7 +356,7 @@ namespace RealEstateManager
             // 
             // groupBoxProperties
             // 
-            groupBoxProperties.BackColor = Color.AliceBlue;
+            groupBoxProperties.BackColor = SystemColors.Control;
             groupBoxProperties.Controls.Add(labelProperties);
             groupBoxProperties.Controls.Add(dataGridViewProperties);
             groupBoxProperties.Controls.Add(buttonAddProperty);
@@ -371,7 +373,7 @@ namespace RealEstateManager
             // 
             // groupBoxPlots
             // 
-            groupBoxPlots.BackColor = Color.AliceBlue;
+            groupBoxPlots.BackColor = SystemColors.Control; ;
             groupBoxPlots.Controls.Add(labelPlots);
             groupBoxPlots.Controls.Add(dataGridViewPlots);
             groupBoxPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);

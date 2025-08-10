@@ -8,6 +8,7 @@ namespace RealEstateManager
         public LoginForm()
         {
             InitializeComponent();
+            textBoxPassword.KeyDown += TextBoxPassword_KeyDown;
         }
 
         private void ButtonLogin_Click(object sender, EventArgs e)
@@ -23,13 +24,14 @@ namespace RealEstateManager
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
             bool isValid = false;
+            string userName = string.Empty;
 
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "SELECT UserName, PasswordHash FROM [Login] WHERE UserName = @username";
+                    string query = "SELECT UserId, UserName, PasswordHash FROM [Login] WHERE UserName = @username";
                     using (var cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@username", username);
@@ -37,9 +39,9 @@ namespace RealEstateManager
                         {
                             if (reader.Read())
                             {
-                                string dbUsername = reader["UserName"]?.ToString()?.Trim() ?? "";
+                                userName = reader["UserName"]?.ToString()?.Trim() ?? "";
                                 string dbPassword = reader["PasswordHash"]?.ToString()?.Trim() ?? "";
-                                if (username.Equals(dbUsername, StringComparison.OrdinalIgnoreCase) && password == dbPassword)
+                                if (username.Equals(userName, StringComparison.OrdinalIgnoreCase) && password == dbPassword)
                                 {
                                     isValid = true;
                                 }
@@ -54,8 +56,26 @@ namespace RealEstateManager
                 return;
             }
 
-            if (isValid)
+            if (isValid && !string.IsNullOrEmpty(userName))
             {
+                LoggedInUserId = userName;
+                string colorHex = "#F5F7FA"; // Default
+                using (var conn = new SqlConnection(connectionString))
+                using (var cmd = new SqlCommand("SELECT BackgroundColor FROM Login WHERE UserName = @UserId", conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userName);
+                    conn.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null && !string.IsNullOrWhiteSpace(result.ToString()))
+                    {
+                        string? colorHexResult = result as string;
+                        if (!string.IsNullOrWhiteSpace(colorHexResult))
+                        {
+                            colorHex = colorHexResult;
+                        }
+                    }
+                }
+                GlobalBackgroundColor = ColorTranslator.FromHtml(colorHex);
                 var landingForm = new LandingForm();
                 landingForm.Show();
                 this.Hide();
@@ -66,10 +86,24 @@ namespace RealEstateManager
             }
         }
 
-        private void buttonShowPassword_Click(object sender, EventArgs e)
+        private void ButtonShowPassword_Click(object sender, EventArgs e)
         {
             textBoxPassword.UseSystemPasswordChar = !textBoxPassword.UseSystemPasswordChar;
             buttonShowPassword.Text = textBoxPassword.UseSystemPasswordChar ? "👁‍🗨" : "👁";
+        }
+
+        private void TextBoxPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonLogin_Click(sender, e);
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            textBoxUsername.Focus();
         }
     }
 }

@@ -261,7 +261,7 @@ namespace RealEstateManager.Pages
             string referenceNumber = textBoxReferenceNumber.Text;
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
-            string userName = Environment.UserName;
+            string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (!string.IsNullOrEmpty(_transactionId))
@@ -289,7 +289,7 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
                     cmd.Parameters.AddWithValue("@Notes", notes);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
-                    cmd.Parameters.AddWithValue("@ModifiedBy", userName);
+                    cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
                     cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@TransactionId", _transactionId);
                     cmd.Parameters.AddWithValue("@PlotId", (object?)plotId ?? DBNull.Value);
@@ -320,8 +320,10 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
                     cmd.Parameters.AddWithValue("@Notes", notes);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
-                    cmd.Parameters.AddWithValue("@CreatedBy", userName);
+                    cmd.Parameters.AddWithValue("@CreatedBy", userIdentifier);
                     cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
+                    cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@PlotId", (object?)plotId ?? DBNull.Value);
 
                     conn.Open();
@@ -454,10 +456,9 @@ namespace RealEstateManager.Pages
 
         private void UpdateBalance()
         {
-            decimal totalBrokerage = 0;
-            decimal.TryParse(textBoxTotalBrokerage.Text, out totalBrokerage);
-            decimal amountToPay = 0, paid = 0;
-            decimal.TryParse(textBoxAmount.Text, out amountToPay);
+            decimal.TryParse(textBoxTotalBrokerage.Text, out decimal totalBrokerage);
+            decimal paid = 0;
+            decimal.TryParse(textBoxAmount.Text, out decimal amountToPay);
             decimal.TryParse(textBoxAmountPaidTillDate.Text, out paid);
             labelBalanceValue.Text = (totalBrokerage - (amountToPay + paid)).ToString("N2");
         }
@@ -465,8 +466,7 @@ namespace RealEstateManager.Pages
         // Called when total brokerage or amount paid till date changes (not new payment)
         private void UpdateBalanceOnLoad()
         {
-            decimal totalBrokerage = 0;
-            decimal.TryParse(textBoxTotalBrokerage.Text, out totalBrokerage);
+            decimal.TryParse(textBoxTotalBrokerage.Text, out decimal totalBrokerage);
             labelBalanceValue.Text = (totalBrokerage - _amountPaidTillDate).ToString("N2");
         }
 
@@ -480,10 +480,8 @@ namespace RealEstateManager.Pages
         // Called when amount to pay (new payment) changes
         private void UpdateBalanceAmount(object? sender, EventArgs e)
         {
-            decimal totalBrokerage = 0;
-            decimal newPaid = 0;
-            decimal.TryParse(textBoxTotalBrokerage.Text, out totalBrokerage);
-            decimal.TryParse(textBoxAmount.Text, out newPaid);
+            decimal.TryParse(textBoxTotalBrokerage.Text, out decimal totalBrokerage);
+            decimal.TryParse(textBoxAmount.Text, out decimal newPaid);
             labelBalanceValue.Text = (totalBrokerage - (_amountPaidTillDate + newPaid)).ToString("N2");
         }
 

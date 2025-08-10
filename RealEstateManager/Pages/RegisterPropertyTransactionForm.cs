@@ -217,7 +217,7 @@ namespace RealEstateManager.Pages
             string referenceNumber = textBoxReferenceNumber.Text;
             string notes = textBoxNotes.Text;
             string transactionType = comboBoxTransactionType.Text;
-            string userName = Environment.UserName;
+            string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
 
             if (!string.IsNullOrEmpty(_transactionId))
@@ -243,7 +243,7 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
                     cmd.Parameters.AddWithValue("@Notes", notes);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
-                    cmd.Parameters.AddWithValue("@ModifiedBy", userName);
+                    cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
                     cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@TransactionId", _transactionId);
 
@@ -271,7 +271,7 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
                     cmd.Parameters.AddWithValue("@Notes", notes);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
-                    cmd.Parameters.AddWithValue("@CreatedBy", userName);
+                    cmd.Parameters.AddWithValue("@CreatedBy", userIdentifier);
                     cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
 
                     conn.Open();

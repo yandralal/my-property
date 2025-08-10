@@ -532,7 +532,7 @@ namespace RealEstateManager.Pages
             labelTotalBalanceTitle.AutoSize = true;
             labelTotalBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalBalanceTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalBalanceTitle.Location = new Point(420, 42);
+            labelTotalBalanceTitle.Location = new Point(420, 39);
             labelTotalBalanceTitle.Name = "labelTotalBalanceTitle";
             labelTotalBalanceTitle.Size = new Size(120, 23);
             labelTotalBalanceTitle.TabIndex = 34;
@@ -542,7 +542,7 @@ namespace RealEstateManager.Pages
             // 
             labelTotalBalanceValue.Font = new Font("Segoe UI", 10F);
             labelTotalBalanceValue.ForeColor = Color.Black;
-            labelTotalBalanceValue.Location = new Point(608, 35);
+            labelTotalBalanceValue.Location = new Point(608, 38);
             labelTotalBalanceValue.Name = "labelTotalBalanceValue";
             labelTotalBalanceValue.Size = new Size(233, 30);
             labelTotalBalanceValue.TabIndex = 35;
@@ -616,7 +616,7 @@ namespace RealEstateManager.Pages
             labelTotalProfitLossTitle.AutoSize = true;
             labelTotalProfitLossTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalProfitLossTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalProfitLossTitle.Location = new Point(843, 41);
+            labelTotalProfitLossTitle.Location = new Point(843, 37);
             labelTotalProfitLossTitle.Name = "labelTotalProfitLossTitle";
             labelTotalProfitLossTitle.Size = new Size(146, 23);
             labelTotalProfitLossTitle.TabIndex = 36;
@@ -626,7 +626,7 @@ namespace RealEstateManager.Pages
             // 
             labelTotalProfitLossValue.Font = new Font("Segoe UI", 10F);
             labelTotalProfitLossValue.ForeColor = Color.Black;
-            labelTotalProfitLossValue.Location = new Point(1003, 41);
+            labelTotalProfitLossValue.Location = new Point(1003, 37);
             labelTotalProfitLossValue.Name = "labelTotalProfitLossValue";
             labelTotalProfitLossValue.Size = new Size(233, 30);
             labelTotalProfitLossValue.TabIndex = 37;
@@ -647,7 +647,7 @@ namespace RealEstateManager.Pages
             // 
             labelTotalBrokeragePaidValue.Font = new Font("Segoe UI", 10F);
             labelTotalBrokeragePaidValue.ForeColor = Color.Black;
-            labelTotalBrokeragePaidValue.Location = new Point(608, 72);
+            labelTotalBrokeragePaidValue.Location = new Point(608, 77);
             labelTotalBrokeragePaidValue.Name = "labelTotalBrokeragePaidValue";
             labelTotalBrokeragePaidValue.Size = new Size(233, 30);
             labelTotalBrokeragePaidValue.TabIndex = 43;
@@ -668,7 +668,7 @@ namespace RealEstateManager.Pages
             // 
             labelBrokerageBalanceValue.Font = new Font("Segoe UI", 10F);
             labelBrokerageBalanceValue.ForeColor = Color.Black;
-            labelBrokerageBalanceValue.Location = new Point(608, 107);
+            labelBrokerageBalanceValue.Location = new Point(608, 112);
             labelBrokerageBalanceValue.Name = "labelBrokerageBalanceValue";
             labelBrokerageBalanceValue.Size = new Size(233, 30);
             labelBrokerageBalanceValue.TabIndex = 45;

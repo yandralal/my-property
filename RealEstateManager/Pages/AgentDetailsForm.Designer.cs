@@ -54,7 +54,7 @@ namespace RealEstateManager.Pages
             // 
             // groupBoxAgentDetails
             // 
-            groupBoxAgentDetails.BackColor = Color.AliceBlue;
+            groupBoxAgentDetails.BackColor = SystemColors.Control;
             groupBoxAgentDetails.Controls.Add(labelIdTitle);
             groupBoxAgentDetails.Controls.Add(labelIdValue);
             groupBoxAgentDetails.Controls.Add(labelNameTitle);
@@ -228,7 +228,7 @@ namespace RealEstateManager.Pages
             // 
             // groupBoxTransactionGrid
             // 
-            groupBoxTransactionGrid.BackColor = Color.AliceBlue;
+            groupBoxTransactionGrid.BackColor = SystemColors.Control;
             groupBoxTransactionGrid.Controls.Add(dataGridViewTransactions);
             groupBoxTransactionGrid.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionGrid.ForeColor = Color.MidnightBlue;

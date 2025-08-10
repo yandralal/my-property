@@ -271,7 +271,7 @@ namespace RealEstateManager.Pages
                 return;
             }
             
-            string createdBy = Environment.UserName;
+            string createdBy = (!string.IsNullOrEmpty(LoggedInUserId))  ? LoggedInUserId.ToString() : Environment.UserName;
             DateTime createdDate = DateTime.Now;
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -306,10 +306,8 @@ namespace RealEstateManager.Pages
             }
             else
             {
-                string insert = @"INSERT INTO PlotSale
-                    (PropertyId, PlotId, AgentId, BrokerageAmount, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
-                    VALUES (@PropertyId, @PlotId, @AgentId, @BrokerageAmount, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
-                    @ModifiedBy, @ModifiedDate)";
+                string insert = @"INSERT INTO Plot (PropertyId, PlotNumber, Status, Area, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted) 
+                VALUES (@PropertyId, @PlotNumber, @Status, @Area, @CreatedBy, @CreatedDate, @ModifiedBy, @ModifiedDate, @IsDeleted)";
 
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(insert, conn))
@@ -353,12 +351,12 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@PlotId", plotId);
                     conn.Open();
                     var status = cmd.ExecuteScalar() as string;
-                    labelPlotStatus.Text = "Status: " + (status ?? "-");
+                    labelPlotStatusValue.Text = status == "Available" ? "For Sale" : "Booked"; 
                 }
             }
             else
             {
-                labelPlotStatus.Text = "Status: -";
+                labelPlotStatusValue.Text = ""; 
             }
         }
 
@@ -393,7 +391,7 @@ namespace RealEstateManager.Pages
         }
 
         // Helper method to set plot status to Booked
-        private void SetPlotStatusToBooked(SqlConnection conn, int? plotId)
+        private static void SetPlotStatusToBooked(SqlConnection conn, int? plotId)
         {
             if (plotId.HasValue)
             {

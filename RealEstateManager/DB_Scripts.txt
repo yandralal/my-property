@@ -18,7 +18,8 @@ CREATE TABLE Login (
     Email NVARCHAR(255) NOT NULL,
     MobileNo NVARCHAR(20) NOT NULL,
     Role NVARCHAR(50) NOT NULL,
-    IsActive BIT NOT NULL
+    IsActive BIT NOT NULL,
+    BackgroundColor NVARCHAR(20) NULL
 );
 
 INSERT INTO [Login] (UserID, UserName, PasswordHash, FirstName, LastName, Email, MobileNo, Role, IsActive)

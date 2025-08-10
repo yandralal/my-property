@@ -13,7 +13,7 @@ namespace RealEstateManager
         public LandingForm()
         {
             InitializeComponent();
-            InitializeFooter(); 
+            InitializeFooter();
             this.WindowState = FormWindowState.Maximized;
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
@@ -156,7 +156,7 @@ namespace RealEstateManager
             {
                 Name = "CustomerName",
                 HeaderText = "Customer Name",
-                Width = 245
+                Width = 215
             });
             dataGridViewPlots.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -216,10 +216,13 @@ namespace RealEstateManager
             {
                 Name = "Action",
                 HeaderText = "Action",
-                Width = 140,
+                Width = 170,
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
             dataGridViewPlots.Columns.Add(actionColumn);
+
+            // Center align the Action column header
+            dataGridViewPlots.Columns["Action"].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             // Set currency formatting for monetary columns
             if (dataGridViewPlots.Columns["SalePrice"] != null)
@@ -426,6 +429,7 @@ namespace RealEstateManager
                 var viewIcon = Properties.Resources.view;
                 var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
+                var whatsappIcon = Properties.Resources.whatsapp;
 
                 int iconWidth = 24, iconHeight = 24, padding = 16; // Increased padding
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
@@ -441,6 +445,10 @@ namespace RealEstateManager
 
                 // Draw delete icon
                 e?.Graphics?.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw WhatsApp icon (last)
+                e?.Graphics?.DrawImage(whatsappIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
             }
@@ -528,6 +536,29 @@ namespace RealEstateManager
                                 LoadPlotsForProperty(propertyId);
                             }
                             break;
+                        case 3:
+                            // WhatsApp icon clicked
+                            string? phone = row.Cells["CustomerPhone"]?.Value?.ToString();
+                            if (string.IsNullOrWhiteSpace(phone))
+                            {
+                                MessageBox.Show("No phone number found for the selected plot.", "No Phone", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                            using (var msgForm = new SendWhatsAppMessageForm())
+                            {
+                                if (msgForm.ShowDialog() == DialogResult.OK)
+                                {
+                                    string message = msgForm.MessageText;
+                                    if (string.IsNullOrWhiteSpace(message))
+                                    {
+                                        MessageBox.Show("Please enter a message.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        return;
+                                    }
+                                    SendWhatsAppMessage(phone, message);
+                                    MessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -573,6 +604,7 @@ namespace RealEstateManager
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
                 // Load your icons from resources
+                var whatsappIcon = Properties.Resources.whatsapp;
                 var viewIcon = Properties.Resources.view;
                 var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
@@ -591,6 +623,10 @@ namespace RealEstateManager
 
                 // Draw delete icon
                 e?.Graphics?.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+                
+                // Draw WhatsApp icon
+                e?.Graphics?.DrawImage(whatsappIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
             }
@@ -600,7 +636,6 @@ namespace RealEstateManager
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewProperties.Columns[e.ColumnIndex].Name == "Action")
             {
-                // Existing logic
                 int iconWidth = 24, padding = 12;
                 int x = e.X - padding;
                 int iconIndex = x / (iconWidth + padding);
@@ -633,6 +668,29 @@ namespace RealEstateManager
                             {
                                 DeleteProperty(propertyId);
                                 LoadActiveProperties();
+                            }
+                            break;
+                        case 3:
+                            // WhatsApp icon clicked
+                            string? phone = row.Cells["Phone"]?.Value?.ToString();
+                            if (string.IsNullOrWhiteSpace(phone))
+                            {
+                                MessageBox.Show("No phone number found for the selected property.", "No Phone", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                            using (var msgForm = new SendWhatsAppMessageForm())
+                            {
+                                if (msgForm.ShowDialog() == DialogResult.OK)
+                                {
+                                    string message = msgForm.MessageText;
+                                    if (string.IsNullOrWhiteSpace(message))
+                                    {
+                                        MessageBox.Show("Please enter a message.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        return;
+                                    }
+                                    SendWhatsAppMessage(phone, message);
+                                    MessageBox.Show("WhatsApp message window opened for the selected customer.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
                             }
                             break;
                     }
@@ -694,18 +752,24 @@ namespace RealEstateManager
                                 }
                             }
                         }
+                       
+                        string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
 
                         // 4. Soft delete the property
-                        using (var cmd = new SqlCommand("UPDATE Property SET IsDeleted = 1 WHERE Id = @Id", conn, tran))
+                        using (var cmd = new SqlCommand("UPDATE Property SET IsDeleted = 1, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE Id = @Id", conn, tran))
                         {
                             cmd.Parameters.AddWithValue("@Id", propertyId);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
+                            cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                             cmd.ExecuteNonQuery();
                         }
 
                         // 5. Soft delete all plots under this property
-                        using (var cmd = new SqlCommand("UPDATE Plot SET IsDeleted = 1 WHERE PropertyId = @PropertyId", conn, tran))
+                        using (var cmd = new SqlCommand("UPDATE Plot SET IsDeleted = 1, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE PropertyId = @PropertyId", conn, tran))
                         {
                             cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
+                            cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                             cmd.ExecuteNonQuery();
                         }
 
@@ -758,10 +822,13 @@ namespace RealEstateManager
                             return;
                         }
 
-                        // 4. Soft delete the plot
-                        using (var cmd = new SqlCommand("UPDATE Plot SET IsDeleted = 1 WHERE Id = @Id", conn, tran))
+                        // 4. Soft delete the plot and update ModifiedBy/ModifiedDate
+                        string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
+                        using (var cmd = new SqlCommand("UPDATE Plot SET IsDeleted = 1, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE Id = @Id", conn, tran))
                         {
                             cmd.Parameters.AddWithValue("@Id", plotId);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
+                            cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                             cmd.ExecuteNonQuery();
                         }
 
@@ -823,6 +890,7 @@ namespace RealEstateManager
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
             dgv.Columns.Add(actionCol);
+            dataGridViewProperties.Columns["Action"].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             // Set headers, widths, order, and AutoSizeMode
             int displayIndex = 0;
@@ -1017,10 +1085,9 @@ namespace RealEstateManager
 
         private void ChangeBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var customizeForm = new CustomizeBackgroundForm())
-            {
-                customizeForm.ShowDialog();
-            }
+            string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
+            using var customizeForm = new CustomizeBackgroundForm(userIdentifier);
+            customizeForm.ShowDialog();
         }
 
         private void DataGridViewPlots_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)

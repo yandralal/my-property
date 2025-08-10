@@ -208,7 +208,7 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            string modifiedBy = Environment.UserName;
+            string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
             string modifiedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             string connectionString = "Server=localhost;Database=MyProperty;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -251,7 +251,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@State", state);
                             cmd.Parameters.AddWithValue("@ZipCode", zip);
                             cmd.Parameters.AddWithValue("@Description", description);
-                            cmd.Parameters.AddWithValue("@ModifiedBy", modifiedBy);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
                             cmd.Parameters.AddWithValue("@ModifiedDate", modifiedDate);
                             cmd.Parameters.AddWithValue("@Id", _propertyId.Value);
                             cmd.Parameters.AddWithValue("@KhasraNo", khasraNo);
@@ -263,7 +263,6 @@ namespace RealEstateManager.Pages
                     else
                     {
                         // Insert new property
-                        string createdBy = modifiedBy;
                         string createdDate = modifiedDate;
                         int isDeleted = 0;
 
@@ -286,9 +285,9 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@State", state);
                             cmd.Parameters.AddWithValue("@ZipCode", zip);
                             cmd.Parameters.AddWithValue("@Description", description);
-                            cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
+                            cmd.Parameters.AddWithValue("@CreatedBy", userIdentifier);
                             cmd.Parameters.AddWithValue("@CreatedDate", createdDate);
-                            cmd.Parameters.AddWithValue("@ModifiedBy", modifiedBy);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
                             cmd.Parameters.AddWithValue("@ModifiedDate", modifiedDate);
                             cmd.Parameters.AddWithValue("@IsDeleted", isDeleted);
                             cmd.Parameters.AddWithValue("@KhasraNo", khasraNo);

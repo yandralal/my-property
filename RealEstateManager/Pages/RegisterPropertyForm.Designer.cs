@@ -378,6 +378,7 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPropertyForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(600, 765);
             Controls.Add(groupBoxPropertyDetails);

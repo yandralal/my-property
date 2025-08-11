@@ -302,7 +302,6 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPropertyTransactionForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.AliceBlue;
             ClientSize = new Size(637, 649);
             Controls.Add(groupBoxTransactionEntry);

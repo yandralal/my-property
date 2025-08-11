@@ -75,7 +75,6 @@ namespace RealEstateManager.Pages
             // SendWhatsAppMessageForm
             // 
             AcceptButton = buttonOK;
-            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = buttonCancel;
             ClientSize = new Size(470, 250);

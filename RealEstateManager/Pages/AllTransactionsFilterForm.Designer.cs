@@ -163,8 +163,6 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewResults.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewResults.EnableHeadersVisualStyles = false;
-            dataGridViewResults.GridColor = Color.LightGray;
             dataGridViewResults.Location = new Point(15, 35);
             dataGridViewResults.Name = "dataGridViewResults";
             dataGridViewResults.ReadOnly = true;
@@ -175,7 +173,6 @@ namespace RealEstateManager.Pages
             // 
             // AllTransactionsFilterForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(1530, 655);
             Controls.Add(groupBoxResults);

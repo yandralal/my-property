@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace RealEstateManager
 {
@@ -11,6 +12,7 @@ namespace RealEstateManager
         private ToolStripMenuItem transactionsMenu;
         private ToolStripMenuItem propertyTransactionsMenuItem;
         private ToolStripMenuItem plotTransactionMenuItem;
+        private ToolStripMenuItem registerPlotToolStripMenuItem;
         private ToolStripMenuItem reportsMenu;
         private ToolStripMenuItem viewReportsMenuItem;
         private ToolStripMenuItem helpMenu;
@@ -21,22 +23,24 @@ namespace RealEstateManager
         private ToolStripMenuItem agentOperationsMenu;
         private ToolStripMenuItem approveOfferMenuItem;
         private ToolStripMenuItem registerSaleMenuItem;
-        private System.Windows.Forms.DataGridView dataGridViewProperties;
-        private System.Windows.Forms.Button buttonAddProperty;
-        private System.Windows.Forms.Button buttonManagePlots;
-        private System.Windows.Forms.DataGridView dataGridViewPlots;
-        private System.Windows.Forms.Label labelProperties;
-        private System.Windows.Forms.Label labelPlots;
+        private ToolStripMenuItem agentTransactionToolStripMenuItem;
+        private ToolStripMenuItem miscTransactionToolStripMenuItem;
+        private ToolStripMenuItem changeBackgroundToolStripMenuItem;
+        private DataGridView dataGridViewProperties;
+        private Button buttonAddProperty;
+        private Button buttonManagePlots;
+        private DataGridView dataGridViewPlots;
+        private Label labelProperties;
         private GroupBox groupBoxProperties;
         private GroupBox groupBoxPlots;
-
-        // For Properties
-        private System.Windows.Forms.TextBox textBoxPropertyFilter;
-        private System.Windows.Forms.Label labelPropertyFilter;
-
-        // For Plots
-        private System.Windows.Forms.TextBox textBoxPlotFilter;
-        private System.Windows.Forms.Label labelPlotFilter;
+        private Panel panelMain;
+        private Panel panelFooter;
+        private Label footerLabel;
+        private TextBox textBoxPlotFilter;
+        private Label labelPlotFilter;
+        private Label labelPlots;
+        private Label labelPropertyFilter;
+        private TextBox textBoxPropertyFilter;
 
         protected override void Dispose(bool disposing)
         {
@@ -81,21 +85,30 @@ namespace RealEstateManager
             buttonManagePlots = new Button();
             dataGridViewPlots = new DataGridView();
             labelProperties = new Label();
-            labelPlots = new Label();
             groupBoxProperties = new GroupBox();
+            labelPropertyFilter = new Label();
+            textBoxPropertyFilter = new TextBox();
             groupBoxPlots = new GroupBox();
+            labelPlots = new Label();
+            labelPlotFilter = new Label();
+            textBoxPlotFilter = new TextBox();
+            panelMain = new Panel();
+            panelFooter = new Panel();
+            footerLabel = new Label();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
             groupBoxProperties.SuspendLayout();
             groupBoxPlots.SuspendLayout();
+            panelMain.SuspendLayout();
+            panelFooter.SuspendLayout();
             SuspendLayout();
             // 
             // menuStripMain
             // 
             menuStripMain.BackColor = SystemColors.Control;
-            menuStripMain.ForeColor = SystemColors.ControlText;
             menuStripMain.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            menuStripMain.ForeColor = SystemColors.ControlText;
             menuStripMain.ImageScalingSize = new Size(20, 20);
             menuStripMain.Items.AddRange(new ToolStripItem[] { transactionsMenu, agentOperationsMenu, reportsMenu, communicationMenu, helpMenu });
             menuStripMain.Location = new Point(0, 0);
@@ -260,14 +273,12 @@ namespace RealEstateManager
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewProperties.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewProperties.EnableHeadersVisualStyles = false;
-            dataGridViewProperties.GridColor = Color.LightGray;
             dataGridViewProperties.Location = new Point(20, 86);
             dataGridViewProperties.Name = "dataGridViewProperties";
             dataGridViewProperties.ReadOnly = true;
             dataGridViewProperties.RowHeadersWidth = 51;
             dataGridViewProperties.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewProperties.Size = new Size(1790, 232);
+            dataGridViewProperties.Size = new Size(1790, 201);
             dataGridViewProperties.TabIndex = 3;
             dataGridViewProperties.SelectionChanged += DataGridViewProperties_SelectionChanged;
             // 
@@ -324,14 +335,12 @@ namespace RealEstateManager
             dataGridViewCellStyle6.SelectionForeColor = Color.Black;
             dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
             dataGridViewPlots.DefaultCellStyle = dataGridViewCellStyle6;
-            dataGridViewPlots.EnableHeadersVisualStyles = false;
-            dataGridViewPlots.GridColor = Color.LightGray;
-            dataGridViewPlots.Location = new Point(20, 73);
+            dataGridViewPlots.Location = new Point(20, 81);
             dataGridViewPlots.Name = "dataGridViewPlots";
             dataGridViewPlots.ReadOnly = true;
             dataGridViewPlots.RowHeadersWidth = 51;
             dataGridViewPlots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewPlots.Size = new Size(1790, 448);
+            dataGridViewPlots.Size = new Size(1790, 375);
             dataGridViewPlots.TabIndex = 1;
             // 
             // labelProperties
@@ -344,16 +353,6 @@ namespace RealEstateManager
             labelProperties.TabIndex = 4;
             labelProperties.Text = "Properties (0)";
             // 
-            // labelPlots
-            // 
-            labelPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            labelPlots.ForeColor = Color.Black;
-            labelPlots.Location = new Point(20, 35);
-            labelPlots.Name = "labelPlots";
-            labelPlots.Size = new Size(400, 25);
-            labelPlots.TabIndex = 5;
-            labelPlots.Text = "Plots (0)";
-            // 
             // groupBoxProperties
             // 
             groupBoxProperties.BackColor = SystemColors.Control;
@@ -361,40 +360,120 @@ namespace RealEstateManager
             groupBoxProperties.Controls.Add(dataGridViewProperties);
             groupBoxProperties.Controls.Add(buttonAddProperty);
             groupBoxProperties.Controls.Add(buttonManagePlots);
+            groupBoxProperties.Controls.Add(labelPropertyFilter);
+            groupBoxProperties.Controls.Add(textBoxPropertyFilter);
             groupBoxProperties.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxProperties.ForeColor = Color.MidnightBlue;
             groupBoxProperties.Location = new Point(52, 60);
             groupBoxProperties.Name = "groupBoxProperties";
             groupBoxProperties.Padding = new Padding(15);
-            groupBoxProperties.Size = new Size(1830, 328);
+            groupBoxProperties.Size = new Size(1830, 308);
             groupBoxProperties.TabIndex = 1;
             groupBoxProperties.TabStop = false;
             groupBoxProperties.Text = "Properties";
             // 
+            // labelPropertyFilter
+            // 
+            labelPropertyFilter.Location = new Point(591, 45);
+            labelPropertyFilter.Name = "labelPropertyFilter";
+            labelPropertyFilter.Size = new Size(84, 31);
+            labelPropertyFilter.TabIndex = 5;
+            labelPropertyFilter.Text = "Filter:";
+            // 
+            // textBoxPropertyFilter
+            // 
+            textBoxPropertyFilter.Location = new Point(681, 42);
+            textBoxPropertyFilter.Name = "textBoxPropertyFilter";
+            textBoxPropertyFilter.Size = new Size(250, 34);
+            textBoxPropertyFilter.TabIndex = 6;
+            textBoxPropertyFilter.TextChanged += TextBoxPropertyFilter_TextChanged;
+            // 
             // groupBoxPlots
             // 
-            groupBoxPlots.BackColor = SystemColors.Control; ;
+            groupBoxPlots.BackColor = SystemColors.Control;
             groupBoxPlots.Controls.Add(labelPlots);
             groupBoxPlots.Controls.Add(dataGridViewPlots);
+            groupBoxPlots.Controls.Add(labelPlotFilter);
+            groupBoxPlots.Controls.Add(textBoxPlotFilter);
             groupBoxPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPlots.ForeColor = Color.MidnightBlue;
-            groupBoxPlots.Location = new Point(52, 413);
+            groupBoxPlots.Location = new Point(52, 396);
             groupBoxPlots.Name = "groupBoxPlots";
             groupBoxPlots.Padding = new Padding(15);
-            groupBoxPlots.Size = new Size(1830, 535);
+            groupBoxPlots.Size = new Size(1830, 474);
             groupBoxPlots.TabIndex = 2;
             groupBoxPlots.TabStop = false;
             groupBoxPlots.Text = "Plots";
             // 
+            // labelPlots
+            // 
+            labelPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelPlots.ForeColor = Color.Black;
+            labelPlots.Location = new Point(20, 42);
+            labelPlots.Name = "labelPlots";
+            labelPlots.Size = new Size(400, 25);
+            labelPlots.TabIndex = 5;
+            labelPlots.Text = "Plots (0)";
+            // 
+            // labelPlotFilter
+            // 
+            labelPlotFilter.Location = new Point(591, 37);
+            labelPlotFilter.Name = "labelPlotFilter";
+            labelPlotFilter.Size = new Size(84, 36);
+            labelPlotFilter.TabIndex = 6;
+            labelPlotFilter.Text = "Filter:";
+            // 
+            // textBoxPlotFilter
+            // 
+            textBoxPlotFilter.Location = new Point(681, 39);
+            textBoxPlotFilter.Name = "textBoxPlotFilter";
+            textBoxPlotFilter.Size = new Size(250, 34);
+            textBoxPlotFilter.TabIndex = 7;
+            textBoxPlotFilter.TextChanged += TextBoxPlotFilter_TextChanged;
+            // 
+            // panelMain
+            // 
+            panelMain.BackColor = SystemColors.Control;
+            panelMain.Controls.Add(groupBoxProperties);
+            panelMain.Controls.Add(groupBoxPlots);
+            panelMain.Dock = DockStyle.Fill;
+            panelMain.Location = new Point(0, 36);
+            panelMain.Name = "panelMain";
+            panelMain.Size = new Size(1832, 888);
+            panelMain.TabIndex = 0;
+            // 
+            // panelFooter
+            // 
+            panelFooter.BackColor = Color.Red;
+            panelFooter.Controls.Add(footerLabel);
+            panelFooter.Dock = DockStyle.Bottom;
+            panelFooter.Height = 32;
+            panelFooter.Location = new Point(0, 924);
+            panelFooter.Name = "panelFooter";
+            panelFooter.Size = new Size(1832, 32);
+            panelFooter.TabIndex = 1;
+            // 
+            // footerLabel
+            // 
+            footerLabel.BackColor = Color.Red;
+            footerLabel.Dock = DockStyle.Fill;
+            footerLabel.Font = new Font("Segoe UI", 10F, FontStyle.Italic);
+            footerLabel.ForeColor = Color.White;
+            footerLabel.Location = new Point(0, 0);
+            footerLabel.Name = "footerLabel";
+            footerLabel.Size = new Size(1832, 32);
+            footerLabel.TabIndex = 0;
+            footerLabel.Text = "©  VVT Softwares Pvt. Ltd. All rights reserved.";
+            footerLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // LandingForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1832, 956);
-            Controls.Add(groupBoxPlots);
-            Controls.Add(groupBoxProperties);
+            Controls.Add(panelFooter);
+            Controls.Add(panelMain);
             Controls.Add(menuStripMain);
             ForeColor = Color.White;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -408,45 +487,13 @@ namespace RealEstateManager
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).EndInit();
             groupBoxProperties.ResumeLayout(false);
+            groupBoxProperties.PerformLayout();
             groupBoxPlots.ResumeLayout(false);
+            groupBoxPlots.PerformLayout();
+            panelMain.ResumeLayout(false);
+            panelFooter.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
-        private ToolStripMenuItem registerPlotToolStripMenuItem;
-
-        // Property Filter
-        private void InitializePropertyFilter()
-        {
-            labelPropertyFilter = new Label();
-            labelPropertyFilter.Text = "Filter:";
-            labelPropertyFilter.Location = new Point(20, 30);
-            labelPropertyFilter.Size = new Size(50, 25);
-
-            textBoxPropertyFilter = new TextBox();
-            textBoxPropertyFilter.Location = new Point(75, 30);
-            textBoxPropertyFilter.Size = new Size(250, 25);
-            textBoxPropertyFilter.TextChanged += TextBoxPropertyFilter_TextChanged;
-            groupBoxProperties.Controls.Add(labelPropertyFilter);
-            groupBoxProperties.Controls.Add(textBoxPropertyFilter);
-        }
-
-        // Plot Filter
-        private void InitializePlotFilter()
-        {
-            labelPlotFilter = new Label();
-            labelPlotFilter.Text = "Filter:";
-            labelPlotFilter.Location = new Point(20, 30);
-            labelPlotFilter.Size = new Size(50, 25);
-
-            textBoxPlotFilter = new TextBox();
-            textBoxPlotFilter.Location = new Point(75, 30);
-            textBoxPlotFilter.Size = new Size(250, 25);
-            textBoxPlotFilter.TextChanged += TextBoxPlotFilter_TextChanged;
-            groupBoxPlots.Controls.Add(labelPlotFilter);
-            groupBoxPlots.Controls.Add(textBoxPlotFilter);
-        }
-        private ToolStripMenuItem agentTransactionToolStripMenuItem;
-        private ToolStripMenuItem miscTransactionToolStripMenuItem;
-        private ToolStripMenuItem changeBackgroundToolStripMenuItem;
     }
 }

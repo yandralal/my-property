@@ -14,7 +14,6 @@ namespace RealEstateManager
         public LandingForm()
         {
             InitializeComponent();
-            InitializeFooter();
             this.WindowState = FormWindowState.Maximized;
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
@@ -22,22 +21,6 @@ namespace RealEstateManager
             dataGridViewProperties.CellFormatting += DataGridViewProperties_CellFormatting;
             dataGridViewPlots.CellFormatting += DataGridViewPlots_CellFormatting;
             LoadActiveProperties();
-        }
-
-        private void InitializeFooter()
-        {
-            footerLabel = new Label
-            {
-                Dock = DockStyle.Bottom,
-                Height = 32,
-                Text = "© " + DateTime.Now.Year + " VVT Softwares Pvt. Ltd. All rights reserved.",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 10F, FontStyle.Italic),
-                BackColor = Color.FromArgb(30, 60, 114),
-                ForeColor = Color.White
-            };
-            this.Controls.Add(footerLabel);
-            this.Controls.SetChildIndex(footerLabel, 0);
         }
 
         private void ButtonAddProperty_Click(object sender, EventArgs e)
@@ -374,10 +357,8 @@ namespace RealEstateManager
                     int plotId = Convert.ToInt32(row["Id"]);
                     decimal saleAmount = row["SaleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(row["SaleAmount"]);
 
-                    // Fetch transactions for this plot
                     decimal amountPaid = 0;
-                    using (var transCmd = new SqlCommand(
-                        "SELECT ISNULL(SUM(Amount), 0) FROM PlotTransaction WHERE PlotId = @PlotId AND IsDeleted = 0", conn))
+                    using (var transCmd = new SqlCommand("SELECT ISNULL(SUM(Amount), 0) FROM PlotTransaction WHERE PlotId = @PlotId AND IsDeleted = 0", conn))
                     {
                         transCmd.Parameters.AddWithValue("@PlotId", plotId);
                         var result = transCmd.ExecuteScalar();
@@ -403,8 +384,6 @@ namespace RealEstateManager
 
                 labelPlots.Text = $"Plots ({dt.Rows.Count})";
             }
-
-            //AdjustGridAndGroupBoxHeight(dataGridViewPlots, groupBoxPlots, 10, 120, 500, 80);
         }
 
         private void DataGridViewPlots_CellContentClick(object? sender, DataGridViewCellEventArgs e)
@@ -853,9 +832,7 @@ namespace RealEstateManager
             }
             else
             {
-                // Filter on multiple columns (adjust as needed)
-                ((DataView)dataGridViewProperties.DataSource).RowFilter =
-                    $"Title LIKE '%{filter}%' OR Type LIKE '%{filter}%' OR Status LIKE '%{filter}%' OR Owner LIKE '%{filter}%'";
+                ((DataView)dataGridViewProperties.DataSource).RowFilter = $"Title LIKE '%{filter}%' OR Type LIKE '%{filter}%' OR Status LIKE '%{filter}%' OR Owner LIKE '%{filter}%'";
             }
         }
 
@@ -869,9 +846,7 @@ namespace RealEstateManager
             }
             else
             {
-                // Filter on multiple columns (adjust as needed)
-                ((DataView)dataGridViewPlots.DataSource).RowFilter =
-                    $"PlotNumber LIKE '%{filter}%' OR CustomerName LIKE '%{filter}%' OR Status LIKE '%{filter}%'";
+                ((DataView)dataGridViewPlots.DataSource).RowFilter = $"PlotNumber LIKE '%{filter}%' OR CustomerName LIKE '%{filter}%' OR Status LIKE '%{filter}%'";
             }
         }
 
@@ -879,7 +854,6 @@ namespace RealEstateManager
         {
             var dgv = dataGridViewProperties;
 
-            // Remove and re-add Action column to ensure it's always last
             if (dgv.Columns.Contains("Action"))
                 dgv.Columns.Remove("Action");
 

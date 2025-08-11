@@ -13,7 +13,8 @@ namespace RealEstateManager.Pages
             comboBoxType.SelectedIndex = 0;
             dateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
             dateTimePickerTo.Value = DateTime.Today;
-            ButtonFilter_Click(this, EventArgs.Empty); 
+            ButtonFilter_Click(this, EventArgs.Empty);
+            ApplyGridStyle(dataGridViewResults);
         }
 
         private void ButtonFilter_Click(object sender, EventArgs e)

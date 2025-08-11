@@ -296,7 +296,6 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewTransactions.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridViewTransactions.EnableHeadersVisualStyles = false;
-            dataGridViewTransactions.GridColor = Color.LightSteelBlue;
             dataGridViewTransactions.Location = new Point(10, 32);
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;

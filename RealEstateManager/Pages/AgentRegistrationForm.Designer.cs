@@ -117,7 +117,6 @@ namespace RealEstateManager.Pages
             // 
             // AgentRegistrationForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(600, 286);
             Controls.Add(groupBoxAgent);

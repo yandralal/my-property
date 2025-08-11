@@ -14,7 +14,7 @@ namespace RealEstateManager.Pages
 
         public PlotDetailsForm(int plotId)
         {
-            InitializeComponent();            
+            InitializeComponent();
             _plotId = plotId;
             LoadPlotDetails();
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
@@ -131,6 +131,9 @@ namespace RealEstateManager.Pages
             var transactions = GetPlotTransactions(_plotId);
             dataGridViewTransactions.DataSource = transactions;
             dataGridViewTransactions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // Apply grid style LAST
+            ApplyGridStyle(dataGridViewTransactions);
 
             // Set label texts with prefix
             labelCustomerName.Text = customerName;

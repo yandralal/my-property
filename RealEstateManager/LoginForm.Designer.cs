@@ -134,7 +134,6 @@
             // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(813, 513);

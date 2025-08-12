@@ -213,12 +213,14 @@ namespace RealEstateManager
             helpMenuItem.Name = "helpMenuItem";
             helpMenuItem.Size = new Size(315, 32);
             helpMenuItem.Text = "Help";
+            helpMenuItem.Click += helpMenuItem_Click;
             // 
             // aboutMenuItem
             // 
             aboutMenuItem.Name = "aboutMenuItem";
             aboutMenuItem.Size = new Size(315, 32);
             aboutMenuItem.Text = "About";
+            aboutMenuItem.Click += aboutMenuItem_Click;
             // 
             // changeBackgroundToolStripMenuItem
             // 

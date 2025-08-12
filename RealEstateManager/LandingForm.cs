@@ -1088,5 +1088,21 @@ namespace RealEstateManager
                 }
             }
         }
+
+        private void helpMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var helpForm = new Pages.HelpForm())
+            {
+                helpForm.ShowDialog(this);
+            }
+        }
+
+        private void aboutMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var aboutForm = new Pages.AboutForm())
+            {
+                aboutForm.ShowDialog(this);
+            }
+        }
     }
 }

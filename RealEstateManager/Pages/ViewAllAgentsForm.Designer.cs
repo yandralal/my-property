@@ -54,8 +54,6 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewAgents.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewAgents.EnableHeadersVisualStyles = false;
-            dataGridViewAgents.GridColor =  SystemColors.WindowFrame;
             dataGridViewAgents.Location = new Point(15, 85);
             dataGridViewAgents.Name = "dataGridViewAgents";
             dataGridViewAgents.ReadOnly = true;
@@ -108,6 +106,7 @@ namespace RealEstateManager.Pages
             // 
             // ViewAllAgentsForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;

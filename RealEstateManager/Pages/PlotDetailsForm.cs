@@ -29,7 +29,7 @@ namespace RealEstateManager.Pages
             SELECT 
                 TransactionId,
                 TransactionDate,
-                TransactionType,      -- Add this line
+                TransactionType, 
                 Amount,
                 PaymentMethod,
                 ReferenceNumber,
@@ -170,7 +170,7 @@ namespace RealEstateManager.Pages
             {
                 dgv.Columns["TransactionId"].HeaderText = "TRN #";
                 dgv.Columns["TransactionId"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["TransactionId"].Width = 80;
+                dgv.Columns["TransactionId"].Width = 70;
             }
             if (dgv.Columns["TransactionDate"] != null)
             {
@@ -183,32 +183,32 @@ namespace RealEstateManager.Pages
             {
                 dgv.Columns["TransactionType"].HeaderText = "TRN Type";
                 dgv.Columns["TransactionType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["TransactionType"].Width = 120;
+                dgv.Columns["TransactionType"].Width = 100;
             }
             if (dgv.Columns["Amount"] != null)
             {
                 dgv.Columns["Amount"].HeaderText = "Amount";
                 dgv.Columns["Amount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Amount"].Width = 150;
+                dgv.Columns["Amount"].Width = 120;
                 dgv.Columns["Amount"].DefaultCellStyle.Format = "C"; 
             }
             if (dgv.Columns["PaymentMethod"] != null)
             {
                 dgv.Columns["PaymentMethod"].HeaderText = "Payment Method";
                 dgv.Columns["PaymentMethod"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["PaymentMethod"].Width = 170;
+                dgv.Columns["PaymentMethod"].Width = 160;
             }
             if (dgv.Columns["ReferenceNumber"] != null)
             {
                 dgv.Columns["ReferenceNumber"].HeaderText = "Reference #";
                 dgv.Columns["ReferenceNumber"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["ReferenceNumber"].Width = 160;
+                dgv.Columns["ReferenceNumber"].Width = 120;
             }
             if (dgv.Columns["Notes"] != null)
             {
                 dgv.Columns["Notes"].HeaderText = "Notes";
                 dgv.Columns["Notes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Notes"].Width = 250;
+                dgv.Columns["Notes"].Width = 220;
             }
             if (dgv.Columns["Action"] != null)
             {

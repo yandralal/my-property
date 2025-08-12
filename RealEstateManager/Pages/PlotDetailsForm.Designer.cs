@@ -295,7 +295,6 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewTransactions.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewTransactions.EnableHeadersVisualStyles = false;
             dataGridViewTransactions.Location = new Point(10, 32);
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;
@@ -537,6 +536,7 @@ namespace RealEstateManager.Pages
             // 
             // PlotDetailsForm
             // 
+            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(1351, 754);
             Controls.Add(groupBoxPlotDetails);

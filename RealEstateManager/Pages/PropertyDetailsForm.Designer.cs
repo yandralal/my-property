@@ -161,7 +161,6 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewTransactions.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewTransactions.EnableHeadersVisualStyles = false;
             dataGridViewTransactions.Location = new Point(18, 46);
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;
@@ -737,6 +736,7 @@ namespace RealEstateManager.Pages
             // 
             // PropertyDetailsForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1331, 796);
             Controls.Add(groupBoxSummary);

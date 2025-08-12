@@ -265,7 +265,6 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewTransactions.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewTransactions.EnableHeadersVisualStyles = false;
             dataGridViewTransactions.Location = new Point(10, 32);
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;
@@ -282,6 +281,7 @@ namespace RealEstateManager.Pages
             // 
             // AgentDetailsForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1384, 603);

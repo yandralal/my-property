@@ -23,7 +23,7 @@ CREATE TABLE Login (
 );
 
 INSERT INTO [Login] (UserID, UserName, PasswordHash, FirstName, LastName, Email, MobileNo, Role, IsActive)
-VALUES (1, 'YT', 'Password01', 'Yandralal', 'Thakre', 'yandralal@live.com', '9637151024', 'Admin', 1);
+VALUES (1, 'admin', 'admin', 'Yandralal', 'Thakre', 'yandralal@live.com', '9637151024', 'Admin', 1);
 
 CREATE TABLE Property (
     Id INT IDENTITY(1,1) PRIMARY KEY,

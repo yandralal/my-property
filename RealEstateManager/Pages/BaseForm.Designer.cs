@@ -30,10 +30,6 @@ namespace RealEstateManager.Pages
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseForm));
             SuspendLayout();
-            // 
-            // BaseForm
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(282, 253);
             Icon = (Icon)resources.GetObject("$this.Icon");

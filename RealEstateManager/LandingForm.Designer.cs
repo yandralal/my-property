@@ -36,11 +36,8 @@ namespace RealEstateManager
         private Panel panelMain;
         private Panel panelFooter;
         private Label footerLabel;
-        private TextBox textBoxPlotFilter;
-        private Label labelPlotFilter;
         private Label labelPlots;
-        private Label labelPropertyFilter;
-        private TextBox textBoxPropertyFilter;
+        private ToolStripMenuItem downloadUserGuideMenuItem;
 
         protected override void Dispose(bool disposing)
         {
@@ -77,6 +74,7 @@ namespace RealEstateManager
             helpMenuItem = new ToolStripMenuItem();
             aboutMenuItem = new ToolStripMenuItem();
             changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
+            downloadUserGuideMenuItem = new ToolStripMenuItem();
             propertyMenu = new ToolStripMenuItem();
             registerPlotToolStripMenuItem = new ToolStripMenuItem();
             registerPlotMenuItem = new ToolStripMenuItem();
@@ -86,12 +84,8 @@ namespace RealEstateManager
             dataGridViewPlots = new DataGridView();
             labelProperties = new Label();
             groupBoxProperties = new GroupBox();
-            labelPropertyFilter = new Label();
-            textBoxPropertyFilter = new TextBox();
             groupBoxPlots = new GroupBox();
             labelPlots = new Label();
-            labelPlotFilter = new Label();
-            textBoxPlotFilter = new TextBox();
             panelMain = new Panel();
             panelFooter = new Panel();
             footerLabel = new Label();
@@ -107,6 +101,7 @@ namespace RealEstateManager
             // menuStripMain
             // 
             menuStripMain.BackColor = SystemColors.Control;
+            menuStripMain.Dock = DockStyle.Top;
             menuStripMain.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             menuStripMain.ForeColor = SystemColors.ControlText;
             menuStripMain.ImageScalingSize = new Size(20, 20);
@@ -203,7 +198,7 @@ namespace RealEstateManager
             // 
             // helpMenu
             // 
-            helpMenu.DropDownItems.AddRange(new ToolStripItem[] { helpMenuItem, aboutMenuItem, changeBackgroundToolStripMenuItem });
+            helpMenu.DropDownItems.AddRange(new ToolStripItem[] { helpMenuItem, aboutMenuItem, changeBackgroundToolStripMenuItem, downloadUserGuideMenuItem });
             helpMenu.Name = "helpMenu";
             helpMenu.Size = new Size(70, 32);
             helpMenu.Text = "Help";
@@ -228,6 +223,13 @@ namespace RealEstateManager
             changeBackgroundToolStripMenuItem.Size = new Size(315, 32);
             changeBackgroundToolStripMenuItem.Text = "Customize Background";
             changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
+            // 
+            // downloadUserGuideMenuItem
+            // 
+            downloadUserGuideMenuItem.Name = "downloadUserGuideMenuItem";
+            downloadUserGuideMenuItem.Size = new Size(315, 32);
+            downloadUserGuideMenuItem.Text = "Download User Guide";
+            downloadUserGuideMenuItem.Click += DownloadUserGuideMenuItem_Click;
             // 
             // propertyMenu
             // 
@@ -362,8 +364,6 @@ namespace RealEstateManager
             groupBoxProperties.Controls.Add(dataGridViewProperties);
             groupBoxProperties.Controls.Add(buttonAddProperty);
             groupBoxProperties.Controls.Add(buttonManagePlots);
-            groupBoxProperties.Controls.Add(labelPropertyFilter);
-            groupBoxProperties.Controls.Add(textBoxPropertyFilter);
             groupBoxProperties.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxProperties.ForeColor = Color.MidnightBlue;
             groupBoxProperties.Location = new Point(52, 60);
@@ -374,29 +374,11 @@ namespace RealEstateManager
             groupBoxProperties.TabStop = false;
             groupBoxProperties.Text = "Properties";
             // 
-            // labelPropertyFilter
-            // 
-            labelPropertyFilter.Location = new Point(591, 45);
-            labelPropertyFilter.Name = "labelPropertyFilter";
-            labelPropertyFilter.Size = new Size(84, 31);
-            labelPropertyFilter.TabIndex = 5;
-            labelPropertyFilter.Text = "Filter:";
-            // 
-            // textBoxPropertyFilter
-            // 
-            textBoxPropertyFilter.Location = new Point(681, 42);
-            textBoxPropertyFilter.Name = "textBoxPropertyFilter";
-            textBoxPropertyFilter.Size = new Size(250, 34);
-            textBoxPropertyFilter.TabIndex = 6;
-            textBoxPropertyFilter.TextChanged += TextBoxPropertyFilter_TextChanged;
-            // 
             // groupBoxPlots
             // 
             groupBoxPlots.BackColor = SystemColors.Control;
             groupBoxPlots.Controls.Add(labelPlots);
             groupBoxPlots.Controls.Add(dataGridViewPlots);
-            groupBoxPlots.Controls.Add(labelPlotFilter);
-            groupBoxPlots.Controls.Add(textBoxPlotFilter);
             groupBoxPlots.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPlots.ForeColor = Color.MidnightBlue;
             groupBoxPlots.Location = new Point(52, 396);
@@ -417,22 +399,6 @@ namespace RealEstateManager
             labelPlots.TabIndex = 5;
             labelPlots.Text = "Plots (0)";
             // 
-            // labelPlotFilter
-            // 
-            labelPlotFilter.Location = new Point(591, 37);
-            labelPlotFilter.Name = "labelPlotFilter";
-            labelPlotFilter.Size = new Size(84, 36);
-            labelPlotFilter.TabIndex = 6;
-            labelPlotFilter.Text = "Filter:";
-            // 
-            // textBoxPlotFilter
-            // 
-            textBoxPlotFilter.Location = new Point(681, 39);
-            textBoxPlotFilter.Name = "textBoxPlotFilter";
-            textBoxPlotFilter.Size = new Size(250, 34);
-            textBoxPlotFilter.TabIndex = 7;
-            textBoxPlotFilter.TextChanged += TextBoxPlotFilter_TextChanged;
-            // 
             // panelMain
             // 
             panelMain.BackColor = SystemColors.Control;
@@ -441,19 +407,8 @@ namespace RealEstateManager
             panelMain.Dock = DockStyle.Fill;
             panelMain.Location = new Point(0, 36);
             panelMain.Name = "panelMain";
-            panelMain.Size = new Size(1832, 888);
+            panelMain.Size = new Size(1832, 917);
             panelMain.TabIndex = 0;
-            // 
-            // panelFooter
-            // 
-            panelFooter.BackColor = Color.Red;
-            panelFooter.Controls.Add(footerLabel);
-            panelFooter.Dock = DockStyle.Bottom;
-            panelFooter.Height = 32;
-            panelFooter.Location = new Point(0, 924);
-            panelFooter.Name = "panelFooter";
-            panelFooter.Size = new Size(1832, 32);
-            panelFooter.TabIndex = 1;
             // 
             // footerLabel
             // 
@@ -468,15 +423,25 @@ namespace RealEstateManager
             footerLabel.Text = "©  VVT Softwares Pvt. Ltd. All rights reserved.";
             footerLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // panelFooter
+            // 
+            panelFooter.BackColor = Color.Red;
+            panelFooter.Controls.Add(footerLabel);
+            panelFooter.Dock = DockStyle.Bottom;
+            //panelFooter.Location = new Point(0, 921);
+            panelFooter.Name = "panelFooter";
+            panelFooter.Size = new Size(1832, 32);
+            panelFooter.TabIndex = 1;
+            // 
             // LandingForm
             // 
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1832, 956);
-            Controls.Add(panelFooter);
+            ClientSize = new Size(1832, 953);
             Controls.Add(panelMain);
             Controls.Add(menuStripMain);
+            Controls.Add(panelFooter);
             ForeColor = Color.White;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
@@ -489,9 +454,7 @@ namespace RealEstateManager
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).EndInit();
             groupBoxProperties.ResumeLayout(false);
-            groupBoxProperties.PerformLayout();
             groupBoxPlots.ResumeLayout(false);
-            groupBoxPlots.PerformLayout();
             panelMain.ResumeLayout(false);
             panelFooter.ResumeLayout(false);
             ResumeLayout(false);

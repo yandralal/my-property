@@ -25,6 +25,7 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.ComboBox comboBoxAgent;
         private System.Windows.Forms.Label labelBrokerage;
         private System.Windows.Forms.TextBox textBoxBrokerage;
+        private System.Windows.Forms.Button buttonCancel;
 
         protected override void Dispose(bool disposing)
         {
@@ -58,6 +59,7 @@ namespace RealEstateManager.Pages
             labelBrokerage = new Label();
             textBoxBrokerage = new TextBox();
             buttonRegisterSale = new Button();
+            buttonCancel = new Button();
             groupBoxSaleDetails.SuspendLayout();
             SuspendLayout();
             // 
@@ -85,6 +87,7 @@ namespace RealEstateManager.Pages
             groupBoxSaleDetails.Controls.Add(labelBrokerage);
             groupBoxSaleDetails.Controls.Add(textBoxBrokerage);
             groupBoxSaleDetails.Controls.Add(buttonRegisterSale);
+            groupBoxSaleDetails.Controls.Add(buttonCancel);
             groupBoxSaleDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxSaleDetails.ForeColor = Color.MidnightBlue;
             groupBoxSaleDetails.Location = new Point(19, 23);
@@ -291,13 +294,27 @@ namespace RealEstateManager.Pages
             buttonRegisterSale.FlatStyle = FlatStyle.Flat;
             buttonRegisterSale.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonRegisterSale.ForeColor = Color.White;
-            buttonRegisterSale.Location = new Point(226, 535);
+            buttonRegisterSale.Location = new Point(230, 532);
             buttonRegisterSale.Name = "buttonRegisterSale";
-            buttonRegisterSale.Size = new Size(233, 40);
+            buttonRegisterSale.Size = new Size(110, 35);
             buttonRegisterSale.TabIndex = 9;
-            buttonRegisterSale.Text = "Register Sale";
+            buttonRegisterSale.Text = "Save";
             buttonRegisterSale.UseVisualStyleBackColor = false;
             buttonRegisterSale.Click += ButtonRegisterSale_Click;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.BackColor = Color.Gray;
+            buttonCancel.FlatStyle = FlatStyle.Flat;
+            buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonCancel.ForeColor = Color.White;
+            buttonCancel.Location = new Point(362, 532);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(110, 35);
+            buttonCancel.TabIndex = 10;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = false;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // RegisterPlotSaleForm
             // 

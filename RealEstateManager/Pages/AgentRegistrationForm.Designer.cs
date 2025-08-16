@@ -9,31 +9,34 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.TextBox txtContact;
         private System.Windows.Forms.Label labelAgency;
         private System.Windows.Forms.TextBox txtAgency;
-        private System.Windows.Forms.Button btnRegister;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnCancel;
 
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentRegistrationForm));
             groupBoxAgent = new GroupBox();
             labelName = new Label();
-            btnRegister = new Button();
             txtName = new TextBox();
             labelContact = new Label();
             txtContact = new TextBox();
             labelAgency = new Label();
             txtAgency = new TextBox();
+            btnSave = new Button();
+            btnCancel = new Button();
             groupBoxAgent.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxAgent
             // 
             groupBoxAgent.Controls.Add(labelName);
-            groupBoxAgent.Controls.Add(btnRegister);
             groupBoxAgent.Controls.Add(txtName);
             groupBoxAgent.Controls.Add(labelContact);
             groupBoxAgent.Controls.Add(txtContact);
             groupBoxAgent.Controls.Add(labelAgency);
             groupBoxAgent.Controls.Add(txtAgency);
+            groupBoxAgent.Controls.Add(btnSave);
+            groupBoxAgent.Controls.Add(btnCancel);
             groupBoxAgent.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxAgent.ForeColor = Color.MidnightBlue;
             groupBoxAgent.Location = new Point(19, 18);
@@ -52,20 +55,6 @@ namespace RealEstateManager.Pages
             labelName.Size = new Size(100, 23);
             labelName.TabIndex = 0;
             labelName.Text = "Name:";
-            // 
-            // btnRegister
-            // 
-            btnRegister.BackColor = Color.Green;
-            btnRegister.FlatStyle = FlatStyle.Flat;
-            btnRegister.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnRegister.ForeColor = Color.White;
-            btnRegister.Location = new Point(166, 191);
-            btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(300, 35);
-            btnRegister.TabIndex = 1;
-            btnRegister.Text = "Register";
-            btnRegister.UseVisualStyleBackColor = false;
-            btnRegister.Click += BtnRegister_Click;
             // 
             // txtName
             // 
@@ -114,6 +103,34 @@ namespace RealEstateManager.Pages
             txtAgency.Name = "txtAgency";
             txtAgency.Size = new Size(300, 30);
             txtAgency.TabIndex = 5;
+            // 
+            // btnSave
+            // 
+            btnSave.BackColor = Color.Green;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(218, 192);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(90, 35);
+            btnSave.TabIndex = 6;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += BtnSave_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.Gray;
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnCancel.ForeColor = Color.White;
+            btnCancel.Location = new Point(318, 192);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(90, 35);
+            btnCancel.TabIndex = 7;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += BtnCancel_Click;
             // 
             // AgentRegistrationForm
             // 

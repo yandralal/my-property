@@ -536,7 +536,6 @@ namespace RealEstateManager.Pages
             // 
             // PlotDetailsForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(1351, 754);
             Controls.Add(groupBoxPlotDetails);

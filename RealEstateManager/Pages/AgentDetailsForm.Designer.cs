@@ -281,7 +281,6 @@ namespace RealEstateManager.Pages
             // 
             // AgentDetailsForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1384, 603);

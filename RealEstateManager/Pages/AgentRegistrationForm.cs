@@ -1,5 +1,6 @@
 using RealEstateManager.Entities;
 using RealEstateManager.Repositories;
+using System.Drawing;
 
 namespace RealEstateManager.Pages
 {
@@ -23,7 +24,7 @@ namespace RealEstateManager.Pages
             txtAgency.Text = agent.Agency;
         }
 
-        private void BtnRegister_Click(object sender, EventArgs e)
+        private void BtnSave_Click(object sender, EventArgs e)
         {
             string name = txtName.Text.Trim();
             string contact = txtContact.Text.Trim();
@@ -69,11 +70,16 @@ namespace RealEstateManager.Pages
 
         private void TxtContact_KeyPress(object? sender, KeyPressEventArgs e)
         {
-            // Allow only digits and control keys (e.g., backspace)
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

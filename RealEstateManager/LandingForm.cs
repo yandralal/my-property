@@ -7,8 +7,6 @@ namespace RealEstateManager
 {
     public partial class LandingForm : BaseForm
     {
-        private DataTable? _propertyTable;
-        private DataTable? _plotTable;
         public DataGridView DataGridViewProperties => dataGridViewProperties;
 
         public LandingForm()
@@ -65,7 +63,6 @@ namespace RealEstateManager
                 var dt = new DataTable();
                 conn.Open();
                 adapter.Fill(dt);
-                _propertyTable = dt; // Store for filtering
 
                 // Add a hidden Phone column if it doesn't exist
                 if (!dt.Columns.Contains("Phone"))
@@ -348,7 +345,6 @@ namespace RealEstateManager
                 var dt = new DataTable();
                 conn.Open();
                 adapter.Fill(dt);
-                _plotTable = dt; // Store for filtering
 
                 dataGridViewPlots.Rows.Clear();
 
@@ -822,34 +818,6 @@ namespace RealEstateManager
             }
         }
 
-        private void TextBoxPropertyFilter_TextChanged(object sender, EventArgs e)
-        {
-            if (_propertyTable == null) return;
-            string filter = textBoxPropertyFilter.Text.Replace("'", "''");
-            if (string.IsNullOrWhiteSpace(filter))
-            {
-                ((DataView)dataGridViewProperties.DataSource).RowFilter = "";
-            }
-            else
-            {
-                ((DataView)dataGridViewProperties.DataSource).RowFilter = $"Title LIKE '%{filter}%' OR Type LIKE '%{filter}%' OR Status LIKE '%{filter}%' OR Owner LIKE '%{filter}%'";
-            }
-        }
-
-        private void TextBoxPlotFilter_TextChanged(object sender, EventArgs e)
-        {
-            if (_plotTable == null) return;
-            string filter = textBoxPlotFilter.Text.Replace("'", "''");
-            if (string.IsNullOrWhiteSpace(filter))
-            {
-                ((DataView)dataGridViewPlots.DataSource).RowFilter = "";
-            }
-            else
-            {
-                ((DataView)dataGridViewPlots.DataSource).RowFilter = $"PlotNumber LIKE '%{filter}%' OR CustomerName LIKE '%{filter}%' OR Status LIKE '%{filter}%'";
-            }
-        }
-
         private void DataGridViewProperties_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             var dgv = dataGridViewProperties;
@@ -1102,6 +1070,36 @@ namespace RealEstateManager
             using (var aboutForm = new Pages.AboutForm())
             {
                 aboutForm.ShowDialog(this);
+            }
+        }
+
+        private void DownloadUserGuideMenuItem_Click(object sender, EventArgs e)
+        {
+            // Update the path to point to the assets folder
+            string pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "User Guide.pdf");
+
+            using (SaveFileDialog saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                saveDialog.FileName = "User Guide.pdf";
+                saveDialog.Title = "Save User Guide";
+
+                if (File.Exists(pdfPath) && saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        File.Copy(pdfPath, saveDialog.FileName, true);
+                        MessageBox.Show("User Guide downloaded successfully.", "Download Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Failed to download the User Guide.\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else if (!File.Exists(pdfPath))
+                {
+                    MessageBox.Show("User Guide PDF not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

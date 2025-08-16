@@ -9,7 +9,7 @@ namespace RealEstateManager.Pages
         public AllTransactionsFilterForm()
         {
             InitializeComponent();
-            comboBoxType.Items.AddRange(new object[] { "Plot", "Property", "Agent", "Miscellaneous" });
+            comboBoxType.Items.AddRange(["Plot", "Property", "Agent", "Miscellaneous"]);
             comboBoxType.SelectedIndex = 0;
             dateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
             dateTimePickerTo.Value = DateTime.Today;
@@ -19,9 +19,17 @@ namespace RealEstateManager.Pages
 
         private void ButtonFilter_Click(object sender, EventArgs e)
         {
-            string type = comboBoxType.SelectedItem?.ToString() ?? "Property";
             DateTime fromDate = dateTimePickerFrom.Value.Date;
-            DateTime toDate = dateTimePickerTo.Value.Date.AddDays(1).AddTicks(-1);
+            DateTime toDate = dateTimePickerTo.Value.Date;
+
+            if (fromDate > toDate)
+            {
+                MessageBox.Show("The 'From' date cannot be after the 'To' date.", "Invalid Date Range", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string type = comboBoxType.SelectedItem?.ToString() ?? "Property";
+            toDate = toDate.AddDays(1).AddTicks(-1);
 
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = "";

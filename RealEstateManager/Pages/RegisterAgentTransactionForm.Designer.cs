@@ -20,6 +20,7 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelPlotId;
         private System.Windows.Forms.ComboBox comboBoxPlotNumber;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.GroupBox groupBoxTransactionDetails;
         private System.Windows.Forms.Label labelTotalBrokerage;
         private System.Windows.Forms.TextBox textBoxTotalBrokerage;
@@ -43,6 +44,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionDetails = new GroupBox();
             labelAgentId = new Label();
             buttonSave = new Button();
+            buttonCancel = new Button();
             comboBoxAgent = new ComboBox();
             labelTransactionDate = new Label();
             dateTimePickerTransactionDate = new DateTimePicker();
@@ -74,6 +76,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionDetails.BackColor = Color.AliceBlue;
             groupBoxTransactionDetails.Controls.Add(labelAgentId);
             groupBoxTransactionDetails.Controls.Add(buttonSave);
+            groupBoxTransactionDetails.Controls.Add(buttonCancel);
             groupBoxTransactionDetails.Controls.Add(comboBoxAgent);
             groupBoxTransactionDetails.Controls.Add(labelTransactionDate);
             groupBoxTransactionDetails.Controls.Add(dateTimePickerTransactionDate);
@@ -124,13 +127,27 @@ namespace RealEstateManager.Pages
             buttonSave.FlatStyle = FlatStyle.Flat;
             buttonSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(288, 635);
+            buttonSave.Location = new Point(284, 635);
             buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(233, 40);
+            buttonSave.Size = new Size(110, 35);
             buttonSave.TabIndex = 11;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = false;
             buttonSave.Click += ButtonSave_Click;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.BackColor = Color.Gray;
+            buttonCancel.FlatStyle = FlatStyle.Flat;
+            buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonCancel.ForeColor = Color.White;
+            buttonCancel.Location = new Point(414, 635);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(110, 35);
+            buttonCancel.TabIndex = 12;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = false;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // comboBoxAgent
             // 

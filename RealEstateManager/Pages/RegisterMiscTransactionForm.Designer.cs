@@ -19,6 +19,7 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelTransactionType;
         private System.Windows.Forms.ComboBox comboBoxTransactionType;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonCancel;
 
         protected override void Dispose(bool disposing)
         {
@@ -46,6 +47,7 @@ namespace RealEstateManager.Pages
             labelTransactionType = new Label();
             comboBoxTransactionType = new ComboBox();
             buttonSave = new Button();
+            buttonCancel = new Button();
             groupBoxTransactionDetails.SuspendLayout();
             SuspendLayout();
             // 
@@ -67,6 +69,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionDetails.Controls.Add(labelTransactionType);
             groupBoxTransactionDetails.Controls.Add(comboBoxTransactionType);
             groupBoxTransactionDetails.Controls.Add(buttonSave);
+            groupBoxTransactionDetails.Controls.Add(buttonCancel);
             groupBoxTransactionDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionDetails.ForeColor = Color.MidnightBlue;
             groupBoxTransactionDetails.Location = new Point(20, 23);
@@ -223,13 +226,27 @@ namespace RealEstateManager.Pages
             buttonSave.FlatStyle = FlatStyle.Flat;
             buttonSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(242, 406);
+            buttonSave.Location = new Point(234, 406);
             buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(233, 40);
+            buttonSave.Size = new Size(110, 35);
             buttonSave.TabIndex = 14;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = false;
             buttonSave.Click += ButtonSave_Click;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.BackColor = Color.Gray;
+            buttonCancel.FlatStyle = FlatStyle.Flat;
+            buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonCancel.ForeColor = Color.White;
+            buttonCancel.Location = new Point(367, 406);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(110, 35);
+            buttonCancel.TabIndex = 15;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = false;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // RegisterMiscTransactionForm
             // 

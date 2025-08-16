@@ -22,6 +22,7 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelTransactionDate;
         private System.Windows.Forms.DateTimePicker dateTimePickerTransactionDate;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label labelTransactionType;
         private System.Windows.Forms.ComboBox comboBoxTransactionType;
 
@@ -48,6 +49,7 @@ namespace RealEstateManager.Pages
             labelTransactionDate = new Label();
             dateTimePickerTransactionDate = new DateTimePicker();
             buttonSave = new Button();
+            buttonCancel = new Button();
             labelTransactionType = new Label();
             comboBoxTransactionType = new ComboBox();
             groupBoxTransactionEntry.SuspendLayout();
@@ -75,6 +77,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Controls.Add(labelTransactionDate);
             groupBoxTransactionEntry.Controls.Add(dateTimePickerTransactionDate);
             groupBoxTransactionEntry.Controls.Add(buttonSave);
+            groupBoxTransactionEntry.Controls.Add(buttonCancel);
             groupBoxTransactionEntry.Controls.Add(labelTransactionType);
             groupBoxTransactionEntry.Controls.Add(comboBoxTransactionType);
             groupBoxTransactionEntry.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
@@ -263,7 +266,7 @@ namespace RealEstateManager.Pages
             dateTimePickerTransactionDate.Font = new Font("Segoe UI", 10F);
             dateTimePickerTransactionDate.Location = new Point(229, 497);
             dateTimePickerTransactionDate.Name = "dateTimePickerTransactionDate";
-            dateTimePickerTransactionDate.Size = new Size(300, 30);
+            dateTimePickerTransactionDate.Size = new Size(320, 30);
             dateTimePickerTransactionDate.TabIndex = 8;
             // 
             // buttonSave
@@ -272,13 +275,27 @@ namespace RealEstateManager.Pages
             buttonSave.FlatStyle = FlatStyle.Flat;
             buttonSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(262, 547);
+            buttonSave.Location = new Point(269, 547);
             buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(233, 40);
+            buttonSave.Size = new Size(110, 35);
             buttonSave.TabIndex = 9;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = false;
             buttonSave.Click += ButtonSave_Click;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.BackColor = Color.Gray;
+            buttonCancel.FlatStyle = FlatStyle.Flat;
+            buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonCancel.ForeColor = Color.White;
+            buttonCancel.Location = new Point(404, 547);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(110, 35);
+            buttonCancel.TabIndex = 10;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = false;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // labelTransactionType
             // 

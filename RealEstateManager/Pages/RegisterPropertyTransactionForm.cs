@@ -295,7 +295,7 @@ namespace RealEstateManager.Pages
             this.Close();
         }
 
-        private void UpdateBalanceAmount(object sender, EventArgs e)
+        private void UpdateBalanceAmount(object? sender, EventArgs e)
         {
             decimal saleAmount = 0;
             decimal newPaid = 0;
@@ -330,6 +330,12 @@ namespace RealEstateManager.Pages
             {
                 textBoxAmount.Text = value.ToString("N2");
             }
+        }
+
+        private void ButtonCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

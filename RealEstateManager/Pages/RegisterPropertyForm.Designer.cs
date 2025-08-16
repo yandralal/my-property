@@ -31,6 +31,7 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.TextBox textBoxKhasraNo;
         private System.Windows.Forms.Label labelArea;
         private System.Windows.Forms.TextBox textBoxArea;
+        private System.Windows.Forms.Button buttonCancel;
 
         protected override void Dispose(bool disposing)
         {
@@ -66,6 +67,7 @@ namespace RealEstateManager.Pages
             labelDescription = new Label();
             textBoxDescription = new TextBox();
             buttonRegister = new Button();
+            buttonCancel = new Button();
             labelKhasraNo = new Label();
             textBoxKhasraNo = new TextBox();
             labelArea = new Label();
@@ -99,6 +101,7 @@ namespace RealEstateManager.Pages
             groupBoxPropertyDetails.Controls.Add(labelDescription);
             groupBoxPropertyDetails.Controls.Add(textBoxDescription);
             groupBoxPropertyDetails.Controls.Add(buttonRegister);
+            groupBoxPropertyDetails.Controls.Add(buttonCancel);
             groupBoxPropertyDetails.Controls.Add(labelKhasraNo);
             groupBoxPropertyDetails.Controls.Add(textBoxKhasraNo);
             groupBoxPropertyDetails.Controls.Add(labelArea);
@@ -330,13 +333,27 @@ namespace RealEstateManager.Pages
             buttonRegister.FlatStyle = FlatStyle.Flat;
             buttonRegister.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonRegister.ForeColor = Color.White;
-            buttonRegister.Location = new Point(235, 673);
+            buttonRegister.Location = new Point(230, 674);
             buttonRegister.Name = "buttonRegister";
-            buttonRegister.Size = new Size(233, 40);
+            buttonRegister.Size = new Size(110, 35);
             buttonRegister.TabIndex = 13;
-            buttonRegister.Text = "Register Property";
+            buttonRegister.Text = "Save";
             buttonRegister.UseVisualStyleBackColor = false;
             buttonRegister.Click += ButtonRegister_Click;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.BackColor = Color.Gray;
+            buttonCancel.FlatStyle = FlatStyle.Flat;
+            buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonCancel.ForeColor = Color.White;
+            buttonCancel.Location = new Point(359, 674);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(110, 35);
+            buttonCancel.TabIndex = 14;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = false;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // labelKhasraNo
             // 

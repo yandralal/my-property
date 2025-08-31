@@ -149,9 +149,9 @@ namespace RealEstateManager.Pages
             // 
             // labelPlotStatusValue
             // 
-            labelPlotStatusValue.Font = new Font("Segoe UI", 10F);
+            labelPlotStatusValue.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelPlotStatusValue.ForeColor = Color.Black;
-            labelPlotStatusValue.Location = new Point(186, 141);
+            labelPlotStatusValue.Location = new Point(186, 142);
             labelPlotStatusValue.Name = "labelPlotStatusValue";
             labelPlotStatusValue.Size = new Size(320, 30);
             labelPlotStatusValue.TabIndex = 5;

@@ -37,8 +37,16 @@ namespace RealEstateManager.Repositories
 
         public static void DeleteAgent(int agentId)
         {
+            // Calculate total brokerage and total paid for the agent
+            decimal totalBrokerage = GetTotalBrokerage(agentId);
+            decimal totalPaid = GetTotalPaid(agentId);
+
+            // If there is pending brokerage, do not allow deletion
+            if (totalBrokerage > totalPaid)
+                throw new InvalidOperationException("Cannot delete agent: Pending brokerage exists.");
+
             using var conn = new SqlConnection(connectionString);
-            using var cmd = new SqlCommand("DELETE FROM Agent WHERE Id = @Id", conn);
+            using var cmd = new SqlCommand("UPDATE Agent SET IsDeleted = 1 WHERE Id = @Id", conn);
             cmd.Parameters.AddWithValue("@Id", agentId);
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -49,7 +57,7 @@ namespace RealEstateManager.Repositories
         {
             var agents = new List<Agent>();
             using var conn = new SqlConnection(connectionString);
-            using var cmd = new SqlCommand("SELECT Id, Name, Contact, Agency FROM Agent", conn);
+            using var cmd = new SqlCommand("SELECT Id, Name, Contact, Agency FROM Agent WHERE IsDeleted = 0", conn);
             conn.Open();
             using var reader = cmd.ExecuteReader();
             while (reader.Read())

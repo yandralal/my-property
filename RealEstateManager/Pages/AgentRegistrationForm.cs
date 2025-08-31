@@ -11,6 +11,7 @@ namespace RealEstateManager.Pages
         public AgentRegistrationForm()
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             groupBoxAgent.Text = "Agent Details";
             txtContact.KeyPress += TxtContact_KeyPress;
         }

@@ -7,16 +7,20 @@ namespace RealEstateManager.Pages
 {
     public partial class AgentDetailsForm : BaseForm
     {
+        int _agentId;
         public AgentDetailsForm(Agent agent)
         {
+            this._agentId = agent.Id;
             InitializeComponent();
             DisplayAgent(agent);
             LoadAgentTransactions(agent.Id);
             DisplayAgentFinancials(agent.Id);
+            LoadPlotsSoldByAgent(agent.Id); 
 
             // Add event handlers for custom painting and clicks
             dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
+            dataGridViewPlotsSold.CellClick += DataGridViewPlotsSold_CellClick;
         }
         private void DisplayAgent(Agent agent)
         {
@@ -26,13 +30,11 @@ namespace RealEstateManager.Pages
             labelIdValue.Text = agent.Id.ToString();
         }
 
-        private static DataTable GetAgentTransactions(int agentId)
+        private static DataTable GetAgentTransactions(int agentId, int? plotId = null)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
-                    pr.Title AS PropertyName,
-                    pl.PlotNumber AS PlotNumber,
                     at.TransactionDate,
                     at.TransactionType,
                     at.Amount,
@@ -41,16 +43,20 @@ namespace RealEstateManager.Pages
                     at.Notes,
                     at.TransactionId
                 FROM AgentTransaction at
-                LEFT JOIN Plot pl ON at.PlotId = pl.Id
-                LEFT JOIN Property pr ON pl.PropertyId = pr.Id
                 WHERE at.AgentId = @AgentId AND at.IsDeleted = 0
+                {0}
                 ORDER BY at.TransactionDate ASC";
+
+            string plotFilter = plotId.HasValue ? "AND at.PlotId = @PlotId" : "";
+            query = string.Format(query, plotFilter);
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
             using (var adapter = new SqlDataAdapter(cmd))
             {
                 cmd.Parameters.AddWithValue("@AgentId", agentId);
+                if (plotId.HasValue)
+                    cmd.Parameters.AddWithValue("@PlotId", plotId.Value);
                 var dt = new DataTable();
                 conn.Open();
                 adapter.Fill(dt);
@@ -58,9 +64,9 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void LoadAgentTransactions(int agentId)
+        private void LoadAgentTransactions(int agentId, int? plotId = null)
         {
-            var transactions = GetAgentTransactions(agentId);
+            var transactions = GetAgentTransactions(agentId, plotId);
 
             dataGridViewTransactions.DataSource = null;
             dataGridViewTransactions.Columns.Clear();
@@ -72,31 +78,14 @@ namespace RealEstateManager.Pages
             {
                 DataPropertyName = "TransactionId",
                 HeaderText = "TRN #",
-                Width = 70,
-                Name = "TransactionId"
-            });
-
-            var col = new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "PropertyName",
-                HeaderText = "Property",
-                Width = 130,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.None // This line is important
-            };
-            dataGridViewTransactions.Columns.Add(col);
-
-            dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "PlotNumber",
-                HeaderText = "Plot #",
                 Width = 100,
-                ReadOnly = true
+                Name = "TransactionId"
             });
             dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "TransactionDate",
                 HeaderText = "TRN Date",
-                Width = 180,
+                Width = 200,
                 ReadOnly = true,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy hh:mm tt" }
             });
@@ -104,14 +93,14 @@ namespace RealEstateManager.Pages
             {
                 DataPropertyName = "TransactionType",
                 HeaderText = "TRN Type",
-                Width = 100,
+                Width = 120,
                 ReadOnly = true
             });
             dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "Amount",
                 HeaderText = "Amount",
-                Width = 130,
+                Width = 150,
                 ReadOnly = true,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
             });
@@ -119,21 +108,21 @@ namespace RealEstateManager.Pages
             {
                 DataPropertyName = "PaymentMethod",
                 HeaderText = "Payment Method",
-                Width = 160,
+                Width = 180,
                 ReadOnly = true
             });
             dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "ReferenceNumber",
                 HeaderText = "Ref #",
-                Width = 120,
+                Width = 150,
                 ReadOnly = true
             });
             dataGridViewTransactions.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "Notes",
                 HeaderText = "Notes",
-                Width = 160,
+                Width = 230,
                 ReadOnly = true
             });
 
@@ -142,7 +131,7 @@ namespace RealEstateManager.Pages
             {
                 Name = "Action",
                 HeaderText = "Action",
-                Width = 120,
+                Width = 130,
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
             dataGridViewTransactions.Columns.Add(actionCol);
@@ -298,6 +287,116 @@ namespace RealEstateManager.Pages
             labelTotalBrokerageValue.Text = totalBrokerage.ToString("N2");
             labelAmountPaidValue.Text = amountPaid.ToString("N2");
             labelBalanceValue.Text = balance.ToString("N2");
+        }
+
+        private void LoadPlotsSoldByAgent(int agentId)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
+            string query = @"
+                SELECT 
+                    p.Id AS PlotId,
+                    pr.Title AS PropertyName,
+                    p.PlotNumber,
+                    ps.SaleDate,
+                    ps.BrokerageAmount,
+                    (SELECT ISNULL(SUM(Amount), 0) FROM AgentTransaction WHERE PlotId = p.Id AND AgentId = @AgentId AND IsDeleted = 0) AS Paid,
+                    (ps.BrokerageAmount - (SELECT ISNULL(SUM(Amount), 0) FROM AgentTransaction WHERE PlotId = p.Id AND AgentId = @AgentId AND IsDeleted = 0)) AS Balance
+                FROM PlotSale ps
+                INNER JOIN Plot p ON ps.PlotId = p.Id
+                INNER JOIN Property pr ON p.PropertyId = pr.Id
+                WHERE ps.AgentId = @AgentId AND ps.IsDeleted = 0
+                ORDER BY TRY_CAST(p.PlotNumber AS INT) ASC, p.PlotNumber ASC";
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(query, conn))
+            using (var adapter = new SqlDataAdapter(cmd))
+            {
+                cmd.Parameters.AddWithValue("@AgentId", agentId);
+                var dt = new DataTable();
+                conn.Open();
+                adapter.Fill(dt);
+
+                dataGridViewPlotsSold.DataSource = null;
+                dataGridViewPlotsSold.Columns.Clear();
+                dataGridViewPlotsSold.AutoGenerateColumns = false;
+
+                // Do NOT add PlotId as a visible column, but keep it in the DataTable for logic
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "PlotId",
+                    HeaderText = "PlotId",
+                    Visible = false
+                });
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "PropertyName",
+                    HeaderText = "Property",
+                    Width = 180
+                });
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "PlotNumber",
+                    HeaderText = "Plot",
+                    Width = 100
+                });
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "SaleDate",
+                    HeaderText = "Sale Date",
+                    Width = 120,
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy hh:mm tt" }
+                });
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "BrokerageAmount",
+                    HeaderText = "Brokerage Amount",
+                    Width = 110,
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
+                });
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "Paid",
+                    HeaderText = "Amount Paid",
+                    Width = 110,
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
+                });
+                dataGridViewPlotsSold.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "Balance",
+                    HeaderText = "Amount Balance",
+                    Width = 110,
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
+                });
+
+                dataGridViewPlotsSold.DataSource = dt;
+
+                // Select the first row and show its transactions
+                if (dataGridViewPlotsSold.Rows.Count > 0)
+                {
+                    dataGridViewPlotsSold.ClearSelection();
+                    dataGridViewPlotsSold.Rows[0].Selected = true;
+
+                    var firstRow = dataGridViewPlotsSold.Rows[0];
+                    if (firstRow.DataBoundItem is DataRowView drv && drv.Row.Table.Columns.Contains("PlotId"))
+                    {
+                        int plotId = Convert.ToInt32(drv["PlotId"]);
+                        LoadAgentTransactions(_agentId, plotId);
+                    }
+                }
+            }
+        }
+
+        private void DataGridViewPlotsSold_CellClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var row = dataGridViewPlotsSold.Rows[e.RowIndex];
+                if (row.DataBoundItem is DataRowView drv && drv.Row.Table.Columns.Contains("PlotId"))
+                {
+                    int plotId = Convert.ToInt32(drv["PlotId"]);
+                    LoadAgentTransactions(_agentId, plotId);
+                }
+            }
         }
     }
 }

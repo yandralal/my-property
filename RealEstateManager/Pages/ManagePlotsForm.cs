@@ -10,6 +10,7 @@ namespace RealEstateManager.Pages
         public ManagePlotsForm()
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             LoadProperties();
             SetupPlotGrid();
             buttonAddPlot.Enabled = false;

@@ -12,6 +12,7 @@ namespace RealEstateManager
         public LandingForm()
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             this.WindowState = FormWindowState.Maximized;
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;

@@ -13,6 +13,7 @@ namespace RealEstateManager.Pages
         public RegisterPropertyForm(int propertyId)
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             _propertyId = propertyId;
             _isEditMode = true;
             SetupPhoneNumberValidation();
@@ -26,6 +27,7 @@ namespace RealEstateManager.Pages
         public RegisterPropertyForm()
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             _isEditMode = false;
             SetupPhoneNumberValidation();
             SetupPriceFormatting();
@@ -178,12 +180,6 @@ namespace RealEstateManager.Pages
             if (string.IsNullOrWhiteSpace(phone))
             {
                 MessageBox.Show("Phone number is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxPhone.Focus();
-                return;
-            }
-            if (!Regex.IsMatch(phone, @"^[6-9]\d{9}$"))
-            {
-                MessageBox.Show("Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxPhone.Focus();
                 return;
             }

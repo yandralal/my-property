@@ -14,6 +14,7 @@ namespace RealEstateManager.Pages
         public RegisterPlotTransactionForm(int? plotId = null, decimal? saleAmount = null, string? plotNumber = "")
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             _plotId = plotId;
             _saleAmount = saleAmount;
             _plotNumber = plotNumber;

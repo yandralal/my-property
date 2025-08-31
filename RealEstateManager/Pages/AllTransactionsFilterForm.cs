@@ -96,6 +96,7 @@ namespace RealEstateManager.Pages
                         SELECT 
                             mt.TransactionId,
                             mt.TransactionDate,
+                            mt.Recipient,
                             mt.TransactionType,
                             mt.Amount,
                             mt.PaymentMethod,
@@ -184,6 +185,17 @@ namespace RealEstateManager.Pages
                         DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy hh:mm tt" }
                     });
                 }
+                if (dt.Columns.Contains("Recipient"))
+                {
+                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        Name = "Recipient",
+                        DataPropertyName = "Recipient",
+                        HeaderText = "Recipient",
+                        Width = 180,
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                    });
+                }
                 if (dt.Columns.Contains("TransactionType"))
                 {
                     dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
@@ -202,7 +214,7 @@ namespace RealEstateManager.Pages
                         Name = "Amount",
                         DataPropertyName = "Amount",
                         HeaderText = "Amount",
-                        Width = 130,
+                        Width = 150,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
                         DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }
                     });
@@ -236,11 +248,11 @@ namespace RealEstateManager.Pages
                         Name = "Notes",
                         DataPropertyName = "Notes",
                         HeaderText = "Notes",
-                        Width = 220,
+                        Width = 250,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
-
+               
                 // Bind data if any rows, otherwise just show headers
                 if (dt.Rows.Count > 0)
                 {

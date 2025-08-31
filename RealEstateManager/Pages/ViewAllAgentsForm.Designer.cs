@@ -61,7 +61,7 @@ namespace RealEstateManager.Pages
             dataGridViewAgents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewAgents.Size = new Size(1060, 437);
             dataGridViewAgents.TabIndex = 0;
-            dataGridViewAgents.CellMouseClick += dataGridViewAgents_CellMouseClick;
+            dataGridViewAgents.CellMouseClick += DataGridViewAgents_CellMouseClick;
             dataGridViewAgents.CellPainting += dataGridViewAgents_CellPainting;
             // 
             // labelAgents

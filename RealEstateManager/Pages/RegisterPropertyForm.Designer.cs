@@ -32,6 +32,13 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelArea;
         private System.Windows.Forms.TextBox textBoxArea;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Label labelTitleStar;
+        private System.Windows.Forms.Label labelTypeStar;
+        private System.Windows.Forms.Label labelStatusStar;
+        private System.Windows.Forms.Label labelPriceStar;
+        private System.Windows.Forms.Label labelOwnerStar;
+        private System.Windows.Forms.Label labelPhoneStar;
+        private System.Windows.Forms.Label labelAreaStar;
 
         protected override void Dispose(bool disposing)
         {
@@ -72,6 +79,13 @@ namespace RealEstateManager.Pages
             textBoxKhasraNo = new TextBox();
             labelArea = new Label();
             textBoxArea = new TextBox();
+            labelTitleStar = new Label();
+            labelTypeStar = new Label();
+            labelStatusStar = new Label();
+            labelPriceStar = new Label();
+            labelOwnerStar = new Label();
+            labelPhoneStar = new Label();
+            labelAreaStar = new Label();
             groupBoxPropertyDetails.SuspendLayout();
             SuspendLayout();
             // 
@@ -106,6 +120,13 @@ namespace RealEstateManager.Pages
             groupBoxPropertyDetails.Controls.Add(textBoxKhasraNo);
             groupBoxPropertyDetails.Controls.Add(labelArea);
             groupBoxPropertyDetails.Controls.Add(textBoxArea);
+            groupBoxPropertyDetails.Controls.Add(labelTitleStar);
+            groupBoxPropertyDetails.Controls.Add(labelTypeStar);
+            groupBoxPropertyDetails.Controls.Add(labelStatusStar);
+            groupBoxPropertyDetails.Controls.Add(labelPriceStar);
+            groupBoxPropertyDetails.Controls.Add(labelOwnerStar);
+            groupBoxPropertyDetails.Controls.Add(labelPhoneStar);
+            groupBoxPropertyDetails.Controls.Add(labelAreaStar);
             groupBoxPropertyDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPropertyDetails.ForeColor = Color.MidnightBlue;
             groupBoxPropertyDetails.Location = new Point(20, 20);
@@ -393,8 +414,86 @@ namespace RealEstateManager.Pages
             textBoxArea.Size = new Size(320, 30);
             textBoxArea.TabIndex = 5;
             // 
+            // labelTitleStar
+            // 
+            labelTitleStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelTitleStar.ForeColor = Color.Red;
+            labelTitleStar.Location = new Point(labelTitle.Left + labelTitle.Width + 2, labelTitle.Top);
+            labelTitleStar.Name = "labelTitleStar";
+            labelTitleStar.Size = new Size(15, 23);
+            labelTitleStar.TabIndex = 16;
+            labelTitleStar.Text = "*";
+            labelTitleStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelTypeStar
+            // 
+            labelTypeStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelTypeStar.ForeColor = Color.Red;
+            labelTypeStar.Location = new Point(labelType.Left + labelType.Width + 2, labelType.Top);
+            labelTypeStar.Name = "labelTypeStar";
+            labelTypeStar.Size = new Size(15, 23);
+            labelTypeStar.TabIndex = 17;
+            labelTypeStar.Text = "*";
+            labelTypeStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelStatusStar
+            // 
+            labelStatusStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelStatusStar.ForeColor = Color.Red;
+            labelStatusStar.Location = new Point(labelStatus.Left + labelStatus.Width + 2, labelStatus.Top);
+            labelStatusStar.Name = "labelStatusStar";
+            labelStatusStar.Size = new Size(15, 23);
+            labelStatusStar.TabIndex = 18;
+            labelStatusStar.Text = "*";
+            labelStatusStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelPriceStar
+            // 
+            labelPriceStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelPriceStar.ForeColor = Color.Red;
+            labelPriceStar.Location = new Point(labelPrice.Left + labelPrice.Width + 2, labelPrice.Top);
+            labelPriceStar.Name = "labelPriceStar";
+            labelPriceStar.Size = new Size(15, 23);
+            labelPriceStar.TabIndex = 19;
+            labelPriceStar.Text = "*";
+            labelPriceStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelOwnerStar
+            // 
+            labelOwnerStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelOwnerStar.ForeColor = Color.Red;
+            labelOwnerStar.Location = new Point(labelOwner.Left + labelOwner.Width + 2, labelOwner.Top);
+            labelOwnerStar.Name = "labelOwnerStar";
+            labelOwnerStar.Size = new Size(15, 23);
+            labelOwnerStar.TabIndex = 20;
+            labelOwnerStar.Text = "*";
+            labelOwnerStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelPhoneStar
+            // 
+            labelPhoneStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelPhoneStar.ForeColor = Color.Red;
+            labelPhoneStar.Location = new Point(labelPhone.Left + labelPhone.Width + 2, labelPhone.Top);
+            labelPhoneStar.Name = "labelPhoneStar";
+            labelPhoneStar.Size = new Size(15, 23);
+            labelPhoneStar.TabIndex = 21;
+            labelPhoneStar.Text = "*";
+            labelPhoneStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelAreaStar
+            // 
+            labelAreaStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelAreaStar.ForeColor = Color.Red;
+            labelAreaStar.Location = new Point(labelArea.Left + labelArea.Width + 2, labelArea.Top);
+            labelAreaStar.Name = "labelAreaStar";
+            labelAreaStar.Size = new Size(15, 23);
+            labelAreaStar.TabIndex = 27;
+            labelAreaStar.Text = "*";
+            labelAreaStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // RegisterPropertyForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(600, 765);
             Controls.Add(groupBoxPropertyDetails);

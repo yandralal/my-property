@@ -9,6 +9,7 @@ namespace RealEstateManager
         public LoginForm()
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             textBoxPassword.KeyDown += TextBoxPassword_KeyDown;
         }
 

@@ -15,6 +15,8 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Label labelTotalBrokerageTitle, labelTotalBrokerageValue;
         private System.Windows.Forms.Label labelAmountPaidTitle, labelAmountPaidValue;
         private System.Windows.Forms.Label labelBalanceTitle, labelBalanceValue;
+        private System.Windows.Forms.GroupBox groupBoxPlotsSold;
+        private System.Windows.Forms.DataGridView dataGridViewPlotsSold;
 
         protected override void Dispose(bool disposing)
         {
@@ -47,9 +49,13 @@ namespace RealEstateManager.Pages
             groupBoxTransactionGrid = new GroupBox();
             dataGridViewTransactions = new DataGridView();
             actionCol = new DataGridViewImageColumn();
+            groupBoxPlotsSold = new GroupBox();
+            dataGridViewPlotsSold = new DataGridView();
             groupBoxAgentDetails.SuspendLayout();
             groupBoxTransactionGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).BeginInit();
+            groupBoxPlotsSold.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPlotsSold).BeginInit();
             SuspendLayout();
             // 
             // groupBoxAgentDetails
@@ -232,10 +238,10 @@ namespace RealEstateManager.Pages
             groupBoxTransactionGrid.Controls.Add(dataGridViewTransactions);
             groupBoxTransactionGrid.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionGrid.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionGrid.Location = new Point(20, 192);
+            groupBoxTransactionGrid.Location = new Point(20, 514);
             groupBoxTransactionGrid.Name = "groupBoxTransactionGrid";
             groupBoxTransactionGrid.Padding = new Padding(15);
-            groupBoxTransactionGrid.Size = new Size(1347, 396);
+            groupBoxTransactionGrid.Size = new Size(1347, 315);
             groupBoxTransactionGrid.TabIndex = 1;
             groupBoxTransactionGrid.TabStop = false;
             groupBoxTransactionGrid.Text = "Transaction List";
@@ -269,7 +275,7 @@ namespace RealEstateManager.Pages
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;
             dataGridViewTransactions.RowHeadersWidth = 51;
-            dataGridViewTransactions.Size = new Size(1326, 346);
+            dataGridViewTransactions.Size = new Size(1326, 263);
             dataGridViewTransactions.TabIndex = 1;
             // 
             // actionCol
@@ -279,13 +285,46 @@ namespace RealEstateManager.Pages
             actionCol.ReadOnly = true;
             actionCol.Width = 125;
             // 
+            // groupBoxPlotsSold
+            // 
+            groupBoxPlotsSold.BackColor = SystemColors.Control;
+            groupBoxPlotsSold.Controls.Add(dataGridViewPlotsSold);
+            groupBoxPlotsSold.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxPlotsSold.ForeColor = Color.MidnightBlue;
+            groupBoxPlotsSold.Location = new Point(20, 204);
+            groupBoxPlotsSold.Name = "groupBoxPlotsSold";
+            groupBoxPlotsSold.Padding = new Padding(15);
+            groupBoxPlotsSold.Size = new Size(1347, 283);
+            groupBoxPlotsSold.TabIndex = 2;
+            groupBoxPlotsSold.TabStop = false;
+            groupBoxPlotsSold.Text = "Plots Sold";
+            // 
+            // dataGridViewPlotsSold
+            // 
+            dataGridViewPlotsSold.AllowUserToAddRows = false;
+            dataGridViewPlotsSold.AllowUserToDeleteRows = false;
+            dataGridViewPlotsSold.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewPlotsSold.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewPlotsSold.BackgroundColor = Color.White;
+            dataGridViewPlotsSold.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewPlotsSold.ColumnHeadersHeight = 29;
+            dataGridViewPlotsSold.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewPlotsSold.Location = new Point(10, 32);
+            dataGridViewPlotsSold.Name = "dataGridViewPlotsSold";
+            dataGridViewPlotsSold.ReadOnly = true;
+            dataGridViewPlotsSold.RowHeadersWidth = 51;
+            dataGridViewPlotsSold.Size = new Size(1326, 225);
+            dataGridViewPlotsSold.TabIndex = 2;
+            // 
             // AgentDetailsForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1384, 603);
+            ClientSize = new Size(1384, 843);
             Controls.Add(groupBoxAgentDetails);
             Controls.Add(groupBoxTransactionGrid);
+            Controls.Add(groupBoxPlotsSold);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AgentDetailsForm";
             Text = "Agent Details";
@@ -293,6 +332,8 @@ namespace RealEstateManager.Pages
             groupBoxAgentDetails.PerformLayout();
             groupBoxTransactionGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).EndInit();
+            groupBoxPlotsSold.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPlotsSold).EndInit();
             ResumeLayout(false);
         }
         private DataGridViewImageColumn actionCol;

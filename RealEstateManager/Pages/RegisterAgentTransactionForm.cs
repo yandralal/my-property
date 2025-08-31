@@ -15,6 +15,7 @@ namespace RealEstateManager.Pages
         public RegisterAgentTransactionForm(int? agentId = null)
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             _agentId = agentId;
 
             if (_agentId.HasValue)

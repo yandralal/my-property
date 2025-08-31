@@ -14,6 +14,7 @@ namespace RealEstateManager.Pages
         public RegisterPropertyTransactionForm(int? propertyId = null, decimal? saleAmount = null, string? propertyNumber = "")
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             _propertyId = propertyId;
             _saleAmount = saleAmount;
             _propertyNumber = propertyNumber;

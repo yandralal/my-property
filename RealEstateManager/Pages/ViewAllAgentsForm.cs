@@ -7,6 +7,7 @@ namespace RealEstateManager.Pages
         public ViewAllAgentsForm()
         {
             InitializeComponent();
+            SetPaddingForControls(10, 6);
             LoadAgents();
             AgentRepository.AgentsChanged += RefreshGrid;
         }
@@ -152,7 +153,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void dataGridViewAgents_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridViewAgents_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewAgents.Columns[e.ColumnIndex].Name == "Action")
             {
@@ -183,8 +184,15 @@ namespace RealEstateManager.Pages
                     case 2: // Delete
                         if (MessageBox.Show("Are you sure you want to delete this agent?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                         {
-                            AgentRepository.DeleteAgent(agentId);
-                            LoadAgents();
+                            try
+                            {
+                                AgentRepository.DeleteAgent(agentId);
+                                LoadAgents();
+                            }
+                            catch (InvalidOperationException ex)
+                            {
+                                MessageBox.Show(ex.Message, "Cannot Delete Agent", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                         }
                         break;
                 }

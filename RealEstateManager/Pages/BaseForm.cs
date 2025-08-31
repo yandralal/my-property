@@ -1,5 +1,6 @@
 using System.Data;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Web;
 
 namespace RealEstateManager.Pages
@@ -105,5 +106,94 @@ namespace RealEstateManager.Pages
             button.FlatAppearance.MouseOverBackColor = Color.DarkGreen;
             button.FlatAppearance.MouseDownBackColor = Color.Green;
         }
+
+        protected void SetAllControlsMargin(Padding margin)
+        {
+            SetControlsMarginRecursive(this, margin);
+        }
+
+        private void SetControlsMarginRecursive(Control parent, Padding margin)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                ctrl.Margin = margin;
+                // Recursively set for child controls (e.g., inside GroupBox, Panel, etc.)
+                if (ctrl.HasChildren)
+                    SetControlsMarginRecursive(ctrl, margin);
+            }
+        }
+
+        // Add this method to set padding for a single TextBox
+        protected void SetTextBoxPadding(TextBox textBox, int left, int right)
+        {
+            const int EM_SETMARGINS = 0xd3;
+            int lParam = left | (right << 16);
+            SendMessage(textBox.Handle, EM_SETMARGINS, 0x3, lParam);
+        }
+        protected void SetLabelPadding(Label leb, int left, int right)
+        {
+            const int EM_SETMARGINS = 0xd3;
+            int lParam = left | (right << 16);
+            SendMessage(leb.Handle, EM_SETMARGINS, 0x3, lParam);
+        }
+
+        // Add this method to set padding for all TextBoxes in the form
+        protected void SetPaddingForControls(int left, int right)
+        {
+            SetPaddingForControlsRecursive(this, left, right);
+        }
+
+        private void SetPaddingForControlsRecursive(Control parent, int left, int right)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is TextBox tb)
+                {
+                    SetTextBoxPadding(tb, left, right);
+                }
+                else if (ctrl is Label lb)
+                {
+                    SetLabelPadding(lb, left, right);
+                }
+                else if (ctrl is ComboBox cb)
+                {
+                    SetComboBoxPadding(cb, left, right);
+                }
+                if (ctrl.HasChildren)
+                {
+                    SetPaddingForControlsRecursive(ctrl, left, right);
+                }
+            }
+        }
+
+        protected static void SetComboBoxPadding(ComboBox comboBox, int left, int right)
+        {
+            // Only works for editable ComboBox (DropDownStyle.DropDown)
+            if (comboBox.DropDownStyle == ComboBoxStyle.DropDownList)
+            {
+                const int EM_SETMARGINS = 0xd3;
+                int lParam = left | (right << 16);
+                SendMessage(comboBox.Handle, EM_SETMARGINS, 0x3, lParam);
+            }
+
+            comboBox.DrawMode = DrawMode.OwnerDrawFixed;
+            comboBox.DrawItem += (s, e) =>
+            {
+                e.DrawBackground();
+                if (e.Index >= 0)
+                {
+                    string text = ((ComboBox)s).Items[e.Index].ToString();
+                    using (var brush = new SolidBrush(e.ForeColor))
+                    {
+                        // Add left padding (e.g., 10px)
+                        e.Graphics.DrawString(text, e.Font, brush, e.Bounds.Left + 10, e.Bounds.Top + 2);
+                    }
+                }
+                e.DrawFocusRectangle();
+            };
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
     }
 }

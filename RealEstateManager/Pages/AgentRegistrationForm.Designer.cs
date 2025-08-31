@@ -11,6 +11,8 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.TextBox txtAgency;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label labelNameStar;
+        private System.Windows.Forms.Label labelContactStar;
 
         private void InitializeComponent()
         {
@@ -24,6 +26,8 @@ namespace RealEstateManager.Pages
             txtAgency = new TextBox();
             btnSave = new Button();
             btnCancel = new Button();
+            labelNameStar = new Label();
+            labelContactStar = new Label();
             groupBoxAgent.SuspendLayout();
             SuspendLayout();
             // 
@@ -37,6 +41,8 @@ namespace RealEstateManager.Pages
             groupBoxAgent.Controls.Add(txtAgency);
             groupBoxAgent.Controls.Add(btnSave);
             groupBoxAgent.Controls.Add(btnCancel);
+            groupBoxAgent.Controls.Add(labelNameStar);
+            groupBoxAgent.Controls.Add(labelContactStar);
             groupBoxAgent.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxAgent.ForeColor = Color.MidnightBlue;
             groupBoxAgent.Location = new Point(19, 18);
@@ -60,7 +66,7 @@ namespace RealEstateManager.Pages
             // 
             txtName.BorderStyle = BorderStyle.FixedSingle;
             txtName.Font = new Font("Segoe UI", 10F);
-            txtName.Location = new Point(166, 51);
+            txtName.Location = new Point(179, 51);
             txtName.Name = "txtName";
             txtName.Size = new Size(300, 30);
             txtName.TabIndex = 1;
@@ -79,7 +85,7 @@ namespace RealEstateManager.Pages
             // 
             txtContact.BorderStyle = BorderStyle.FixedSingle;
             txtContact.Font = new Font("Segoe UI", 10F);
-            txtContact.Location = new Point(166, 98);
+            txtContact.Location = new Point(179, 98);
             txtContact.MaxLength = 10;
             txtContact.Name = "txtContact";
             txtContact.Size = new Size(300, 30);
@@ -99,7 +105,7 @@ namespace RealEstateManager.Pages
             // 
             txtAgency.BorderStyle = BorderStyle.FixedSingle;
             txtAgency.Font = new Font("Segoe UI", 10F);
-            txtAgency.Location = new Point(166, 145);
+            txtAgency.Location = new Point(179, 145);
             txtAgency.Name = "txtAgency";
             txtAgency.Size = new Size(300, 30);
             txtAgency.TabIndex = 5;
@@ -110,7 +116,7 @@ namespace RealEstateManager.Pages
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(218, 192);
+            btnSave.Location = new Point(231, 193);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(90, 35);
             btnSave.TabIndex = 6;
@@ -124,7 +130,7 @@ namespace RealEstateManager.Pages
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(318, 192);
+            btnCancel.Location = new Point(331, 193);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(90, 35);
             btnCancel.TabIndex = 7;
@@ -132,8 +138,33 @@ namespace RealEstateManager.Pages
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += BtnCancel_Click;
             // 
+            // labelNameStar
+            // 
+            labelNameStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelNameStar.ForeColor = Color.Red;
+            // Place star just after the labelName text
+            labelNameStar.Location = new Point(labelName.Left + labelName.Width + 2, labelName.Top);
+            labelNameStar.Name = "labelNameStar";
+            labelNameStar.Size = new Size(20, 23);
+            labelNameStar.TabIndex = 8;
+            labelNameStar.Text = "*";
+            labelNameStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelContactStar
+            // 
+            labelContactStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelContactStar.ForeColor = Color.Red;
+            // Place star just after the labelContact text
+            labelContactStar.Location = new Point(labelContact.Left + labelContact.Width + 2, labelContact.Top);
+            labelContactStar.Name = "labelContactStar";
+            labelContactStar.Size = new Size(20, 23);
+            labelContactStar.TabIndex = 9;
+            labelContactStar.Text = "*";
+            labelContactStar.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // AgentRegistrationForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(600, 286);
             Controls.Add(groupBoxAgent);

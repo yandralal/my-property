@@ -103,6 +103,7 @@ namespace RealEstateManager.Pages
             LoadProperties();
             LoadAgents();
             buttonRegisterSale.Text = "Register Sale";
+            SetPaddingForControls(10, 6);
         }
 
         private void LoadProperties()
@@ -118,9 +119,9 @@ namespace RealEstateManager.Pages
                 conn.Open();
                 adapter.Fill(dt);
 
-                comboBoxProperty.DataSource = dt;
                 comboBoxProperty.DisplayMember = "Title";
                 comboBoxProperty.ValueMember = "Id";
+                comboBoxProperty.DataSource = dt;
                 comboBoxProperty.SelectedIndex = -1; // No selection by default
             }
             comboBoxPlot.DataSource = null;
@@ -152,9 +153,9 @@ namespace RealEstateManager.Pages
                 conn.Open();
                 adapter.Fill(dt);
 
-                comboBoxPlot.DataSource = dt;
                 comboBoxPlot.DisplayMember = "PlotNumber";
                 comboBoxPlot.ValueMember = "Id";
+                comboBoxPlot.DataSource = dt;
                 comboBoxPlot.SelectedIndex = -1;
             }
         }
@@ -307,8 +308,10 @@ namespace RealEstateManager.Pages
             }
             else
             {
-                string insert = @"INSERT INTO Plot (PropertyId, PlotNumber, Status, Area, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted) 
-                VALUES (@PropertyId, @PlotNumber, @Status, @Area, @CreatedBy, @CreatedDate, @ModifiedBy, @ModifiedDate, @IsDeleted)";
+                string insert = @"INSERT INTO PlotSale
+                    (PropertyId, PlotId, AgentId, BrokerageAmount, CustomerName, CustomerPhone, CustomerEmail, SaleAmount, SaleDate, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+                    VALUES (@PropertyId, @PlotId, @AgentId, @BrokerageAmount, @CustomerName, @CustomerPhone, @CustomerEmail, @SaleAmount, @SaleDate, @CreatedBy, @CreatedDate,
+                    @ModifiedBy, @ModifiedDate)";
 
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(insert, conn))

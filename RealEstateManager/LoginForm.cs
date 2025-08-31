@@ -12,7 +12,7 @@ namespace RealEstateManager
             textBoxPassword.KeyDown += TextBoxPassword_KeyDown;
         }
 
-        private void ButtonLogin_Click(object sender, EventArgs e)
+        private void ButtonLogin_Click(object? sender, EventArgs e)
         {
             string username = textBoxUsername.Text.Trim();
             string password = textBoxPassword.Text.Trim();

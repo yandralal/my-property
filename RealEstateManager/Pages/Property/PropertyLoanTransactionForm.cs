@@ -5,9 +5,11 @@ namespace RealEstateManager.Pages
 {
     public partial class PropertyLoanTransactionForm : BaseForm
     {
-        private readonly int _propertyId;
-        private readonly string _propertyTitle;
-        private readonly int? _editId = null; 
+        private int _propertyId;
+        // Change the declaration of _propertyTitle to be nullable
+        private string? _propertyTitle;
+        private readonly int? _editId = null;
+        private readonly bool _isReadOnly;
 
         // Add this field to store mapping from lender name to PropertyLoanId
         private readonly Dictionary<string, int> _lenderNameToLoanId = new();
@@ -15,11 +17,34 @@ namespace RealEstateManager.Pages
         private const int Y_AFTER_PAYING_FOR = 240;
         private const int Y_STEP = 45;
 
+        // Constructor for new transaction (edit mode)
         public PropertyLoanTransactionForm(int propertyId, string propertyTitle)
+            : this(propertyId, propertyTitle, null, false)
+        {
+        }
+
+        // Constructor for edit/view by transactionId
+        public PropertyLoanTransactionForm(int transactionId, bool isReadOnly = false)
+        {
+            InitializeComponent();
+            _isReadOnly = isReadOnly;
+            _editId = transactionId;
+
+            // Load transaction details from DB
+            LoadTransactionForEditOrView(transactionId);
+
+            // Set controls to read-only if needed
+            SetReadOnlyMode(_isReadOnly);
+        }
+
+        // Unified constructor for internal use
+        private PropertyLoanTransactionForm(int propertyId, string propertyTitle, int? editId, bool isReadOnly)
         {
             InitializeComponent();
             _propertyId = propertyId;
             _propertyTitle = propertyTitle;
+            _editId = editId;
+            _isReadOnly = isReadOnly;
 
             textBoxPropertyId.Text = _propertyTitle; // Pre-populate property name
 
@@ -43,6 +68,74 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
             comboBoxTransactionType.SelectedIndex = 1; // Default to "Debit"
+
+            // If editing, load data
+            if (_editId.HasValue)
+            {
+                LoadTransactionForEditOrView(_editId.Value);
+            }
+
+            SetReadOnlyMode(_isReadOnly);
+        }
+
+        private void LoadTransactionForEditOrView(int transactionId)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(@"
+                SELECT t.*, p.Title AS PropertyTitle
+                FROM PropertyLoanTransaction t
+                INNER JOIN Property p ON t.PropertyId = p.Id
+                WHERE t.Id = @Id", conn))
+            {
+                cmd.Parameters.AddWithValue("@Id", transactionId);
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        _propertyId = reader.GetInt32(reader.GetOrdinal("PropertyId"));
+                        _propertyTitle = reader["PropertyTitle"].ToString() ?? "";
+
+                        textBoxPropertyId.Text = _propertyTitle;
+                        comboBoxLenderName.Text = reader["LenderName"].ToString();
+                        comboBoxTransactionType.Text = reader["TransactionType"].ToString();
+                        comboBoxPaymentMethod.Text = reader["PaymentMethod"].ToString();
+                        textBoxReferenceNumber.Text = reader["ReferenceNumber"]?.ToString() ?? "";
+                        textBoxNotes.Text = reader["Notes"]?.ToString() ?? "";
+                        dateTimePickerTransactionDate.Value = reader.GetDateTime(reader.GetOrdinal("TransactionDate"));
+
+                        decimal principal = reader["PrincipalAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PrincipalAmount"]) : 0;
+                        decimal interest = reader["InterestAmount"] != DBNull.Value ? Convert.ToDecimal(reader["InterestAmount"]) : 0;
+                        if (interest > 0)
+                        {
+                            comboBoxPayingFor.SelectedItem = "Interest";
+                            textBoxAmount.Text = interest.ToString("0.00");
+                        }
+                        else
+                        {
+                            comboBoxPayingFor.SelectedItem = "Principal";
+                            textBoxAmount.Text = principal.ToString("0.00");
+                        }
+                    }
+                }
+            }
+            LoadLenders();
+            UpdateLoanSummaryFields();
+        }
+
+        private void SetReadOnlyMode(bool isReadOnly)
+        {
+            // Disable all input controls in view mode
+            textBoxAmount.ReadOnly = isReadOnly;
+            textBoxReferenceNumber.ReadOnly = isReadOnly;
+            textBoxNotes.ReadOnly = isReadOnly;
+            comboBoxLenderName.Enabled = !isReadOnly;
+            comboBoxTransactionType.Enabled = !isReadOnly;
+            comboBoxPaymentMethod.Enabled = !isReadOnly;
+            comboBoxPayingFor.Enabled = !isReadOnly;
+            dateTimePickerTransactionDate.Enabled = !isReadOnly;
+            buttonSave.Visible = !isReadOnly;
         }
 
         private void LoadLenders()

@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
+using RealEstateManager.Pages.Property;
 using System.Configuration;
 using System.Data;
 
@@ -201,40 +202,46 @@ namespace RealEstateManager.Pages
             var cell = dataGridViewLoans[e.ColumnIndex, e.RowIndex];
             var mouse = dataGridViewLoans.PointToClient(Cursor.Position);
             var cellDisplayRect = dataGridViewLoans.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+
             int iconWidth = 24;
-            int padding = 4;
+            int padding = 8; // Use the same padding as in CellPainting
+            int totalIcons = 3;
             int x = mouse.X - cellDisplayRect.Left;
 
-            int iconIndex = x / (iconWidth + padding);
-
-            if (iconIndex == 0) // Edit
+            for (int i = 0; i < totalIcons; i++)
             {
-                var loan = GetLoanById(id);
-                if (loan != null)
+                int iconStart = padding + i * (iconWidth + padding);
+                int iconEnd = iconStart + iconWidth;
+                if (x >= iconStart && x < iconEnd)
                 {
-                    var form = new PropertyLoanForm(loan);
-                    if (form.ShowDialog() == DialogResult.OK)
-                        LoadLoans();
-                }
-            }
-            else if (iconIndex == 1) // View
-            {
-                var loan = GetLoanById(id);
-                if (loan != null)
-                {
-                    var form = new PropertyLoanForm(loan);
-                    foreach (Control c in form.Controls)
-                        c.Enabled = false;
-                    //form.buttonCancel.Enabled = true;
-                    form.ShowDialog();
-                }
-            }
-            else if (iconIndex == 2) // Delete
-            {
-                if (MessageBox.Show("Are you sure you want to delete this loan?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    DeletePropertyLoan(id);
-                    LoadLoans();
+                    if (i == 0) // Edit
+                    {
+                        var loan = GetLoanById(id);
+                        if (loan != null)
+                        {
+                            var form = new PropertyLoanForm(loan);
+                            if (form.ShowDialog() == DialogResult.OK)
+                                LoadLoans();
+                        }
+                    }
+                    else if (i == 1) // View
+                    {
+                        var loan = GetLoanById(id);
+                        if (loan != null)
+                        {
+                            var detailsForm = new PropertyLoanDetailsForm(loan);
+                            detailsForm.ShowDialog();
+                        }
+                    }
+                    else if (i == 2) // Delete
+                    {
+                        if (MessageBox.Show("Are you sure you want to delete this loan?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        {
+                            DeletePropertyLoan(id);
+                            LoadLoans();
+                        }
+                    }
+                    break;
                 }
             }
         }

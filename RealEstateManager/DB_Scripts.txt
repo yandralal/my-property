@@ -161,3 +161,41 @@ CREATE TABLE [dbo].[MiscTransaction] (
     [ModifiedDate]      DATETIME      NULL,
     [IsDeleted]         BIT           NOT NULL DEFAULT 0
 );
+
+CREATE TABLE PropertyLoan (
+    Id INT IDENTITY PRIMARY KEY,
+    PropertyId INT NOT NULL,
+    LoanAmount DECIMAL(18,2) NOT NULL,
+    LenderName NVARCHAR(100) NOT NULL,
+    InterestRate DECIMAL(5,2) NOT NULL,
+	Tenure INT NOT NULL,
+    TotalInterest DECIMAL(18,2) NULL,
+    TotalRepayable DECIMAL(18,2) NULL,
+    LoanDate DATETIME NOT NULL,
+    Remarks NVARCHAR(255) NULL,
+    CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
+    CreatedBy NVARCHAR(100) NULL,
+    ModifiedBy NVARCHAR(100) NULL,
+    ModifiedDate DATETIME NULL,
+    IsDeleted BIT NOT NULL DEFAULT 0,
+    CONSTRAINT FK_PropertyLoan_Property FOREIGN KEY (PropertyId) REFERENCES Property(Id)
+);
+
+CREATE TABLE PropertyLoanTransaction (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    PropertyId INT NOT NULL,
+    PropertyLoanId INT NULL,
+    LenderName NVARCHAR(200) NOT NULL,
+    PrincipalAmount DECIMAL(18,2) NOT NULL DEFAULT 0,   -- Amount paid towards principal
+    InterestAmount DECIMAL(18,2) NOT NULL DEFAULT 0,    -- Amount paid towards interest
+    TransactionType NVARCHAR(50) NOT NULL,              -- "Principal" or "Interest"
+    TransactionDate DATETIME NOT NULL,
+    PaymentMethod NVARCHAR(100) NOT NULL,
+    ReferenceNumber NVARCHAR(100) NULL,
+    Notes NVARCHAR(500) NULL,
+    CreatedDate DATETIME NOT NULL,
+    CreatedBy NVARCHAR(100) NULL,
+    ModifiedDate DATETIME NULL,
+    ModifiedBy NVARCHAR(100) NULL,
+    IsDeleted BIT NOT NULL DEFAULT 0
+);

@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using RealEstateManager.Entities;
 using RealEstateManager.Pages;
 using System.Configuration; 
 using System.Data;
@@ -956,7 +957,7 @@ namespace RealEstateManager
                 }
             }
 
-            var transactionForm = new Pages.RegisterPropertyTransactionForm(propertyId, saleAmount, propertyNumber);
+            var transactionForm = new RegisterPropertyTransactionForm(propertyId, saleAmount, propertyNumber);
             transactionForm.ShowDialog();
         }
 
@@ -1060,7 +1061,7 @@ namespace RealEstateManager
 
         private void helpMenuItem_Click(object sender, EventArgs e)
         {
-            using (var helpForm = new Pages.HelpForm())
+            using (var helpForm = new HelpForm())
             {
                 helpForm.ShowDialog(this);
             }
@@ -1102,6 +1103,94 @@ namespace RealEstateManager
                     MessageBox.Show("User Guide PDF not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void PropertyLoanMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewProperties.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a property.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var idCell = dataGridViewProperties.CurrentRow.Cells["Id"];
+            var titleCell = dataGridViewProperties.CurrentRow.Cells["Title"];
+            if (idCell == null || !int.TryParse(idCell.Value?.ToString(), out int propertyId))
+            {
+                MessageBox.Show("Invalid property selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            string propertyTitle = titleCell?.Value?.ToString() ?? "";
+
+            // Fetch existing loan for this property (if any)
+            LoanTransaction? loan = null;
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand("SELECT TOP 1 * FROM LoanTransaction WHERE PropertyId = @PropertyId", conn))
+            {
+                cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        loan = new LoanTransaction
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            PropertyId = reader["PropertyId"] as int?,
+                            LoanAmount = reader.GetDecimal(reader.GetOrdinal("LoanAmount")),
+                            LenderName = reader["LenderName"].ToString() ?? "",
+                            InterestRate = reader.GetDecimal(reader.GetOrdinal("InterestRate")),
+                            LoanDate = reader.GetDateTime(reader.GetOrdinal("LoanDate")),
+                            Remarks = reader["Remarks"] as string,
+                            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
+                        };
+                    }
+                }
+            }
+
+            // Open the form with loan details if exists, else just prepopulate property
+            if (loan != null)
+            {
+                var form = new PropertyLoanForm(loan);
+                //form..Text = propertyTitle; // Show property name
+                //form.textBoxPropertyId.ReadOnly = true;
+                form.ShowDialog();
+            }
+            else
+            {
+                var form = new PropertyLoanForm();
+                //form.textBoxPropertyId.Text = propertyTitle; // Show property name
+                //form.textBoxPropertyId.ReadOnly = true;
+                form.ShowDialog();
+            }
+        }
+
+        private void PropertyLoanTransactionMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewProperties.CurrentRow == null)
+            {
+                MessageBox.Show("Please select a property.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var idCell = dataGridViewProperties.CurrentRow.Cells["Id"];
+            var titleCell = dataGridViewProperties.CurrentRow.Cells["Title"];
+            if (idCell == null || !int.TryParse(idCell.Value?.ToString(), out int propertyId))
+            {
+                MessageBox.Show("Invalid property selection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            string propertyTitle = titleCell?.Value?.ToString() ?? "";
+
+            var form = new PropertyLoanTransactionForm(propertyId, propertyTitle);
+            form.ShowDialog();
+        }
+
+        private void ManagePropertyLoansMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new ManagePropertyLoansForm();
+            form.ShowDialog();
         }
     }
 }

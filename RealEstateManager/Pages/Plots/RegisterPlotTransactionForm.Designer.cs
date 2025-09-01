@@ -85,7 +85,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Location = new Point(23, 21);
             groupBoxTransactionEntry.Name = "groupBoxTransactionEntry";
             groupBoxTransactionEntry.Padding = new Padding(15);
-            groupBoxTransactionEntry.Size = new Size(590, 610);
+            groupBoxTransactionEntry.Size = new Size(590, 629);
             groupBoxTransactionEntry.TabIndex = 0;
             groupBoxTransactionEntry.TabStop = false;
             groupBoxTransactionEntry.Text = "Transaction Entry";
@@ -275,7 +275,7 @@ namespace RealEstateManager.Pages
             buttonSave.FlatStyle = FlatStyle.Flat;
             buttonSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(255, 547);
+            buttonSave.Location = new Point(255, 564);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(110, 35);
             buttonSave.TabIndex = 9;
@@ -309,7 +309,7 @@ namespace RealEstateManager.Pages
             buttonCancel.FlatStyle = FlatStyle.Flat;
             buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonCancel.ForeColor = Color.White;
-            buttonCancel.Location = new Point(383, 547);
+            buttonCancel.Location = new Point(383, 564);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(110, 35);
             buttonCancel.TabIndex = 10;
@@ -320,7 +320,7 @@ namespace RealEstateManager.Pages
             // RegisterPlotTransactionForm
             // 
             BackColor = Color.AliceBlue;
-            ClientSize = new Size(634, 648);
+            ClientSize = new Size(634, 664);
             Controls.Add(groupBoxTransactionEntry);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;

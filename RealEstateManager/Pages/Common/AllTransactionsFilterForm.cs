@@ -9,15 +9,16 @@ namespace RealEstateManager.Pages
         public AllTransactionsFilterForm()
         {
             InitializeComponent();
-            comboBoxType.Items.AddRange(["Plot", "Property", "Agent", "Miscellaneous"]);
+            comboBoxType.Items.AddRange(new[] { "Plot", "Property", "Agent", "Miscellaneous", "Property Loan" }); // Added "Property Loan"
             comboBoxType.SelectedIndex = 0;
+            comboBoxType.SelectedIndexChanged += ButtonFilter_Click;
             dateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
             dateTimePickerTo.Value = DateTime.Today;
             ButtonFilter_Click(this, EventArgs.Empty);
             ApplyGridStyle(dataGridViewResults);
         }
 
-        private void ButtonFilter_Click(object sender, EventArgs e)
+        private void ButtonFilter_Click(object? sender, EventArgs e)
         {
             DateTime fromDate = dateTimePickerFrom.Value.Date;
             DateTime toDate = dateTimePickerTo.Value.Date;
@@ -108,6 +109,26 @@ namespace RealEstateManager.Pages
                           AND mt.TransactionDate <= @ToDate
                         ORDER BY mt.TransactionDate ASC";
                     break;
+                case "Property Loan":
+                    query = @"
+                SELECT 
+                    plt.Id AS TransactionId,
+                    plt.TransactionDate,
+                    plt.TransactionType,
+                    plt.PrincipalAmount,
+                    plt.InterestAmount,
+                    plt.PaymentMethod,
+                    plt.ReferenceNumber,
+                    pl.LenderName,
+                    pr.Title AS PropertyName
+                FROM PropertyLoanTransaction plt
+                LEFT JOIN PropertyLoan pl ON plt.PropertyLoanId = pl.Id
+                LEFT JOIN Property pr ON pl.PropertyId = pr.Id
+                WHERE plt.IsDeleted = 0
+                  AND plt.TransactionDate >= @FromDate
+                  AND plt.TransactionDate <= @ToDate
+                ORDER BY plt.TransactionDate ASC";
+                    break;
             }
 
             using (var conn = new SqlConnection(connectionString))
@@ -126,7 +147,7 @@ namespace RealEstateManager.Pages
                 dataGridViewResults.Columns.Clear();
                 dataGridViewResults.AutoGenerateColumns = false;
                 dataGridViewResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dataGridViewResults.AllowUserToResizeColumns = false; 
+                dataGridViewResults.AllowUserToResizeColumns = false;
 
                 // Always add columns, even if no data
                 if (dt.Columns.Contains("TransactionId"))
@@ -147,29 +168,18 @@ namespace RealEstateManager.Pages
                         Name = "PropertyName",
                         DataPropertyName = "PropertyName",
                         HeaderText = "Property",
-                        Width = 180,
+                        Width = 150,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
-                if (dt.Columns.Contains("PlotNumber"))
+                if (dt.Columns.Contains("LenderName"))
                 {
                     dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
                     {
-                        Name = "PlotNumber",
-                        DataPropertyName = "PlotNumber",
-                        HeaderText = "Plot Number",
+                        Name = "LenderName",
+                        DataPropertyName = "LenderName",
+                        HeaderText = "Lender",
                         Width = 120,
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None
-                    });
-                }
-                if (dt.Columns.Contains("AgentName"))
-                {
-                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
-                    {
-                        Name = "AgentName",
-                        DataPropertyName = "AgentName",
-                        HeaderText = "Agent",
-                        Width = 180,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
@@ -185,17 +195,6 @@ namespace RealEstateManager.Pages
                         DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy hh:mm tt" }
                     });
                 }
-                if (dt.Columns.Contains("Recipient"))
-                {
-                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
-                    {
-                        Name = "Recipient",
-                        DataPropertyName = "Recipient",
-                        HeaderText = "Recipient",
-                        Width = 180,
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None
-                    });
-                }
                 if (dt.Columns.Contains("TransactionType"))
                 {
                     dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
@@ -207,13 +206,37 @@ namespace RealEstateManager.Pages
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
+                if (dt.Columns.Contains("PrincipalAmount"))
+                {
+                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        Name = "PrincipalAmount",
+                        DataPropertyName = "PrincipalAmount",
+                        HeaderText = "Principal Paid",
+                        Width = 150,
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                        DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }
+                    });
+                }
+                if (dt.Columns.Contains("InterestAmount"))
+                {
+                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        Name = "InterestAmount",
+                        DataPropertyName = "InterestAmount",
+                        HeaderText = "Interest Paid",
+                        Width = 120,
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                        DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }
+                    });
+                }
                 if (dt.Columns.Contains("Amount"))
                 {
                     dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
                     {
                         Name = "Amount",
                         DataPropertyName = "Amount",
-                        HeaderText = "Amount",
+                        HeaderText = "Total Paid",
                         Width = 150,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
                         DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }
@@ -252,7 +275,7 @@ namespace RealEstateManager.Pages
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
-               
+
                 // Bind data if any rows, otherwise just show headers
                 if (dt.Rows.Count > 0)
                 {

@@ -38,6 +38,8 @@ namespace RealEstateManager
         private Label footerLabel;
         private Label labelPlots;
         private ToolStripMenuItem downloadUserGuideMenuItem;
+        private ToolStripMenuItem propertyLoanTransactionMenuItem;
+        private ToolStripMenuItem managePropertyLoansMenuItem;
 
         protected override void Dispose(bool disposing)
         {
@@ -89,6 +91,8 @@ namespace RealEstateManager
             panelMain = new Panel();
             panelFooter = new Panel();
             footerLabel = new Label();
+            propertyLoanTransactionMenuItem = new ToolStripMenuItem();
+            managePropertyLoansMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
@@ -114,7 +118,7 @@ namespace RealEstateManager
             // 
             // transactionsMenu
             // 
-            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem, miscTransactionToolStripMenuItem });
+            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem, miscTransactionToolStripMenuItem, propertyLoanTransactionMenuItem });
             transactionsMenu.Name = "transactionsMenu";
             transactionsMenu.Size = new Size(144, 32);
             transactionsMenu.Text = "Transactions";
@@ -146,10 +150,25 @@ namespace RealEstateManager
             miscTransactionToolStripMenuItem.Size = new Size(232, 32);
             miscTransactionToolStripMenuItem.Text = "Miscellaneous";
             miscTransactionToolStripMenuItem.Click += MiscTransactionToolStripMenuItem_Click;
+            //
+            // propertyLoanTransactionMenuItem
+            //
+            propertyLoanTransactionMenuItem.Name = "propertyLoanTransactionMenuItem";
+            propertyLoanTransactionMenuItem.Size = new Size(232, 32);
+            propertyLoanTransactionMenuItem.Text = "Property Loan";
+            propertyLoanTransactionMenuItem.Click += PropertyLoanTransactionMenuItem_Click;
+            //
+            // managePropertyLoansMenuItem
+            //
+            managePropertyLoansMenuItem = new ToolStripMenuItem();
+            managePropertyLoansMenuItem.Name = "managePropertyLoansMenuItem";
+            managePropertyLoansMenuItem.Size = new System.Drawing.Size(246, 32);
+            managePropertyLoansMenuItem.Text = "Manage Property Loans";
+            managePropertyLoansMenuItem.Click += ManagePropertyLoansMenuItem_Click;
             // 
             // agentOperationsMenu
             // 
-            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { registerSaleMenuItem, approveOfferMenuItem });
+            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { registerSaleMenuItem, approveOfferMenuItem, managePropertyLoansMenuItem });
             agentOperationsMenu.Name = "agentOperationsMenu";
             agentOperationsMenu.Size = new Size(130, 32);
             agentOperationsMenu.Text = "Operations";

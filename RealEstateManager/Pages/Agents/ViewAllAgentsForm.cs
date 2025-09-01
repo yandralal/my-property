@@ -124,7 +124,7 @@ namespace RealEstateManager.Pages
             labelAgents.Text = $"Agents ({agents.Count})";
         }
 
-        private void dataGridViewAgents_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        private void DataGridViewAgents_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewAgents.Columns[e.ColumnIndex].Name == "Action")
             {

@@ -62,7 +62,7 @@ namespace RealEstateManager.Pages
             dataGridViewAgents.Size = new Size(1060, 437);
             dataGridViewAgents.TabIndex = 0;
             dataGridViewAgents.CellMouseClick += DataGridViewAgents_CellMouseClick;
-            dataGridViewAgents.CellPainting += dataGridViewAgents_CellPainting;
+            dataGridViewAgents.CellPainting += DataGridViewAgents_CellPainting;
             // 
             // labelAgents
             // 

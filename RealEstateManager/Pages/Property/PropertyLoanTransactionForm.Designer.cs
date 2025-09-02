@@ -32,10 +32,10 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.TextBox textBoxTotalInterest;
         private System.Windows.Forms.Label labelTotalInterestPaid;
         private System.Windows.Forms.TextBox textBoxTotalInterestPaid;
-        private System.Windows.Forms.Label labelTotalPrinciplePaid;
-        private System.Windows.Forms.TextBox textBoxTotalPrinciplePaid;
-        private System.Windows.Forms.Label labelTotalPrinciple;
-        private System.Windows.Forms.TextBox textBoxTotalPrinciple;
+        private System.Windows.Forms.Label labelTotalPrincipalPaid;
+        private System.Windows.Forms.TextBox textBoxTotalPrincipalPaid;
+        private System.Windows.Forms.Label labelTotalPrincipal;
+        private System.Windows.Forms.TextBox textBoxTotalPrincipal;
 
         protected override void Dispose(bool disposing)
         {
@@ -75,10 +75,10 @@ namespace RealEstateManager.Pages
             textBoxTotalInterest = new TextBox();
             labelTotalInterestPaid = new Label();
             textBoxTotalInterestPaid = new TextBox();
-            labelTotalPrinciplePaid = new Label();
-            textBoxTotalPrinciplePaid = new TextBox();
-            labelTotalPrinciple = new Label();
-            textBoxTotalPrinciple = new TextBox();
+            labelTotalPrincipalPaid = new Label();
+            textBoxTotalPrincipalPaid = new TextBox();
+            labelTotalPrincipal = new Label();
+            textBoxTotalPrincipal = new TextBox();
             groupBoxTransactionEntry.SuspendLayout();
             SuspendLayout();
             // 
@@ -113,10 +113,10 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Controls.Add(textBoxTotalInterest);
             groupBoxTransactionEntry.Controls.Add(labelTotalInterestPaid);
             groupBoxTransactionEntry.Controls.Add(textBoxTotalInterestPaid);
-            groupBoxTransactionEntry.Controls.Add(labelTotalPrinciplePaid);
-            groupBoxTransactionEntry.Controls.Add(textBoxTotalPrinciplePaid);
-            groupBoxTransactionEntry.Controls.Add(labelTotalPrinciple);
-            groupBoxTransactionEntry.Controls.Add(textBoxTotalPrinciple);
+            groupBoxTransactionEntry.Controls.Add(labelTotalPrincipalPaid);
+            groupBoxTransactionEntry.Controls.Add(textBoxTotalPrincipalPaid);
+            groupBoxTransactionEntry.Controls.Add(labelTotalPrincipal);
+            groupBoxTransactionEntry.Controls.Add(textBoxTotalPrincipal);
             groupBoxTransactionEntry.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionEntry.ForeColor = Color.MidnightBlue;
             groupBoxTransactionEntry.Location = new Point(20, 25);
@@ -365,7 +365,7 @@ namespace RealEstateManager.Pages
             // 
             comboBoxPayingFor.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPayingFor.Font = new Font("Segoe UI", 10F);
-            comboBoxPayingFor.Items.AddRange(new object[] { "Interest", "Principle" });
+            comboBoxPayingFor.Items.AddRange(new object[] { "Interest", "Principal" });
             comboBoxPayingFor.Location = new Point(229, 188);
             comboBoxPayingFor.Name = "comboBoxPayingFor";
             comboBoxPayingFor.Size = new Size(320, 31);
@@ -412,45 +412,45 @@ namespace RealEstateManager.Pages
             textBoxTotalInterestPaid.Size = new Size(320, 30);
             textBoxTotalInterestPaid.TabIndex = 8;
             // 
-            // labelTotalPrinciplePaid
+            // labelTotalPrincipalPaid
             // 
-            labelTotalPrinciplePaid.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalPrinciplePaid.ForeColor = Color.DarkSlateGray;
-            labelTotalPrinciplePaid.Location = new Point(27, 240);
-            labelTotalPrinciplePaid.Name = "labelTotalPrinciplePaid";
-            labelTotalPrinciplePaid.Size = new Size(196, 23);
-            labelTotalPrinciplePaid.TabIndex = 20;
-            labelTotalPrinciplePaid.Text = "Total Principle Paid:";
+            labelTotalPrincipalPaid.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalPrincipalPaid.ForeColor = Color.DarkSlateGray;
+            labelTotalPrincipalPaid.Location = new Point(27, 240);
+            labelTotalPrincipalPaid.Name = "labelTotalPrincipalPaid";
+            labelTotalPrincipalPaid.Size = new Size(196, 23);
+            labelTotalPrincipalPaid.TabIndex = 20;
+            labelTotalPrincipalPaid.Text = "Total Principal Paid:";
             // 
-            // textBoxTotalPrinciplePaid
+            // textBoxTotalPrincipalPaid
             // 
-            textBoxTotalPrinciplePaid.BorderStyle = BorderStyle.FixedSingle;
-            textBoxTotalPrinciplePaid.Font = new Font("Segoe UI", 10F);
-            textBoxTotalPrinciplePaid.Location = new Point(229, 237);
-            textBoxTotalPrinciplePaid.Name = "textBoxTotalPrinciplePaid";
-            textBoxTotalPrinciplePaid.ReadOnly = true;
-            textBoxTotalPrinciplePaid.Size = new Size(320, 30);
-            textBoxTotalPrinciplePaid.TabIndex = 8;
+            textBoxTotalPrincipalPaid.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTotalPrincipalPaid.Font = new Font("Segoe UI", 10F);
+            textBoxTotalPrincipalPaid.Location = new Point(229, 237);
+            textBoxTotalPrincipalPaid.Name = "textBoxTotalPrincipalPaid";
+            textBoxTotalPrincipalPaid.ReadOnly = true;
+            textBoxTotalPrincipalPaid.Size = new Size(320, 30);
+            textBoxTotalPrincipalPaid.TabIndex = 8;
             // 
-            // labelTotalPrinciple
+            // labelTotalPrincipal
             // 
-            labelTotalPrinciple.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalPrinciple.ForeColor = Color.DarkSlateGray;
-            labelTotalPrinciple.Location = new Point(27, 333);
-            labelTotalPrinciple.Name = "labelTotalPrinciple";
-            labelTotalPrinciple.Size = new Size(196, 23);
-            labelTotalPrinciple.TabIndex = 4;
-            labelTotalPrinciple.Text = "Total Principle:";
+            labelTotalPrincipal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalPrincipal.ForeColor = Color.DarkSlateGray;
+            labelTotalPrincipal.Location = new Point(27, 333);
+            labelTotalPrincipal.Name = "labelTotalPrincipal";
+            labelTotalPrincipal.Size = new Size(196, 23);
+            labelTotalPrincipal.TabIndex = 4;
+            labelTotalPrincipal.Text = "Total Principal:";
             // 
-            // textBoxTotalPrinciple
+            // textBoxTotalPrincipal
             // 
-            textBoxTotalPrinciple.BorderStyle = BorderStyle.FixedSingle;
-            textBoxTotalPrinciple.Font = new Font("Segoe UI", 10F);
-            textBoxTotalPrinciple.Location = new Point(229, 330);
-            textBoxTotalPrinciple.Name = "textBoxTotalPrinciple";
-            textBoxTotalPrinciple.ReadOnly = true;
-            textBoxTotalPrinciple.Size = new Size(320, 30);
-            textBoxTotalPrinciple.TabIndex = 3;
+            textBoxTotalPrincipal.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTotalPrincipal.Font = new Font("Segoe UI", 10F);
+            textBoxTotalPrincipal.Location = new Point(229, 330);
+            textBoxTotalPrincipal.Name = "textBoxTotalPrincipal";
+            textBoxTotalPrincipal.ReadOnly = true;
+            textBoxTotalPrincipal.Size = new Size(320, 30);
+            textBoxTotalPrincipal.TabIndex = 3;
             // 
             // PropertyLoanTransactionForm
             // 

@@ -173,6 +173,17 @@ namespace RealEstateManager.Pages.Property
                 HeaderText = "Reference #",
                 Width = 110
             });
+            if (!dataGridViewTransactions.Columns.Contains("Action"))
+            {
+                var actionCol = new DataGridViewImageColumn
+                {
+                    Name = "Action",
+                    HeaderText = "Action",
+                    Width = 120,
+                    ImageLayout = DataGridViewImageCellLayout.Normal
+                };
+                dataGridViewTransactions.Columns.Add(actionCol);
+            }
         }
 
         private void ButtonGeneratePdf_Click(object? sender, EventArgs e)
@@ -291,19 +302,6 @@ namespace RealEstateManager.Pages.Property
             // Set font styles
             dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
             dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            // Add action column if not already present
-            if (!dgv.Columns.Contains("Action"))
-            {
-                var actionCol = new DataGridViewImageColumn
-                {
-                    Name = "Action",
-                    HeaderText = "Action",
-                    Width = 120,
-                    ImageLayout = DataGridViewImageCellLayout.Normal
-                };
-                dgv.Columns.Add(actionCol);
-            }
 
             // Set column headers, widths, and formats as needed
             if (dgv.Columns["TransactionId"] != null)

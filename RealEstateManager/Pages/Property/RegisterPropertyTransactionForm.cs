@@ -14,7 +14,7 @@ namespace RealEstateManager.Pages
         public RegisterPropertyTransactionForm(int? propertyId = null, decimal? saleAmount = null, string? propertyNumber = "")
         {
             InitializeComponent();
-            SetPaddingForControls(10, 6);
+            SetupNumericTextBoxValidation(); 
             _propertyId = propertyId;
             _saleAmount = saleAmount;
             _propertyNumber = propertyNumber;
@@ -51,6 +51,7 @@ namespace RealEstateManager.Pages
         public RegisterPropertyTransactionForm(string transactionId, bool readOnly = false)
         {
             InitializeComponent();
+            SetupNumericTextBoxValidation();
 
             _transactionId = transactionId;
 
@@ -337,6 +338,39 @@ namespace RealEstateManager.Pages
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        /// <summary>
+        /// Restricts numeric textboxes to digits, one decimal point, and control keys.
+        /// </summary>
+        private void SetupNumericTextBoxValidation()
+        {
+            KeyPressEventHandler handler = (s, e) =>
+            {
+                TextBox tb = s as TextBox;
+                char ch = e.KeyChar;
+
+                // Allow control keys (backspace, delete, etc.)
+                if (char.IsControl(ch))
+                    return;
+
+                // Allow only one decimal separator, and not as the first character
+                if (ch == '.' && (tb.Text.Contains('.') || tb.SelectionStart == 0))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Allow digits only
+                if (!char.IsDigit(ch) && ch != '.')
+                {
+                    e.Handled = true;
+                }
+            };
+
+            textBoxAmount.KeyPress += handler;
+            textBoxSaleAmount.KeyPress += handler;
+            textBoxAmountPaidTillDate.KeyPress += handler;
         }
     }
 }

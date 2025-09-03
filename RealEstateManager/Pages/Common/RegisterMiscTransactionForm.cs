@@ -10,7 +10,6 @@ namespace RealEstateManager.Pages
         public RegisterMiscTransactionForm()
         {
             InitializeComponent();
-            SetPaddingForControls(10, 6);
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
             comboBoxTransactionType.SelectedIndex = 0;
@@ -19,6 +18,7 @@ namespace RealEstateManager.Pages
             comboBoxPaymentMethod.Items.AddRange(["Cash", "Cheque", "Bank Transfer", "Other"]);
 
             SetupAmountFormatting();
+            SetupNumericTextBoxValidation();
         }
 
         public RegisterMiscTransactionForm(string transactionId, bool readOnly = false)
@@ -59,7 +59,7 @@ namespace RealEstateManager.Pages
                         textBoxAmount.Text = reader["Amount"] != DBNull.Value ? Convert.ToDecimal(reader["Amount"]).ToString("N2") : "";
                         comboBoxPaymentMethod.Text = reader["PaymentMethod"]?.ToString() ?? "";
                         textBoxReferenceNumber.Text = reader["ReferenceNumber"]?.ToString() ?? "";
-                        textBoxRecipient.Text = reader["Recipient"]?.ToString() ?? ""; // <-- Add this line
+                        textBoxRecipient.Text = reader["Recipient"]?.ToString() ?? "";
                         textBoxNotes.Text = reader["Notes"]?.ToString() ?? "";
                         comboBoxTransactionType.Text = reader["TransactionType"]?.ToString() ?? "Credit";
                     }
@@ -67,6 +67,7 @@ namespace RealEstateManager.Pages
             }
 
             SetupAmountFormatting();
+            SetupNumericTextBoxValidation();
 
             SetFieldsReadOnly(readOnly);
             buttonSave.Visible = !readOnly;
@@ -223,6 +224,35 @@ namespace RealEstateManager.Pages
                 if (decimal.TryParse(textBoxAmount.Text, out decimal val))
                 {
                     textBoxAmount.Text = val.ToString("F2");
+                }
+            };
+        }
+
+        /// <summary>
+        /// Restricts textBoxAmount to digits, one decimal point, and control keys.
+        /// </summary>
+        private void SetupNumericTextBoxValidation()
+        {
+            textBoxAmount.KeyPress += (s, e) =>
+            {
+                char ch = e.KeyChar;
+                TextBox tb = s as TextBox;
+
+                // Allow control keys (backspace, delete, etc.)
+                if (char.IsControl(ch))
+                    return;
+
+                // Allow only one decimal separator, and not as the first character
+                if (ch == '.' && (tb.Text.Contains('.') || tb.SelectionStart == 0))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Allow digits only
+                if (!char.IsDigit(ch) && ch != '.')
+                {
+                    e.Handled = true;
                 }
             };
         }

@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace RealEstateManager.Pages
 {
@@ -206,6 +207,7 @@ namespace RealEstateManager.Pages
                 conn.Open();
 
                 // Load property details
+                decimal buyPrice = 0;
                 using (var reader = propertyCmd.ExecuteReader())
                 {
                     if (reader.Read())
@@ -225,7 +227,8 @@ namespace RealEstateManager.Pages
 
                         decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
                         decimal amountBalance = reader["AmountBalance"] is decimal ab ? ab : 0;
-                        labelPropertyBuyPrice.Text = string.Format("{0:C}", reader["Price"]);
+                        buyPrice = reader["Price"] is decimal bp ? bp : 0;
+                        labelPropertyBuyPrice.Text = string.Format("{0:C}", buyPrice);
                         labelPropertyAmountPaid.Text = string.Format("{0:C}", amountPaid);
                         labelPropertyBalance.Text = string.Format("{0:C}", amountBalance);
                     }
@@ -240,7 +243,6 @@ namespace RealEstateManager.Pages
                 }
 
                 decimal totalSaleAmount = 0;
-                decimal buyPrice = 0;
                 decimal totalPaid = 0;
                 decimal totalBalance = 0;
 
@@ -249,8 +251,7 @@ namespace RealEstateManager.Pages
                     SELECT 
                         (SELECT COUNT(*) FROM Plot WHERE PropertyId = @Id AND IsDeleted = 0) AS TotalPlots,
                         ISNULL((SELECT SUM(SaleAmount) FROM PlotSale ps INNER JOIN Plot p ON ps.PlotId = p.Id WHERE p.PropertyId = @Id AND p.IsDeleted = 0), 0) AS TotalSaleAmount,
-                        ISNULL((SELECT SUM(Amount) FROM PlotTransaction pt INNER JOIN Plot p ON pt.PlotId = p.Id WHERE p.PropertyId = @Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
-                        (SELECT Price FROM Property WHERE Id = @Id) AS BuyPrice
+                        ISNULL((SELECT SUM(Amount) FROM PlotTransaction pt INNER JOIN Plot p ON pt.PlotId = p.Id WHERE p.PropertyId = @Id AND pt.IsDeleted = 0), 0) AS AmountPaid
                 ";
                 using (var summaryCmd = new SqlCommand(summaryQuery, conn))
                 {
@@ -263,7 +264,6 @@ namespace RealEstateManager.Pages
                             int totalPlots = reader["TotalPlots"] is int tp ? tp : 0;
                             totalSaleAmount = reader["TotalSaleAmount"] is decimal tsa ? tsa : 0;
                             totalPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
-                            buyPrice = reader["BuyPrice"] is decimal bp ? bp : 0;
                             totalBalance = totalSaleAmount - totalPaid;
 
                             labelTotalPlotsValue.Text = totalPlots.ToString();
@@ -285,11 +285,24 @@ namespace RealEstateManager.Pages
                     brokerageCmd.Parameters.AddWithValue("@Id", _propertyId);
                     var result = brokerageCmd.ExecuteScalar();
                     totalBrokerage = result is decimal b ? b : 0;
-                    labelTotalBrokeragePaidValue.Text = string.Format("{0:C}", totalBrokerage);
+                    labelTotalBrokerageValue.Text = string.Format("{0:C}", totalBrokerage);
                 }
 
-                decimal profitLoss = totalSaleAmount - buyPrice - totalBrokerage;
-                labelTotalProfitLossValue.Text = string.Format("{0:C}", profitLoss);
+                // --- Loan summary ---
+                var (totalLoanPrincipal, totalLoanInterest) = GetLoanSummary(_propertyId);
+                labelTotalLoanPrincipalValue.Text = string.Format("{0:C}", totalLoanPrincipal);
+                labelTotalLoanInterestValue.Text = string.Format("{0:C}", totalLoanInterest);
+
+                // --- Profit/Loss calculations ---
+                decimal profitLossAfterLoan = totalSaleAmount - buyPrice - totalBrokerage - totalLoanInterest;
+
+                // Always show as positive currency, color indicates profit/loss
+                labelProfitLossAfterLoanValue.Text = Math.Abs(profitLossAfterLoan).ToString("C", CultureInfo.CurrentCulture);
+
+                if (profitLossAfterLoan >= 0)
+                    labelProfitLossAfterLoanValue.ForeColor = Color.Green;
+                else
+                    labelProfitLossAfterLoanValue.ForeColor = Color.Red;
             }
         }
 
@@ -396,7 +409,6 @@ namespace RealEstateManager.Pages
                 {
                     GeneratePdfReport(sfd.FileName);
                     MessageBox.Show("PDF report generated successfully.", "Report", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 }
             }
         }
@@ -550,11 +562,10 @@ namespace RealEstateManager.Pages
             (string Title, string Value)[] summary = {
                 ("Total Plots:", labelTotalPlotsValue.Text),
                 ("Total Sale Amount:", labelTotalSaleAmountValue.Text),
-                ("Total Paid:", labelTotalPaidValue.Text),
-                ("Total Brokerage Paid:", labelTotalBrokeragePaidValue.Text),
-                ("Brokerage Balance:", labelBrokerageBalanceValue.Text),
-                ("Total Balance:", labelTotalBalanceValue.Text),
-                ("Total Profit/Loss:", labelTotalProfitLossValue.Text)
+                ("Total Brokerage:", labelTotalBrokerageValue.Text),
+                ("Total Loan Principal:", labelTotalLoanPrincipalValue.Text),
+                ("Total Loan Interest:", labelTotalLoanInterestValue.Text),
+                ("Profit/Loss:", labelProfitLossAfterLoanValue.Text)
             };
 
             double summaryX = margin;
@@ -697,6 +708,29 @@ namespace RealEstateManager.Pages
 
             document.Save(filePath);
             Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+        }
+
+        private (decimal totalPrincipal, decimal totalInterest) GetLoanSummary(int propertyId)
+        {
+            decimal totalPrincipal = 0;
+            decimal totalInterest = 0;
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand("SELECT LoanAmount, TotalInterest FROM PropertyLoan WHERE PropertyId = @PropertyId AND IsDeleted = 0", conn))
+            {
+                cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        totalPrincipal += reader.GetDecimal(0);
+                        totalInterest += reader.GetDecimal(1);
+                    }
+                }
+            }
+            return (totalPrincipal, totalInterest);
         }
     }
 }

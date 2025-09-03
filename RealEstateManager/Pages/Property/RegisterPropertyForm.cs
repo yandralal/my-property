@@ -8,15 +8,16 @@ namespace RealEstateManager.Pages
     {
         private readonly int? _propertyId;
         private readonly bool _isEditMode;
+        public int? SavedPropertyId { get; private set; }
 
         // Edit mode constructor
         public RegisterPropertyForm(int propertyId)
         {
             InitializeComponent();
-            SetPaddingForControls(10, 6);
             _propertyId = propertyId;
             _isEditMode = true;
             SetupPhoneNumberValidation();
+            SetupNumericTextBoxValidation();
             SetupPriceFormatting();
             SetupAreaFormatting();
             LoadPropertyDetails();
@@ -27,9 +28,9 @@ namespace RealEstateManager.Pages
         public RegisterPropertyForm()
         {
             InitializeComponent();
-            SetPaddingForControls(10, 6);
             _isEditMode = false;
             SetupPhoneNumberValidation();
+            SetupNumericTextBoxValidation();
             SetupPriceFormatting();
             SetupAreaFormatting();
         }
@@ -107,6 +108,35 @@ namespace RealEstateManager.Pages
                     textBoxArea.Text = val.ToString("F2");
                 }
             };
+        }
+
+        private void SetupNumericTextBoxValidation()
+        {
+            KeyPressEventHandler handler = (s, e) =>
+            {
+                TextBox tb = s as TextBox;
+                char ch = e.KeyChar;
+
+                // Allow control keys (backspace, delete, etc.)
+                if (char.IsControl(ch))
+                    return;
+
+                // Allow only one decimal separator, and not as the first character
+                if (ch == '.' && (tb.Text.Contains('.') || tb.SelectionStart == 0))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Allow digits only
+                if (!char.IsDigit(ch) && ch != '.')
+                {
+                    e.Handled = true;
+                }
+            };
+
+            textBoxPrice.KeyPress += handler;
+            textBoxArea.KeyPress += handler;
         }
 
         private void ButtonRegister_Click(object sender, EventArgs e)
@@ -255,6 +285,8 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
+
+                        this.SavedPropertyId = _propertyId;
                         MessageBox.Show("Property updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
@@ -291,6 +323,7 @@ namespace RealEstateManager.Pages
                             cmd.Parameters.AddWithValue("@Area", area);
                             cmd.ExecuteNonQuery();
                         }
+                        this.SavedPropertyId = _propertyId ?? (int?)new SqlCommand("SELECT SCOPE_IDENTITY()", conn).ExecuteScalar();
                         MessageBox.Show("Property registered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     this.DialogResult = DialogResult.OK;

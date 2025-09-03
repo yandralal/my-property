@@ -98,12 +98,12 @@ namespace RealEstateManager.Pages
         {
             InitializeComponent();
             SetupPhoneNumberValidation();
+            SetupNumericTextBoxValidation();
             textBoxSaleAmount.Leave += FormatDecimalTextBoxOnLeave;
             textBoxBrokerage.Leave += FormatDecimalTextBoxOnLeave;
             LoadProperties();
             LoadAgents();
             buttonRegisterSale.Text = "Register Sale";
-            SetPaddingForControls(10, 6);
         }
 
         private void LoadProperties()
@@ -380,6 +380,36 @@ namespace RealEstateManager.Pages
                 }
             };
             textBoxCustomerPhone.MaxLength = 10;
+        }
+
+        private void SetupNumericTextBoxValidation()
+        {
+            // Allow only digits, one decimal separator, and control keys
+            KeyPressEventHandler handler = (s, e) =>
+            {
+                TextBox tb = s as TextBox;
+                char ch = e.KeyChar;
+
+                // Allow control keys (backspace, delete, etc.)
+                if (char.IsControl(ch))
+                    return;
+
+                // Allow only one decimal separator
+                if (ch == '.' && (tb.Text.Contains('.') || tb.SelectionStart == 0))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Allow digits
+                if (!char.IsDigit(ch) && ch != '.')
+                {
+                    e.Handled = true;
+                }
+            };
+
+            textBoxSaleAmount.KeyPress += handler;
+            textBoxBrokerage.KeyPress += handler;
         }
 
         // Add this method to handle formatting for both fields

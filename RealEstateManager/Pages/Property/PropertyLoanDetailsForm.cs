@@ -48,20 +48,7 @@ namespace RealEstateManager.Pages.Property
                 StyleTransactionGrid();
             }
 
-            if (dataGridViewTransactions.DataSource is DataTable dt)
-            {
-                decimal totalPrincipal = 0;
-                decimal totalInterest = 0;
-                foreach (DataRow row in dt.Rows)
-                {
-                    if (row["PrincipalAmount"] != DBNull.Value)
-                        totalPrincipal += Convert.ToDecimal(row["PrincipalAmount"]);
-                    if (row["InterestAmount"] != DBNull.Value)
-                        totalInterest += Convert.ToDecimal(row["InterestAmount"]);
-                }
-                labelTotalPrincipalPaidValue.Text = totalPrincipal.ToString("C2");
-                labelTotalInterestPaidValue.Text = totalInterest.ToString("C2");
-            }
+            UpdateLoanSummaryFromGrid();
         }
 
         private void LoadLoanTransactions(int propertyLoanId)
@@ -362,7 +349,6 @@ namespace RealEstateManager.Pages.Property
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
-                // Load your icons from resources (replace with your actual resource names)
                 var viewIcon = Properties.Resources.view;
                 var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
@@ -428,12 +414,13 @@ namespace RealEstateManager.Pages.Property
         private void EditTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
-            using (var form = new PropertyLoanTransactionForm(Convert.ToInt32(transactionId), false)) // false = edit mode
+            using (var form = new PropertyLoanTransactionForm(Convert.ToInt32(transactionId), false))
             {
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadLoanTransactions(_loan.Id);
                     StyleTransactionGrid();
+                    UpdateLoanSummaryFromGrid();
                 }
             }
         }
@@ -453,9 +440,32 @@ namespace RealEstateManager.Pages.Property
                 cmd.ExecuteNonQuery();
             }
 
-            // Refresh grid after delete
             LoadLoanTransactions(_loan.Id);
             StyleTransactionGrid();
+            UpdateLoanSummaryFromGrid();
+        }
+
+        private void UpdateLoanSummaryFromGrid()
+        {
+            if (dataGridViewTransactions.DataSource is DataTable dt)
+            {
+                decimal totalPrincipal = 0;
+                decimal totalInterest = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row["PrincipalAmount"] != DBNull.Value)
+                        totalPrincipal += Convert.ToDecimal(row["PrincipalAmount"]);
+                    if (row["InterestAmount"] != DBNull.Value)
+                        totalInterest += Convert.ToDecimal(row["InterestAmount"]);
+                }
+                labelTotalPrincipalPaidValue.Text = totalPrincipal.ToString("C2");
+                labelTotalInterestPaidValue.Text = totalInterest.ToString("C2");
+
+                // Optionally, update total paid and balance if needed
+                decimal totalPaid = totalPrincipal + totalInterest;
+                labelTotalPaidValue.Text = totalPaid.ToString("C2");
+                labelBalanceValue.Text = (_loan.TotalRepayable - totalPaid).ToString("C2");
+            }
         }
     }
 }

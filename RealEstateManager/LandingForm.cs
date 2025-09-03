@@ -13,7 +13,6 @@ namespace RealEstateManager
         public LandingForm()
         {
             InitializeComponent();
-            SetPaddingForControls(10, 6);
             this.WindowState = FormWindowState.Maximized;
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
@@ -28,7 +27,8 @@ namespace RealEstateManager
             var registerForm = new Pages.RegisterPropertyForm();
             if (registerForm.ShowDialog() == DialogResult.OK)
             {
-                LoadActiveProperties(); // Refresh grid after adding
+                int? selectedId = registerForm.SavedPropertyId;
+                LoadActiveProperties(selectedId);
             }
         }
 
@@ -636,7 +636,9 @@ namespace RealEstateManager
                             var editForm = new RegisterPropertyForm(propertyId);
                             if (editForm.ShowDialog() == DialogResult.OK)
                             {
-                                LoadActiveProperties();
+                                // Use the SavedPropertyId to restore selection
+                                int? selectedId = editForm.SavedPropertyId ?? propertyId;
+                                LoadActiveProperties(selectedId);
                             }
                             break;
                         case 2:
@@ -910,7 +912,9 @@ namespace RealEstateManager
                 var editForm = new RegisterPropertyForm(id);
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
-                    LoadActiveProperties();
+                    // Use the SavedPropertyId to restore selection
+                    int? selectedId = editForm.SavedPropertyId ?? id;
+                    LoadActiveProperties(selectedId);
                 }
             }
         }

@@ -134,6 +134,9 @@ namespace RealEstateManager.Pages
                             textBoxAmount.Text = principal.ToString("0.00");
                         }
 
+                        // Ensure .00 is always appended and balance is updated
+                        UpdateBalanceWithAmountToPay();
+
                         if (reader["PropertyLoanId"] != DBNull.Value)
                             propertyLoanId = Convert.ToInt32(reader["PropertyLoanId"]);
                     }

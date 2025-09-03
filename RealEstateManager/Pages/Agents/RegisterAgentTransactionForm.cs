@@ -15,7 +15,6 @@ namespace RealEstateManager.Pages
         public RegisterAgentTransactionForm(int? agentId = null)
         {
             InitializeComponent();
-            SetPaddingForControls(10, 6);
             _agentId = agentId;
 
             if (_agentId.HasValue)
@@ -30,6 +29,7 @@ namespace RealEstateManager.Pages
             textBoxAmount.TextChanged += UpdateBalanceAmount;
 
             SetupAmountFormatting();
+            SetupNumericTextBoxValidation(); // <-- Add this line
         }
 
         public RegisterAgentTransactionForm(string transactionId, bool readOnly = false)
@@ -122,6 +122,7 @@ namespace RealEstateManager.Pages
             textBoxAmount.TextChanged += UpdateBalanceAmount;
 
             SetupAmountFormatting();
+            SetupNumericTextBoxValidation(); // <-- Add this line
         }
 
         public RegisterAgentTransactionForm()
@@ -144,6 +145,7 @@ namespace RealEstateManager.Pages
             textBoxAmount.TextChanged += UpdateBalanceAmount;
 
             SetupAmountFormatting();
+            SetupNumericTextBoxValidation(); // <-- Add this line
         }
 
         private void RegisterAgentTransactionForm_Load(object sender, EventArgs e)
@@ -526,6 +528,39 @@ namespace RealEstateManager.Pages
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        /// <summary>
+        /// Restricts numeric textboxes to digits, one decimal point, and control keys.
+        /// </summary>
+        private void SetupNumericTextBoxValidation()
+        {
+            KeyPressEventHandler handler = (s, e) =>
+            {
+                TextBox tb = s as TextBox;
+                char ch = e.KeyChar;
+
+                // Allow control keys (backspace, delete, etc.)
+                if (char.IsControl(ch))
+                    return;
+
+                // Allow only one decimal separator, and not as the first character
+                if (ch == '.' && (tb.Text.Contains('.') || tb.SelectionStart == 0))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Allow digits only
+                if (!char.IsDigit(ch) && ch != '.')
+                {
+                    e.Handled = true;
+                }
+            };
+
+            textBoxAmount.KeyPress += handler;
+            textBoxTotalBrokerage.KeyPress += handler;
+            textBoxAmountPaidTillDate.KeyPress += handler;
         }
     }
 }

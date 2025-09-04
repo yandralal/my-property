@@ -17,10 +17,23 @@ namespace RealEstateManager.Pages
         {
             InitializeComponent();
             _propertyId = propertyId;
+            SetGeneratePdfButtonVisibility();
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
             dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
             LoadPropertyDetails();
+        }
+
+        private void SetGeneratePdfButtonVisibility()
+        {
+            var originalImage = Properties.Resources.pdf;
+            var buttonSize = buttonGenerateReport.Size;
+            int imgWidth = Math.Max(1, buttonSize.Width - 10);
+            int imgHeight = Math.Max(1, buttonSize.Height - 10);
+            var scaledImage = new Bitmap(originalImage, imgWidth, imgHeight);
+            buttonGenerateReport.Image = scaledImage;
+            buttonGenerateReport.ImageAlign = ContentAlignment.MiddleCenter;
+            buttonGenerateReport.Text = ""; 
         }
 
         private void DataGridViewTransactions_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
@@ -206,8 +219,9 @@ namespace RealEstateManager.Pages
 
                 conn.Open();
 
-                // Load property details
                 decimal buyPrice = 0;
+                decimal amountPaid = 0;
+                // Load property details
                 using (var reader = propertyCmd.ExecuteReader())
                 {
                     if (reader.Read())
@@ -225,12 +239,11 @@ namespace RealEstateManager.Pages
                         labelKhasraNoValue.Text = reader["KhasraNo"]?.ToString() ?? "";
                         labelAreaValue.Text = reader["Area"] != DBNull.Value ? Convert.ToDecimal(reader["Area"]).ToString("N2") : "";
 
-                        decimal amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
-                        decimal amountBalance = reader["AmountBalance"] is decimal ab ? ab : 0;
                         buyPrice = reader["Price"] is decimal bp ? bp : 0;
+                        amountPaid = reader["AmountPaid"] is decimal ap ? ap : 0;
                         labelPropertyBuyPrice.Text = string.Format("{0:C}", buyPrice);
                         labelPropertyAmountPaid.Text = string.Format("{0:C}", amountPaid);
-                        labelPropertyBalance.Text = string.Format("{0:C}", amountBalance);
+                        labelPropertyBalance.Text = string.Format("{0:C}", amountPaid);
                     }
                 }
 
@@ -292,6 +305,13 @@ namespace RealEstateManager.Pages
                 var (totalLoanPrincipal, totalLoanInterest) = GetLoanSummary(_propertyId);
                 labelTotalLoanPrincipalValue.Text = string.Format("{0:C}", totalLoanPrincipal);
                 labelTotalLoanInterestValue.Text = string.Format("{0:C}", totalLoanInterest);
+
+                // Assign total loan taken to labelPropertyAmountPaidLoanValue
+                labelPropertyAmountPaidLoanValue.Text = string.Format("{0:C}", totalLoanPrincipal);
+
+                // Calculate balance: Buy Price - (Total Loan + Total Cash Paid)
+                decimal balance = buyPrice - (totalLoanPrincipal + amountPaid);
+                labelPropertyBalance.Text = string.Format("{0:C}", balance);
 
                 // --- Profit/Loss calculations ---
                 decimal profitLossAfterLoan = totalSaleAmount - buyPrice - totalBrokerage - totalLoanInterest;

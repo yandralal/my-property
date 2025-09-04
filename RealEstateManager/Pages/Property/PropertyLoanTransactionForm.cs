@@ -197,7 +197,7 @@ namespace RealEstateManager.Pages
             _lenderNameToLoanId.Clear();
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             using (var conn = new SqlConnection(connectionString))
-            using (var cmd = new SqlCommand("SELECT Id, LenderName FROM PropertyLoan WHERE PropertyId = @PropertyId", conn))
+            using (var cmd = new SqlCommand("SELECT Id, LenderName FROM PropertyLoan WHERE PropertyId = @PropertyId AND IsDeleted = 0", conn))
             {
                 cmd.Parameters.AddWithValue("@PropertyId", _propertyId);
                 conn.Open();
@@ -391,7 +391,6 @@ namespace RealEstateManager.Pages
             string lenderName = comboBoxLenderName.SelectedItem?.ToString() ?? "";
             if (!_lenderNameToLoanId.TryGetValue(lenderName, out int propertyLoanId))
             {
-                // Clear all fields if no lender selected
                 textBoxTotalInterest.Text = "";
                 textBoxTotalInterestPaid.Text = "";
                 textBoxTotalPrincipalPaid.Text = "";
@@ -406,7 +405,6 @@ namespace RealEstateManager.Pages
             {
                 conn.Open();
 
-                // Get loan details
                 decimal totalInterest = 0, TotalRepayment = 0, loanAmount = 0;
                 using (var cmd = new SqlCommand("SELECT LoanAmount, TotalInterest, TotalRepayment FROM PropertyLoan WHERE Id = @LoanId", conn))
                 {
@@ -426,41 +424,43 @@ namespace RealEstateManager.Pages
 
                 if (isInterest)
                 {
-                    // Total interest paid till date
                     decimal totalInterestPaid = 0;
-                    using (var cmd = new SqlCommand(@"
+                    string interestQuery = @"
                         SELECT ISNULL(SUM(InterestAmount),0) FROM PropertyLoanTransaction
-                        WHERE PropertyLoanId = @LoanId AND IsDeleted = 0", conn))
+                        WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
+                    if (_editId.HasValue)
+                        interestQuery += " AND Id <> @CurrentId";
+                    using (var cmd = new SqlCommand(interestQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
+                        if (_editId.HasValue)
+                            cmd.Parameters.AddWithValue("@CurrentId", _editId.Value);
                         totalInterestPaid = (decimal)cmd.ExecuteScalar();
                     }
 
-                    // Amount paid till date (interest)
                     textBoxTotalInterest.Text = totalInterest.ToString("N2");
                     textBoxTotalInterestPaid.Text = totalInterestPaid.ToString("N2");
-                    labelBalanceValue.Text = (totalInterest - totalInterestPaid).ToString("N2");
-
-                    // Hide Principal fields
+                    labelBalanceValue.Text = (totalInterest - (totalInterestPaid + GetCurrentAmount())).ToString("N2");
                     textBoxTotalPrincipalPaid.Text = "";
                 }
-                else // Principal
+                else
                 {
-                    // Total Principal paid till date
                     decimal totalPrincipalPaid = 0;
-                    using (var cmd = new SqlCommand(@"
+                    string principalQuery = @"
                         SELECT ISNULL(SUM(PrincipalAmount),0) FROM PropertyLoanTransaction
-                        WHERE PropertyLoanId = @LoanId AND IsDeleted = 0", conn))
+                        WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
+                    if (_editId.HasValue)
+                        principalQuery += " AND Id <> @CurrentId";
+                    using (var cmd = new SqlCommand(principalQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
+                        if (_editId.HasValue)
+                            cmd.Parameters.AddWithValue("@CurrentId", _editId.Value);
                         totalPrincipalPaid = (decimal)cmd.ExecuteScalar();
                     }
 
-                    // Amount paid till date (Principal)
                     textBoxTotalPrincipalPaid.Text = totalPrincipalPaid.ToString("N2");
-                    labelBalanceValue.Text = (loanAmount - totalPrincipalPaid).ToString("N2");
-
-                    // Hide interest fields
+                    labelBalanceValue.Text = (loanAmount - (totalPrincipalPaid + GetCurrentAmount())).ToString("N2");
                     textBoxTotalInterest.Text = "";
                     textBoxTotalInterestPaid.Text = "";
                 }
@@ -660,6 +660,13 @@ namespace RealEstateManager.Pages
             {
                 comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
             }
+        }
+
+        private decimal GetCurrentAmount()
+        {
+            decimal amount = 0;
+            decimal.TryParse(textBoxAmount.Text, out amount);
+            return amount;
         }
     }
 }

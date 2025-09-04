@@ -10,6 +10,8 @@ namespace RealEstateManager
     {
         public DataGridView DataGridViewProperties => dataGridViewProperties;
 
+        private void OnPropertyLoansChanged() => LoadActiveProperties();
+        private int? _selectedPropertyId = null;
         public LandingForm()
         {
             InitializeComponent();
@@ -20,6 +22,14 @@ namespace RealEstateManager
             dataGridViewProperties.CellFormatting += DataGridViewProperties_CellFormatting;
             dataGridViewPlots.CellFormatting += DataGridViewPlots_CellFormatting;
             LoadActiveProperties();
+
+            Pages.ManagePropertyLoansForm.PropertyLoansChanged += OnPropertyLoansChanged;
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            Pages.ManagePropertyLoansForm.PropertyLoansChanged -= OnPropertyLoansChanged;
+            base.OnFormClosed(e);
         }
 
         private void ButtonAddProperty_Click(object sender, EventArgs e)
@@ -40,6 +50,8 @@ namespace RealEstateManager
 
         public void LoadActiveProperties(int? selectedPropertyId = null)
         {
+            int? propertyIdToSelect = selectedPropertyId ?? _selectedPropertyId;
+
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
                 SELECT 
@@ -105,14 +117,14 @@ namespace RealEstateManager
             }
 
             // Restore selection if possible
-            if (selectedPropertyId.HasValue)
+            if (propertyIdToSelect.HasValue)
             {
                 foreach (DataGridViewRow row in dataGridViewProperties.Rows)
                 {
-                    if (row.Cells["Id"].Value != null && Convert.ToInt32(row.Cells["Id"].Value) == selectedPropertyId.Value)
+                    if (row.Cells["Id"].Value != null && Convert.ToInt32(row.Cells["Id"].Value) == propertyIdToSelect.Value)
                     {
                         row.Selected = true;
-                        dataGridViewProperties.CurrentCell = row.Cells["Title"]; // or any visible column
+                        dataGridViewProperties.CurrentCell = row.Cells[0]; // Optionally set focus
                         break;
                     }
                 }
@@ -310,9 +322,10 @@ namespace RealEstateManager
         {
             if (dataGridViewProperties.CurrentRow != null)
             {
-                var idCell = dataGridViewProperties.CurrentRow.Cells["Id"] ?? dataGridViewProperties.CurrentRow.Cells["Id"];
+                var idCell = dataGridViewProperties.CurrentRow.Cells["Id"];
                 if (idCell?.Value != null && int.TryParse(idCell.Value.ToString(), out int propertyId))
                 {
+                    _selectedPropertyId = propertyId; // Track selection
                     LoadPlotsForProperty(propertyId);
                 }
                 else
@@ -410,24 +423,24 @@ namespace RealEstateManager
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
                 // Load your icons from resources
+                var whatsappIcon = Properties.Resources.whatsapp;
                 var viewIcon = Properties.Resources.view;
                 var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
-                var whatsappIcon = Properties.Resources.whatsapp;
 
-                int iconWidth = 24, iconHeight = 24, padding = 16; // Increased padding
+                int iconWidth = 24, iconHeight = 24, padding = 12;
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Draw view icon
-                e?.Graphics?.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
-
-                // Draw edit icon
+                // Draw edit icon (first)
                 e?.Graphics?.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
-                // Draw delete icon
+                // Draw view icon (second)
+                e?.Graphics?.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw delete icon (third)
                 e?.Graphics?.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
@@ -442,7 +455,7 @@ namespace RealEstateManager
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dataGridViewPlots.Columns[e.ColumnIndex].Name == "Action")
             {
-                int iconWidth = 24, padding = 16;
+                int iconWidth = 24, padding = 12;
                 int x = e.X - padding;
                 int iconIndex = x / (iconWidth + padding);
 
@@ -473,11 +486,7 @@ namespace RealEstateManager
                     switch (iconIndex)
                     {
                         case 0:
-                            // View
-                            var detailsForm = new PlotDetailsForm(plotId);
-                            detailsForm.ShowDialog();
-                            break;
-                        case 1: // Edit
+                            // Edit
                             var hasSaleCell = row.Cells["HasSale"];
                             bool hasSale = hasSaleCell.Value != null && hasSaleCell.Value.ToString() == "1";
                             if (!hasSale)
@@ -511,6 +520,11 @@ namespace RealEstateManager
                                 LoadPlotsForProperty(propertyId);
                             }
                             break;
+                        case 1:
+                            // View
+                            var detailsForm = new PlotDetailsForm(plotId);
+                            detailsForm.ShowDialog();
+                            break;
                         case 2:
                             // Delete
                             var result = MessageBox.Show("Are you sure you want to delete this plot?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -521,7 +535,7 @@ namespace RealEstateManager
                             }
                             break;
                         case 3:
-                            // WhatsApp icon clicked
+                            // WhatsApp
                             string? phone = row.Cells["CustomerPhone"]?.Value?.ToString();
                             if (string.IsNullOrWhiteSpace(phone))
                             {
@@ -597,15 +611,15 @@ namespace RealEstateManager
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Draw view icon
-                e?.Graphics?.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
-
-                // Draw edit icon
+                // Draw edit icon (first)
                 e?.Graphics?.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
-                // Draw delete icon
+                // Draw view icon (second)
+                e?.Graphics?.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw delete icon (third)
                 e?.Graphics?.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
                 
@@ -627,24 +641,24 @@ namespace RealEstateManager
                 var row = dataGridViewProperties.Rows[e.RowIndex];
                 if (int.TryParse(row.Cells["Id"].Value?.ToString(), out int propertyId))
                 {
+                    // iconIndex: 0=Edit, 1=View, 2=Delete, 3=WhatsApp
                     switch (iconIndex)
                     {
                         case 0:
+                            // Edit
+                            var editForm = new RegisterPropertyForm(propertyId);
+                            if (editForm.ShowDialog() == DialogResult.OK)
+                            {
+                                int? selectedId = editForm.SavedPropertyId ?? propertyId;
+                                LoadActiveProperties(selectedId);
+                            }
+                            break;
+                        case 1:
                             // View
                             var viewForm = new PropertyDetailsForm(propertyId);
                             if (viewForm.ShowDialog() == DialogResult.OK)
                             {
                                 LoadActiveProperties();
-                            }
-                            break;
-                        case 1:
-                            // Edit
-                            var editForm = new RegisterPropertyForm(propertyId);
-                            if (editForm.ShowDialog() == DialogResult.OK)
-                            {
-                                // Use the SavedPropertyId to restore selection
-                                int? selectedId = editForm.SavedPropertyId ?? propertyId;
-                                LoadActiveProperties(selectedId);
                             }
                             break;
                         case 2:
@@ -989,8 +1003,18 @@ namespace RealEstateManager
 
         private void AgentTransactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new RegisterAgentTransactionForm();
-            form.ShowDialog();
+            int? selectedPropertyId = null;
+            if (dataGridViewProperties.CurrentRow != null)
+            {
+                var idCell = dataGridViewProperties.CurrentRow.Cells["Id"];
+                if (idCell != null && int.TryParse(idCell.Value?.ToString(), out int propertyId))
+                {
+                    selectedPropertyId = propertyId;
+                }
+            }
+
+            var agentTransactionForm = new RegisterAgentTransactionForm(agentId: null, propertyId: selectedPropertyId);
+            agentTransactionForm.ShowDialog();
         }
 
         private void MiscTransactionToolStripMenuItem_Click(object sender, EventArgs e)

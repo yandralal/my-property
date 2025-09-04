@@ -129,7 +129,7 @@ namespace RealEstateManager.Pages
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
-                var viewIcon = Properties.Resources.view;      // Add view icon to your resources
+                var viewIcon = Properties.Resources.view;
                 var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
 
@@ -137,15 +137,15 @@ namespace RealEstateManager.Pages
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Draw view icon
-                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
-
-                // Draw edit icon
+                // Draw edit icon (first)
                 e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
-                // Draw delete icon
+                // Draw view icon (second)
+                e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw delete icon (third)
                 e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
                 e.Handled = true;
@@ -171,14 +171,14 @@ namespace RealEstateManager.Pages
 
                 switch (iconIndex)
                 {
-                    case 0: // View
-                        var detailsForm = new AgentDetailsForm(agent);
-                        detailsForm.ShowDialog();
-                        break;
-                    case 1: // Edit
+                    case 0: // Edit
                         var form = new AgentRegistrationForm(agent);
                         if (form.ShowDialog() == DialogResult.OK)
                             LoadAgents();
+                        break;
+                    case 1: // View
+                        var detailsForm = new AgentDetailsForm(agent);
+                        detailsForm.ShowDialog();
                         break;
                     case 2: // Delete
                         if (MessageBox.Show("Are you sure you want to delete this agent?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)

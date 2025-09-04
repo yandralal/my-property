@@ -21,8 +21,27 @@ namespace RealEstateManager.Pages
             dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
             dataGridViewPlotsSold.CellClick += DataGridViewPlotsSold_CellClick;
+
+            RegisterAgentTransactionForm.AgentTransactionChanged += OnAgentTransactionChanged;
         }
-        private void DisplayAgent(Agent agent)
+        public AgentDetailsForm()
+        {
+            InitializeComponent();
+            RegisterAgentTransactionForm.AgentTransactionChanged += OnAgentTransactionChanged;
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            RegisterAgentTransactionForm.AgentTransactionChanged -= OnAgentTransactionChanged;
+            base.OnFormClosed(e);
+        }
+
+        private void OnAgentTransactionChanged()
+        {
+            LoadPlotsSoldByAgent(_agentId);
+        }
+
+        private void DisplayAgent(Agent agent)  
         {
             labelNameValue.Text = agent.Name;
             labelContactValue.Text = agent.Contact;
@@ -145,7 +164,6 @@ namespace RealEstateManager.Pages
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
-                // Replace with your actual resource icons
                 var viewIcon = Properties.Resources.view;
                 var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
@@ -156,15 +174,15 @@ namespace RealEstateManager.Pages
 
                 if (e.Graphics != null)
                 {
-                    // Draw view icon
-                    e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                    x += iconWidth + padding;
-
-                    // Draw edit icon
+                    // Draw edit icon (first)
                     e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                     x += iconWidth + padding;
 
-                    // Draw delete icon
+                    // Draw view icon (second)
+                    e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                    x += iconWidth + padding;
+
+                    // Draw delete icon (third)
                     e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 }
 
@@ -187,10 +205,10 @@ namespace RealEstateManager.Pages
                 switch (iconIndex)
                 {
                     case 0:
-                        ViewTransaction(transactionId);
+                        EditTransaction(transactionId);
                         break;
                     case 1:
-                        EditTransaction(transactionId);
+                        ViewTransaction(transactionId);
                         break;
                     case 2:
                         DeleteTransaction(transactionId);

@@ -12,8 +12,9 @@ namespace RealEstateManager.Pages
         public PropertyLoanForm()
         {
             InitializeComponent();
-            buttonSave.Text = "Save";      // Changed from "Add"
-            buttonCancel.Text = "Cancel";  // Ensure this is set
+            AddMandatoryFieldStars();
+            buttonSave.Text = "Save";  
+            buttonCancel.Text = "Cancel"; 
             LoadProperties();
 
             // Calculation triggers
@@ -39,6 +40,7 @@ namespace RealEstateManager.Pages
         public PropertyLoanForm(LoanTransaction loan)
         {
             InitializeComponent();
+            AddMandatoryFieldStars();
             _editId = loan.Id;
             buttonSave.Text = "Save";
             buttonCancel.Text = "Cancel";
@@ -47,14 +49,14 @@ namespace RealEstateManager.Pages
             {
                 comboBoxProperty.SelectedValue = loan.PropertyId.Value;
             }
-            textBoxLoanAmount.Text = loan.LoanAmount.ToString("0.00");
+            textBoxLoanAmount.Text = loan.LoanAmount.ToString("N2");
             textBoxLenderName.Text = loan.LenderName;
-            textBoxInterestRate.Text = loan.InterestRate.ToString("0.00");
+            textBoxInterestRate.Text = loan.InterestRate.ToString("N2");
             dateTimePickerLoanDate.Value = loan.LoanDate;
             textBoxRemarks.Text = loan.Remarks ?? "";
             textBoxTenure.Text = loan.Tenure?.ToString() ?? "";
-            textBoxTotalInterest.Text = loan.TotalInterest.ToString("0.00");     
-            textBoxTotalRepayment.Text = loan.TotalRepayment.ToString("0.00");   
+            textBoxTotalInterest.Text = loan.TotalInterest.ToString("N2");
+            textBoxTotalRepayment.Text = loan.TotalRepayment.ToString("N2");
 
             // Calculation triggers
             textBoxLoanAmount.TextChanged += (s, e) => UpdateTotalRepayment();
@@ -253,8 +255,8 @@ namespace RealEstateManager.Pages
                 decimal interestPerPeriod = principal * rate / 100m;
                 decimal totalInterest = interestPerPeriod * months;
                 decimal total = principal + totalInterest;
-                textBoxTotalInterest.Text = totalInterest.ToString("0.00");
-                textBoxTotalRepayment.Text = total.ToString("0.00");
+                textBoxTotalInterest.Text = totalInterest.ToString("N2");
+                textBoxTotalRepayment.Text = total.ToString("N2");
             }
             else if (string.IsNullOrWhiteSpace(textBoxLoanAmount.Text) &&
                      string.IsNullOrWhiteSpace(textBoxInterestRate.Text) &&
@@ -270,7 +272,7 @@ namespace RealEstateManager.Pages
             if (sender is TextBox tb)
             {
                 if (tb != textBoxTenure && decimal.TryParse(tb.Text, out decimal value))
-                    tb.Text = value.ToString("0.00");
+                    tb.Text = value.ToString("N2");
             }
             UpdateTotalRepayment();
         }
@@ -284,6 +286,8 @@ namespace RealEstateManager.Pages
             textBoxTotalRepayment.Leave += AmountTextBox_Leave;
             textBoxTenure.KeyPress += TextBoxTenure_KeyPress;
             textBoxLoanAmount.KeyPress += TextBoxLoanAmount_KeyPress;
+
+            AddMandatoryFieldStars();
         }
 
         private void TextBoxLoanAmount_KeyPress(object? sender, KeyPressEventArgs e)
@@ -329,6 +333,29 @@ namespace RealEstateManager.Pages
             {
                 e.Handled = true;
             }
+        }
+
+        private void AddMandatoryFieldStars()
+        {
+            void AddStar(Control target)
+            {
+                var star = new Label
+                {
+                    Text = "*",
+                    ForeColor = Color.Red,
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    AutoSize = true,
+                    Location = new Point(target.Right + 5, target.Top + 2)
+                };
+                target.Parent.Controls.Add(star);
+                star.BringToFront();
+            }
+
+            AddStar(comboBoxProperty);
+            AddStar(textBoxLoanAmount);
+            AddStar(textBoxLenderName);
+            AddStar(textBoxInterestRate);
+            AddStar(textBoxTenure);
         }
     }
 }

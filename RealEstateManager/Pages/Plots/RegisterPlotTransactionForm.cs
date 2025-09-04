@@ -15,6 +15,10 @@ namespace RealEstateManager.Pages
         {
             InitializeComponent();
             SetupNumericTextBoxValidation();
+
+            // Add red stars for mandatory fields
+            AddMandatoryFieldStars();
+
             _plotId = plotId;
             _saleAmount = saleAmount;
             _plotNumber = plotNumber;
@@ -25,7 +29,7 @@ namespace RealEstateManager.Pages
             }
             if (_saleAmount.HasValue)
             {
-                textBoxSaleAmount.Text = _saleAmount.Value.ToString();
+                textBoxSaleAmount.Text = _saleAmount.Value.ToString("N2");
                 textBoxSaleAmount.ReadOnly = true;
             }
 
@@ -46,12 +50,27 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
             comboBoxTransactionType.SelectedIndex = 0; // Default to first item
+
+            // Sale amount formatting on leave
+            textBoxSaleAmount.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxSaleAmount.Text, out var value))
+                    textBoxSaleAmount.Text = value.ToString("N2");
+                else
+                    textBoxSaleAmount.Text = "0.00";
+            };
+
+            // Set default payment mode to Cash
+            comboBoxPaymentMethod.SelectedItem = "Cash";
         }
 
         public RegisterPlotTransactionForm(string transactionId, bool readOnly = false)
         {
             InitializeComponent();
-            SetupNumericTextBoxValidation(); 
+            SetupNumericTextBoxValidation();
+
+            // Add red stars for mandatory fields
+            AddMandatoryFieldStars();
 
             _transactionId = transactionId;
 
@@ -132,6 +151,19 @@ namespace RealEstateManager.Pages
 
             // Optionally, hide the Save button in view mode
             buttonSave.Visible = !readOnly;
+
+            // Sale amount formatting on leave
+            textBoxSaleAmount.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxSaleAmount.Text, out var value))
+                    textBoxSaleAmount.Text = value.ToString("N2");
+                else
+                    textBoxSaleAmount.Text = "0.00";
+            };
+
+            // Set default payment mode to Cash if not loaded from DB
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+                comboBoxPaymentMethod.SelectedItem = "Cash";
         }
 
         private static decimal GetAmountPaidTillDate(int plotId)
@@ -399,6 +431,83 @@ namespace RealEstateManager.Pages
             textBoxAmount.KeyPress += handler;
             textBoxSaleAmount.KeyPress += handler;
             textBoxAmountPaidTillDate.KeyPress += handler;
+
+            textBoxSaleAmount.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxSaleAmount.Text, out var value))
+                    textBoxSaleAmount.Text = value.ToString("N2");
+                else
+                    textBoxSaleAmount.Text = "0.00";
+            };
+        }
+
+        private void AddMandatoryFieldStars()
+        {
+            // Plot Number
+            var plotIdStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(textBoxPlotId.Right + 5, textBoxPlotId.Top)
+            };
+            groupBoxTransactionEntry.Controls.Add(plotIdStar);
+
+            // Sale Amount
+            var saleAmountStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(textBoxSaleAmount.Right + 5, textBoxSaleAmount.Top)
+            };
+            groupBoxTransactionEntry.Controls.Add(saleAmountStar);
+
+            // Amount To Pay
+            var amountStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(textBoxAmount.Right + 5, textBoxAmount.Top)
+            };
+            groupBoxTransactionEntry.Controls.Add(amountStar);
+
+            // Transaction Type
+            var transactionTypeStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(comboBoxTransactionType.Right + 5, comboBoxTransactionType.Top)
+            };
+            groupBoxTransactionEntry.Controls.Add(transactionTypeStar);
+
+            // Payment Method
+            var paymentMethodStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(comboBoxPaymentMethod.Right + 5, comboBoxPaymentMethod.Top)
+            };
+            groupBoxTransactionEntry.Controls.Add(paymentMethodStar);
+
+            // Transaction Date
+            var transactionDateStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(dateTimePickerTransactionDate.Right + 5, dateTimePickerTransactionDate.Top)
+            };
+            groupBoxTransactionEntry.Controls.Add(transactionDateStar);
         }
     }
 }

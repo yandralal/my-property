@@ -85,7 +85,7 @@ namespace RealEstateManager.Pages
                             if (!reader.IsDBNull(0))
                                 comboBoxAgent.SelectedValue = reader.GetInt32(0);
                             if (!reader.IsDBNull(1))
-                                textBoxBrokerage.Text = reader.GetDecimal(1).ToString("0.00");
+                                textBoxBrokerage.Text = reader.GetDecimal(1).ToString("N2");
                             else
                                 textBoxBrokerage.Text = "0.00";
                         }
@@ -175,15 +175,39 @@ namespace RealEstateManager.Pages
                 conn.Open();
                 adapter.Fill(dt);
 
+                // Insert "Please select" option at the top
+                var newRow = dt.NewRow();
+                newRow["Id"] = 0;
+                newRow["Name"] = "Please select";
+                dt.Rows.InsertAt(newRow, 0);
+
                 comboBoxAgent.DataSource = dt;
                 comboBoxAgent.DisplayMember = "Name";
                 comboBoxAgent.ValueMember = "Id";
-                comboBoxAgent.SelectedIndex = -1;
+                comboBoxAgent.SelectedIndex = 0;
             }
         }
 
         private void ButtonRegisterSale_Click(object sender, EventArgs e)
         {
+            // Parse sale amount and brokerage amount once for reuse
+            decimal saleAmount = decimal.TryParse(textBoxSaleAmount.Text, out var parsedSaleAmt) ? parsedSaleAmt : 0;
+            decimal brokerageAmount = decimal.TryParse(textBoxBrokerage.Text, out var parsedBrokerage) ? parsedBrokerage : 0;
+
+            // Check for deal cancellation (all fields cleared or zero)
+            bool isDealCancelled =
+                string.IsNullOrWhiteSpace(textBoxCustomerName.Text)
+                && string.IsNullOrWhiteSpace(textBoxCustomerPhone.Text)
+                && string.IsNullOrWhiteSpace(textBoxCustomerEmail.Text)
+                && saleAmount == 0
+                && (comboBoxAgent.SelectedValue == null || comboBoxAgent.SelectedValue.ToString() == "0")
+                && brokerageAmount == 0;
+            bool flowControl = HandleDealCancellation(isDealCancelled);
+            if (!flowControl)
+            {
+                return;
+            }
+
             // Validate property selection
             int propertyId = 0;
             int? plotId = null;
@@ -227,14 +251,15 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            // Validate sale amount
-            decimal saleAmount = decimal.TryParse(textBoxSaleAmount.Text, out var amt) ? amt : 0;
-            if (saleAmount <= 0)
+            // Validate sale amount (allow 0 and above)
+            if (saleAmount < 0)
             {
-                MessageBox.Show("Please enter a valid sale amount greater than zero.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid sale amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxSaleAmount.Focus();
                 return;
             }
+            // Ensure textbox is formatted
+            textBoxSaleAmount.Text = saleAmount.ToString("N2");
 
             // Validate sale date (not in future)
             DateTime saleDate = dateTimePickerSaleDate.Value;
@@ -246,13 +271,11 @@ namespace RealEstateManager.Pages
             }
 
             int agentId = 0;
-            decimal brokerageAmount = 0;
-
             bool agentSelected = comboBoxAgent.SelectedValue != null && int.TryParse(comboBoxAgent.SelectedValue.ToString(), out agentId) && agentId > 0;
 
             if (agentSelected)
             {
-                if (!decimal.TryParse(textBoxBrokerage.Text, out brokerageAmount) || brokerageAmount <= 0)
+                if (brokerageAmount <= 0)
                 {
                     MessageBox.Show("Please enter a valid brokerage amount greater than zero when an agent is selected.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     textBoxBrokerage.Focus();
@@ -274,8 +297,8 @@ namespace RealEstateManager.Pages
                 textBoxCustomerEmail.Focus();
                 return;
             }
-            
-            string createdBy = (!string.IsNullOrEmpty(LoggedInUserId))  ? LoggedInUserId.ToString() : Environment.UserName;
+
+            string createdBy = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
             DateTime createdDate = DateTime.Now;
 
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
@@ -343,6 +366,52 @@ namespace RealEstateManager.Pages
 
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private bool HandleDealCancellation(bool isDealCancelled)
+        {
+            if (_isEditMode && _editPlotId.HasValue && isDealCancelled)
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var tran = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            using (var cmd = new SqlCommand("DELETE FROM PlotSale WHERE PlotId = @PlotId", conn, tran))
+                            {
+                                cmd.Parameters.AddWithValue("@PlotId", _editPlotId.Value);
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // Set plot status back to Available
+                            using (var cmd = new SqlCommand(
+                                "UPDATE Plot SET Status = @Status, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE Id = @PlotId", conn, tran))
+                            {
+                                cmd.Parameters.AddWithValue("@Status", "Available");
+                                cmd.Parameters.AddWithValue("@PlotId", _editPlotId.Value);
+                                cmd.Parameters.AddWithValue("@ModifiedBy", (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName);
+                                cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
+                                cmd.ExecuteNonQuery();
+                            }
+                            tran.Commit();
+                            MessageBox.Show("Plot sale cancelled. The plot is now available for sale.", "Deal Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            tran.Rollback();
+                            MessageBox.Show("Failed to cancel plot sale.\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                return false;
+            }
+
+            return true;
         }
 
         private void ComboBoxPlot_SelectedIndexChanged(object sender, EventArgs e)
@@ -450,71 +519,27 @@ namespace RealEstateManager.Pages
         // In both constructors, after InitializeComponent(), add red stars for mandatory fields (right of controls)
         private void AddMandatoryFieldStars()
         {
-            // Property
-            var propertyStar = new Label
+            void AddStar(Control target)
             {
-                Text = "*",
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(comboBoxProperty.Right + 5, comboBoxProperty.Top)
-            };
-            this.Controls.Add(propertyStar);
+                var star = new Label
+                {
+                    Text = "*",
+                    ForeColor = Color.Red,
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    AutoSize = true,
+                    Location = new Point(target.Right + 5, target.Top + 2)
+                };
+                target.Parent.Controls.Add(star);
+                star.BringToFront();
+            }
 
-            // Plot
-            var plotStar = new Label
-            {
-                Text = "*",
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(comboBoxPlot.Right + 5, comboBoxPlot.Top)
-            };
-            this.Controls.Add(plotStar);
-
-            // Customer Name
-            var nameStar = new Label
-            {
-                Text = "*",
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(textBoxCustomerName.Right + 5, textBoxCustomerName.Top)
-            };
-            this.Controls.Add(nameStar);
-
-            // Customer Phone
-            var phoneStar = new Label
-            {
-                Text = "*",
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(textBoxCustomerPhone.Right + 5, textBoxCustomerPhone.Top)
-            };
-            this.Controls.Add(phoneStar);
-
-            // Sale Amount
-            var saleAmountStar = new Label
-            {
-                Text = "*",
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(textBoxSaleAmount.Right + 5, textBoxSaleAmount.Top)
-            };
-            this.Controls.Add(saleAmountStar);
-
-            // Sale Date
-            var saleDateStar = new Label
-            {
-                Text = "*",
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(dateTimePickerSaleDate.Right + 5, dateTimePickerSaleDate.Top)
-            };
-            this.Controls.Add(saleDateStar);
+            AddStar(comboBoxProperty);
+            AddStar(comboBoxPlot);
+            AddStar(textBoxCustomerName);
+            AddStar(textBoxCustomerPhone);
+            AddStar(textBoxSaleAmount);
+            AddStar(dateTimePickerSaleDate);
+            AddStar(textBoxBrokerage); // Always show, or show conditionally if agent is selected
         }
     }
 }

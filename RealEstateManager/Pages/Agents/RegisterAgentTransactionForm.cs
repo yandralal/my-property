@@ -3,6 +3,8 @@ using RealEstateManager.Entities;
 using RealEstateManager.Repositories;
 using System.Data;
 using System.Configuration; 
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace RealEstateManager.Pages
 {
@@ -12,24 +14,36 @@ namespace RealEstateManager.Pages
         private readonly string? _transactionId;
         private decimal _amountPaidTillDate = 0;
 
-        public RegisterAgentTransactionForm(int? agentId = null)
+        public RegisterAgentTransactionForm(int? agentId = null, int? propertyId = null)
         {
             InitializeComponent();
             _agentId = agentId;
 
+            LoadProperties();
+            LoadAgents();
+
+            comboBoxAgent.SelectedIndexChanged += ComboBoxAgent_SelectedIndexChanged;
+            comboBoxPlotNumber.SelectedIndexChanged += ComboBoxPlotNumber_SelectedIndexChanged;
+
+            if (propertyId.HasValue)
+                comboBoxProperty.SelectedValue = propertyId.Value;
+
             if (_agentId.HasValue)
-            {
-                comboBoxAgent.Text = _agentId.Value.ToString();
-            }
+                comboBoxAgent.SelectedValue = _agentId.Value;
 
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
-            comboBoxTransactionType.SelectedIndex = 0;
+            comboBoxTransactionType.SelectedItem = "Debit"; // Set default to Debit
+
+            comboBoxPaymentMethod.Items.Clear();
+            comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
+            comboBoxPaymentMethod.SelectedItem = "Cash"; // Set default to Cash
 
             textBoxAmount.TextChanged += UpdateBalanceAmount;
 
             SetupAmountFormatting();
-            SetupNumericTextBoxValidation(); // <-- Add this line
+            SetupNumericTextBoxValidation();
+            AddMandatoryFieldStars();
         }
 
         public RegisterAgentTransactionForm(string transactionId, bool readOnly = false)
@@ -123,6 +137,7 @@ namespace RealEstateManager.Pages
 
             SetupAmountFormatting();
             SetupNumericTextBoxValidation(); // <-- Add this line
+            AddMandatoryFieldStars();
         }
 
         public RegisterAgentTransactionForm()
@@ -146,6 +161,7 @@ namespace RealEstateManager.Pages
 
             SetupAmountFormatting();
             SetupNumericTextBoxValidation(); // <-- Add this line
+            AddMandatoryFieldStars();
         }
 
         private void RegisterAgentTransactionForm_Load(object sender, EventArgs e)
@@ -337,6 +353,7 @@ namespace RealEstateManager.Pages
                 MessageBox.Show("Transaction registered successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             AgentRepository.RaiseAgentsChanged();
+            AgentTransactionChanged?.Invoke();
             this.DialogResult = DialogResult.OK;
         }
 
@@ -442,11 +459,21 @@ namespace RealEstateManager.Pages
                 string query = @"SELECT ISNULL(SUM(Amount), 0) 
                                  FROM AgentTransaction 
                                  WHERE AgentId = @AgentId AND PlotId = @PlotId AND IsDeleted = 0";
+
+                if (!string.IsNullOrEmpty(_transactionId))
+                {
+                    // Exclude current transaction from sum
+                    query += " AND TransactionId <> @TransactionId";
+                }
+
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@AgentId", agentId);
                     cmd.Parameters.AddWithValue("@PlotId", plotId);
+                    if (!string.IsNullOrEmpty(_transactionId))
+                        cmd.Parameters.AddWithValue("@TransactionId", _transactionId);
+
                     conn.Open();
                     var result = cmd.ExecuteScalar();
                     textBoxAmountPaidTillDate.Text = result != null ? Convert.ToDecimal(result).ToString("N2") : "0.00";
@@ -518,9 +545,23 @@ namespace RealEstateManager.Pages
             textBoxAmount.Leave += (s, e) =>
             {
                 if (decimal.TryParse(textBoxAmount.Text, out decimal val))
-                {
-                    textBoxAmount.Text = val.ToString("F2");
-                }
+                    textBoxAmount.Text = val.ToString("N2");
+                else
+                    textBoxAmount.Text = "0.00";
+            };
+            textBoxTotalBrokerage.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxTotalBrokerage.Text, out decimal val))
+                    textBoxTotalBrokerage.Text = val.ToString("N2");
+                else
+                    textBoxTotalBrokerage.Text = "0.00";
+            };
+            textBoxAmountPaidTillDate.Leave += (s, e) =>
+            {
+                if (decimal.TryParse(textBoxAmountPaidTillDate.Text, out decimal val))
+                    textBoxAmountPaidTillDate.Text = val.ToString("N2");
+                else
+                    textBoxAmountPaidTillDate.Text = "0.00";
             };
         }
 
@@ -562,5 +603,32 @@ namespace RealEstateManager.Pages
             textBoxTotalBrokerage.KeyPress += handler;
             textBoxAmountPaidTillDate.KeyPress += handler;
         }
+
+        private void AddMandatoryFieldStars()
+        {
+            void AddStar(Control target)
+            {
+                var star = new Label
+                {
+                    Text = "*",
+                    ForeColor = Color.Red,
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    AutoSize = true,
+                    Location = new Point(target.Right + 5, target.Top + 2)
+                };
+                target.Parent.Controls.Add(star);
+                star.BringToFront();
+            }
+
+            AddStar(comboBoxAgent);
+            AddStar(comboBoxProperty);
+            AddStar(comboBoxPlotNumber); 
+            AddStar(textBoxAmount);
+            AddStar(comboBoxTransactionType);
+            AddStar(comboBoxPaymentMethod);
+            AddStar(dateTimePickerTransactionDate);
+        }
+
+        public static event Action? AgentTransactionChanged;
     }
 }

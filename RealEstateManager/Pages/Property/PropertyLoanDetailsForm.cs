@@ -357,17 +357,17 @@ namespace RealEstateManager.Pages.Property
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Draw view icon
-                if (viewIcon != null && e.Graphics != null)
-                    e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
-
-                // Draw edit icon
+                // Draw edit icon (first)
                 if (editIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
-                // Draw delete icon
+                // Draw view icon (second)
+                if (viewIcon != null && e.Graphics != null)
+                    e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
+                x += iconWidth + padding;
+
+                // Draw delete icon (third)
                 if (deleteIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
@@ -389,10 +389,10 @@ namespace RealEstateManager.Pages.Property
                 switch (iconIndex)
                 {
                     case 0:
-                        ViewTransaction(transactionId);
+                        EditTransaction(transactionId);
                         break;
                     case 1:
-                        EditTransaction(transactionId);
+                        ViewTransaction(transactionId);
                         break;
                     case 2:
                         DeleteTransaction(transactionId);

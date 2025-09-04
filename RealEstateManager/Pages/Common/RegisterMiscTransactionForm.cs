@@ -10,12 +10,14 @@ namespace RealEstateManager.Pages
         public RegisterMiscTransactionForm()
         {
             InitializeComponent();
+            AddMandatoryFieldStars();
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
-            comboBoxTransactionType.SelectedIndex = 0;
+            comboBoxTransactionType.SelectedIndex = 1;
 
             comboBoxPaymentMethod.Items.Clear();
             comboBoxPaymentMethod.Items.AddRange(["Cash", "Cheque", "Bank Transfer", "Other"]);
+            comboBoxPaymentMethod.SelectedIndex = 0;
 
             SetupAmountFormatting();
             SetupNumericTextBoxValidation();
@@ -24,6 +26,7 @@ namespace RealEstateManager.Pages
         public RegisterMiscTransactionForm(string transactionId, bool readOnly = false)
         {
             InitializeComponent();
+            AddMandatoryFieldStars();
             _transactionId = transactionId;
 
             comboBoxTransactionType.Items.Clear();
@@ -75,39 +78,7 @@ namespace RealEstateManager.Pages
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            // Validate transaction date (not in future)
-            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
-            {
-                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                dateTimePickerTransactionDate.Focus();
-                return;
-            }
-
-            // Validate amount
-            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
-            {
-                MessageBox.Show("Please enter a valid, positive amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxAmount.Focus();
-                return;
-            }
-
-            // Validate transaction type
-            if (string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
-            {
-                MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBoxTransactionType.Focus();
-                return;
-            }
-
-            // Validate payment method
-            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
-            {
-                MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBoxPaymentMethod.Focus();
-                return;
-            }
-
-            // Validate recipient (required, at least 3 chars)
+            // 1. Recipient (TabIndex 0)
             if (string.IsNullOrWhiteSpace(textBoxRecipient.Text) || textBoxRecipient.Text.Trim().Length < 3)
             {
                 MessageBox.Show("Please enter a valid recipient name (at least 3 characters).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -115,11 +86,45 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            // Validate reference number (optional, but if provided, at least 3 chars)
+            // 2. Amount (TabIndex 1)
+            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid, positive amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
+                return;
+            }
+
+            // 3. Transaction Type (TabIndex 2)
+            if (string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
+            {
+                MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxTransactionType.Focus();
+                return;
+            }
+
+            // 4. Payment Method (TabIndex 3)
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPaymentMethod.Focus();
+                return;
+            }
+
+            // 5. Reference Number (TabIndex 4, optional, but if provided, at least 3 chars)
             if (!string.IsNullOrWhiteSpace(textBoxReferenceNumber.Text) && textBoxReferenceNumber.Text.Trim().Length < 3)
             {
                 MessageBox.Show("Reference number must be at least 3 characters if provided.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxReferenceNumber.Focus();
+                return;
+            }
+
+            // 6. Notes (TabIndex 5) - usually optional, skip unless you want to enforce a rule
+
+            // 7. Transaction Date (TabIndex 6)
+            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerTransactionDate.Focus();
                 return;
             }
 
@@ -223,7 +228,11 @@ namespace RealEstateManager.Pages
             {
                 if (decimal.TryParse(textBoxAmount.Text, out decimal val))
                 {
-                    textBoxAmount.Text = val.ToString("F2");
+                    textBoxAmount.Text = val.ToString("N2");
+                }
+                else
+                {
+                    textBoxAmount.Text = "0.00";
                 }
             };
         }
@@ -255,6 +264,31 @@ namespace RealEstateManager.Pages
                     e.Handled = true;
                 }
             };
+        }
+
+        private void AddMandatoryFieldStars()
+        {
+            // Helper to add a star to the group box
+            void AddStar(Control target)
+            {
+                var star = new Label
+                {
+                    Text = "*",
+                    ForeColor = Color.Red,
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    AutoSize = true,
+                    Location = new Point(target.Right + 5, target.Top + 2)
+                };
+                // Add to the same parent as the target control
+                target.Parent.Controls.Add(star);
+                star.BringToFront();
+            }
+
+            AddStar(textBoxRecipient);
+            AddStar(textBoxAmount);
+            AddStar(comboBoxTransactionType);
+            AddStar(comboBoxPaymentMethod);
+            AddStar(dateTimePickerTransactionDate);
         }
     }
 }

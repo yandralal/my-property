@@ -221,7 +221,10 @@ namespace RealEstateManager.Pages
                         {
                             var form = new PropertyLoanForm(loan);
                             if (form.ShowDialog() == DialogResult.OK)
+                            {
                                 LoadLoans();
+                                PropertyLoansChanged?.Invoke();
+                            }
                         }
                     }
                     else if (i == 1) // View
@@ -239,6 +242,7 @@ namespace RealEstateManager.Pages
                         {
                             DeletePropertyLoan(id);
                             LoadLoans();
+                            PropertyLoansChanged?.Invoke();
                         }
                     }
                     break;
@@ -322,7 +326,10 @@ namespace RealEstateManager.Pages
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadLoans();
+                PropertyLoansChanged?.Invoke();
             }
         }
+
+        public static event Action? PropertyLoansChanged;
     }
 }

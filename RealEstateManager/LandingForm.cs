@@ -52,7 +52,13 @@ namespace RealEstateManager
                     p.Description,
                     p.Phone,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
-                    (p.Price - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)) AS AmountBalance,
+                    -- Calculate total principal loan for the property
+                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrincipal,
+                    -- AmountBalance = BuyPrice - AmountPaid - TotalLoanPrincipal
+                    (p.Price 
+                        - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)
+                        - ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0)
+                    ) AS AmountBalance,
                     p.KhasraNo,
                     p.Area
                 FROM Property p
@@ -828,7 +834,7 @@ namespace RealEstateManager
 
             if (dgv.Columns.Contains("Action"))
                 dgv.Columns.Remove("Action");
-
+                      
             var actionCol = new DataGridViewImageColumn
             {
                 Name = "Action",
@@ -856,15 +862,16 @@ namespace RealEstateManager
             }
 
             SetCol("Title", "Property Name", 180);
-            SetCol("Type", "Type", 110);
-            SetCol("Status", "Status", 100);
+            SetCol("Type", "Type", 100); 
+            SetCol("Status", "Status", 90);
             SetCol("Owner", "Owner Name", 160);
-            SetCol("KhasraNo", "Khasra No", 110); // Move KhasraNo right after Owner
+            SetCol("KhasraNo", "Khasra No", 100);
             SetCol("Area", "Area (sq.ft)", 120);
-            SetCol("BuyPrice", "Buy Price", 160, "C");
-            SetCol("AmountPaid", "Amount Paid", 160, "C");
+            SetCol("BuyPrice", "Buy Price", 155, "C");
+            SetCol("AmountPaid", "Amount Paid", 155, "C");
+            SetCol("TotalLoanPrincipal", "Total Loan", 160, "C"); // <-- Add this line
             SetCol("AmountBalance", "Amount Balance", 155, "C");
-            SetCol("Description", "Description", 330);
+            SetCol("Description", "Description", 200);
 
             if (dgv.Columns["Id"] != null)
                 dgv.Columns["Id"].Visible = false;

@@ -25,6 +25,7 @@ namespace RealEstateManager.Pages
         )
         {
             InitializeComponent();
+            AddMandatoryFieldStars();
             SetupPhoneNumberValidation();
             textBoxSaleAmount.Leave += FormatDecimalTextBoxOnLeave;
             textBoxBrokerage.Leave += FormatDecimalTextBoxOnLeave;
@@ -45,7 +46,7 @@ namespace RealEstateManager.Pages
             textBoxCustomerPhone.Text = customerPhone;
             textBoxCustomerEmail.Text = customerEmail;
             textBoxSaleAmount.Text = decimal.TryParse(salePrice, out var saleAmt)
-                ? saleAmt.ToString("0.00")
+                ? saleAmt.ToString("N2")
                 : "0.00";
             if (DateTime.TryParse(saleDate, out var dt))
                 dateTimePickerSaleDate.Value = dt;
@@ -97,6 +98,7 @@ namespace RealEstateManager.Pages
         public RegisterPlotSaleForm()
         {
             InitializeComponent();
+            AddMandatoryFieldStars();
             SetupPhoneNumberValidation();
             SetupNumericTextBoxValidation();
             textBoxSaleAmount.Leave += FormatDecimalTextBoxOnLeave;
@@ -256,10 +258,10 @@ namespace RealEstateManager.Pages
                     textBoxBrokerage.Focus();
                     return;
                 }
+                textBoxBrokerage.Text = brokerageAmount.ToString("N2");
             }
             else
             {
-                // No agent selected, brokerage can be blank or zero
                 brokerageAmount = 0;
                 textBoxBrokerage.Text = "0.00";
             }
@@ -418,7 +420,7 @@ namespace RealEstateManager.Pages
             if (sender is TextBox tb)
             {
                 if (decimal.TryParse(tb.Text, out var value))
-                    tb.Text = value.ToString("0.00");
+                    tb.Text = value.ToString("N2");
                 else
                     tb.Text = "0.00";
             }
@@ -443,6 +445,76 @@ namespace RealEstateManager.Pages
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        // In both constructors, after InitializeComponent(), add red stars for mandatory fields (right of controls)
+        private void AddMandatoryFieldStars()
+        {
+            // Property
+            var propertyStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(comboBoxProperty.Right + 5, comboBoxProperty.Top)
+            };
+            this.Controls.Add(propertyStar);
+
+            // Plot
+            var plotStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(comboBoxPlot.Right + 5, comboBoxPlot.Top)
+            };
+            this.Controls.Add(plotStar);
+
+            // Customer Name
+            var nameStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(textBoxCustomerName.Right + 5, textBoxCustomerName.Top)
+            };
+            this.Controls.Add(nameStar);
+
+            // Customer Phone
+            var phoneStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(textBoxCustomerPhone.Right + 5, textBoxCustomerPhone.Top)
+            };
+            this.Controls.Add(phoneStar);
+
+            // Sale Amount
+            var saleAmountStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(textBoxSaleAmount.Right + 5, textBoxSaleAmount.Top)
+            };
+            this.Controls.Add(saleAmountStar);
+
+            // Sale Date
+            var saleDateStar = new Label
+            {
+                Text = "*",
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(dateTimePickerSaleDate.Right + 5, dateTimePickerSaleDate.Top)
+            };
+            this.Controls.Add(saleDateStar);
         }
     }
 }

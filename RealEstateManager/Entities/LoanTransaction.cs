@@ -16,7 +16,7 @@ namespace RealEstateManager.Entities
         public DateTime? ModifiedDate { get; set; }
         public string? Property { get; set; }
         public decimal TotalInterest { get; set; }
-        public decimal TotalRepayable { get; set; }
+        public decimal TotalRepayment { get; set; }
         public decimal TotalPaid { get; set; }
         public decimal Balance { get; set; }
         public int? Tenure { get; set; }

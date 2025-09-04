@@ -37,7 +37,7 @@ namespace RealEstateManager.Pages.Property
             labelTenureValue.Text = _loan.Tenure?.ToString() + " months" ?? "";
             labelLoanDateValue.Text = _loan.LoanDate.ToString("dd/MM/yyyy hh:mm tt");
             labelTotalInterestValue.Text = _loan.TotalInterest.ToString("C2");
-            labelTotalRepayableValue.Text = _loan.TotalRepayable.ToString("C2");
+            labelTotalRepaymentValue.Text = _loan.TotalRepayment.ToString("C2");
             labelTotalPaidValue.Text = _loan.TotalPaid.ToString("C2");
             labelBalanceValue.Text = _loan.Balance.ToString("C2");
 
@@ -214,7 +214,7 @@ namespace RealEstateManager.Pages.Property
                 $"Tenure: {labelTenure.Text}",
                 $"Loan Date: {labelLoanDate.Text}",
                 $"Total Interest: {labelTotalInterest.Text}",
-                $"Total Repayable: {labelTotalRepayable.Text}",
+                $"Total Repayable: {labelTotalRepayment.Text}",
                 $"Total Paid: {labelTotalPaid.Text}",
                 $"Balance: {labelBalance.Text}"
             };
@@ -464,7 +464,7 @@ namespace RealEstateManager.Pages.Property
                 // Optionally, update total paid and balance if needed
                 decimal totalPaid = totalPrincipal + totalInterest;
                 labelTotalPaidValue.Text = totalPaid.ToString("C2");
-                labelBalanceValue.Text = (_loan.TotalRepayable - totalPaid).ToString("C2");
+                labelBalanceValue.Text = (_loan.TotalRepayment - totalPaid).ToString("C2");
             }
         }
     }

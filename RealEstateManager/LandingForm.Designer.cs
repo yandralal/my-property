@@ -65,9 +65,11 @@ namespace RealEstateManager
             plotTransactionMenuItem = new ToolStripMenuItem();
             agentTransactionToolStripMenuItem = new ToolStripMenuItem();
             miscTransactionToolStripMenuItem = new ToolStripMenuItem();
+            propertyLoanTransactionMenuItem = new ToolStripMenuItem();
             agentOperationsMenu = new ToolStripMenuItem();
             registerSaleMenuItem = new ToolStripMenuItem();
             approveOfferMenuItem = new ToolStripMenuItem();
+            managePropertyLoansMenuItem = new ToolStripMenuItem();
             reportsMenu = new ToolStripMenuItem();
             viewReportsMenuItem = new ToolStripMenuItem();
             communicationMenu = new ToolStripMenuItem();
@@ -91,8 +93,6 @@ namespace RealEstateManager
             panelMain = new Panel();
             panelFooter = new Panel();
             footerLabel = new Label();
-            propertyLoanTransactionMenuItem = new ToolStripMenuItem();
-            managePropertyLoansMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewProperties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlots).BeginInit();
@@ -105,7 +105,6 @@ namespace RealEstateManager
             // menuStripMain
             // 
             menuStripMain.BackColor = SystemColors.Control;
-            menuStripMain.Dock = DockStyle.Top;
             menuStripMain.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             menuStripMain.ForeColor = SystemColors.ControlText;
             menuStripMain.ImageScalingSize = new Size(20, 20);
@@ -118,7 +117,7 @@ namespace RealEstateManager
             // 
             // transactionsMenu
             // 
-            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem, miscTransactionToolStripMenuItem, propertyLoanTransactionMenuItem });
+            transactionsMenu.DropDownItems.AddRange(new ToolStripItem[] { propertyTransactionsMenuItem, propertyLoanTransactionMenuItem, plotTransactionMenuItem, agentTransactionToolStripMenuItem, miscTransactionToolStripMenuItem });
             transactionsMenu.Name = "transactionsMenu";
             transactionsMenu.Size = new Size(144, 32);
             transactionsMenu.Text = "Transactions";
@@ -150,21 +149,13 @@ namespace RealEstateManager
             miscTransactionToolStripMenuItem.Size = new Size(232, 32);
             miscTransactionToolStripMenuItem.Text = "Miscellaneous";
             miscTransactionToolStripMenuItem.Click += MiscTransactionToolStripMenuItem_Click;
-            //
+            // 
             // propertyLoanTransactionMenuItem
-            //
+            // 
             propertyLoanTransactionMenuItem.Name = "propertyLoanTransactionMenuItem";
             propertyLoanTransactionMenuItem.Size = new Size(232, 32);
-            propertyLoanTransactionMenuItem.Text = "Property Loan";
+            propertyLoanTransactionMenuItem.Text = "Loan";
             propertyLoanTransactionMenuItem.Click += PropertyLoanTransactionMenuItem_Click;
-            //
-            // managePropertyLoansMenuItem
-            //
-            managePropertyLoansMenuItem = new ToolStripMenuItem();
-            managePropertyLoansMenuItem.Name = "managePropertyLoansMenuItem";
-            managePropertyLoansMenuItem.Size = new System.Drawing.Size(246, 32);
-            managePropertyLoansMenuItem.Text = "Manage Property Loans";
-            managePropertyLoansMenuItem.Click += ManagePropertyLoansMenuItem_Click;
             // 
             // agentOperationsMenu
             // 
@@ -186,6 +177,13 @@ namespace RealEstateManager
             approveOfferMenuItem.Size = new Size(246, 32);
             approveOfferMenuItem.Text = "Manage Agents";
             approveOfferMenuItem.Click += ViewAllAgentsMenuItem_Click;
+            // 
+            // managePropertyLoansMenuItem
+            // 
+            managePropertyLoansMenuItem.Name = "managePropertyLoansMenuItem";
+            managePropertyLoansMenuItem.Size = new Size(246, 32);
+            managePropertyLoansMenuItem.Text = "Manage Loans";
+            managePropertyLoansMenuItem.Click += ManagePropertyLoansMenuItem_Click;
             // 
             // reportsMenu
             // 
@@ -426,8 +424,18 @@ namespace RealEstateManager
             panelMain.Dock = DockStyle.Fill;
             panelMain.Location = new Point(0, 36);
             panelMain.Name = "panelMain";
-            panelMain.Size = new Size(1832, 917);
+            panelMain.Size = new Size(1832, 885);
             panelMain.TabIndex = 0;
+            // 
+            // panelFooter
+            // 
+            panelFooter.BackColor = Color.Red;
+            panelFooter.Controls.Add(footerLabel);
+            panelFooter.Dock = DockStyle.Bottom;
+            panelFooter.Location = new Point(0, 921);
+            panelFooter.Name = "panelFooter";
+            panelFooter.Size = new Size(1832, 32);
+            panelFooter.TabIndex = 1;
             // 
             // footerLabel
             // 
@@ -442,18 +450,9 @@ namespace RealEstateManager
             footerLabel.Text = "©  VVT Softwares Pvt. Ltd. All rights reserved.";
             footerLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // panelFooter
-            // 
-            panelFooter.BackColor = Color.Red;
-            panelFooter.Controls.Add(footerLabel);
-            panelFooter.Dock = DockStyle.Bottom;
-            //panelFooter.Location = new Point(0, 921);
-            panelFooter.Name = "panelFooter";
-            panelFooter.Size = new Size(1832, 32);
-            panelFooter.TabIndex = 1;
-            // 
             // LandingForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;

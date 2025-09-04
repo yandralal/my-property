@@ -11,7 +11,7 @@ namespace RealEstateManager.Pages.Property
         private System.Windows.Forms.Label labelTenure;
         private System.Windows.Forms.Label labelLoanDate;
         private System.Windows.Forms.Label labelTotalInterest;
-        private System.Windows.Forms.Label labelTotalRepayable;
+        private System.Windows.Forms.Label labelTotalRepayment;
         private System.Windows.Forms.Label labelTotalPaid;
         private System.Windows.Forms.Label labelBalance;
         private System.Windows.Forms.DataGridView dataGridViewTransactions;
@@ -29,14 +29,13 @@ namespace RealEstateManager.Pages.Property
         private System.Windows.Forms.Label labelLoanDateValue;
         private System.Windows.Forms.Label labelTotalInterestTitle;
         private System.Windows.Forms.Label labelTotalInterestValue;
-        private System.Windows.Forms.Label labelTotalRepayableTitle;
-        private System.Windows.Forms.Label labelTotalRepayableValue;
+        private System.Windows.Forms.Label labelTotalRepaymentTitle;
+        private System.Windows.Forms.Label labelTotalRepaymentValue;
         private System.Windows.Forms.Label labelTotalPaidTitle;
         private System.Windows.Forms.Label labelTotalPaidValue;
         private System.Windows.Forms.Label labelBalanceTitle;
         private System.Windows.Forms.Label labelBalanceValue;
         private System.Windows.Forms.Button buttonGeneratePDF;
-        private System.Windows.Forms.Label labelTotalPrincipalPaidTitle;
         private System.Windows.Forms.Label labelTotalPrincipalPaidValue;
         private System.Windows.Forms.Label labelTotalInterestPaidTitle;
         private System.Windows.Forms.Label labelTotalInterestPaidValue;
@@ -48,7 +47,6 @@ namespace RealEstateManager.Pages.Property
             groupBoxLoanDetails = new GroupBox();
             labelPropertyTitle = new Label();
             labelPropertyValue = new Label();
-            labelTotalPrincipalPaidTitle = new Label();
             labelLenderNameTitle = new Label();
             labelTotalPrincipalPaidValue = new Label();
             labelLenderNameValue = new Label();
@@ -64,8 +62,8 @@ namespace RealEstateManager.Pages.Property
             labelLoanDateValue = new Label();
             labelTotalInterestTitle = new Label();
             labelTotalInterestValue = new Label();
-            labelTotalRepayableTitle = new Label();
-            labelTotalRepayableValue = new Label();
+            labelTotalRepaymentTitle = new Label();
+            labelTotalRepaymentValue = new Label();
             labelTotalPaidTitle = new Label();
             labelTotalPaidValue = new Label();
             labelBalanceTitle = new Label();
@@ -78,11 +76,12 @@ namespace RealEstateManager.Pages.Property
             buttonGeneratePDF = new Button();
             labelLoanDate = new Label();
             labelTotalInterest = new Label();
-            labelTotalRepayable = new Label();
+            labelTotalRepayment = new Label();
             labelTotalPaid = new Label();
             labelBalance = new Label();
             groupBoxTransactions = new GroupBox();
             dataGridViewTransactions = new DataGridView();
+            labelTotalPrincipalPaidTitle = new Label();
             groupBoxLoanDetails.SuspendLayout();
             groupBoxTransactions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).BeginInit();
@@ -91,9 +90,9 @@ namespace RealEstateManager.Pages.Property
             // groupBoxLoanDetails
             // 
             groupBoxLoanDetails.BackColor = Color.AliceBlue;
+            groupBoxLoanDetails.Controls.Add(labelTotalPrincipalPaidTitle);
             groupBoxLoanDetails.Controls.Add(labelPropertyTitle);
             groupBoxLoanDetails.Controls.Add(labelPropertyValue);
-            groupBoxLoanDetails.Controls.Add(labelTotalPrincipalPaidTitle);
             groupBoxLoanDetails.Controls.Add(labelLenderNameTitle);
             groupBoxLoanDetails.Controls.Add(labelTotalPrincipalPaidValue);
             groupBoxLoanDetails.Controls.Add(labelLenderNameValue);
@@ -109,8 +108,8 @@ namespace RealEstateManager.Pages.Property
             groupBoxLoanDetails.Controls.Add(labelLoanDateValue);
             groupBoxLoanDetails.Controls.Add(labelTotalInterestTitle);
             groupBoxLoanDetails.Controls.Add(labelTotalInterestValue);
-            groupBoxLoanDetails.Controls.Add(labelTotalRepayableTitle);
-            groupBoxLoanDetails.Controls.Add(labelTotalRepayableValue);
+            groupBoxLoanDetails.Controls.Add(labelTotalRepaymentTitle);
+            groupBoxLoanDetails.Controls.Add(labelTotalRepaymentValue);
             groupBoxLoanDetails.Controls.Add(labelTotalPaidTitle);
             groupBoxLoanDetails.Controls.Add(labelTotalPaidValue);
             groupBoxLoanDetails.Controls.Add(labelBalanceTitle);
@@ -145,16 +144,6 @@ namespace RealEstateManager.Pages.Property
             labelPropertyValue.Size = new Size(314, 41);
             labelPropertyValue.TabIndex = 1;
             // 
-            // labelTotalPrincipalPaidTitle
-            // 
-            labelTotalPrincipalPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalPrincipalPaidTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalPrincipalPaidTitle.Location = new Point(623, 132);
-            labelTotalPrincipalPaidTitle.Name = "labelTotalPrincipalPaidTitle";
-            labelTotalPrincipalPaidTitle.Size = new Size(180, 22);
-            labelTotalPrincipalPaidTitle.TabIndex = 2;
-            labelTotalPrincipalPaidTitle.Text = "Total Principal Paid:";
-            // 
             // labelLenderNameTitle
             // 
             labelLenderNameTitle.AutoSize = true;
@@ -186,13 +175,15 @@ namespace RealEstateManager.Pages.Property
             // 
             // labelTotalInterestPaidTitle
             // 
+            labelTotalInterestPaidTitle.AutoSize = true;
             labelTotalInterestPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalInterestPaidTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalInterestPaidTitle.Location = new Point(623, 171);
+            labelTotalInterestPaidTitle.Location = new Point(623, 174);
             labelTotalInterestPaidTitle.Name = "labelTotalInterestPaidTitle";
-            labelTotalInterestPaidTitle.Size = new Size(180, 22);
+            labelTotalInterestPaidTitle.Size = new Size(160, 23);
             labelTotalInterestPaidTitle.TabIndex = 4;
             labelTotalInterestPaidTitle.Text = "Total Interest Paid:";
+            labelTotalInterestPaidTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // labelTotalInterestPaidValue
             // 
@@ -228,7 +219,7 @@ namespace RealEstateManager.Pages.Property
             labelInterestRateTitle.AutoSize = true;
             labelInterestRateTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelInterestRateTitle.ForeColor = Color.DarkSlateGray;
-            labelInterestRateTitle.Location = new Point(30, 170);
+            labelInterestRateTitle.Location = new Point(30, 173);
             labelInterestRateTitle.Name = "labelInterestRateTitle";
             labelInterestRateTitle.Size = new Size(117, 23);
             labelInterestRateTitle.TabIndex = 6;
@@ -238,7 +229,7 @@ namespace RealEstateManager.Pages.Property
             // 
             labelInterestRateValue.Font = new Font("Segoe UI", 10F);
             labelInterestRateValue.ForeColor = Color.Black;
-            labelInterestRateValue.Location = new Point(180, 170);
+            labelInterestRateValue.Location = new Point(180, 173);
             labelInterestRateValue.Name = "labelInterestRateValue";
             labelInterestRateValue.Size = new Size(314, 22);
             labelInterestRateValue.TabIndex = 7;
@@ -248,7 +239,7 @@ namespace RealEstateManager.Pages.Property
             labelTenureTitle.AutoSize = true;
             labelTenureTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTenureTitle.ForeColor = Color.DarkSlateGray;
-            labelTenureTitle.Location = new Point(30, 209);
+            labelTenureTitle.Location = new Point(30, 212);
             labelTenureTitle.Name = "labelTenureTitle";
             labelTenureTitle.Size = new Size(68, 23);
             labelTenureTitle.TabIndex = 8;
@@ -258,7 +249,7 @@ namespace RealEstateManager.Pages.Property
             // 
             labelTenureValue.Font = new Font("Segoe UI", 10F);
             labelTenureValue.ForeColor = Color.Black;
-            labelTenureValue.Location = new Point(180, 206);
+            labelTenureValue.Location = new Point(180, 209);
             labelTenureValue.Name = "labelTenureValue";
             labelTenureValue.Size = new Size(314, 22);
             labelTenureValue.TabIndex = 9;
@@ -268,7 +259,7 @@ namespace RealEstateManager.Pages.Property
             labelLoanDateTitle.AutoSize = true;
             labelLoanDateTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelLoanDateTitle.ForeColor = Color.DarkSlateGray;
-            labelLoanDateTitle.Location = new Point(30, 248);
+            labelLoanDateTitle.Location = new Point(30, 251);
             labelLoanDateTitle.Name = "labelLoanDateTitle";
             labelLoanDateTitle.Size = new Size(96, 23);
             labelLoanDateTitle.TabIndex = 10;
@@ -278,7 +269,7 @@ namespace RealEstateManager.Pages.Property
             // 
             labelLoanDateValue.Font = new Font("Segoe UI", 10F);
             labelLoanDateValue.ForeColor = Color.Black;
-            labelLoanDateValue.Location = new Point(180, 245);
+            labelLoanDateValue.Location = new Point(180, 248);
             labelLoanDateValue.Name = "labelLoanDateValue";
             labelLoanDateValue.Size = new Size(314, 22);
             labelLoanDateValue.TabIndex = 11;
@@ -303,32 +294,32 @@ namespace RealEstateManager.Pages.Property
             labelTotalInterestValue.Size = new Size(348, 22);
             labelTotalInterestValue.TabIndex = 13;
             // 
-            // labelTotalRepayableTitle
+            // labelTotalRepaymentTitle
             // 
-            labelTotalRepayableTitle.AutoSize = true;
-            labelTotalRepayableTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalRepayableTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalRepayableTitle.Location = new Point(623, 88);
-            labelTotalRepayableTitle.Name = "labelTotalRepayableTitle";
-            labelTotalRepayableTitle.Size = new Size(142, 23);
-            labelTotalRepayableTitle.TabIndex = 14;
-            labelTotalRepayableTitle.Text = "Total Repayable:";
+            labelTotalRepaymentTitle.AutoSize = true;
+            labelTotalRepaymentTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalRepaymentTitle.ForeColor = Color.DarkSlateGray;
+            labelTotalRepaymentTitle.Location = new Point(623, 88);
+            labelTotalRepaymentTitle.Name = "labelTotalRepaymentTitle";
+            labelTotalRepaymentTitle.Size = new Size(150, 23);
+            labelTotalRepaymentTitle.TabIndex = 14;
+            labelTotalRepaymentTitle.Text = "Total Repayment:";
             // 
-            // labelTotalRepayableValue
+            // labelTotalRepaymentValue
             // 
-            labelTotalRepayableValue.Font = new Font("Segoe UI", 10F);
-            labelTotalRepayableValue.ForeColor = Color.Black;
-            labelTotalRepayableValue.Location = new Point(851, 88);
-            labelTotalRepayableValue.Name = "labelTotalRepayableValue";
-            labelTotalRepayableValue.Size = new Size(348, 22);
-            labelTotalRepayableValue.TabIndex = 15;
+            labelTotalRepaymentValue.Font = new Font("Segoe UI", 10F);
+            labelTotalRepaymentValue.ForeColor = Color.Black;
+            labelTotalRepaymentValue.Location = new Point(851, 88);
+            labelTotalRepaymentValue.Name = "labelTotalRepaymentValue";
+            labelTotalRepaymentValue.Size = new Size(348, 22);
+            labelTotalRepaymentValue.TabIndex = 15;
             // 
             // labelTotalPaidTitle
             // 
             labelTotalPaidTitle.AutoSize = true;
             labelTotalPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalPaidTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalPaidTitle.Location = new Point(623, 209);
+            labelTotalPaidTitle.Location = new Point(623, 212);
             labelTotalPaidTitle.Name = "labelTotalPaidTitle";
             labelTotalPaidTitle.Size = new Size(94, 23);
             labelTotalPaidTitle.TabIndex = 16;
@@ -348,7 +339,7 @@ namespace RealEstateManager.Pages.Property
             labelBalanceTitle.AutoSize = true;
             labelBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelBalanceTitle.ForeColor = Color.DarkSlateGray;
-            labelBalanceTitle.Location = new Point(623, 248);
+            labelBalanceTitle.Location = new Point(623, 251);
             labelBalanceTitle.Name = "labelBalanceTitle";
             labelBalanceTitle.Size = new Size(120, 23);
             labelBalanceTitle.TabIndex = 18;
@@ -441,14 +432,14 @@ namespace RealEstateManager.Pages.Property
             labelTotalInterest.Size = new Size(600, 22);
             labelTotalInterest.TabIndex = 6;
             // 
-            // labelTotalRepayable
+            // labelTotalRepayment
             // 
-            labelTotalRepayable.Font = new Font("Segoe UI", 10F);
-            labelTotalRepayable.ForeColor = Color.Black;
-            labelTotalRepayable.Location = new Point(30, 236);
-            labelTotalRepayable.Name = "labelTotalRepayable";
-            labelTotalRepayable.Size = new Size(600, 22);
-            labelTotalRepayable.TabIndex = 7;
+            labelTotalRepayment.Font = new Font("Segoe UI", 10F);
+            labelTotalRepayment.ForeColor = Color.Black;
+            labelTotalRepayment.Location = new Point(30, 236);
+            labelTotalRepayment.Name = "labelTotalRepayment";
+            labelTotalRepayment.Size = new Size(600, 22);
+            labelTotalRepayment.TabIndex = 7;
             // 
             // labelTotalPaid
             // 
@@ -513,6 +504,18 @@ namespace RealEstateManager.Pages.Property
             dataGridViewTransactions.Size = new Size(1286, 387);
             dataGridViewTransactions.TabIndex = 0;
             // 
+            // labelTotalInterestPaidTitle
+            // 
+            labelTotalPrincipalPaidTitle.AutoSize = true;
+            labelTotalPrincipalPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalPrincipalPaidTitle.ForeColor = Color.DarkSlateGray;
+            labelTotalPrincipalPaidTitle.Location = new Point(623, 132);
+            labelTotalPrincipalPaidTitle.Name = "labelTotalInterestPaidTitle";
+            labelTotalPrincipalPaidTitle.Size = new Size(160, 23);
+            labelTotalPrincipalPaidTitle.TabIndex = 20;
+            labelTotalPrincipalPaidTitle.Text = "Total Principal Paid:";
+            labelTotalPrincipalPaidTitle.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // PropertyLoanDetailsForm
             // 
             AutoScaleDimensions = new SizeF(9F, 23F);
@@ -529,5 +532,6 @@ namespace RealEstateManager.Pages.Property
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).EndInit();
             ResumeLayout(false);
         }
+        private Label labelTotalPrincipalPaidTitle;
     }
 }

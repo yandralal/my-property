@@ -14,8 +14,8 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.TextBox textBoxInterestRate;
         private System.Windows.Forms.Label labelTenure;
         private System.Windows.Forms.TextBox textBoxTenure;
-        private System.Windows.Forms.Label labelTotalRepayable;
-        private System.Windows.Forms.TextBox textBoxTotalRepayable;
+        private System.Windows.Forms.Label labelTotalRepayment;
+        private System.Windows.Forms.TextBox textBoxTotalRepayment;
         private System.Windows.Forms.Label labelLoanDate;
         private System.Windows.Forms.DateTimePicker dateTimePickerLoanDate;
         private System.Windows.Forms.Label labelRemarks;
@@ -45,8 +45,8 @@ namespace RealEstateManager.Pages
             textBoxInterestRate = new TextBox();
             labelTenure = new Label();
             textBoxTenure = new TextBox();
-            labelTotalRepayable = new Label();
-            textBoxTotalRepayable = new TextBox();
+            labelTotalRepayment = new Label();
+            textBoxTotalRepayment = new TextBox();
             labelLoanDate = new Label();
             dateTimePickerLoanDate = new DateTimePicker();
             labelRemarks = new Label();
@@ -72,8 +72,8 @@ namespace RealEstateManager.Pages
             groupBoxLoan.Controls.Add(textBoxTenure);
             groupBoxLoan.Controls.Add(labelTotalInterest);
             groupBoxLoan.Controls.Add(textBoxTotalInterest);
-            groupBoxLoan.Controls.Add(labelTotalRepayable);
-            groupBoxLoan.Controls.Add(textBoxTotalRepayable);
+            groupBoxLoan.Controls.Add(labelTotalRepayment);
+            groupBoxLoan.Controls.Add(textBoxTotalRepayment);
             groupBoxLoan.Controls.Add(labelLoanDate);
             groupBoxLoan.Controls.Add(dateTimePickerLoanDate);
             groupBoxLoan.Controls.Add(labelRemarks);
@@ -205,25 +205,25 @@ namespace RealEstateManager.Pages
             textBoxTotalInterest.TabIndex = 11;
             textBoxTotalInterest.Enabled = false;
             // 
-            // labelTotalRepayable
+            // labelTotalRepayment
             // 
-            labelTotalRepayable.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalRepayable.ForeColor = Color.DarkSlateGray;
-            labelTotalRepayable.Location = new Point(40, 327);
-            labelTotalRepayable.Name = "labelTotalRepayable";
-            labelTotalRepayable.Size = new Size(156, 25);
-            labelTotalRepayable.TabIndex = 12;
-            labelTotalRepayable.Text = "Total Repayable:";
+            labelTotalRepayment.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalRepayment.ForeColor = Color.DarkSlateGray;
+            labelTotalRepayment.Location = new Point(40, 327);
+            labelTotalRepayment.Name = "labelTotalRepayment";
+            labelTotalRepayment.Size = new Size(156, 25);
+            labelTotalRepayment.TabIndex = 12;
+            labelTotalRepayment.Text = "Total Repayable:";
             // 
-            // textBoxTotalRepayable
+            // textBoxTotalRepayment
             // 
-            textBoxTotalRepayable.BorderStyle = BorderStyle.FixedSingle;
-            textBoxTotalRepayable.Font = new Font("Segoe UI", 10F);
-            textBoxTotalRepayable.Location = new Point(202, 325);
-            textBoxTotalRepayable.Name = "textBoxTotalRepayable";
-            textBoxTotalRepayable.ReadOnly = true;
-            textBoxTotalRepayable.Size = new Size(320, 30);
-            textBoxTotalRepayable.TabIndex = 13;
+            textBoxTotalRepayment.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTotalRepayment.Font = new Font("Segoe UI", 10F);
+            textBoxTotalRepayment.Location = new Point(202, 325);
+            textBoxTotalRepayment.Name = "textBoxTotalRepayment";
+            textBoxTotalRepayment.ReadOnly = true;
+            textBoxTotalRepayment.Size = new Size(320, 30);
+            textBoxTotalRepayment.TabIndex = 13;
             // 
             // labelLoanDate
             // 

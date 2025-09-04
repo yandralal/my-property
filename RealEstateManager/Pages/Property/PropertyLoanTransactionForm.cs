@@ -126,12 +126,12 @@ namespace RealEstateManager.Pages
                         if (interest > 0)
                         {
                             payingFor = "Interest";
-                            textBoxAmount.Text = interest.ToString("0.00");
+                            textBoxAmount.Text = interest.ToString("N2");
                         }
                         else
                         {
                             payingFor = "Principal";
-                            textBoxAmount.Text = principal.ToString("0.00");
+                            textBoxAmount.Text = principal.ToString("N2");
                         }
 
                         // Ensure .00 is always appended and balance is updated
@@ -155,7 +155,7 @@ namespace RealEstateManager.Pages
             {
                 using (var conn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(@"
-                    SELECT LoanAmount, TotalInterest, TotalRepayable
+                    SELECT LoanAmount, TotalInterest, TotalRepayment
                     FROM PropertyLoan
                     WHERE Id = @LoanId", conn))
                 {
@@ -216,26 +216,71 @@ namespace RealEstateManager.Pages
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            // Validate input
-            if (!decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            // 1. Property (should be set)
+            if (string.IsNullOrWhiteSpace(textBoxPropertyId.Text))
             {
-                MessageBox.Show("Please enter a valid amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxAmount.Focus();
+                MessageBox.Show("Please select a property.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxPropertyId.Focus();
                 return;
             }
-            if (comboBoxTransactionType.SelectedIndex < 0)
+
+            // 2. Lender Name
+            if (comboBoxLenderName.SelectedIndex < 0 || string.IsNullOrWhiteSpace(comboBoxLenderName.Text))
+            {
+                MessageBox.Show("Please select a lender name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxLenderName.Focus();
+                return;
+            }
+
+            // 3. Loan Amount
+            if (string.IsNullOrWhiteSpace(textBoxLoanAmount.Text) || !decimal.TryParse(textBoxLoanAmount.Text, out decimal loanAmount) || loanAmount <= 0)
+            {
+                MessageBox.Show("Please enter a valid loan amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxLoanAmount.Focus();
+                return;
+            }
+
+            // 4. Paying For
+            if (comboBoxPayingFor.SelectedIndex < 0 || string.IsNullOrWhiteSpace(comboBoxPayingFor.Text))
+            {
+                MessageBox.Show("Please select what you are paying for (Interest/Principal).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxPayingFor.Focus();
+                return;
+            }
+
+            // 5. Transaction Type
+            if (comboBoxTransactionType.SelectedIndex < 0 || string.IsNullOrWhiteSpace(comboBoxTransactionType.Text))
             {
                 MessageBox.Show("Please select a transaction type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 comboBoxTransactionType.Focus();
                 return;
             }
-            if (comboBoxPaymentMethod.SelectedIndex < 0)
+
+            // 6. Amount To Pay
+            if (string.IsNullOrWhiteSpace(textBoxAmount.Text) || !decimal.TryParse(textBoxAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid amount to pay.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxAmount.Focus();
+                return;
+            }
+
+            // 7. Payment Method
+            if (comboBoxPaymentMethod.SelectedIndex < 0 || string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
             {
                 MessageBox.Show("Please select a payment method.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 comboBoxPaymentMethod.Focus();
                 return;
             }
 
+            // 8. Date
+            if (dateTimePickerTransactionDate.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Transaction date cannot be in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dateTimePickerTransactionDate.Focus();
+                return;
+            }
+
+            // --- Existing code continues here ---
             DateTime transactionDate = dateTimePickerTransactionDate.Value;
             string transactionType = comboBoxTransactionType.SelectedItem.ToString() ?? "";
             string paymentMethod = comboBoxPaymentMethod.SelectedItem.ToString() ?? "";
@@ -243,17 +288,13 @@ namespace RealEstateManager.Pages
             string notes = textBoxNotes.Text.Trim();
             string lenderName = comboBoxLenderName.SelectedItem?.ToString() ?? "";
             int? propertyLoanId = _lenderNameToLoanId.TryGetValue(lenderName, out int id) ? id : (int?)null;
-            decimal loanAmount = 0;
-            decimal.TryParse(textBoxLoanAmount.Text, out loanAmount);
 
             // Determine principal/interest split
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
             decimal principalAmount = isInterest ? 0 : amount;
             decimal interestAmount = isInterest ? amount : 0;
 
-            string userIdentifier = !string.IsNullOrEmpty(BaseForm.LoggedInUserId)
-                ? BaseForm.LoggedInUserId
-                : Environment.UserName;
+            string userIdentifier = !string.IsNullOrEmpty(LoggedInUserId) ? LoggedInUserId : Environment.UserName;
 
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
@@ -366,8 +407,8 @@ namespace RealEstateManager.Pages
                 conn.Open();
 
                 // Get loan details
-                decimal totalInterest = 0, totalRepayable = 0, loanAmount = 0;
-                using (var cmd = new SqlCommand("SELECT LoanAmount, TotalInterest, TotalRepayable FROM PropertyLoan WHERE Id = @LoanId", conn))
+                decimal totalInterest = 0, TotalRepayment = 0, loanAmount = 0;
+                using (var cmd = new SqlCommand("SELECT LoanAmount, TotalInterest, TotalRepayment FROM PropertyLoan WHERE Id = @LoanId", conn))
                 {
                     cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
                     using (var reader = cmd.ExecuteReader())
@@ -376,12 +417,12 @@ namespace RealEstateManager.Pages
                         {
                             loanAmount = reader.GetDecimal(0);
                             totalInterest = reader.GetDecimal(1);
-                            totalRepayable = reader.GetDecimal(2);
+                            TotalRepayment = reader.GetDecimal(2);
                         }
                     }
                 }
-                textBoxLoanAmount.Text = loanAmount.ToString("0.00");
-                textBoxTotalPrincipal.Text = loanAmount.ToString("0.00");
+                textBoxLoanAmount.Text = loanAmount.ToString("N2");
+                textBoxTotalPrincipal.Text = loanAmount.ToString("N2");
 
                 if (isInterest)
                 {
@@ -396,9 +437,9 @@ namespace RealEstateManager.Pages
                     }
 
                     // Amount paid till date (interest)
-                    textBoxTotalInterest.Text = totalInterest.ToString("0.00");
-                    textBoxTotalInterestPaid.Text = totalInterestPaid.ToString("0.00");
-                    labelBalanceValue.Text = (totalInterest - totalInterestPaid).ToString("0.00");
+                    textBoxTotalInterest.Text = totalInterest.ToString("N2");
+                    textBoxTotalInterestPaid.Text = totalInterestPaid.ToString("N2");
+                    labelBalanceValue.Text = (totalInterest - totalInterestPaid).ToString("N2");
 
                     // Hide Principal fields
                     textBoxTotalPrincipalPaid.Text = "";
@@ -416,8 +457,8 @@ namespace RealEstateManager.Pages
                     }
 
                     // Amount paid till date (Principal)
-                    textBoxTotalPrincipalPaid.Text = totalPrincipalPaid.ToString("0.00");
-                    labelBalanceValue.Text = (loanAmount - totalPrincipalPaid).ToString("0.00");
+                    textBoxTotalPrincipalPaid.Text = totalPrincipalPaid.ToString("N2");
+                    labelBalanceValue.Text = (loanAmount - totalPrincipalPaid).ToString("N2");
 
                     // Hide interest fields
                     textBoxTotalInterest.Text = "";
@@ -437,7 +478,7 @@ namespace RealEstateManager.Pages
         {
             if (decimal.TryParse(textBoxAmount.Text, out decimal value))
             {
-                textBoxAmount.Text = value.ToString("0.00");
+                textBoxAmount.Text = value.ToString("N2");
             }
             else if (!string.IsNullOrWhiteSpace(textBoxAmount.Text))
             {
@@ -467,7 +508,7 @@ namespace RealEstateManager.Pages
             }
 
             decimal newBalance = total - (paid + amountToPay);
-            labelBalanceValue.Text = newBalance.ToString("0.00");
+            labelBalanceValue.Text = newBalance.ToString("N2");
         }
 
         private void ArrangePayingForControls()

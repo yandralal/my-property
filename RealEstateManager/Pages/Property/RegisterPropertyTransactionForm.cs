@@ -8,8 +8,11 @@ namespace RealEstateManager.Pages
         private readonly int? _propertyId;
         private readonly decimal? _saleAmount;
         private readonly string? _propertyNumber;
-        private decimal _amountPaidTillDate = 0;
+        private readonly decimal _amountPaidTillDate = 0;
         private readonly string? _transactionId;
+
+        // In your class, add a field to store total loan
+        private decimal _totalLoan = 0;
 
         public RegisterPropertyTransactionForm(int? propertyId = null, decimal? saleAmount = null, string? propertyNumber = "")
         {
@@ -25,7 +28,7 @@ namespace RealEstateManager.Pages
             }
             if (_saleAmount.HasValue)
             {
-                textBoxSaleAmount.Text = _saleAmount.Value.ToString();
+                textBoxSaleAmount.Text = _saleAmount.Value.ToString("N2");
                 textBoxSaleAmount.ReadOnly = true;
             }
 
@@ -34,6 +37,9 @@ namespace RealEstateManager.Pages
             {
                 _amountPaidTillDate = GetAmountPaidTillDate(_propertyId.Value);
                 textBoxAmountPaidTillDate.Text = _amountPaidTillDate.ToString("N2");
+
+                _totalLoan = GetTotalLoan(_propertyId.Value);
+                textBoxTotalLoan.Text = _totalLoan.ToString("N2");
             }
 
             // Update balance label on load
@@ -44,8 +50,11 @@ namespace RealEstateManager.Pages
 
             // Populate Transaction Type dropdown
             comboBoxTransactionType.Items.Clear();
-            comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
-            comboBoxTransactionType.SelectedIndex = 0;
+            comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);
+            comboBoxTransactionType.SelectedItem = "Debit"; // Set "Debit" as default
+
+            // Set default payment method
+            comboBoxPaymentMethod.SelectedItem = "Cash";
         }
 
         public RegisterPropertyTransactionForm(string transactionId, bool readOnly = false)
@@ -93,7 +102,7 @@ namespace RealEstateManager.Pages
                         comboBoxPaymentMethod.Text = reader["PaymentMethod"]?.ToString() ?? "";
                         textBoxReferenceNumber.Text = reader["ReferenceNumber"]?.ToString() ?? "";
                         textBoxNotes.Text = reader["Notes"]?.ToString() ?? "";
-                        comboBoxTransactionType.Text = reader["TransactionType"]?.ToString() ?? "Credit";
+                        comboBoxTransactionType.Text = reader["TransactionType"]?.ToString() ?? "Debit"; // Set "Debit" as fallback
 
                         var propertyNumberObj = reader["Title"];
                         if (propertyNumberObj != null)
@@ -113,6 +122,9 @@ namespace RealEstateManager.Pages
                         {
                             _amountPaidTillDate = GetAmountPaidTillDate(_propertyId.Value);
                             textBoxAmountPaidTillDate.Text = _amountPaidTillDate.ToString("N2");
+
+                            _totalLoan = GetTotalLoan(_propertyId.Value);
+                            textBoxTotalLoan.Text = _totalLoan.ToString("N2");
                         }
                     }
                 }
@@ -122,6 +134,10 @@ namespace RealEstateManager.Pages
             textBoxAmount.TextChanged += UpdateBalanceAmount;
             SetFieldsReadOnly(readOnly);
             buttonSave.Visible = !readOnly;
+
+            // Set default payment method if not loading an existing value
+            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
+                comboBoxPaymentMethod.SelectedItem = "Cash";
         }
 
         private static decimal GetAmountPaidTillDate(int propertyId)
@@ -138,12 +154,26 @@ namespace RealEstateManager.Pages
             }
         }
 
+        // Add this method to fetch total loan for the property
+        private static decimal GetTotalLoan(int propertyId)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
+            string query = "SELECT ISNULL(SUM(LoanAmount), 0) FROM PropertyLoan WHERE PropertyId = @PropertyId AND IsDeleted = 0";
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@PropertyId", propertyId);
+                conn.Open();
+                var result = cmd.ExecuteScalar();
+                return result != null ? Convert.ToDecimal(result) : 0;
+            }
+        }
+
         private void UpdateBalanceOnLoad()
         {
-            decimal saleAmount = 0;
-            if (decimal.TryParse(textBoxSaleAmount.Text, out saleAmount))
+            if (decimal.TryParse(textBoxSaleAmount.Text, out decimal saleAmount))
             {
-                labelBalanceValue.Text = (saleAmount - _amountPaidTillDate).ToString("N2");
+                labelBalanceValue.Text = (saleAmount - _amountPaidTillDate - _totalLoan).ToString("N2");
             }
             else
             {
@@ -304,11 +334,11 @@ namespace RealEstateManager.Pages
             if (decimal.TryParse(textBoxSaleAmount.Text, out saleAmount) &&
                 decimal.TryParse(textBoxAmount.Text, out newPaid))
             {
-                labelBalanceValue.Text = (saleAmount - (_amountPaidTillDate + newPaid)).ToString("N2");
+                labelBalanceValue.Text = (saleAmount - (_amountPaidTillDate + newPaid) - _totalLoan).ToString("N2");
             }
             else if (decimal.TryParse(textBoxSaleAmount.Text, out saleAmount))
             {
-                labelBalanceValue.Text = (saleAmount - _amountPaidTillDate).ToString("N2");
+                labelBalanceValue.Text = (saleAmount - _amountPaidTillDate - _totalLoan).ToString("N2");
             }
             else
             {

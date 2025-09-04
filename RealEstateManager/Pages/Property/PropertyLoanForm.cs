@@ -17,22 +17,22 @@ namespace RealEstateManager.Pages
             LoadProperties();
 
             // Calculation triggers
-            textBoxLoanAmount.TextChanged += (s, e) => UpdateTotalRepayable();
-            textBoxInterestRate.TextChanged += (s, e) => UpdateTotalRepayable();
-            textBoxTenure.TextChanged += (s, e) => UpdateTotalRepayable();
+            textBoxLoanAmount.TextChanged += (s, e) => UpdateTotalRepayment();
+            textBoxInterestRate.TextChanged += (s, e) => UpdateTotalRepayment();
+            textBoxTenure.TextChanged += (s, e) => UpdateTotalRepayment();
 
             // Formatting triggers
             textBoxLoanAmount.Leave += AmountTextBox_Leave;
             textBoxInterestRate.Leave += AmountTextBox_Leave;
             textBoxTenure.Leave += AmountTextBox_Leave;
             textBoxTotalInterest.Leave += AmountTextBox_Leave;
-            textBoxTotalRepayable.Leave += AmountTextBox_Leave;
+            textBoxTotalRepayment.Leave += AmountTextBox_Leave;
 
             // Prevent non-numeric input
             textBoxLoanAmount.KeyPress += TextBoxDecimal_KeyPress;
             textBoxInterestRate.KeyPress += TextBoxDecimal_KeyPress;
             textBoxTotalInterest.KeyPress += TextBoxDecimal_KeyPress;
-            textBoxTotalRepayable.KeyPress += TextBoxDecimal_KeyPress;
+            textBoxTotalRepayment.KeyPress += TextBoxDecimal_KeyPress;
             textBoxTenure.KeyPress += TextBoxInteger_KeyPress;
         }
 
@@ -54,19 +54,19 @@ namespace RealEstateManager.Pages
             textBoxRemarks.Text = loan.Remarks ?? "";
             textBoxTenure.Text = loan.Tenure?.ToString() ?? "";
             textBoxTotalInterest.Text = loan.TotalInterest.ToString("0.00");     
-            textBoxTotalRepayable.Text = loan.TotalRepayable.ToString("0.00");   
+            textBoxTotalRepayment.Text = loan.TotalRepayment.ToString("0.00");   
 
             // Calculation triggers
-            textBoxLoanAmount.TextChanged += (s, e) => UpdateTotalRepayable();
-            textBoxInterestRate.TextChanged += (s, e) => UpdateTotalRepayable();
-            textBoxTenure.TextChanged += (s, e) => UpdateTotalRepayable();
+            textBoxLoanAmount.TextChanged += (s, e) => UpdateTotalRepayment();
+            textBoxInterestRate.TextChanged += (s, e) => UpdateTotalRepayment();
+            textBoxTenure.TextChanged += (s, e) => UpdateTotalRepayment();
 
             // Formatting triggers
             textBoxLoanAmount.Leave += AmountTextBox_Leave;
             textBoxInterestRate.Leave += AmountTextBox_Leave;
             textBoxTenure.Leave += AmountTextBox_Leave;
             textBoxTotalInterest.Leave += AmountTextBox_Leave;
-            textBoxTotalRepayable.Leave += AmountTextBox_Leave;
+            textBoxTotalRepayment.Leave += AmountTextBox_Leave;
         }
 
         private void LoadProperties()
@@ -157,12 +157,12 @@ namespace RealEstateManager.Pages
         private void InsertPropertyLoan(int? propertyId, decimal loanAmount, string lenderName, decimal interestRate, DateTime loanDate, string remarks, int tenure)
         {
             decimal.TryParse(textBoxTotalInterest.Text, out decimal totalInterest);
-            decimal.TryParse(textBoxTotalRepayable.Text, out decimal totalRepayable);
+            decimal.TryParse(textBoxTotalRepayment.Text, out decimal TotalRepayment);
 
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string insert = @"INSERT INTO PropertyLoan
-                (PropertyId, LoanAmount, LenderName, InterestRate, LoanDate, Remarks, CreatedDate, CreatedBy, TotalInterest, TotalRepayable, Tenure)
-                VALUES (@PropertyId, @LoanAmount, @LenderName, @InterestRate, @LoanDate, @Remarks, @CreatedDate, @CreatedBy, @TotalInterest, @TotalRepayable, @Tenure)";
+                (PropertyId, LoanAmount, LenderName, InterestRate, LoanDate, Remarks, CreatedDate, CreatedBy, TotalInterest, TotalRepayment, Tenure)
+                VALUES (@PropertyId, @LoanAmount, @LenderName, @InterestRate, @LoanDate, @Remarks, @CreatedDate, @CreatedBy, @TotalInterest, @TotalRepayment, @Tenure)";
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(insert, conn))
@@ -176,7 +176,7 @@ namespace RealEstateManager.Pages
                 cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@CreatedBy", BaseForm.LoggedInUserId ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TotalInterest", totalInterest);
-                cmd.Parameters.AddWithValue("@TotalRepayable", totalRepayable);
+                cmd.Parameters.AddWithValue("@TotalRepayment", TotalRepayment);
                 cmd.Parameters.AddWithValue("@Tenure", tenure);
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -189,7 +189,7 @@ namespace RealEstateManager.Pages
         private void UpdatePropertyLoan(int id, int? propertyId, decimal loanAmount, string lenderName, decimal interestRate, DateTime loanDate, string remarks, int tenure)
         {
             decimal.TryParse(textBoxTotalInterest.Text, out decimal totalInterest);
-            decimal.TryParse(textBoxTotalRepayable.Text, out decimal totalRepayable);
+            decimal.TryParse(textBoxTotalRepayment.Text, out decimal TotalRepayment);
 
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string update = @"UPDATE PropertyLoan SET
@@ -202,7 +202,7 @@ namespace RealEstateManager.Pages
                 ModifiedDate = @ModifiedDate,
                 ModifiedBy = @ModifiedBy,
                 TotalInterest = @TotalInterest,
-                TotalRepayable = @TotalRepayable,
+                TotalRepayment = @TotalRepayment,
                 Tenure = @Tenure
                 WHERE Id = @Id";
 
@@ -218,7 +218,7 @@ namespace RealEstateManager.Pages
                 cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@ModifiedBy", BaseForm.LoggedInUserId ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TotalInterest", totalInterest);
-                cmd.Parameters.AddWithValue("@TotalRepayable", totalRepayable);
+                cmd.Parameters.AddWithValue("@TotalRepayment", TotalRepayment);
                 cmd.Parameters.AddWithValue("@Tenure", tenure);
                 cmd.Parameters.AddWithValue("@Id", id);
                 conn.Open();
@@ -242,7 +242,7 @@ namespace RealEstateManager.Pages
             }
         }
 
-        private void UpdateTotalRepayable()
+        private void UpdateTotalRepayment()
         {
             bool hasPrincipal = decimal.TryParse(textBoxLoanAmount.Text, out decimal principal);
             bool hasRate = decimal.TryParse(textBoxInterestRate.Text, out decimal rate);
@@ -254,14 +254,14 @@ namespace RealEstateManager.Pages
                 decimal totalInterest = interestPerPeriod * months;
                 decimal total = principal + totalInterest;
                 textBoxTotalInterest.Text = totalInterest.ToString("0.00");
-                textBoxTotalRepayable.Text = total.ToString("0.00");
+                textBoxTotalRepayment.Text = total.ToString("0.00");
             }
             else if (string.IsNullOrWhiteSpace(textBoxLoanAmount.Text) &&
                      string.IsNullOrWhiteSpace(textBoxInterestRate.Text) &&
                      string.IsNullOrWhiteSpace(textBoxTenure.Text))
             {
                 textBoxTotalInterest.Text = "";
-                textBoxTotalRepayable.Text = "";
+                textBoxTotalRepayment.Text = "";
             }
         }
 
@@ -272,7 +272,7 @@ namespace RealEstateManager.Pages
                 if (tb != textBoxTenure && decimal.TryParse(tb.Text, out decimal value))
                     tb.Text = value.ToString("0.00");
             }
-            UpdateTotalRepayable();
+            UpdateTotalRepayment();
         }
 
         private void PropertyLoanForm_Load(object sender, EventArgs e)
@@ -281,7 +281,7 @@ namespace RealEstateManager.Pages
             textBoxInterestRate.Leave += AmountTextBox_Leave;
             textBoxTenure.Leave += AmountTextBox_Leave;
             textBoxTotalInterest.Leave += AmountTextBox_Leave;
-            textBoxTotalRepayable.Leave += AmountTextBox_Leave;
+            textBoxTotalRepayment.Leave += AmountTextBox_Leave;
             textBoxTenure.KeyPress += TextBoxTenure_KeyPress;
             textBoxLoanAmount.KeyPress += TextBoxLoanAmount_KeyPress;
         }

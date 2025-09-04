@@ -32,11 +32,11 @@ namespace RealEstateManager.Pages
                     l.InterestRate AS [Interest Rate (%)],
                     l.Tenure, 
                     l.TotalInterest AS [Total Interest],
-                    l.TotalRepayable AS [Total Payable],
+                    l.TotalRepayment AS [Total Repayment],
                     ISNULL(
                         (SELECT SUM(ISNULL(PrincipalAmount,0) + ISNULL(InterestAmount,0)) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     ) AS [Total Paid],
-                    (l.TotalRepayable - ISNULL(
+                    (l.TotalRepayment - ISNULL(
                         (SELECT SUM(ISNULL(PrincipalAmount,0) + ISNULL(InterestAmount,0)) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     )) AS [Balance]
                 FROM PropertyLoan l
@@ -98,7 +98,7 @@ namespace RealEstateManager.Pages
             {
                 Name = "Interest Rate (%)",
                 DataPropertyName = "Interest Rate (%)",
-                HeaderText = "Interest Rate (%)",
+                HeaderText = "Rate (%)",
                 Width = 150,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None
             });
@@ -107,7 +107,7 @@ namespace RealEstateManager.Pages
                 Name = "Tenure",
                 DataPropertyName = "Tenure",
                 HeaderText = "Tenure (Months)",
-                Width = 100,
+                Width = 90,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None
             });
             dataGridViewLoans.Columns.Add(new DataGridViewTextBoxColumn
@@ -121,10 +121,10 @@ namespace RealEstateManager.Pages
             });
             dataGridViewLoans.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Total Payable",
-                DataPropertyName = "Total Payable",
-                HeaderText = "Total Payable",
-                Width = 150,
+                Name = "Total Repayment",
+                DataPropertyName = "Total Repayment",
+                HeaderText = "Total Repayment",
+                Width = 170,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
             });
@@ -272,11 +272,11 @@ namespace RealEstateManager.Pages
                     l.InterestRate,
                     l.LoanDate,
                     l.TotalInterest,
-                    l.TotalRepayable,
+                    l.TotalRepayment,
                     ISNULL(
                         (SELECT SUM(PrincipalAmount) + SUM(InterestAmount) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     ) AS [TotalPaid],
-                    (l.TotalRepayable - ISNULL(
+                    (l.TotalRepayment - ISNULL(
                         (SELECT SUM(PrincipalAmount) + SUM(InterestAmount) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     )) AS [Balance],
                     l.Remarks,
@@ -303,7 +303,7 @@ namespace RealEstateManager.Pages
                             InterestRate = reader.GetDecimal(reader.GetOrdinal("InterestRate")),
                             LoanDate = reader.GetDateTime(reader.GetOrdinal("LoanDate")),
                             TotalInterest = reader.GetDecimal(reader.GetOrdinal("TotalInterest")),
-                            TotalRepayable = reader.GetDecimal(reader.GetOrdinal("TotalRepayable")),
+                            TotalRepayment = reader.GetDecimal(reader.GetOrdinal("TotalRepayment")),
                             TotalPaid = reader.GetDecimal(reader.GetOrdinal("TotalPaid")),
                             Balance = reader.GetDecimal(reader.GetOrdinal("Balance")),
                             Remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? null : reader.GetString(reader.GetOrdinal("Remarks")),

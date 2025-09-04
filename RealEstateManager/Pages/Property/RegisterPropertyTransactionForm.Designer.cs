@@ -25,6 +25,8 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label labelTransactionType;
         private System.Windows.Forms.ComboBox comboBoxTransactionType;
+        private System.Windows.Forms.Label labelTotalLoan;
+        private System.Windows.Forms.TextBox textBoxTotalLoan;
 
         private void InitializeComponent()
         {
@@ -34,6 +36,8 @@ namespace RealEstateManager.Pages
             textBoxPropertyId = new TextBox();
             labelSaleAmount = new Label();
             textBoxSaleAmount = new TextBox();
+            labelTotalLoan = new Label();
+            textBoxTotalLoan = new TextBox();
             labelAmountPaidTillDate = new Label();
             textBoxAmountPaidTillDate = new TextBox();
             labelAmount = new Label();
@@ -62,6 +66,8 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Controls.Add(textBoxPropertyId);
             groupBoxTransactionEntry.Controls.Add(labelSaleAmount);
             groupBoxTransactionEntry.Controls.Add(textBoxSaleAmount);
+            groupBoxTransactionEntry.Controls.Add(labelTotalLoan);
+            groupBoxTransactionEntry.Controls.Add(textBoxTotalLoan);
             groupBoxTransactionEntry.Controls.Add(labelAmountPaidTillDate);
             groupBoxTransactionEntry.Controls.Add(textBoxAmountPaidTillDate);
             groupBoxTransactionEntry.Controls.Add(labelAmount);
@@ -85,7 +91,7 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.Location = new Point(17, 25);
             groupBoxTransactionEntry.Name = "groupBoxTransactionEntry";
             groupBoxTransactionEntry.Padding = new Padding(15);
-            groupBoxTransactionEntry.Size = new Size(605, 610);
+            groupBoxTransactionEntry.Size = new Size(605, 639);
             groupBoxTransactionEntry.TabIndex = 0;
             groupBoxTransactionEntry.TabStop = false;
             groupBoxTransactionEntry.Text = "Transaction Entry";
@@ -130,11 +136,31 @@ namespace RealEstateManager.Pages
             textBoxSaleAmount.Size = new Size(320, 30);
             textBoxSaleAmount.TabIndex = 1;
             // 
+            // labelTotalLoan
+            // 
+            labelTotalLoan.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalLoan.ForeColor = Color.DarkSlateGray;
+            labelTotalLoan.Location = new Point(27, 139);
+            labelTotalLoan.Name = "labelTotalLoan";
+            labelTotalLoan.Size = new Size(120, 23);
+            labelTotalLoan.TabIndex = 3;
+            labelTotalLoan.Text = "Total Loan:";
+            // 
+            // textBoxTotalLoan
+            // 
+            textBoxTotalLoan.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTotalLoan.Font = new Font("Segoe UI", 10F);
+            textBoxTotalLoan.Location = new Point(229, 136);
+            textBoxTotalLoan.Name = "textBoxTotalLoan";
+            textBoxTotalLoan.ReadOnly = true;
+            textBoxTotalLoan.Size = new Size(320, 30);
+            textBoxTotalLoan.TabIndex = 2;
+            // 
             // labelAmountPaidTillDate
             // 
             labelAmountPaidTillDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelAmountPaidTillDate.ForeColor = Color.DarkSlateGray;
-            labelAmountPaidTillDate.Location = new Point(27, 141);
+            labelAmountPaidTillDate.Location = new Point(27, 186);
             labelAmountPaidTillDate.Name = "labelAmountPaidTillDate";
             labelAmountPaidTillDate.Size = new Size(196, 23);
             labelAmountPaidTillDate.TabIndex = 4;
@@ -144,7 +170,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxAmountPaidTillDate.BorderStyle = BorderStyle.FixedSingle;
             textBoxAmountPaidTillDate.Font = new Font("Segoe UI", 10F);
-            textBoxAmountPaidTillDate.Location = new Point(229, 138);
+            textBoxAmountPaidTillDate.Location = new Point(229, 183);
             textBoxAmountPaidTillDate.Name = "textBoxAmountPaidTillDate";
             textBoxAmountPaidTillDate.ReadOnly = true;
             textBoxAmountPaidTillDate.Size = new Size(320, 30);
@@ -154,7 +180,7 @@ namespace RealEstateManager.Pages
             // 
             labelAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelAmount.ForeColor = Color.DarkSlateGray;
-            labelAmount.Location = new Point(27, 238);
+            labelAmount.Location = new Point(27, 280);
             labelAmount.Name = "labelAmount";
             labelAmount.Size = new Size(140, 23);
             labelAmount.TabIndex = 6;
@@ -164,7 +190,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxAmount.BorderStyle = BorderStyle.FixedSingle;
             textBoxAmount.Font = new Font("Segoe UI", 10F);
-            textBoxAmount.Location = new Point(229, 237);
+            textBoxAmount.Location = new Point(229, 279);
             textBoxAmount.Name = "textBoxAmount";
             textBoxAmount.Size = new Size(320, 30);
             textBoxAmount.TabIndex = 4;
@@ -175,7 +201,7 @@ namespace RealEstateManager.Pages
             // 
             labelBalanceAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelBalanceAmount.ForeColor = Color.DarkSlateGray;
-            labelBalanceAmount.Location = new Point(27, 285);
+            labelBalanceAmount.Location = new Point(27, 327);
             labelBalanceAmount.Name = "labelBalanceAmount";
             labelBalanceAmount.Size = new Size(120, 23);
             labelBalanceAmount.TabIndex = 8;
@@ -186,7 +212,7 @@ namespace RealEstateManager.Pages
             labelBalanceValue.BorderStyle = BorderStyle.FixedSingle;
             labelBalanceValue.Font = new Font("Segoe UI", 10F);
             labelBalanceValue.ForeColor = Color.Black;
-            labelBalanceValue.Location = new Point(229, 282);
+            labelBalanceValue.Location = new Point(229, 324);
             labelBalanceValue.Name = "labelBalanceValue";
             labelBalanceValue.Size = new Size(320, 30);
             labelBalanceValue.TabIndex = 9;
@@ -196,7 +222,7 @@ namespace RealEstateManager.Pages
             // 
             labelPaymentMethod.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPaymentMethod.ForeColor = Color.DarkSlateGray;
-            labelPaymentMethod.Location = new Point(27, 330);
+            labelPaymentMethod.Location = new Point(27, 372);
             labelPaymentMethod.Name = "labelPaymentMethod";
             labelPaymentMethod.Size = new Size(140, 23);
             labelPaymentMethod.TabIndex = 10;
@@ -207,7 +233,7 @@ namespace RealEstateManager.Pages
             comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPaymentMethod.Font = new Font("Segoe UI", 10F);
             comboBoxPaymentMethod.Items.AddRange(new object[] { "Cash", "Cheque", "Bank Transfer", "Other" });
-            comboBoxPaymentMethod.Location = new Point(229, 327);
+            comboBoxPaymentMethod.Location = new Point(229, 369);
             comboBoxPaymentMethod.Name = "comboBoxPaymentMethod";
             comboBoxPaymentMethod.Size = new Size(320, 31);
             comboBoxPaymentMethod.TabIndex = 5;
@@ -216,7 +242,7 @@ namespace RealEstateManager.Pages
             // 
             labelReferenceNumber.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelReferenceNumber.ForeColor = Color.DarkSlateGray;
-            labelReferenceNumber.Location = new Point(27, 377);
+            labelReferenceNumber.Location = new Point(27, 419);
             labelReferenceNumber.Name = "labelReferenceNumber";
             labelReferenceNumber.Size = new Size(120, 23);
             labelReferenceNumber.TabIndex = 12;
@@ -226,7 +252,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxReferenceNumber.BorderStyle = BorderStyle.FixedSingle;
             textBoxReferenceNumber.Font = new Font("Segoe UI", 10F);
-            textBoxReferenceNumber.Location = new Point(229, 374);
+            textBoxReferenceNumber.Location = new Point(229, 416);
             textBoxReferenceNumber.Name = "textBoxReferenceNumber";
             textBoxReferenceNumber.Size = new Size(320, 30);
             textBoxReferenceNumber.TabIndex = 6;
@@ -235,7 +261,7 @@ namespace RealEstateManager.Pages
             // 
             labelNotes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelNotes.ForeColor = Color.DarkSlateGray;
-            labelNotes.Location = new Point(27, 422);
+            labelNotes.Location = new Point(27, 464);
             labelNotes.Name = "labelNotes";
             labelNotes.Size = new Size(120, 23);
             labelNotes.TabIndex = 14;
@@ -245,7 +271,7 @@ namespace RealEstateManager.Pages
             // 
             textBoxNotes.BorderStyle = BorderStyle.FixedSingle;
             textBoxNotes.Font = new Font("Segoe UI", 10F);
-            textBoxNotes.Location = new Point(229, 419);
+            textBoxNotes.Location = new Point(229, 461);
             textBoxNotes.Multiline = true;
             textBoxNotes.Name = "textBoxNotes";
             textBoxNotes.Size = new Size(320, 60);
@@ -255,7 +281,7 @@ namespace RealEstateManager.Pages
             // 
             labelTransactionDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTransactionDate.ForeColor = Color.DarkSlateGray;
-            labelTransactionDate.Location = new Point(27, 500);
+            labelTransactionDate.Location = new Point(27, 542);
             labelTransactionDate.Name = "labelTransactionDate";
             labelTransactionDate.Size = new Size(120, 23);
             labelTransactionDate.TabIndex = 16;
@@ -264,7 +290,7 @@ namespace RealEstateManager.Pages
             // dateTimePickerTransactionDate
             // 
             dateTimePickerTransactionDate.Font = new Font("Segoe UI", 10F);
-            dateTimePickerTransactionDate.Location = new Point(229, 497);
+            dateTimePickerTransactionDate.Location = new Point(229, 539);
             dateTimePickerTransactionDate.Name = "dateTimePickerTransactionDate";
             dateTimePickerTransactionDate.Size = new Size(320, 30);
             dateTimePickerTransactionDate.TabIndex = 8;
@@ -275,7 +301,7 @@ namespace RealEstateManager.Pages
             buttonSave.FlatStyle = FlatStyle.Flat;
             buttonSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonSave.ForeColor = Color.White;
-            buttonSave.Location = new Point(269, 547);
+            buttonSave.Location = new Point(269, 589);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(110, 35);
             buttonSave.TabIndex = 9;
@@ -289,7 +315,7 @@ namespace RealEstateManager.Pages
             buttonCancel.FlatStyle = FlatStyle.Flat;
             buttonCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonCancel.ForeColor = Color.White;
-            buttonCancel.Location = new Point(404, 547);
+            buttonCancel.Location = new Point(404, 589);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(110, 35);
             buttonCancel.TabIndex = 10;
@@ -302,7 +328,7 @@ namespace RealEstateManager.Pages
             labelTransactionType.AutoSize = true;
             labelTransactionType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTransactionType.ForeColor = Color.DarkSlateGray;
-            labelTransactionType.Location = new Point(27, 188);
+            labelTransactionType.Location = new Point(27, 230);
             labelTransactionType.Name = "labelTransactionType";
             labelTransactionType.Size = new Size(149, 23);
             labelTransactionType.TabIndex = 10;
@@ -312,7 +338,7 @@ namespace RealEstateManager.Pages
             // 
             comboBoxTransactionType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxTransactionType.Font = new Font("Segoe UI", 10F);
-            comboBoxTransactionType.Location = new Point(229, 188);
+            comboBoxTransactionType.Location = new Point(229, 230);
             comboBoxTransactionType.Name = "comboBoxTransactionType";
             comboBoxTransactionType.Size = new Size(320, 31);
             comboBoxTransactionType.TabIndex = 3;
@@ -320,7 +346,7 @@ namespace RealEstateManager.Pages
             // RegisterPropertyTransactionForm
             // 
             BackColor = Color.AliceBlue;
-            ClientSize = new Size(637, 649);
+            ClientSize = new Size(637, 676);
             Controls.Add(groupBoxTransactionEntry);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;

@@ -681,9 +681,9 @@ namespace RealEstateManager.Pages
             labelProfitLossAfterLoanTitle.AutoSize = true;
             labelProfitLossAfterLoanTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelProfitLossAfterLoanTitle.ForeColor = Color.DarkSlateGray;
-            labelProfitLossAfterLoanTitle.Location = new Point(663, 41);
+            labelProfitLossAfterLoanTitle.Location = new Point(713, 41);
             labelProfitLossAfterLoanTitle.Name = "labelProfitLossAfterLoanTitle";
-            labelProfitLossAfterLoanTitle.Size = new Size(192, 23);
+            labelProfitLossAfterLoanTitle.Size = new Size(102, 23);
             labelProfitLossAfterLoanTitle.TabIndex = 50;
             labelProfitLossAfterLoanTitle.Text = "Profit/Loss:";
             // 
@@ -697,6 +697,7 @@ namespace RealEstateManager.Pages
             labelProfitLossAfterLoanValue.Size = new Size(314, 63);
             labelProfitLossAfterLoanValue.TabIndex = 51;
             labelProfitLossAfterLoanValue.Text = "0.00";
+            labelProfitLossAfterLoanValue.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // buttonGenerateReport
             // 

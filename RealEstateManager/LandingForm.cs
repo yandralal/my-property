@@ -1199,15 +1199,11 @@ namespace RealEstateManager
             if (loan != null)
             {
                 var form = new PropertyLoanForm(loan);
-                //form..Text = propertyTitle; // Show property name
-                //form.textBoxPropertyId.ReadOnly = true;
                 form.ShowDialog();
             }
             else
             {
                 var form = new PropertyLoanForm();
-                //form.textBoxPropertyId.Text = propertyTitle; // Show property name
-                //form.textBoxPropertyId.ReadOnly = true;
                 form.ShowDialog();
             }
         }
@@ -1237,6 +1233,12 @@ namespace RealEstateManager
         {
             var form = new ManagePropertyLoansForm();
             form.ShowDialog();
+        }
+
+        private void MiscTransactionDetailsMenuItem_Click(object sender, EventArgs e)
+        {
+            var miscForm = new MiscTransactionDetailForm();
+            miscForm.ShowDialog();
         }
     }
 }

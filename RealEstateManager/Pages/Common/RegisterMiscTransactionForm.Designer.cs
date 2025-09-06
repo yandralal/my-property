@@ -246,7 +246,8 @@ namespace RealEstateManager.Pages
             buttonCancel.TabIndex = 9;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = false;
-            buttonCancel.Click += ButtonCancel_Click;
+            buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
             // RegisterMiscTransactionForm
             // 

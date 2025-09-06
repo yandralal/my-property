@@ -20,7 +20,7 @@ namespace RealEstateManager
         private ToolStripMenuItem aboutMenuItem;
         private ToolStripMenuItem communicationMenu;
         private ToolStripMenuItem sendMessageToAllMenuItem;
-        private ToolStripMenuItem agentOperationsMenu;
+        private ToolStripMenuItem operationsMenu;
         private ToolStripMenuItem approveOfferMenuItem;
         private ToolStripMenuItem registerSaleMenuItem;
         private ToolStripMenuItem agentTransactionToolStripMenuItem;
@@ -40,6 +40,7 @@ namespace RealEstateManager
         private ToolStripMenuItem downloadUserGuideMenuItem;
         private ToolStripMenuItem propertyLoanTransactionMenuItem;
         private ToolStripMenuItem managePropertyLoansMenuItem;
+        private ToolStripMenuItem miscTransactionDetailsMenuItem;
 
         protected override void Dispose(bool disposing)
         {
@@ -52,12 +53,12 @@ namespace RealEstateManager
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LandingForm));
             menuStripMain = new MenuStrip();
             transactionsMenu = new ToolStripMenuItem();
@@ -66,10 +67,11 @@ namespace RealEstateManager
             plotTransactionMenuItem = new ToolStripMenuItem();
             agentTransactionToolStripMenuItem = new ToolStripMenuItem();
             miscTransactionToolStripMenuItem = new ToolStripMenuItem();
-            agentOperationsMenu = new ToolStripMenuItem();
+            operationsMenu = new ToolStripMenuItem();
             registerSaleMenuItem = new ToolStripMenuItem();
             approveOfferMenuItem = new ToolStripMenuItem();
             managePropertyLoansMenuItem = new ToolStripMenuItem();
+            miscTransactionDetailsMenuItem = new ToolStripMenuItem();
             reportsMenu = new ToolStripMenuItem();
             viewReportsMenuItem = new ToolStripMenuItem();
             communicationMenu = new ToolStripMenuItem();
@@ -108,7 +110,7 @@ namespace RealEstateManager
             menuStripMain.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             menuStripMain.ForeColor = SystemColors.ControlText;
             menuStripMain.ImageScalingSize = new Size(20, 20);
-            menuStripMain.Items.AddRange(new ToolStripItem[] { transactionsMenu, agentOperationsMenu, reportsMenu, communicationMenu, helpMenu });
+            menuStripMain.Items.AddRange(new ToolStripItem[] { transactionsMenu, operationsMenu, reportsMenu, communicationMenu, helpMenu });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
             menuStripMain.Size = new Size(1832, 36);
@@ -157,33 +159,40 @@ namespace RealEstateManager
             miscTransactionToolStripMenuItem.Text = "Miscellaneous";
             miscTransactionToolStripMenuItem.Click += MiscTransactionToolStripMenuItem_Click;
             // 
-            // agentOperationsMenu
+            // operationsMenu
             // 
-            agentOperationsMenu.DropDownItems.AddRange(new ToolStripItem[] { registerSaleMenuItem, approveOfferMenuItem, managePropertyLoansMenuItem });
-            agentOperationsMenu.Name = "agentOperationsMenu";
-            agentOperationsMenu.Size = new Size(130, 32);
-            agentOperationsMenu.Text = "Operations";
+            operationsMenu.DropDownItems.AddRange(new ToolStripItem[] { registerSaleMenuItem, approveOfferMenuItem, managePropertyLoansMenuItem, miscTransactionDetailsMenuItem });
+            operationsMenu.Name = "operationsMenu";
+            operationsMenu.Size = new Size(130, 32);
+            operationsMenu.Text = "Operations";
             // 
             // registerSaleMenuItem
             // 
             registerSaleMenuItem.Name = "registerSaleMenuItem";
-            registerSaleMenuItem.Size = new Size(246, 32);
+            registerSaleMenuItem.Size = new Size(266, 32);
             registerSaleMenuItem.Text = "Sale Plot";
             registerSaleMenuItem.Click += RegisterSaleMenuItem_Click;
             // 
             // approveOfferMenuItem
             // 
             approveOfferMenuItem.Name = "approveOfferMenuItem";
-            approveOfferMenuItem.Size = new Size(246, 32);
-            approveOfferMenuItem.Text = "Manage Agents";
+            approveOfferMenuItem.Size = new Size(266, 32);
+            approveOfferMenuItem.Text = "Agents";
             approveOfferMenuItem.Click += ViewAllAgentsMenuItem_Click;
             // 
             // managePropertyLoansMenuItem
             // 
             managePropertyLoansMenuItem.Name = "managePropertyLoansMenuItem";
-            managePropertyLoansMenuItem.Size = new Size(246, 32);
-            managePropertyLoansMenuItem.Text = "Manage Loans";
+            managePropertyLoansMenuItem.Size = new Size(266, 32);
+            managePropertyLoansMenuItem.Text = "Loans";
             managePropertyLoansMenuItem.Click += ManagePropertyLoansMenuItem_Click;
+            // 
+            // miscTransactionDetailsMenuItem
+            // 
+            miscTransactionDetailsMenuItem.Name = "miscTransactionDetailsMenuItem";
+            miscTransactionDetailsMenuItem.Size = new Size(266, 32);
+            miscTransactionDetailsMenuItem.Text = "Misc Transactions";
+            miscTransactionDetailsMenuItem.Click += MiscTransactionDetailsMenuItem_Click;
             // 
             // reportsMenu
             // 
@@ -273,27 +282,27 @@ namespace RealEstateManager
             // 
             dataGridViewProperties.AllowUserToAddRows = false;
             dataGridViewProperties.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.AliceBlue;
-            dataGridViewProperties.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.BackColor = Color.AliceBlue;
+            dataGridViewProperties.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             dataGridViewProperties.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewProperties.BackgroundColor = Color.White;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.MidnightBlue;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridViewProperties.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle8.ForeColor = Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dataGridViewProperties.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dataGridViewProperties.ColumnHeadersHeight = 29;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle3.ForeColor = Color.MidnightBlue;
-            dataGridViewCellStyle3.SelectionBackColor = Color.LightCyan;
-            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dataGridViewProperties.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle9.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle9.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
+            dataGridViewProperties.DefaultCellStyle = dataGridViewCellStyle9;
             dataGridViewProperties.Location = new Point(20, 86);
             dataGridViewProperties.Name = "dataGridViewProperties";
             dataGridViewProperties.ReadOnly = true;
@@ -335,27 +344,27 @@ namespace RealEstateManager
             // 
             dataGridViewPlots.AllowUserToAddRows = false;
             dataGridViewPlots.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle4.BackColor = Color.AliceBlue;
-            dataGridViewPlots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle10.BackColor = Color.AliceBlue;
+            dataGridViewPlots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
             dataGridViewPlots.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewPlots.BackgroundColor = Color.White;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = Color.MidnightBlue;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = Color.White;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dataGridViewPlots.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = Color.MidnightBlue;
+            dataGridViewCellStyle11.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle11.ForeColor = Color.White;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.True;
+            dataGridViewPlots.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             dataGridViewPlots.ColumnHeadersHeight = 29;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = Color.AliceBlue;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle6.ForeColor = Color.MidnightBlue;
-            dataGridViewCellStyle6.SelectionBackColor = Color.LightCyan;
-            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
-            dataGridViewPlots.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = Color.AliceBlue;
+            dataGridViewCellStyle12.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle12.ForeColor = Color.MidnightBlue;
+            dataGridViewCellStyle12.SelectionBackColor = Color.LightCyan;
+            dataGridViewCellStyle12.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.False;
+            dataGridViewPlots.DefaultCellStyle = dataGridViewCellStyle12;
             dataGridViewPlots.Location = new Point(20, 81);
             dataGridViewPlots.Name = "dataGridViewPlots";
             dataGridViewPlots.ReadOnly = true;

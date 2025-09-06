@@ -334,12 +334,12 @@ namespace RealEstateManager.Pages.Property
             {
                 dgv.Columns["ReferenceNumber"].HeaderText = "Reference #";
                 dgv.Columns["ReferenceNumber"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["ReferenceNumber"].Width = 140;
+                dgv.Columns["ReferenceNumber"].Width = 150;
             }
             if (dgv.Columns["Action"] != null)
             {
                 dgv.Columns["Action"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Action"].Width = 120;
+                dgv.Columns["Action"].Width = 100;
             }
         }
 
@@ -350,24 +350,18 @@ namespace RealEstateManager.Pages.Property
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
                 var viewIcon = Properties.Resources.view;
-                var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
 
                 int iconWidth = 24, iconHeight = 24, padding = 12;
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Draw edit icon (first)
-                if (editIcon != null && e.Graphics != null)
-                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
-
-                // Draw view icon (second)
+                // Draw view icon (first)
                 if (viewIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
-                // Draw delete icon (third)
+                // Draw delete icon (second)
                 if (deleteIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
 
@@ -389,12 +383,9 @@ namespace RealEstateManager.Pages.Property
                 switch (iconIndex)
                 {
                     case 0:
-                        EditTransaction(transactionId);
-                        break;
-                    case 1:
                         ViewTransaction(transactionId);
                         break;
-                    case 2:
+                    case 1:
                         DeleteTransaction(transactionId);
                         break;
                 }
@@ -408,20 +399,6 @@ namespace RealEstateManager.Pages.Property
             using (var form = new PropertyLoanTransactionForm(Convert.ToInt32(transactionId), true)) // true = read-only
             {
                 form.ShowDialog(this);
-            }
-        }
-
-        private void EditTransaction(string? transactionId)
-        {
-            if (string.IsNullOrEmpty(transactionId)) return;
-            using (var form = new PropertyLoanTransactionForm(Convert.ToInt32(transactionId), false))
-            {
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    LoadLoanTransactions(_loan.Id);
-                    StyleTransactionGrid();
-                    UpdateLoanSummaryFromGrid();
-                }
             }
         }
 

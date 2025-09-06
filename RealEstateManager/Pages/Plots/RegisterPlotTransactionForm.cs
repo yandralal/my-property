@@ -9,7 +9,6 @@ namespace RealEstateManager.Pages
         private readonly decimal? _saleAmount;
         private readonly string? _plotNumber;
         private readonly decimal _amountPaidTillDate = 0;
-        private readonly string? _transactionId;
 
         public RegisterPlotTransactionForm(int? plotId = null, decimal? saleAmount = null, string? plotNumber = "")
         {
@@ -64,7 +63,7 @@ namespace RealEstateManager.Pages
             comboBoxPaymentMethod.SelectedItem = "Cash";
         }
 
-        public RegisterPlotTransactionForm(string transactionId, bool readOnly = false)
+        public RegisterPlotTransactionForm(string transactionId)
         {
             InitializeComponent();
             SetupNumericTextBoxValidation();
@@ -72,29 +71,27 @@ namespace RealEstateManager.Pages
             // Add red stars for mandatory fields
             AddMandatoryFieldStars();
 
-            _transactionId = transactionId;
-
-            // Populate Transaction Type dropdown
+            // Bind transaction type combobox before setting its value
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
 
             // Load transaction details from DB
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
-                SELECT 
-                    pt.PlotId, 
-                    pt.TransactionDate, 
-                    pt.Amount, 
-                    pt.PaymentMethod, 
-                    pt.ReferenceNumber, 
-                    pt.Notes, 
-                    pt.TransactionType,
-                    p.PlotNumber,
-                    ps.SaleAmount
-                FROM PlotTransaction pt
-                INNER JOIN Plot p ON pt.PlotId = p.Id
-                LEFT JOIN PlotSale ps ON pt.PlotId = ps.PlotId
-                WHERE pt.TransactionId = @TransactionId AND pt.IsDeleted = 0";
+            SELECT 
+                pt.PlotId, 
+                pt.TransactionDate, 
+                pt.Amount, 
+                pt.PaymentMethod, 
+                pt.ReferenceNumber, 
+                pt.Notes, 
+                pt.TransactionType,
+                p.PlotNumber,
+                ps.SaleAmount
+            FROM PlotTransaction pt
+            INNER JOIN Plot p ON pt.PlotId = p.Id
+            LEFT JOIN PlotSale ps ON pt.PlotId = ps.PlotId
+            WHERE pt.TransactionId = @TransactionId AND pt.IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(query, conn))
@@ -143,27 +140,9 @@ namespace RealEstateManager.Pages
             // Update balance label on load
             UpdateBalanceOnLoad();
 
-            // Attach event handler for dynamic update
-            textBoxAmount.TextChanged += UpdateBalanceAmount;
-
-            // Set fields enabled/disabled based on readOnly
-            SetFieldsReadOnly(readOnly);
-
-            // Optionally, hide the Save button in view mode
-            buttonSave.Visible = !readOnly;
-
-            // Sale amount formatting on leave
-            textBoxSaleAmount.Leave += (s, e) =>
-            {
-                if (decimal.TryParse(textBoxSaleAmount.Text, out var value))
-                    textBoxSaleAmount.Text = value.ToString("N2");
-                else
-                    textBoxSaleAmount.Text = "0.00";
-            };
-
-            // Set default payment mode to Cash if not loaded from DB
-            if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
-                comboBoxPaymentMethod.SelectedItem = "Cash";
+            // Disable all input controls for view-only mode
+            SetFieldsReadOnly(true);
+            buttonSave.Visible = false; // Hide Save button
         }
 
         private static decimal GetAmountPaidTillDate(int plotId)
@@ -265,68 +244,31 @@ namespace RealEstateManager.Pages
             string userIdentifier = (!string.IsNullOrEmpty(LoggedInUserId)) ? LoggedInUserId.ToString() : Environment.UserName;
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
-            if (!string.IsNullOrEmpty(_transactionId))
+            // INSERT new transaction only
+            string insert = @"
+                INSERT INTO PlotTransaction
+                (PlotId, TransactionDate, Amount, PaymentMethod, ReferenceNumber, Notes, TransactionType, CreatedBy, CreatedDate, IsDeleted)
+                VALUES
+                (@PlotId, @TransactionDate, @Amount, @PaymentMethod, @ReferenceNumber, @Notes, @TransactionType, @CreatedBy, @CreatedDate, 0)";
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(insert, conn))
             {
-                // UPDATE existing transaction
-                string update = @"
-                    UPDATE PlotTransaction SET
-                        TransactionDate = @TransactionDate,
-                        Amount = @Amount,
-                        PaymentMethod = @PaymentMethod,
-                        ReferenceNumber = @ReferenceNumber,
-                        Notes = @Notes,
-                        TransactionType = @TransactionType,
-                        ModifiedBy = @ModifiedBy,
-                        ModifiedDate = @ModifiedDate
-                    WHERE TransactionId = @TransactionId AND IsDeleted = 0";
+                cmd.Parameters.AddWithValue("@PlotId", _plotId);
+                cmd.Parameters.AddWithValue("@TransactionDate", dateTimePickerTransactionDate.Value);
+                cmd.Parameters.AddWithValue("@Amount", amount);
+                cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
+                cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
+                cmd.Parameters.AddWithValue("@Notes", notes);
+                cmd.Parameters.AddWithValue("@TransactionType", transactionType);
+                cmd.Parameters.AddWithValue("@CreatedBy", userIdentifier);
+                cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
 
-                using (var conn = new SqlConnection(connectionString))
-                using (var cmd = new SqlCommand(update, conn))
-                {
-                    cmd.Parameters.AddWithValue("@TransactionDate", dateTimePickerTransactionDate.Value);
-                    cmd.Parameters.AddWithValue("@Amount", amount);
-                    cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
-                    cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
-                    cmd.Parameters.AddWithValue("@Notes", notes);
-                    cmd.Parameters.AddWithValue("@TransactionType", transactionType);
-                    cmd.Parameters.AddWithValue("@ModifiedBy", userIdentifier);
-                    cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@TransactionId", _transactionId);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
-                MessageBox.Show("Transaction updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                conn.Open();
+                cmd.ExecuteNonQuery();
             }
-            else
-            {
-                // INSERT new transaction
-                string insert = @"
-                    INSERT INTO PlotTransaction
-                    (PlotId, TransactionDate, Amount, PaymentMethod, ReferenceNumber, Notes, TransactionType, CreatedBy, CreatedDate, IsDeleted)
-                    VALUES
-                    (@PlotId, @TransactionDate, @Amount, @PaymentMethod, @ReferenceNumber, @Notes, @TransactionType, @CreatedBy, @CreatedDate, 0)";
 
-                using (var conn = new SqlConnection(connectionString))
-                using (var cmd = new SqlCommand(insert, conn))
-                {
-                    cmd.Parameters.AddWithValue("@PlotId", _plotId);
-                    cmd.Parameters.AddWithValue("@TransactionDate", dateTimePickerTransactionDate.Value);
-                    cmd.Parameters.AddWithValue("@Amount", amount);
-                    cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
-                    cmd.Parameters.AddWithValue("@ReferenceNumber", referenceNumber);
-                    cmd.Parameters.AddWithValue("@Notes", notes);
-                    cmd.Parameters.AddWithValue("@TransactionType", transactionType);
-                    cmd.Parameters.AddWithValue("@CreatedBy", userIdentifier);
-                    cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
-                MessageBox.Show("Transaction registered successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            MessageBox.Show("Transaction registered successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // Refresh grid in LandingForm if open and select the property
             int? propertyId = null;

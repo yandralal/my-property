@@ -141,7 +141,7 @@ namespace RealEstateManager.Pages
             {
                 DataPropertyName = "Notes",
                 HeaderText = "Notes",
-                Width = 230,
+                Width = 260,
                 ReadOnly = true
             });
 
@@ -150,7 +150,7 @@ namespace RealEstateManager.Pages
             {
                 Name = "Action",
                 HeaderText = "Action",
-                Width = 130,
+                Width = 90,
                 ImageLayout = DataGridViewImageCellLayout.Normal
             };
             dataGridViewTransactions.Columns.Add(actionCol);
@@ -165,7 +165,6 @@ namespace RealEstateManager.Pages
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
                 var viewIcon = Properties.Resources.view;
-                var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
 
                 int iconWidth = 24, iconHeight = 24, padding = 12;
@@ -174,15 +173,11 @@ namespace RealEstateManager.Pages
 
                 if (e.Graphics != null)
                 {
-                    // Draw edit icon (first)
-                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                    x += iconWidth + padding;
-
-                    // Draw view icon (second)
+                    // Draw view icon (first)
                     e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                     x += iconWidth + padding;
 
-                    // Draw delete icon (third)
+                    // Draw delete icon (second)
                     e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 }
 
@@ -205,12 +200,9 @@ namespace RealEstateManager.Pages
                 switch (iconIndex)
                 {
                     case 0:
-                        EditTransaction(transactionId);
-                        break;
-                    case 1:
                         ViewTransaction(transactionId);
                         break;
-                    case 2:
+                    case 1:
                         DeleteTransaction(transactionId);
                         break;
                 }
@@ -223,19 +215,6 @@ namespace RealEstateManager.Pages
             // Open RegisterAgentTransactionForm in view mode
             using var form = new RegisterAgentTransactionForm(transactionId, true);
             form.ShowDialog();
-        }
-
-        private void EditTransaction(string? transactionId)
-        {
-            if (string.IsNullOrEmpty(transactionId)) return;
-            // Open RegisterAgentTransactionForm in edit mode
-            using var form = new RegisterAgentTransactionForm(transactionId, false);
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                int agentId = int.Parse(labelIdValue.Text);
-                LoadAgentTransactions(agentId);
-                DisplayAgentFinancials(agentId);
-            }
         }
 
         private void DeleteTransaction(string? transactionId)

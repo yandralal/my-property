@@ -102,12 +102,12 @@ namespace RealEstateManager.Pages
             {
                 dgv.Columns["Notes"].HeaderText = "Notes";
                 dgv.Columns["Notes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Notes"].Width = 280;
+                dgv.Columns["Notes"].Width = 300;
             }
             if (dgv.Columns["Action"] != null)
             {
                 dgv.Columns["Action"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Action"].Width = 120;
+                dgv.Columns["Action"].Width = 90;
             }
         }
 
@@ -119,10 +119,9 @@ namespace RealEstateManager.Pages
             var row = dataGridViewTransactions.Rows[e.RowIndex];
             var transactionId = row.Cells["TransactionId"].Value?.ToString();
 
-            // Show a context menu for actions
+            // Show a context menu for actions: View, Delete only
             var menu = new ContextMenuStrip();
             menu.Items.Add("View", null, (s, ea) => ViewTransaction(transactionId));
-            menu.Items.Add("Edit", null, (s, ea) => EditTransaction(transactionId));
             menu.Items.Add("Delete", null, (s, ea) => DeleteTransaction(transactionId));
             var cellDisplayRectangle = dataGridViewTransactions.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
             var location = dataGridViewTransactions.PointToScreen(new Point(cellDisplayRectangle.Left, cellDisplayRectangle.Bottom));
@@ -134,18 +133,6 @@ namespace RealEstateManager.Pages
             if (string.IsNullOrEmpty(transactionId)) return;
             var form = new RegisterPropertyTransactionForm(transactionId, readOnly: true);
             form.ShowDialog();
-        }
-
-        private void EditTransaction(string? transactionId)
-        {
-            if (string.IsNullOrEmpty(transactionId)) return;
-            var form = new RegisterPropertyTransactionForm(transactionId, readOnly: false);
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                // Optionally refresh the grid here
-                var transactions = GetPropertyTransactions(_propertyId);
-                dataGridViewTransactions.DataSource = transactions;
-            }
         }
 
         private void DeleteTransaction(string? transactionId)
@@ -166,9 +153,8 @@ namespace RealEstateManager.Pages
                     }
                     MessageBox.Show("Transaction deleted successfully.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Refresh the grid in this form
-                    var transactions = GetPropertyTransactions(_propertyId);
-                    dataGridViewTransactions.DataSource = transactions;
+                    // Refresh property details and grid
+                    LoadPropertyDetails();
 
                     // Optionally refresh property grid in LandingForm if open
                     foreach (Form openForm in Application.OpenForms)
@@ -360,9 +346,8 @@ namespace RealEstateManager.Pages
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
-                // Load your icons from resources
-                var viewIcon = Properties.Resources.view;      // Replace with your actual resource names
-                var editIcon = Properties.Resources.edit;
+                // Only draw view and delete icons
+                var viewIcon = Properties.Resources.view;
                 var deleteIcon = Properties.Resources.delete1;
 
                 int iconWidth = 24, iconHeight = 24, padding = 12;
@@ -372,11 +357,6 @@ namespace RealEstateManager.Pages
                 // Draw view icon
                 if (viewIcon != null && e.Graphics != null)
                     e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                x += iconWidth + padding;
-
-                // Draw edit icon
-                if (editIcon != null && e.Graphics != null)
-                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 x += iconWidth + padding;
 
                 // Draw delete icon
@@ -404,9 +384,6 @@ namespace RealEstateManager.Pages
                         ViewTransaction(transactionId);
                         break;
                     case 1:
-                        EditTransaction(transactionId);
-                        break;
-                    case 2:
                         DeleteTransaction(transactionId);
                         break;
                 }

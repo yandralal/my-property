@@ -5,8 +5,8 @@ namespace RealEstateManager.Pages
         private System.Windows.Forms.GroupBox groupBoxTransactionEntry;
         private System.Windows.Forms.Label labelPropertyId;
         private System.Windows.Forms.TextBox textBoxPropertyId;
-        private System.Windows.Forms.Label labelSaleAmount;
-        private System.Windows.Forms.TextBox textBoxSaleAmount;
+        private System.Windows.Forms.Label labelBuyAmount;
+        private System.Windows.Forms.TextBox textBoxBuyAmount;
         private System.Windows.Forms.Label labelAmountPaidTillDate;
         private System.Windows.Forms.TextBox textBoxAmountPaidTillDate;
         private System.Windows.Forms.Label labelAmount;
@@ -34,8 +34,8 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry = new GroupBox();
             labelPropertyId = new Label();
             textBoxPropertyId = new TextBox();
-            labelSaleAmount = new Label();
-            textBoxSaleAmount = new TextBox();
+            labelBuyAmount = new Label();
+            textBoxBuyAmount = new TextBox();
             labelTotalLoan = new Label();
             textBoxTotalLoan = new TextBox();
             labelAmountPaidTillDate = new Label();
@@ -64,8 +64,8 @@ namespace RealEstateManager.Pages
             groupBoxTransactionEntry.BackColor = Color.AliceBlue;
             groupBoxTransactionEntry.Controls.Add(labelPropertyId);
             groupBoxTransactionEntry.Controls.Add(textBoxPropertyId);
-            groupBoxTransactionEntry.Controls.Add(labelSaleAmount);
-            groupBoxTransactionEntry.Controls.Add(textBoxSaleAmount);
+            groupBoxTransactionEntry.Controls.Add(labelBuyAmount);
+            groupBoxTransactionEntry.Controls.Add(textBoxBuyAmount);
             groupBoxTransactionEntry.Controls.Add(labelTotalLoan);
             groupBoxTransactionEntry.Controls.Add(textBoxTotalLoan);
             groupBoxTransactionEntry.Controls.Add(labelAmountPaidTillDate);
@@ -116,25 +116,25 @@ namespace RealEstateManager.Pages
             textBoxPropertyId.Size = new Size(320, 30);
             textBoxPropertyId.TabIndex = 0;
             // 
-            // labelSaleAmount
+            // labelBuyAmount
             // 
-            labelSaleAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelSaleAmount.ForeColor = Color.DarkSlateGray;
-            labelSaleAmount.Location = new Point(27, 93);
-            labelSaleAmount.Name = "labelSaleAmount";
-            labelSaleAmount.Size = new Size(120, 23);
-            labelSaleAmount.TabIndex = 2;
-            labelSaleAmount.Text = "Buy Amount:";
+            labelBuyAmount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelBuyAmount.ForeColor = Color.DarkSlateGray;
+            labelBuyAmount.Location = new Point(27, 93);
+            labelBuyAmount.Name = "labelBuyAmount";
+            labelBuyAmount.Size = new Size(120, 23);
+            labelBuyAmount.TabIndex = 2;
+            labelBuyAmount.Text = "Buy Amount:";
             // 
-            // textBoxSaleAmount
+            // textBoxBuyAmount
             // 
-            textBoxSaleAmount.BorderStyle = BorderStyle.FixedSingle;
-            textBoxSaleAmount.Font = new Font("Segoe UI", 10F);
-            textBoxSaleAmount.Location = new Point(229, 90);
-            textBoxSaleAmount.Name = "textBoxSaleAmount";
-            textBoxSaleAmount.ReadOnly = true;
-            textBoxSaleAmount.Size = new Size(320, 30);
-            textBoxSaleAmount.TabIndex = 1;
+            textBoxBuyAmount.BorderStyle = BorderStyle.FixedSingle;
+            textBoxBuyAmount.Font = new Font("Segoe UI", 10F);
+            textBoxBuyAmount.Location = new Point(229, 90);
+            textBoxBuyAmount.Name = "textBoxBuyAmount";
+            textBoxBuyAmount.ReadOnly = true;
+            textBoxBuyAmount.Size = new Size(320, 30);
+            textBoxBuyAmount.TabIndex = 1;
             // 
             // labelTotalLoan
             // 

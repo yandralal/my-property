@@ -62,10 +62,10 @@ namespace RealEstateManager
             menuStripMain = new MenuStrip();
             transactionsMenu = new ToolStripMenuItem();
             propertyTransactionsMenuItem = new ToolStripMenuItem();
+            propertyLoanTransactionMenuItem = new ToolStripMenuItem();
             plotTransactionMenuItem = new ToolStripMenuItem();
             agentTransactionToolStripMenuItem = new ToolStripMenuItem();
             miscTransactionToolStripMenuItem = new ToolStripMenuItem();
-            propertyLoanTransactionMenuItem = new ToolStripMenuItem();
             agentOperationsMenu = new ToolStripMenuItem();
             registerSaleMenuItem = new ToolStripMenuItem();
             approveOfferMenuItem = new ToolStripMenuItem();
@@ -129,6 +129,13 @@ namespace RealEstateManager
             propertyTransactionsMenuItem.Text = "Property";
             propertyTransactionsMenuItem.Click += PropertyTransactionsMenuItem_Click;
             // 
+            // propertyLoanTransactionMenuItem
+            // 
+            propertyLoanTransactionMenuItem.Name = "propertyLoanTransactionMenuItem";
+            propertyLoanTransactionMenuItem.Size = new Size(232, 32);
+            propertyLoanTransactionMenuItem.Text = "Loan";
+            propertyLoanTransactionMenuItem.Click += PropertyLoanTransactionMenuItem_Click;
+            // 
             // plotTransactionMenuItem
             // 
             plotTransactionMenuItem.Name = "plotTransactionMenuItem";
@@ -149,13 +156,6 @@ namespace RealEstateManager
             miscTransactionToolStripMenuItem.Size = new Size(232, 32);
             miscTransactionToolStripMenuItem.Text = "Miscellaneous";
             miscTransactionToolStripMenuItem.Click += MiscTransactionToolStripMenuItem_Click;
-            // 
-            // propertyLoanTransactionMenuItem
-            // 
-            propertyLoanTransactionMenuItem.Name = "propertyLoanTransactionMenuItem";
-            propertyLoanTransactionMenuItem.Size = new Size(232, 32);
-            propertyLoanTransactionMenuItem.Text = "Loan";
-            propertyLoanTransactionMenuItem.Click += PropertyLoanTransactionMenuItem_Click;
             // 
             // agentOperationsMenu
             // 
@@ -309,7 +309,7 @@ namespace RealEstateManager
             buttonAddProperty.FlatStyle = FlatStyle.Flat;
             buttonAddProperty.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonAddProperty.ForeColor = Color.White;
-            buttonAddProperty.Location = new Point(1411, 37);
+            buttonAddProperty.Location = new Point(1427, 37);
             buttonAddProperty.Name = "buttonAddProperty";
             buttonAddProperty.Size = new Size(215, 36);
             buttonAddProperty.TabIndex = 2;
@@ -323,7 +323,7 @@ namespace RealEstateManager
             buttonManagePlots.FlatStyle = FlatStyle.Flat;
             buttonManagePlots.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonManagePlots.ForeColor = Color.White;
-            buttonManagePlots.Location = new Point(1653, 37);
+            buttonManagePlots.Location = new Point(1669, 37);
             buttonManagePlots.Name = "buttonManagePlots";
             buttonManagePlots.Size = new Size(134, 36);
             buttonManagePlots.TabIndex = 3;
@@ -429,7 +429,7 @@ namespace RealEstateManager
             // 
             // panelFooter
             // 
-            panelFooter.BackColor = Color.Red;
+            panelFooter.BackColor = Color.MidnightBlue;
             panelFooter.Controls.Add(footerLabel);
             panelFooter.Dock = DockStyle.Bottom;
             panelFooter.Location = new Point(0, 921);
@@ -439,7 +439,7 @@ namespace RealEstateManager
             // 
             // footerLabel
             // 
-            footerLabel.BackColor = Color.Red;
+            footerLabel.BackColor = Color.MidnightBlue;
             footerLabel.Dock = DockStyle.Fill;
             footerLabel.Font = new Font("Segoe UI", 10F, FontStyle.Italic);
             footerLabel.ForeColor = Color.White;

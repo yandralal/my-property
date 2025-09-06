@@ -28,8 +28,8 @@ namespace RealEstateManager.Pages
             }
             if (_saleAmount.HasValue)
             {
-                textBoxSaleAmount.Text = _saleAmount.Value.ToString("N2");
-                textBoxSaleAmount.ReadOnly = true;
+                textBoxBuyAmount.Text = _saleAmount.Value.ToString("N2");
+                textBoxBuyAmount.ReadOnly = true;
             }
 
             // Fetch and display amount paid till date
@@ -67,6 +67,9 @@ namespace RealEstateManager.Pages
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(new[] { "Credit", "Debit" });
 
+            decimal currentTransactionAmount = 0;
+            decimal buyPrice = 0;
+
             // Load transaction details from DB
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             string query = @"
@@ -77,12 +80,11 @@ namespace RealEstateManager.Pages
                     pt.Amount, 
                     pt.PaymentMethod, 
                     pt.ReferenceNumber, 
-                    ps.SaleAmount,
                     p.Title,
+                    p.Price AS BuyPrice,
                     pt.Notes
                 FROM PropertyTransaction pt
                 INNER JOIN Property p ON pt.PropertyId = p.Id
-                LEFT JOIN PlotSale ps ON pt.PropertyId = ps.PropertyId
                 WHERE pt.TransactionId = @TransactionId AND pt.IsDeleted = 0";
 
             using (var conn = new SqlConnection(connectionString))
@@ -98,11 +100,12 @@ namespace RealEstateManager.Pages
                         dateTimePickerTransactionDate.Value = reader["TransactionDate"] != DBNull.Value
                             ? Convert.ToDateTime(reader["TransactionDate"])
                             : DateTime.Now;
-                        textBoxAmount.Text = reader["Amount"] != DBNull.Value ? Convert.ToDecimal(reader["Amount"]).ToString("N2") : "";
+                        currentTransactionAmount = reader["Amount"] != DBNull.Value ? Convert.ToDecimal(reader["Amount"]) : 0;
+                        textBoxAmount.Text = currentTransactionAmount.ToString("N2");
                         comboBoxPaymentMethod.Text = reader["PaymentMethod"]?.ToString() ?? "";
                         textBoxReferenceNumber.Text = reader["ReferenceNumber"]?.ToString() ?? "";
                         textBoxNotes.Text = reader["Notes"]?.ToString() ?? "";
-                        comboBoxTransactionType.Text = reader["TransactionType"]?.ToString() ?? "Debit"; // Set "Debit" as fallback
+                        comboBoxTransactionType.Text = reader["TransactionType"]?.ToString() ?? "Debit";
 
                         var propertyNumberObj = reader["Title"];
                         if (propertyNumberObj != null)
@@ -111,31 +114,27 @@ namespace RealEstateManager.Pages
                             textBoxPropertyId.ReadOnly = true;
                         }
 
-                        var saleAmountObj = reader["SaleAmount"];
-                        if (saleAmountObj != DBNull.Value)
-                        {
-                            textBoxSaleAmount.Text = Convert.ToDecimal(saleAmountObj).ToString("N2");
-                            textBoxSaleAmount.ReadOnly = true;
-                        }
+                        buyPrice = reader["BuyPrice"] != DBNull.Value ? Convert.ToDecimal(reader["BuyPrice"]) : 0;
+                        textBoxBuyAmount.Text = buyPrice.ToString("N2");
+                        textBoxBuyAmount.ReadOnly = true;
 
                         if (_propertyId.HasValue)
                         {
-                            _amountPaidTillDate = GetAmountPaidTillDate(_propertyId.Value);
-                            textBoxAmountPaidTillDate.Text = _amountPaidTillDate.ToString("N2");
-
                             _totalLoan = GetTotalLoan(_propertyId.Value);
                             textBoxTotalLoan.Text = _totalLoan.ToString("N2");
                         }
+
+                        // Calculate balance using only the current transaction
+                        labelBalanceValue.Text = (buyPrice - currentTransactionAmount - _totalLoan).ToString("N2");
+                        textBoxAmountPaidTillDate.Text = currentTransactionAmount.ToString("N2");
                     }
                 }
             }
 
-            UpdateBalanceOnLoad();
-            textBoxAmount.TextChanged += UpdateBalanceAmount;
-            SetFieldsReadOnly(readOnly);
-            buttonSave.Visible = !readOnly;
+            // Disable all input controls for view-only mode
+            SetFieldsReadOnly(true);
+            buttonSave.Visible = false;
 
-            // Set default payment method if not loading an existing value
             if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
                 comboBoxPaymentMethod.SelectedItem = "Cash";
         }
@@ -171,7 +170,7 @@ namespace RealEstateManager.Pages
 
         private void UpdateBalanceOnLoad()
         {
-            if (decimal.TryParse(textBoxSaleAmount.Text, out decimal saleAmount))
+            if (decimal.TryParse(textBoxBuyAmount.Text, out decimal saleAmount))
             {
                 labelBalanceValue.Text = (saleAmount - _amountPaidTillDate - _totalLoan).ToString("N2");
             }
@@ -231,10 +230,10 @@ namespace RealEstateManager.Pages
             }
 
             // Validate sale amount (should be positive)
-            if (!decimal.TryParse(textBoxSaleAmount.Text, out decimal saleAmount) || saleAmount <= 0)
+            if (!decimal.TryParse(textBoxBuyAmount.Text, out decimal saleAmount) || saleAmount <= 0)
             {
                 MessageBox.Show("Sale amount must be a valid, positive number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxSaleAmount.Focus();
+                textBoxBuyAmount.Focus();
                 return;
             }
 
@@ -331,12 +330,12 @@ namespace RealEstateManager.Pages
         {
             decimal saleAmount = 0;
             decimal newPaid = 0;
-            if (decimal.TryParse(textBoxSaleAmount.Text, out saleAmount) &&
+            if (decimal.TryParse(textBoxBuyAmount.Text, out saleAmount) &&
                 decimal.TryParse(textBoxAmount.Text, out newPaid))
             {
                 labelBalanceValue.Text = (saleAmount - (_amountPaidTillDate + newPaid) - _totalLoan).ToString("N2");
             }
-            else if (decimal.TryParse(textBoxSaleAmount.Text, out saleAmount))
+            else if (decimal.TryParse(textBoxBuyAmount.Text, out saleAmount))
             {
                 labelBalanceValue.Text = (saleAmount - _amountPaidTillDate - _totalLoan).ToString("N2");
             }
@@ -399,7 +398,7 @@ namespace RealEstateManager.Pages
             };
 
             textBoxAmount.KeyPress += handler;
-            textBoxSaleAmount.KeyPress += handler;
+            textBoxBuyAmount.KeyPress += handler;
             textBoxAmountPaidTillDate.KeyPress += handler;
         }
     }

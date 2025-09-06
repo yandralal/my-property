@@ -726,9 +726,9 @@ namespace RealEstateManager.Pages
             // 
             // buttonGenerateReport
             // 
-            buttonGenerateReport.Location = new Point(1222, 26);
+            buttonGenerateReport.Location = new Point(1234, 107);
             buttonGenerateReport.Name = "buttonGenerateReport";
-            buttonGenerateReport.Size = new Size(46, 45);
+            buttonGenerateReport.Size = new Size(45, 45);
             buttonGenerateReport.TabIndex = 40;
             buttonGenerateReport.UseVisualStyleBackColor = false;
             buttonGenerateReport.Click += ButtonGenerateReport_Click;

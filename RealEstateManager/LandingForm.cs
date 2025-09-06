@@ -124,7 +124,14 @@ namespace RealEstateManager
                     if (row.Cells["Id"].Value != null && Convert.ToInt32(row.Cells["Id"].Value) == propertyIdToSelect.Value)
                     {
                         row.Selected = true;
-                        dataGridViewProperties.CurrentCell = row.Cells[0]; // Optionally set focus
+                        // Find the first visible column to set as CurrentCell
+                        var firstVisibleCol = dataGridViewProperties.Columns
+                            .Cast<DataGridViewColumn>()
+                            .FirstOrDefault(c => c.Visible && row.Cells[c.Index] != null);
+                        if (firstVisibleCol != null)
+                        {
+                            dataGridViewProperties.CurrentCell = row.Cells[firstVisibleCol.Index];
+                        }
                         break;
                     }
                 }

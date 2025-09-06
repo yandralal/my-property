@@ -20,6 +20,10 @@ namespace RealEstateManager.Pages
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;
             dataGridViewTransactions.CellPainting += DataGridViewTransactions_CellPainting;
             dataGridViewTransactions.CellMouseClick += DataGridViewTransactions_CellMouseClick;
+
+            // PDF button setup (similar to PropertyDetailsForm)
+            SetGeneratePdfButtonStyle();
+            buttonGenerateReport.Click += ButtonGenerateReport_Click;
         }
 
         private static DataTable GetPlotTransactions(int plotId)
@@ -120,13 +124,14 @@ namespace RealEstateManager.Pages
                     }
                 }
             }
+            
             var (agentName, totalBrokerage, brokeragePaid, brokerageBalance) = DisplayAgentBrokerageDetails(_plotId);
 
             labelAgentName.Text = agentName;
-            labelTotalBrokerage.Text = string.Format("{0:C}", totalBrokerage); 
+            labelTotalBrokerage.Text = string.Format("{0:C}", totalBrokerage);
             labelBrokeragePaid.Text = string.Format("{0:C}", brokeragePaid);
-            labelBrokerageBalance.Text = string.Format("{0:C}", brokerageBalance); 
-
+            labelBrokerageBalance.Text = string.Format("{0:C}", brokerageBalance);
+            
             // Load transactions and bind to grid
             var transactions = GetPlotTransactions(_plotId);
             dataGridViewTransactions.DataSource = transactions;
@@ -208,12 +213,12 @@ namespace RealEstateManager.Pages
             {
                 dgv.Columns["Notes"].HeaderText = "Notes";
                 dgv.Columns["Notes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Notes"].Width = 220;
+                dgv.Columns["Notes"].Width = 240;
             }
             if (dgv.Columns["Action"] != null)
             {
                 dgv.Columns["Action"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["Action"].Width = 120;
+                dgv.Columns["Action"].Width = 90;
             }
         }
 
@@ -223,28 +228,22 @@ namespace RealEstateManager.Pages
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
 
-                // Load your icons from resources
+                // Only draw view and delete icons
                 var viewIcon = Properties.Resources.view;
-                var editIcon = Properties.Resources.edit;
                 var deleteIcon = Properties.Resources.delete1;
 
                 int iconWidth = 24, iconHeight = 24, padding = 12;
                 int y = e.CellBounds.Top + (e.CellBounds.Height - iconHeight) / 2;
                 int x = e.CellBounds.Left + padding;
 
-                // Safely draw icons only if not null
+                // Draw view icon
                 if (viewIcon != null && e.Graphics != null)
                 {
                     e.Graphics.DrawImage(viewIcon, new Rectangle(x, y, iconWidth, iconHeight));
                 }
                 x += iconWidth + padding;
 
-                if (editIcon != null)
-                {
-                    e.Graphics.DrawImage(editIcon, new Rectangle(x, y, iconWidth, iconHeight));
-                }
-                x += iconWidth + padding;
-
+                // Draw delete icon
                 if (deleteIcon != null)
                 {
                     e.Graphics.DrawImage(deleteIcon, new Rectangle(x, y, iconWidth, iconHeight));
@@ -271,9 +270,6 @@ namespace RealEstateManager.Pages
                         ViewTransaction(transactionId);
                         break;
                     case 1:
-                        EditTransaction(transactionId);
-                        break;
-                    case 2:
                         DeleteTransaction(transactionId);
                         break;
                 }
@@ -283,20 +279,8 @@ namespace RealEstateManager.Pages
         private static void ViewTransaction(string? transactionId)
         {
             if (string.IsNullOrEmpty(transactionId)) return;
-            var form = new RegisterPlotTransactionForm(transactionId, readOnly: true);
+            var form = new RegisterPlotTransactionForm(transactionId);
             form.ShowDialog();
-        }
-
-        private void EditTransaction(string? transactionId)
-        {
-            if (string.IsNullOrEmpty(transactionId)) return;
-            var form = new RegisterPlotTransactionForm(transactionId, readOnly: false);
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                // Optionally refresh the grid here
-                var transactions = GetPlotTransactions(_plotId);
-                dataGridViewTransactions.DataSource = transactions;
-            }
         }
 
         private void DeleteTransaction(string? transactionId)
@@ -317,8 +301,8 @@ namespace RealEstateManager.Pages
                     }
                     MessageBox.Show("Transaction deleted successfully.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    var transactions = GetPlotTransactions(_plotId);
-                    dataGridViewTransactions.DataSource = transactions;
+                    // Refresh all plot details and grid
+                    LoadPlotDetails();
 
                     foreach (Form openForm in Application.OpenForms)
                     {
@@ -477,11 +461,8 @@ namespace RealEstateManager.Pages
                 ("Customer Email:", labelCustomerEmail.Text),
                 ("Sale Amount:", labelSaleAmount.Text),
                 ("Paid Amount:", labelPaidAmount.Text),
-                ("Balance:", labelBalanceAmount.Text),
-                ("Agent Name:", labelAgentName.Text),
-                ("Total Brokerage:", labelTotalBrokerage.Text),
-                ("Brokerage Paid:", labelBrokeragePaid.Text),
-                ("Brokerage Balance:", labelBrokerageBalance.Text)
+                ("Balance:", labelBalanceAmount.Text)
+                // Agent and brokerage fields removed
             };
 
             double detailsX = margin;
@@ -685,6 +666,18 @@ namespace RealEstateManager.Pages
                 }
             }
             return (agentName, totalBrokerage, brokeragePaid, brokerageBalance);
+        }
+
+        private void SetGeneratePdfButtonStyle()
+        {
+            var originalImage = Properties.Resources.pdf;
+            var buttonSize = buttonGenerateReport.Size;
+            int imgWidth = Math.Max(1, buttonSize.Width - 10);
+            int imgHeight = Math.Max(1, buttonSize.Height - 10);
+            var scaledImage = new Bitmap(originalImage, imgWidth, imgHeight);
+            buttonGenerateReport.Image = scaledImage;
+            buttonGenerateReport.ImageAlign = ContentAlignment.MiddleCenter;
+            buttonGenerateReport.Text = "";
         }
     }
 }

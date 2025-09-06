@@ -21,64 +21,68 @@ namespace RealEstateManager.Pages
 
         private void InitializeComponent()
         {
-            this.buttonApply = new System.Windows.Forms.Button();
-            this.buttonPickColor = new System.Windows.Forms.Button();
-            this.previewPanel = new System.Windows.Forms.Panel();
-            this.labelInstruction = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // labelInstruction
-            // 
-            this.labelInstruction.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labelInstruction.Text = "Click 'Pick Color' to choose a background color.";
-            this.labelInstruction.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labelInstruction.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular);
-            this.labelInstruction.Height = 40;
-            // 
-            // previewPanel
-            // 
-            this.previewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.previewPanel.Location = new System.Drawing.Point(0, 40);
-            this.previewPanel.Name = "previewPanel";
-            this.previewPanel.Size = new System.Drawing.Size(400, 130);
-            this.previewPanel.TabIndex = 1;
-            this.previewPanel.BackColor = RealEstateManager.Pages.BaseForm.GlobalBackgroundColor;
-            // 
-            // buttonPickColor
-            // 
-            this.buttonPickColor.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonPickColor.Location = new System.Drawing.Point(0, 170);
-            this.buttonPickColor.Name = "buttonPickColor";
-            this.buttonPickColor.Size = new System.Drawing.Size(400, 40);
-            this.buttonPickColor.TabIndex = 2;
-            this.buttonPickColor.Text = "Pick Color";
-            this.buttonPickColor.UseVisualStyleBackColor = true;
+            buttonApply = new Button();
+            buttonPickColor = new Button();
+            previewPanel = new Panel();
+            labelInstruction = new Label();
+            SuspendLayout();
             // 
             // buttonApply
             // 
-            this.buttonApply.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonApply.Location = new System.Drawing.Point(0, 210);
-            this.buttonApply.Name = "buttonApply";
-            this.buttonApply.Size = new System.Drawing.Size(400, 40);
-            this.buttonApply.TabIndex = 0;
-            this.buttonApply.Text = "Apply";
-            this.buttonApply.UseVisualStyleBackColor = true;
+            buttonApply.Dock = DockStyle.Bottom;
+            buttonApply.Location = new Point(0, 210);
+            buttonApply.Name = "buttonApply";
+            buttonApply.Size = new Size(400, 40);
+            buttonApply.TabIndex = 0;
+            buttonApply.Text = "Apply";
+            buttonApply.UseVisualStyleBackColor = true;
+            // 
+            // buttonPickColor
+            // 
+            buttonPickColor.Dock = DockStyle.Bottom;
+            buttonPickColor.Location = new Point(0, 170);
+            buttonPickColor.Name = "buttonPickColor";
+            buttonPickColor.Size = new Size(400, 40);
+            buttonPickColor.TabIndex = 2;
+            buttonPickColor.Text = "Pick Color";
+            buttonPickColor.UseVisualStyleBackColor = true;
+            // 
+            // previewPanel
+            // 
+            previewPanel.BackColor = Color.FromArgb(245, 247, 250);
+            previewPanel.Dock = DockStyle.Fill;
+            previewPanel.Location = new Point(0, 40);
+            previewPanel.Name = "previewPanel";
+            previewPanel.Size = new Size(400, 130);
+            previewPanel.TabIndex = 1;
+            // 
+            // labelInstruction
+            // 
+            labelInstruction.Dock = DockStyle.Top;
+            labelInstruction.Font = new Font("Segoe UI", 10F);
+            labelInstruction.Location = new Point(0, 0);
+            labelInstruction.Name = "labelInstruction";
+            labelInstruction.Size = new Size(400, 40);
+            labelInstruction.TabIndex = 2;
+            labelInstruction.Text = "Click 'Pick Color' to choose a background color.";
+            labelInstruction.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // CustomizeBackgroundForm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 250);
-            this.Controls.Add(this.previewPanel);
-            this.Controls.Add(this.labelInstruction);
-            this.Controls.Add(this.buttonPickColor);
-            this.Controls.Add(this.buttonApply);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "CustomizeBackgroundForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Customize Background";
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(400, 250);
+            Controls.Add(previewPanel);
+            Controls.Add(labelInstruction);
+            Controls.Add(buttonPickColor);
+            Controls.Add(buttonApply);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "CustomizeBackgroundForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Customize Background";
+            ResumeLayout(false);
         }
 
         #endregion

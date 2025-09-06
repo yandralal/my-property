@@ -10,6 +10,7 @@ namespace RealEstateManager.Pages
         public RegisterMiscTransactionForm()
         {
             InitializeComponent();
+            
             AddMandatoryFieldStars();
             comboBoxTransactionType.Items.Clear();
             comboBoxTransactionType.Items.AddRange(["Credit", "Debit"]);

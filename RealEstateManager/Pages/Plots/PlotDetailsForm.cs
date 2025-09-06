@@ -15,6 +15,7 @@ namespace RealEstateManager.Pages
         public PlotDetailsForm(int plotId)
         {
             InitializeComponent();
+            
             _plotId = plotId;
             LoadPlotDetails();
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;

@@ -106,12 +106,14 @@ namespace RealEstateManager.Pages
             // 
             // ViewAllAgentsForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 248, 255);
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1127, 571);
             Controls.Add(groupBoxAgents);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "ViewAllAgentsForm";
             Text = "All Agents";
             ((System.ComponentModel.ISupportInitialize)dataGridViewAgents).EndInit();

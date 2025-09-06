@@ -256,6 +256,7 @@ namespace RealEstateManager.Pages
             ClientSize = new Size(606, 545);
             Controls.Add(groupBoxTransactionDetails);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "RegisterMiscTransactionForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Miscellaneous Transaction";

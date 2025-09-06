@@ -9,6 +9,7 @@ namespace RealEstateManager.Pages
         public AllTransactionsFilterForm()
         {
             InitializeComponent();
+            
             comboBoxType.Items.AddRange(new[] { "Plot", "Property", "Agent", "Miscellaneous", "Property Loan" }); // Added "Property Loan"
             comboBoxType.SelectedIndex = 0;
             comboBoxType.SelectedIndexChanged += ButtonFilter_Click;

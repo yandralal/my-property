@@ -318,11 +318,13 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPlotSaleForm
             // 
+            
             BackColor = Color.FromArgb(245, 248, 255);
             ClientSize = new Size(599, 638);
             Controls.Add(groupBoxSaleDetails);
             Font = new Font("Segoe UI", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "RegisterPlotSaleForm";
             Text = "Register Sale";
             groupBoxSaleDetails.ResumeLayout(false);

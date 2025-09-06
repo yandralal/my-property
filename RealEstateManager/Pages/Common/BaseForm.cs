@@ -14,7 +14,6 @@ namespace RealEstateManager.Pages
         {
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
-            MaximizeBox = false;
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)

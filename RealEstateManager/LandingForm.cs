@@ -16,6 +16,7 @@ namespace RealEstateManager
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
+            
             SetupPlotGrid();
             dataGridViewProperties.DataBindingComplete += DataGridViewProperties_DataBindingComplete;
             dataGridViewProperties.CellMouseClick += DataGridViewProperties_CellMouseClick;
@@ -23,18 +24,21 @@ namespace RealEstateManager
             dataGridViewPlots.CellFormatting += DataGridViewPlots_CellFormatting;
             LoadActiveProperties();
 
-            Pages.ManagePropertyLoansForm.PropertyLoansChanged += OnPropertyLoansChanged;
+            ManagePropertyLoansForm.PropertyLoansChanged += OnPropertyLoansChanged;
+            panelFooter.BringToFront();
+            footerLabel.Text = $"© {DateTime.Now.Year} VVT Softwares Pvt. Ltd. All rights reserved.";
+            panelFooter.BringToFront();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            Pages.ManagePropertyLoansForm.PropertyLoansChanged -= OnPropertyLoansChanged;
+            ManagePropertyLoansForm.PropertyLoansChanged -= OnPropertyLoansChanged;
             base.OnFormClosed(e);
         }
 
         private void ButtonAddProperty_Click(object sender, EventArgs e)
         {
-            var registerForm = new Pages.RegisterPropertyForm();
+            var registerForm = new RegisterPropertyForm();
             if (registerForm.ShowDialog() == DialogResult.OK)
             {
                 int? selectedId = registerForm.SavedPropertyId;
@@ -1111,7 +1115,7 @@ namespace RealEstateManager
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
         {
-            using (var aboutForm = new Pages.AboutForm())
+            using (var aboutForm = new AboutForm())
             {
                 aboutForm.ShowDialog(this);
             }

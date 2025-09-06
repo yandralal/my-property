@@ -142,8 +142,7 @@ namespace RealEstateManager.Pages
             // 
             labelNameStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelNameStar.ForeColor = Color.Red;
-            // Place star just after the labelName text
-            labelNameStar.Location = new Point(labelName.Left + labelName.Width + 2, labelName.Top);
+            labelNameStar.Location = new Point(56, 51);
             labelNameStar.Name = "labelNameStar";
             labelNameStar.Size = new Size(20, 23);
             labelNameStar.TabIndex = 8;
@@ -154,8 +153,7 @@ namespace RealEstateManager.Pages
             // 
             labelContactStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelContactStar.ForeColor = Color.Red;
-            // Place star just after the labelContact text
-            labelContactStar.Location = new Point(labelContact.Left + labelContact.Width + 2, labelContact.Top);
+            labelContactStar.Location = new Point(56, 98);
             labelContactStar.Name = "labelContactStar";
             labelContactStar.Size = new Size(20, 23);
             labelContactStar.TabIndex = 9;
@@ -169,6 +167,7 @@ namespace RealEstateManager.Pages
             ClientSize = new Size(600, 286);
             Controls.Add(groupBoxAgent);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "AgentRegistrationForm";
             Text = "Agent Registration";
             groupBoxAgent.ResumeLayout(false);

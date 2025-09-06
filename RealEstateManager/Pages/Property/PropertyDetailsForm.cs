@@ -16,6 +16,7 @@ namespace RealEstateManager.Pages
         public PropertyDetailsForm(int propertyId)
         {
             InitializeComponent();
+            
             _propertyId = propertyId;
             SetGeneratePdfButtonVisibility();
             dataGridViewTransactions.DataBindingComplete += DataGridViewTransactions_DataBindingComplete;

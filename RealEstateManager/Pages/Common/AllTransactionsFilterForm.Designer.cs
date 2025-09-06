@@ -173,12 +173,14 @@ namespace RealEstateManager.Pages
             // 
             // AllTransactionsFilterForm
             // 
+            
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(1530, 655);
             Controls.Add(groupBoxResults);
             Controls.Add(groupBoxFilter);
             Font = new Font("Segoe UI", 10F);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "AllTransactionsFilterForm";
             Text = "Filter All Transactions";
             groupBoxFilter.ResumeLayout(false);

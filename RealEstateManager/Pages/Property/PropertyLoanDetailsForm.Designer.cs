@@ -45,6 +45,7 @@ namespace RealEstateManager.Pages.Property
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             groupBoxLoanDetails = new GroupBox();
+            labelTotalPrincipalPaidTitle = new Label();
             labelPropertyTitle = new Label();
             labelPropertyValue = new Label();
             labelLenderNameTitle = new Label();
@@ -81,7 +82,6 @@ namespace RealEstateManager.Pages.Property
             labelBalance = new Label();
             groupBoxTransactions = new GroupBox();
             dataGridViewTransactions = new DataGridView();
-            labelTotalPrincipalPaidTitle = new Label();
             groupBoxLoanDetails.SuspendLayout();
             groupBoxTransactions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).BeginInit();
@@ -123,6 +123,18 @@ namespace RealEstateManager.Pages.Property
             groupBoxLoanDetails.TabIndex = 0;
             groupBoxLoanDetails.TabStop = false;
             groupBoxLoanDetails.Text = "Loan Details";
+            // 
+            // labelTotalPrincipalPaidTitle
+            // 
+            labelTotalPrincipalPaidTitle.AutoSize = true;
+            labelTotalPrincipalPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalPrincipalPaidTitle.ForeColor = Color.DarkSlateGray;
+            labelTotalPrincipalPaidTitle.Location = new Point(623, 132);
+            labelTotalPrincipalPaidTitle.Name = "labelTotalPrincipalPaidTitle";
+            labelTotalPrincipalPaidTitle.Size = new Size(169, 23);
+            labelTotalPrincipalPaidTitle.TabIndex = 20;
+            labelTotalPrincipalPaidTitle.Text = "Total Principal Paid:";
+            labelTotalPrincipalPaidTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // labelPropertyTitle
             // 
@@ -504,26 +516,15 @@ namespace RealEstateManager.Pages.Property
             dataGridViewTransactions.Size = new Size(1286, 387);
             dataGridViewTransactions.TabIndex = 0;
             // 
-            // labelTotalInterestPaidTitle
-            // 
-            labelTotalPrincipalPaidTitle.AutoSize = true;
-            labelTotalPrincipalPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalPrincipalPaidTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalPrincipalPaidTitle.Location = new Point(623, 132);
-            labelTotalPrincipalPaidTitle.Name = "labelTotalInterestPaidTitle";
-            labelTotalPrincipalPaidTitle.Size = new Size(160, 23);
-            labelTotalPrincipalPaidTitle.TabIndex = 20;
-            labelTotalPrincipalPaidTitle.Text = "Total Principal Paid:";
-            labelTotalPrincipalPaidTitle.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // PropertyLoanDetailsForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
+            
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(1351, 811);
             Controls.Add(groupBoxLoanDetails);
             Controls.Add(groupBoxTransactions);
             Font = new Font("Segoe UI", 10F);
+            MaximizeBox = false;
             Name = "PropertyLoanDetailsForm";
             Text = "Property Loan Details";
             groupBoxLoanDetails.ResumeLayout(false);

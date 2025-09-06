@@ -12,6 +12,7 @@ namespace RealEstateManager.Pages
         {
             this._agentId = agent.Id;
             InitializeComponent();
+            
             DisplayAgent(agent);
             LoadAgentTransactions(agent.Id);
             DisplayAgentFinancials(agent.Id);

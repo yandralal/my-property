@@ -109,6 +109,7 @@ namespace RealEstateManager.Pages
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1534, 571);
             Controls.Add(groupBoxLoans);
+            MaximizeBox = false;
             Name = "ManagePropertyLoansForm";
             Text = "Manage Property Loans";
             ((System.ComponentModel.ISupportInitialize)dataGridViewLoans).EndInit();

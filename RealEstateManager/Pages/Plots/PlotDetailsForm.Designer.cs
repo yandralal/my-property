@@ -538,6 +538,7 @@ namespace RealEstateManager.Pages
             Controls.Add(groupBoxTransactionGrid);
             Font = new Font("Segoe UI", 10F);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "PlotDetailsForm";
             Text = "Plot Details";
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).EndInit();

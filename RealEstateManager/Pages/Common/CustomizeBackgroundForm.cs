@@ -11,6 +11,7 @@ namespace RealEstateManager.Pages
         public CustomizeBackgroundForm(string userId)
         {
             InitializeComponent();
+            
             colorDialog = new ColorDialog();
             currentUserId = userId; 
             buttonApply.Click += ButtonApply_Click;

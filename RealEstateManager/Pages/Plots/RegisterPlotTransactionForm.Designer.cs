@@ -319,12 +319,14 @@ namespace RealEstateManager.Pages
             // 
             // RegisterPlotTransactionForm
             // 
+            
             BackColor = Color.AliceBlue;
             ClientSize = new Size(634, 664);
             Controls.Add(groupBoxTransactionEntry);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             MinimizeBox = false;
             Name = "RegisterPlotTransactionForm";
             StartPosition = FormStartPosition.CenterParent;

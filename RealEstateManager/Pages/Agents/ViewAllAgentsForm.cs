@@ -7,6 +7,7 @@ namespace RealEstateManager.Pages
         public ViewAllAgentsForm()
         {
             InitializeComponent();
+            
             LoadAgents();
             AgentRepository.AgentsChanged += RefreshGrid;
         }

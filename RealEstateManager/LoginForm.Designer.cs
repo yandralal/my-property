@@ -60,6 +60,7 @@
             panelLogin.Location = new Point(200, 75);
             panelLogin.Name = "panelLogin";
             panelLogin.Size = new Size(400, 363);
+            panelLogin.TabIndex = 0;
             // 
             // buttonShowPassword
             // 
@@ -67,6 +68,7 @@
             buttonShowPassword.Location = new Point(315, 200);
             buttonShowPassword.Name = "buttonShowPassword";
             buttonShowPassword.Size = new Size(35, 34);
+            buttonShowPassword.TabIndex = 0;
             buttonShowPassword.Text = "👁";
             buttonShowPassword.Click += ButtonShowPassword_Click;
             // 
@@ -77,6 +79,7 @@
             pictureBoxLogo.Name = "pictureBoxLogo";
             pictureBoxLogo.Size = new Size(70, 63);
             pictureBoxLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxLogo.TabIndex = 1;
             pictureBoxLogo.TabStop = false;
             // 
             // labelTitle
@@ -134,6 +137,7 @@
             // 
             // LoginForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gainsboro;
             ClientSize = new Size(813, 513);
@@ -142,7 +146,6 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "LoginForm";
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "Login";
             panelLogin.ResumeLayout(false);
             panelLogin.PerformLayout();

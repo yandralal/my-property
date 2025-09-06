@@ -7,6 +7,7 @@ namespace RealEstateManager.Pages
         public AboutForm()
         {
             InitializeComponent();
+            
         }
     }
 }

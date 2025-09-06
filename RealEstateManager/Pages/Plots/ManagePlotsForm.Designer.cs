@@ -193,12 +193,14 @@ namespace RealEstateManager.Pages
             // 
             // ManagePlotsForm
             // 
+            
             BackColor = Color.FromArgb(245, 248, 255);
             ClientSize = new Size(1076, 620);
             Controls.Add(groupBoxPlots);
             Font = new Font("Segoe UI", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
+            MaximizeBox = false;
             Name = "ManagePlotsForm";
             Text = "Manage Plots";
             ((System.ComponentModel.ISupportInitialize)numericUpDownPlotCount).EndInit();

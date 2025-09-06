@@ -788,6 +788,7 @@ namespace RealEstateManager.Pages
             Controls.Add(groupBoxTransactionGrid);
             Controls.Add(groupBoxPropertyDetails);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "PropertyDetailsForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Property Details";

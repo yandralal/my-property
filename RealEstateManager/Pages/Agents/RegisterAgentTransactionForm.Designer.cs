@@ -385,11 +385,13 @@ namespace RealEstateManager.Pages
             // 
             // RegisterAgentTransactionForm
             // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             BackColor = Color.WhiteSmoke;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(645, 729);
             Controls.Add(groupBoxTransactionDetails);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "RegisterAgentTransactionForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Agent Transaction";

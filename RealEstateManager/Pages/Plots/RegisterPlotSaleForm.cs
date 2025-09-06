@@ -25,6 +25,7 @@ namespace RealEstateManager.Pages
         )
         {
             InitializeComponent();
+            
             AddMandatoryFieldStars();
             SetupPhoneNumberValidation();
             textBoxSaleAmount.Leave += FormatDecimalTextBoxOnLeave;
@@ -98,6 +99,7 @@ namespace RealEstateManager.Pages
         public RegisterPlotSaleForm()
         {
             InitializeComponent();
+            
             AddMandatoryFieldStars();
             SetupPhoneNumberValidation();
             SetupNumericTextBoxValidation();

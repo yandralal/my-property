@@ -17,6 +17,7 @@ namespace RealEstateManager.Pages
         public RegisterAgentTransactionForm(int? agentId = null, int? propertyId = null)
         {
             InitializeComponent();
+            
             _agentId = agentId;
 
             LoadProperties();

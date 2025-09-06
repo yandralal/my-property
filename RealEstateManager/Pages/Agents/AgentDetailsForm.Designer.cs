@@ -326,6 +326,7 @@ namespace RealEstateManager.Pages
             Controls.Add(groupBoxTransactionGrid);
             Controls.Add(groupBoxPlotsSold);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "AgentDetailsForm";
             Text = "Agent Details";
             groupBoxAgentDetails.ResumeLayout(false);

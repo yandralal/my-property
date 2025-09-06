@@ -45,6 +45,8 @@ namespace RealEstateManager.Pages
             textBoxInterestRate = new TextBox();
             labelTenure = new Label();
             textBoxTenure = new TextBox();
+            labelTotalInterest = new Label();
+            textBoxTotalInterest = new TextBox();
             labelTotalRepayment = new Label();
             textBoxTotalRepayment = new TextBox();
             labelLoanDate = new Label();
@@ -53,8 +55,6 @@ namespace RealEstateManager.Pages
             textBoxRemarks = new TextBox();
             buttonSave = new Button();
             buttonCancel = new Button();
-            labelTotalInterest = new Label();
-            textBoxTotalInterest = new TextBox();
             groupBoxLoan.SuspendLayout();
             SuspendLayout();
             // 
@@ -197,13 +197,13 @@ namespace RealEstateManager.Pages
             // textBoxTotalInterest
             // 
             textBoxTotalInterest.BorderStyle = BorderStyle.FixedSingle;
+            textBoxTotalInterest.Enabled = false;
             textBoxTotalInterest.Font = new Font("Segoe UI", 10F);
             textBoxTotalInterest.Location = new Point(202, 280);
             textBoxTotalInterest.Name = "textBoxTotalInterest";
             textBoxTotalInterest.ReadOnly = true;
             textBoxTotalInterest.Size = new Size(320, 30);
             textBoxTotalInterest.TabIndex = 11;
-            textBoxTotalInterest.Enabled = false;
             // 
             // labelTotalRepayment
             // 
@@ -296,6 +296,7 @@ namespace RealEstateManager.Pages
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 560);
             Controls.Add(groupBoxLoan);
+            MaximizeBox = false;
             Name = "PropertyLoanForm";
             Text = "Property Loan";
             groupBoxLoan.ResumeLayout(false);

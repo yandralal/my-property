@@ -454,11 +454,13 @@ namespace RealEstateManager.Pages
             // 
             // PropertyLoanTransactionForm
             // 
+            
             BackColor = Color.AliceBlue;
             ClientSize = new Size(637, 839);
             Controls.Add(groupBoxTransactionEntry);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             MinimizeBox = false;
             Name = "PropertyLoanTransactionForm";
             StartPosition = FormStartPosition.CenterParent;

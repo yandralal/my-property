@@ -75,6 +75,7 @@ namespace RealEstateManager.Pages
             // SendWhatsAppMessageForm
             // 
             AcceptButton = buttonOK;
+            
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = buttonCancel;
             ClientSize = new Size(470, 250);
@@ -85,6 +86,7 @@ namespace RealEstateManager.Pages
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             MinimizeBox = false;
             Name = "SendWhatsAppMessageForm";
             StartPosition = FormStartPosition.CenterParent;

@@ -10,6 +10,7 @@ namespace RealEstateManager.Pages
         public ManagePlotsForm()
         {
             InitializeComponent();
+            
             LoadProperties();
             SetupPlotGrid();
             buttonAddPlot.Enabled = false;

@@ -13,6 +13,7 @@ namespace RealEstateManager.Pages
         public RegisterPlotTransactionForm(int? plotId = null, decimal? saleAmount = null, string? plotNumber = "")
         {
             InitializeComponent();
+            
             SetupNumericTextBoxValidation();
 
             // Add red stars for mandatory fields
@@ -66,6 +67,7 @@ namespace RealEstateManager.Pages
         public RegisterPlotTransactionForm(string transactionId)
         {
             InitializeComponent();
+            
             SetupNumericTextBoxValidation();
 
             // Add red stars for mandatory fields

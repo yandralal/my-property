@@ -418,7 +418,7 @@ namespace RealEstateManager.Pages
             // 
             labelTitleStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelTitleStar.ForeColor = Color.Red;
-            labelTitleStar.Location = new Point(labelTitle.Left + labelTitle.Width + 2, labelTitle.Top);
+            labelTitleStar.Location = new Point(30, 54);
             labelTitleStar.Name = "labelTitleStar";
             labelTitleStar.Size = new Size(15, 23);
             labelTitleStar.TabIndex = 16;
@@ -429,7 +429,7 @@ namespace RealEstateManager.Pages
             // 
             labelTypeStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelTypeStar.ForeColor = Color.Red;
-            labelTypeStar.Location = new Point(labelType.Left + labelType.Width + 2, labelType.Top);
+            labelTypeStar.Location = new Point(30, 99);
             labelTypeStar.Name = "labelTypeStar";
             labelTypeStar.Size = new Size(15, 23);
             labelTypeStar.TabIndex = 17;
@@ -440,7 +440,7 @@ namespace RealEstateManager.Pages
             // 
             labelStatusStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelStatusStar.ForeColor = Color.Red;
-            labelStatusStar.Location = new Point(labelStatus.Left + labelStatus.Width + 2, labelStatus.Top);
+            labelStatusStar.Location = new Point(30, 144);
             labelStatusStar.Name = "labelStatusStar";
             labelStatusStar.Size = new Size(15, 23);
             labelStatusStar.TabIndex = 18;
@@ -451,7 +451,7 @@ namespace RealEstateManager.Pages
             // 
             labelPriceStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelPriceStar.ForeColor = Color.Red;
-            labelPriceStar.Location = new Point(labelPrice.Left + labelPrice.Width + 2, labelPrice.Top);
+            labelPriceStar.Location = new Point(30, 189);
             labelPriceStar.Name = "labelPriceStar";
             labelPriceStar.Size = new Size(15, 23);
             labelPriceStar.TabIndex = 19;
@@ -462,7 +462,7 @@ namespace RealEstateManager.Pages
             // 
             labelOwnerStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelOwnerStar.ForeColor = Color.Red;
-            labelOwnerStar.Location = new Point(labelOwner.Left + labelOwner.Width + 2, labelOwner.Top);
+            labelOwnerStar.Location = new Point(30, 234);
             labelOwnerStar.Name = "labelOwnerStar";
             labelOwnerStar.Size = new Size(15, 23);
             labelOwnerStar.TabIndex = 20;
@@ -473,7 +473,7 @@ namespace RealEstateManager.Pages
             // 
             labelPhoneStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelPhoneStar.ForeColor = Color.Red;
-            labelPhoneStar.Location = new Point(labelPhone.Left + labelPhone.Width + 2, labelPhone.Top);
+            labelPhoneStar.Location = new Point(30, 374);
             labelPhoneStar.Name = "labelPhoneStar";
             labelPhoneStar.Size = new Size(15, 23);
             labelPhoneStar.TabIndex = 21;
@@ -484,7 +484,7 @@ namespace RealEstateManager.Pages
             // 
             labelAreaStar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelAreaStar.ForeColor = Color.Red;
-            labelAreaStar.Location = new Point(labelArea.Left + labelArea.Width + 2, labelArea.Top);
+            labelAreaStar.Location = new Point(30, 279);
             labelAreaStar.Name = "labelAreaStar";
             labelAreaStar.Size = new Size(15, 23);
             labelAreaStar.TabIndex = 27;
@@ -498,6 +498,7 @@ namespace RealEstateManager.Pages
             ClientSize = new Size(600, 765);
             Controls.Add(groupBoxPropertyDetails);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "RegisterPropertyForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Register Property";

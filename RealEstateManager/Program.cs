@@ -9,7 +9,7 @@ namespace RealEstateManager
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new LandingForm());
+            Application.Run(new LoginForm());
         }
     }
 }

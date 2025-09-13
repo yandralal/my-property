@@ -20,6 +20,7 @@ namespace RealEstateManager.Pages
             dataGridViewMiscTransactions.DefaultCellStyle.ForeColor = Color.Gray; 
 
             LoadMiscTransactions();
+            ApplyGridStyle(dataGridViewMiscTransactions);
         }
 
         private void LoadMiscTransactions()

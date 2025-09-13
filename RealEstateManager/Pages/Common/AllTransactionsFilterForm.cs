@@ -169,7 +169,18 @@ namespace RealEstateManager.Pages
                         Name = "PropertyName",
                         DataPropertyName = "PropertyName",
                         HeaderText = "Property",
-                        Width = 150,
+                        Width = 200,
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                    });
+                }
+                if (dt.Columns.Contains("Recipient"))
+                {
+                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        Name = "Recipient",
+                        DataPropertyName = "Recipient",
+                        HeaderText = "Recipient",
+                        Width = 200,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
@@ -180,7 +191,7 @@ namespace RealEstateManager.Pages
                         Name = "LenderName",
                         DataPropertyName = "LenderName",
                         HeaderText = "Lender",
-                        Width = 120,
+                        Width = 200,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
@@ -215,18 +226,6 @@ namespace RealEstateManager.Pages
                         DataPropertyName = "PrincipalAmount",
                         HeaderText = "Principal Paid",
                         Width = 150,
-                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                        DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }
-                    });
-                }
-                if (dt.Columns.Contains("InterestAmount"))
-                {
-                    dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
-                    {
-                        Name = "InterestAmount",
-                        DataPropertyName = "InterestAmount",
-                        HeaderText = "Interest Paid",
-                        Width = 120,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
                         DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }
                     });

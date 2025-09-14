@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36109.1 d17.14
+VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateManager", "RealEstateManager.csproj", "{93F6F6A9-8E61-4103-87CE-BD12A313931E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPropertyApi", "..\MyPropertyApi\MyPropertyApi.csproj", "{D306887E-236C-DCAF-691E-7DDE57BC10DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{93F6F6A9-8E61-4103-87CE-BD12A313931E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93F6F6A9-8E61-4103-87CE-BD12A313931E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93F6F6A9-8E61-4103-87CE-BD12A313931E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D306887E-236C-DCAF-691E-7DDE57BC10DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D306887E-236C-DCAF-691E-7DDE57BC10DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D306887E-236C-DCAF-691E-7DDE57BC10DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D306887E-236C-DCAF-691E-7DDE57BC10DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -122,7 +122,10 @@ CREATE TABLE Agent (
     Contact NVARCHAR(50),
     Agency NVARCHAR(100),
     IsDeleted BIT NOT NULL DEFAULT 0,
-    CreatedDate DATETIME NOT NULL DEFAULT GETDATE()
+    CreatedBy NVARCHAR(255) NOT NULL,
+    CreatedDate DATETIME NOT NULL,
+    ModifiedBy NVARCHAR(255) NOT NULL,
+    ModifiedDate DATETIME NOT NULL
 );
 
 CREATE TABLE [dbo].[AgentTransaction] (

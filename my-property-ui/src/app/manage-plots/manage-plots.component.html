@@ -1,0 +1,84 @@
+<div class="group-box">
+  <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin:0; flex:1;">Manage Plots</h2>
+      <button class="modal-close add-plot" type="button" (click)="closeModalClicked()" aria-label="Close" style="font-size:2rem; line-height:1; margin-left:1em;">&times;</button>
+  </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 2em; margin-bottom: 1em;">
+    <div style="flex:1; min-width:220px;">
+      <label style="margin-right:0.5em;">Property:</label>
+      <select [formControl]="selectedPropertyId" (change)="onPropertyChange()">
+        <option [ngValue]="null">-- Select --</option>
+        <option *ngFor="let prop of properties" [ngValue]="prop.id">{{ prop.title }}</option>
+      </select>
+    </div>
+  </div>
+  <div style="margin-top:1em;">
+    <h3 style="display: flex; align-items: center; gap: 0.5em; font-size: 1.15rem; font-weight: 600; color: #1e90ff; margin-bottom: 0.5em;">
+      Plots ({{plots.length}})
+    </h3>
+    <div style="max-height:560px; overflow-y:auto; border:1px solid #eee; border-radius:6px;">
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" /></th>
+            <th>Plot #</th>
+            <th>Status</th>
+            <th>Area (Sqft)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let plot of plots; let i = index">
+            <td><input type="checkbox" [(ngModel)]="plot.selected" (change)="onPlotSelectChange()" /></td>
+            <ng-container *ngIf="editIndex === i; else viewRow">
+              <td><span>{{ plot.plotNumber }}</span></td>
+              <td><span>{{ plot.status }}</span></td>
+              <td><input [(ngModel)]="plot.area" style="width:120px;" /></td>
+              <td>
+                <button class="action-icon" title="Save" (click)="savePlot(plot, i)">
+                  <i class="bi bi-check-lg"></i>
+                </button>
+                <button class="action-icon" title="Cancel" (click)="cancelEdit()">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </td>
+            </ng-container>
+            <ng-template #viewRow>
+              <td>{{ plot.plotNumber }}</td>
+              <td>{{ plot.status }}</td>
+              <td>{{ plot.area }}</td>
+              <td>
+                <button class="action-icon" title="Edit" (click)="editPlot(plot, i)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="action-icon" title="Delete" (click)="deletePlot(plot)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div style="margin-top:1em; display:flex; gap:1em; align-items:center;">
+    <button type="button" class="add-plot" (click)="addPlot()" [disabled]="!selectedPropertyId.value">Add Plot</button>
+    <button type="button" class="add-plot" (click)="showAddMultiple = !showAddMultiple">Add Multiple Plots</button>
+    <button type="button" class="add-plot" (click)="deleteSelectedPlots()" [disabled]="!hasSelectedPlots()">Delete Selected</button>
+  </div>
+  <div *ngIf="showAddMultiple && selectedPropertyId.value" style="margin-top:1em; display:flex; align-items:center; gap:1em;">
+    <label>Number of Plots:</label>
+    <input type="number" [(ngModel)]="multiplePlotCount" min="1" max="1000" style="width:80px; margin-left:0.5em;" />
+    <button type="button" class="add-plot" (click)="addMultiplePlots()">Confirm</button>
+  </div>
+  <ng-container *ngIf="showConfirmDialog">
+    <app-confirm-dialog
+      [title]="confirmDialogTitle"
+      [message]="confirmDialogMessage"
+      (confirm)="onConfirmDelete()"
+      (cancel)="onCancelDelete()"
+    />
+  </ng-container>
+  <app-loader [show]="loaderVisible"></app-loader>
+  <app-message-box [show]="messageBoxVisible" [message]="messageText" (close)="closeMessageBox()"></app-message-box>
+</div>

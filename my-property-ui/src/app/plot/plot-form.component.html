@@ -1,0 +1,72 @@
+<div class="group-box">
+  <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Plot Details Form</h2>
+    <button class="modal-close" type="button" (click)="closeModalClicked()" aria-label="Close">&times;</button>
+  </div>
+  <form [formGroup]="plotForm" (ngSubmit)="onSubmit()" class="plot-form" autocomplete="off">
+  <input type="hidden" formControlName="saleId" />
+  <div class="form-sections">
+    <div class="form-section">
+      <div>
+        <label for="plotNumber">Plot Number *</label>
+        <input id="plotNumber" formControlName="plotNumber" autocomplete="off" [disabled]="true" />
+      </div>
+      <div>
+        <label for="status">Status *</label>
+        <select id="status" formControlName="status" [disabled]="true">
+          <option value="">Select</option>
+          <option value="Available">Available</option>
+          <option value="Booked">Booked</option>
+          <option value="Sold">Sold</option>
+        </select>
+      </div>
+      <div>
+        <label for="area">Area (sq.ft) *</label>
+        <input id="area" type="number" formControlName="area" />
+      </div>
+      <div>
+        <label for="saleAmount">Sale Amount</label>
+        <input id="saleAmount" type="number" formControlName="saleAmount" />
+      </div>
+      <div>
+        <label for="brokerAgent">Broker/Agent</label>
+        <select id="agentId" formControlName="agentId">
+          <option value="">Select Broker/Agent</option>
+          <option *ngFor="let agent of agents" [value]="agent.id">{{ agent.name }}</option>
+        </select>
+      </div>
+      <div>
+        <label for="brokerageAmount">Brokerage Amount</label>
+        <input id="brokerageAmount" type="number" formControlName="brokerageAmount" />
+      </div>
+    </div>
+    <div class="form-section">
+      <div>
+        <label for="customerName">Customer Name</label>
+        <input id="customerName" formControlName="customerName" autocomplete="off" />
+      </div>
+      <div>
+        <label for="customerPhone">Customer Phone</label>
+        <input id="customerPhone" formControlName="customerPhone" autocomplete="off" />
+      </div>
+      <div>
+        <label for="customerEmail">Customer Email</label>
+        <input id="customerEmail" formControlName="customerEmail" autocomplete="off" />
+      </div>
+      <div>
+        <label for="amountPaid">Amount Paid</label>
+        <input id="amountPaid" type="number" formControlName="amountPaid" [disabled]="true" />
+      </div>
+      <div>
+        <label for="amountBalance">Amount Balance</label>
+        <input id="amountBalance" type="number" formControlName="amountBalance" [disabled]="true" />
+      </div>
+      <div>
+        <label for="saleDate">Sale Date</label>
+        <input id="saleDate" type="date" formControlName="saleDate" />
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="viewMode">Save</button>
+</form>
+</div>

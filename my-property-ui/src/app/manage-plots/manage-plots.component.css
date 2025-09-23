@@ -1,0 +1,215 @@
+.group-box {
+  max-width: 700px;
+  min-width: 520px;
+  margin: 0 auto;
+  padding: 1.5em;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid #d1d5db;
+}
+th, td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  border-right: 1px solid #d1d5db;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+th:last-child, td:last-child {
+  border-right: none;
+}
+th {
+  background: #1e90ff;
+  color: #fff;
+  font-weight: bold;
+}
+tr:nth-child(even) {
+  background: #e6f2ff;
+}
+
+.add-plot {
+  margin-right: 0.5em;
+  padding: 0.3em 1em;
+  border-radius: 4px;
+  border: none;
+  background: #14b8a6;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+th:nth-child(1), td:nth-child(1) { width: 36px; text-align: center; }
+th:nth-child(2), td:nth-child(2) { width: 90px; }
+th:nth-child(3), td:nth-child(3) { width: 90px; }
+th:nth-child(4), td:nth-child(4) { width: 80px; }
+th:nth-child(5), td:nth-child(5) { width: 70px; text-align: center; }
+
+.action-icon {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  margin: 0 0.15rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  vertical-align: middle;
+  outline: none;
+}
+.action-icon:hover, .action-icon:focus {
+  background: #e0e7ff;
+  color: #14b8a6;
+}
+
+select[formControl]:focus {
+  border-color: #80bdff;
+  outline: none;
+}
+/* Override modal max-width globally for specificity */
+:host ::ng-deep .modal {
+    max-width: 750px !important;
+}
+:host ::ng-deep .manage-plots-modal {
+  max-width: 750px !important;
+  /* Add any other manage plots specific modal styles here */
+}
+/* Copied styles from property-form.component.css for consistency */
+.modal-header {
+	margin-bottom: 1.2rem;
+	border-bottom: 1px solid #e5e7eb;
+	padding-bottom: 0.7rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+.modal-header h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-desc {
+	font-size: 0.98rem;
+	color: #64748b;
+	margin: 0;
+}
+
+.modal-close {
+	position: absolute;
+	top: 1.1rem;
+	right: 0.5rem;
+	background: none;
+	border: none;
+	font-size: 1.7rem;
+	color: #64748b;
+	cursor: pointer;    
+}
+
+.modal-close:hover {
+    color: #14b8a6;
+}
+
+/* Consistent form wrapper for all forms */
+.form-wrapper {
+	max-width: 800px;
+	width: 98vw;
+	margin: 2rem auto;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+	padding: 2rem 2rem 1.5rem 2rem;
+}
+
+.property-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+}
+
+.property-form label {
+	font-weight: 500;
+	margin-bottom: 0.3rem;
+}
+
+.property-form input,
+.property-form select,
+.property-form textarea {
+	font-family: inherit;
+	font-size: 0.98rem;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 0.35rem 0.7rem;
+	margin-bottom: 0.25rem;
+	background: #f8fafc;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.form-sections {
+  display: flex;
+  gap: 2rem;
+  position: relative;
+}
+.form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.form-section:first-child {
+  border-right: 1.5px solid #d1d5db;
+  padding-right: 2rem;
+}
+.form-section:last-child {
+  padding-left: 2rem;
+}
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 0.98rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.35rem 0.7rem;
+    margin-bottom: 0.25rem;
+    background: #f8fafc;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #1e90ff;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44,62,80,0.50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.confirm-modal {
+  max-width: 400px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  padding: 2em 1.5em;
+  z-index: 10000;
+}

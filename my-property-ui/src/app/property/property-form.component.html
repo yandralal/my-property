@@ -1,0 +1,80 @@
+<div class="group-box">
+  <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Property Details Form</h2>
+    <button class="modal-close" type="button" (click)="closeModalClicked()" aria-label="Close">&times;</button>
+  </div>
+  <app-message-box [show]="messageBoxVisible" [message]="messageText" (close)="closeMessageBox()"></app-message-box>
+  <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()" class="property-form" autocomplete="off">
+  <div class="form-sections">
+    <div class="form-section">
+      <div>
+        <label for="title">Property Title *</label>
+        <input id="title" formControlName="title" autocomplete="off" />
+      </div>
+      <div>
+        <label for="type">Type *</label>
+        <select id="type" formControlName="type">
+          <option value="">Select</option>
+          <option value="Residential">Residential</option>
+          <option value="Commercial">Commercial</option>
+          <option value="Plot">Plot</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="status">Status *</label>
+        <select id="status" formControlName="status">
+          <option value="">Select</option>
+          <option value="Available">Available</option>
+          <option value="Sold">Sold</option>
+          <option value="Pending">Pending</option>
+          <option value="Rented">Rented</option>
+        </select>
+      </div>
+      <div>
+        <label for="price">Price *</label>
+        <input id="price" type="number" formControlName="price" />
+      </div>
+      <div>
+        <label for="owner">Owner Name *</label>
+        <input id="owner" formControlName="owner" autocomplete="off" />
+      </div>
+      <div>
+        <label for="phone">Phone Number *</label>
+        <input id="phone" formControlName="phone" autocomplete="off" />
+      </div>
+    </div>
+    <div class="form-section">
+      <div>
+        <label for="area">Area (sq.ft) *</label>
+        <input id="area" type="number" formControlName="area" />
+      </div>
+      <div>
+        <label for="khasraNo">Khasra No</label>
+        <input id="khasraNo" formControlName="khasraNo" />
+      </div>
+      <div>
+        <label for="address">Address</label>
+        <input id="address" formControlName="address" autocomplete="off" />
+      </div>
+      <div>
+        <label for="city">City</label>
+        <input id="city" formControlName="city" autocomplete="off" />
+      </div>
+      <div>
+        <label for="state">State</label>
+        <input id="state" formControlName="state" autocomplete="off" />
+      </div>
+      <div>
+        <label for="zip">Zip Code</label>
+        <input id="zip" formControlName="zipCode" autocomplete="off" />
+      </div>
+      <div>
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description"></textarea>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+</div>

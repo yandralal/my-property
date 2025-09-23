@@ -1,0 +1,96 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.data-table th, .data-table td {
+  border: 1px solid #d1d5db;
+  padding: 0.75rem;
+  text-align: left;
+  font-size: 0.98rem !important;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+  line-height: 1.1 !important;
+  color: #222 !important;
+  background: #fff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  vertical-align: middle !important;
+}
+
+.data-table th {
+  min-height: 24px !important;
+  height: 24px !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  line-height: 1.2 !important;
+  background: #1e90ff !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  text-align: left !important;
+}
+
+.data-table tr {
+  min-height: 40px !important;
+  height: 40px !important;
+  vertical-align: middle !important;
+}
+
+.data-table th:last-child, .data-table td:last-child {
+  width: 120px !important;
+  min-width: 80px !important;
+  max-width: 140px !important;
+  text-align: center !important;
+  padding-left: 0.25rem !important;
+  padding-right: 0.25rem !important;
+  vertical-align: middle !important;
+}
+
+.data-table tr:nth-child(even) {
+  background: #e6f2ff;
+}
+
+.data-table tr.selected-row td {
+  background: #e0e7ff !important;
+  color: #222 !important;
+}
+
+.selected-row {
+  background: #e0e7ff !important;
+  color: #222 !important;
+}
+
+.data-table th:last-child, .data-table td:last-child {
+  width: 180px !important;
+  min-width: 120px !important;
+  max-width: 200px !important;
+  text-align: center !important;
+  padding-left: 0.25rem !important;
+  padding-right: 0.25rem !important;
+  vertical-align: middle !important;
+}
+
+.action-icon {
+  background: transparent !important;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  margin: 0 0.15rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  vertical-align: middle;
+  outline: none;
+}
+
+.action-icon:hover, .action-icon:focus {
+  background: #e0e7ff !important;
+  color: #14b8a6;
+}

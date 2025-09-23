@@ -1,0 +1,77 @@
+body, .login-container, .login-panel, .title, .input, .login-btn, .show-password {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.login-container {
+  background: #f5f7fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-panel {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 12px;
+  width: 370px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo {
+  width: 70px;
+  margin-bottom: 1rem;
+}
+.title {
+  color: #1e90ff;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+.input {
+  width: 300px;
+  height: 38px;
+  padding: 0 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.12rem;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.password-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+.password-group .input {
+  margin-bottom: 0;
+}
+.show-password {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  margin-left: -2.5rem;
+  cursor: pointer;
+}
+.login-btn {
+  width: 100%;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  background: #228b22;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 6px rgba(34,139,34,0.08);
+  transition: background 0.2s;
+}
+.login-btn:hover {
+  background: #1e7e1e;
+}

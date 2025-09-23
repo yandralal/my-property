@@ -1,0 +1,28 @@
+<table *ngIf="transactions.length > 0" class="table table-bordered table-striped data-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <th>Reference</th>
+            <th style="width: 400px;">Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let txn of transactions">
+            <td>{{ txn.transactionDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+            <td>{{ txn.transactionType }}</td>
+            <td><i class="bi bi-currency-rupee"></i> {{ txn.amount | number:'1.2-2' }}</td>
+            <td>{{ txn.paymentMethod }}</td>
+            <td>{{ txn.referenceNumber }}</td>
+            <td>{{ txn.notes }}</td>
+            <td>
+                 <button type="button" class="action-icon" title="Delete" (click)="onDeleteTransaction(txn)" style="margin: 0 auto; display: block;">
+                     <i class="bi bi-trash"></i>
+                 </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

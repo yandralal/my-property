@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Property } from '../models/property.model';
 import { Router } from '@angular/router';
 import { PropertyService } from '../services/property.service';
+import { PlotTransactionFormComponent } from '../plot/plot-transaction-form.component';
 import { PlotService } from '../services/plot.service';
 import { Plot } from '../models/plot.model';
 import { MessageBoxComponent } from '../shared/message-box.component';
@@ -14,6 +15,7 @@ import { ManagePlotsComponent } from '../manage-plots/manage-plots.component';
 import { PropertyTransactionsListComponent } from '../property/property-transactions-list.component';
 import { PlotTransactionsListComponent } from '../plot/plot-transactions-list.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
+import { InrFormatPipe } from '../shared/inr-format.pipe';
 
 @Component({
     selector: 'app-home',
@@ -30,67 +32,127 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
         PropertyTransactionFormComponent,
         PropertyTransactionsListComponent,
         PlotTransactionsListComponent,
-        ConfirmDialogComponent
+        ConfirmDialogComponent,
+        PlotTransactionFormComponent,
+        InrFormatPipe
     ]
 })
 
 export class HomeComponent implements OnInit {
-    propertyTransactions: any[] = [];
-    plotTransactions: any[] = [];
-    activeTransactionTab: 'property' | 'plot' = 'property';
-    onOpenPropertyTransaction(txn: any, viewMode: boolean) {
-        this.selectedTransactionDetails = txn;
-        this.transactionViewMode = viewMode ? 'view' : 'edit';
-        this.transactionModal.visible = true;
-        this.transactionModal.type = 'property';
+    onSalePlot(plot: any) {
+        if (plot && plot.id) {
+            this.plotViewMode = false;
+            this.plotService.getPlotById(plot.id).subscribe({
+                next: (plotDetails) => {
+                    this.selectedPlotDetails = plotDetails;
+                    this.showPlotFormModal = true;
+                },
+                error: () => {
+                    this.showPlotFormModal = true;
+                }
+            });
+        }
     }
-    confirmDeletePropertyVisible: boolean = false;
-    propertyToDelete: Property | null = null;
-    onRefreshPlotsFromModal(propertyId: number) {
-        this.selectedPropertyId = propertyId;
-        this.refreshPlots();
+    showPlotTransactionFormModal: boolean = false;
+    closePlotTransactionFormModal() {
+        this.showPlotTransactionFormModal = false;
+        this.selectedTransactionDetails = null;
     }
-    // For property transactions table
-    propertyList: any[] = [];
-    loading: boolean = false;
-    error: string = '';
+    // Success handler for plot transaction form
+    onPlotTransactionFormSuccess(message: string) {
+        this.messageText = message;
+        this.messageBoxVisible = true;
 
-    // Property transactions table actions
-    onViewTransaction(txn: any) {
-        this.onOpenPropertyTransaction(txn, true);
+        setTimeout(() => {
+            this.messageBoxVisible = false;
+            this.refreshPlotTransactions();
+        }, 1500); // Show message for 1.5 seconds
     }
-
-    onEditTransaction(txn: any) {
-        this.onOpenPropertyTransaction(txn, false);
-    }
-
-    onDeleteTransaction(txn: any) {
-        // Example: Show confirm dialog or log
-        console.log('Delete transaction', txn);
-    }
-
-    closeModalClicked() {
-        // Example: Hide modal or log
-        console.log('Close property transactions modal');
+    confirmDeletePlotTransactionVisible: boolean = false;
+    plotTransactionToDelete: any = null;
+    onRequestDeletePlotTransaction(txn: any) {
+        this.plotTransactionToDelete = txn;
+        this.confirmDeletePlotTransactionVisible = true;
     }
 
-    // Always load transactions for selected property
-    fetchTransactions() {
-        this.loading = true;
-        this.error = '';
-        this.propertyService.getPropertyTransactions(this.selectedPropertyId || 0).subscribe({
-            next: (txns) => {
-                this.propertyTransactions = txns || [];
-                this.loading = false;
+    onConfirmDeletePlotTransaction() {
+        if (!this.plotTransactionToDelete || !this.plotTransactionToDelete.transactionId) return;
+        this.showLoader(true);
+        this.plotService.deletePlotTransaction(this.plotTransactionToDelete.transactionId).subscribe({
+            next: () => {
+                this.showLoader(false);
+                this.showMessage('Plot transaction deleted successfully.');
+                this.refreshPlotTransactions();
+                this.confirmDeletePlotTransactionVisible = false;
+                this.plotTransactionToDelete = null;
             },
             error: () => {
-                this.propertyTransactions = [];
-                this.error = 'Failed to load transactions.';
-                this.loading = false;
+                this.showLoader(false);
+                this.showMessage('Failed to delete plot transaction.');
+                this.confirmDeletePlotTransactionVisible = false;
+                this.plotTransactionToDelete = null;
             }
         });
     }
 
+    onCancelDeletePlotTransaction() {
+        this.confirmDeletePlotTransactionVisible = false;
+        this.plotTransactionToDelete = null;
+    }
+
+    refreshPlotTransactions() {
+        if (this.selectedPlotId) {
+            this.plotService.getPlotTransactions(this.selectedPlotId).subscribe({
+                next: (txns) => {
+                    this.plotTransactions = txns || [];
+                },
+                error: () => {
+                    this.plotTransactions = [];
+                }
+            });
+        }
+    }
+    confirmDeleteTransactionVisible: boolean = false;
+    transactionToDelete: any = null;
+    onRequestDeletePropertyTransaction(txn: any) {
+        console.log('Delete transaction event received:', txn);
+        this.transactionToDelete = txn;
+        this.confirmDeleteTransactionVisible = true;
+        console.log('confirmDeleteTransactionVisible:', this.confirmDeleteTransactionVisible);
+    }
+
+    onConfirmDeletePropertyTransaction() {
+        if (!this.transactionToDelete || !this.transactionToDelete.transactionId) return;
+        this.showLoader(true);
+        this.propertyService.deletePropertyTransaction(this.transactionToDelete.transactionId).subscribe({
+            next: () => {
+                this.showLoader(false);
+                this.showMessage('Transaction deleted successfully.');
+                this.fetchTransactions();
+                this.confirmDeleteTransactionVisible = false;
+                this.transactionToDelete = null;
+            },
+            error: () => {
+                this.showLoader(false);
+                this.showMessage('Failed to delete transaction.');
+                this.confirmDeleteTransactionVisible = false;
+                this.transactionToDelete = null;
+            }
+        });
+    }
+
+    onCancelDeletePropertyTransaction() {
+        this.confirmDeleteTransactionVisible = false;
+        this.transactionToDelete = null;
+    }
+    propertyTransactions: any[] = [];
+    plotTransactions: any[] = [];
+    activeTransactionTab: 'property' | 'plot' = 'property';
+    confirmDeletePropertyVisible: boolean = false;
+    propertyToDelete: Property | null = null;
+    propertyList: any[] = [];
+    loading: boolean = false;
+    error: string = '';
     transactionModal = { visible: false, type: '' };
     transactionListModal = { visible: false, type: '' };
     selectedAgentId = null;
@@ -99,45 +161,24 @@ export class HomeComponent implements OnInit {
     selectedTransactionDetails: any = null;
     transactionViewMode: 'view' | 'edit' = 'view';
     showPropertyTransactionFormModal: boolean = false;
-
-    onOpenPropertyTransactionForm(txn: any, mode: 'view' | 'edit') {
-        this.selectedTransactionDetails = txn;
-        this.transactionViewMode = mode;
-        this.showPropertyTransactionFormModal = true;
-    }
-
-    closePropertyTransactionFormModal() {
-        this.showPropertyTransactionFormModal = false;
-        this.selectedTransactionDetails = null;
-    }
-
-    onPropertyTransactionFormSuccess(event: string) {
-        this.closePropertyTransactionFormModal();
-        this.fetchTransactions();
-    }
     showDropdown = false;
     properties: Property[] = [];
     plots: Plot[] = [];
     selectedPropertyId: number | undefined = undefined;
     selectedPlotId: number | undefined = undefined;
     selectedPropertyDetails: any = null;
-
     isSidebarCollapsed = false;
     expandedMenu: string | null = null;
     userName: string = 'User';
-
     showPropertyFormModal = false;
     viewMode: boolean = false;
     showManagePlotsModal: boolean = false;
     showPlotFormModal: boolean = false;
     selectedPlotDetails: any = null;
     plotViewMode: boolean = false;
-
-
     loaderVisible: boolean = false;
     messageBoxVisible: boolean = false;
     messageText: string = '';
-
     confirmDeletePlotVisible: boolean = false;
     plotToDelete: Plot | null = null;
 
@@ -152,6 +193,8 @@ export class HomeComponent implements OnInit {
         this.expandedMenu = 'transactions';
         if (menu === 'property') {
             this.showPropertyTransactionFormModal = true;
+        } else if (menu === 'plot') {
+            this.showPlotTransactionFormModal = true;
         } else {
             this.transactionModal.visible = true;
             this.transactionModal.type = menu;
@@ -561,7 +604,7 @@ export class HomeComponent implements OnInit {
             case 'agent': return 'agent-transaction-form-modal';
             case 'loan': return 'loan-transaction-form-modal';
             case 'misc': return 'misc-transaction-form-modal';
-            default: return 'property-transaction-form-modal';
+            default: return 'transaction-form-modal';
         }
     }
 
@@ -620,6 +663,53 @@ export class HomeComponent implements OnInit {
                 error: () => {
                     this.plots = [];
                     this.selectedPlotDetails = null;
+                }
+            });
+        }
+    }
+
+    fetchTransactions() {
+        this.loading = true;
+        this.error = '';
+        this.propertyService.getPropertyTransactions(this.selectedPropertyId || 0).subscribe({
+            next: (txns) => {
+                this.propertyTransactions = txns || [];
+                this.loading = false;
+            },
+            error: () => {
+                this.propertyTransactions = [];
+                this.error = 'Failed to load transactions.';
+                this.loading = false;
+            }
+        });
+    }
+
+    closePropertyTransactionFormModal() {
+        this.showPropertyTransactionFormModal = false;
+        this.selectedTransactionDetails = null;
+    }
+
+    // Success handler for transaction form
+    onPropertyTransactionFormSuccess(message: string) {
+        this.messageText = message;
+        this.messageBoxVisible = true;
+
+        setTimeout(() => {
+            this.showPropertyTransactionFormModal = false;
+            this.messageBoxVisible = false;
+            this.refreshPropertyTransactions();
+        }, 1500);
+    }
+
+    // Refresh property transactions list
+    refreshPropertyTransactions() {
+        if (this.selectedPropertyId) {
+            this.propertyService.getPropertyTransactions(this.selectedPropertyId).subscribe({
+                next: (txns) => {
+                    this.propertyTransactions = txns;
+                },
+                error: () => {
+                    this.propertyTransactions = [];
                 }
             });
         }

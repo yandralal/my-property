@@ -1,4 +1,4 @@
-.modal, .form-wrapper, .property-form {
+.modal, .form-wrapper, .property-form .property-transaction-form .plot-transaction-form{
   display: block !important;
   opacity: 1 !important;
   position: relative !important;
@@ -438,7 +438,19 @@ body, .sidebar-layout, .sidebar, .panel-main, .group-box, .sidebar-menu, .sideba
   position: relative;
 }
 
-.plot-transactions-form-modal,
+.plot-transaction-form-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  max-width: 845px !important;
+  width: 98vw;
+  max-height: 880px;
+  height: auto;
+  overflow-y: auto;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+  position: relative;
+}
+
 .agent-transactions-form-modal,
 .loan-transactions-form-modal,
 .misc-transactions-form-modal {
@@ -468,7 +480,20 @@ body, .sidebar-layout, .sidebar, .panel-main, .group-box, .sidebar-menu, .sideba
   position: relative;
 }
 
-.plot-transactions-list-modal,
+.plot-transactions-list-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  max-width: 1200px !important;
+  width: 98vw;
+  max-height: 880px;
+  min-height: 320px;
+  height: auto;
+  overflow-y: auto;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+  position: relative;
+}
+
 .agent-transactions-list-modal,
 .loan-transactions-list-modal,
 .misc-transactions-list-modal {

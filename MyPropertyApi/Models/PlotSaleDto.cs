@@ -10,7 +10,7 @@ namespace MyPropertyApi.Models
         public string CustomerEmail { get; set; } = "";
         public decimal SaleAmount { get; set; }
         public DateTime? SaleDate { get; set; }
-        public int AgentId { get; set; }
+        public int? AgentId { get; set; }
         public decimal BrokerageAmount { get; set; }
     }
 }

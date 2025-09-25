@@ -402,16 +402,35 @@ namespace MyPropertyApi.Controllers
             {
                 using var conn = new SqlConnection(connectionString);
                 await conn.OpenAsync();
-                string delete = @"UPDATE PlotSale SET IsDeleted = 1, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE SaleId = @SaleId";
-                using var cmd = new SqlCommand(delete, conn);
-                cmd.Parameters.AddWithValue("@SaleId", saleId);
-                cmd.Parameters.AddWithValue("@ModifiedBy", userName);
-                cmd.Parameters.AddWithValue("@ModifiedDate", now);
-                int rows = await cmd.ExecuteNonQueryAsync();
-                if (rows > 0)
-                    return Ok(new { Success = true, Message = "Plot sale deleted successfully." });
-                else
-                    return NotFound("Plot sale not found or already deleted.");
+
+                // Get PlotId for this sale
+                int plotId = 0;
+                using (var getPlotCmd = new SqlCommand("SELECT PlotId FROM PlotSale WHERE SaleId = @SaleId", conn))
+                {
+                    getPlotCmd.Parameters.AddWithValue("@SaleId", saleId);
+                    var result = await getPlotCmd.ExecuteScalarAsync();
+                    if (result == null || result == DBNull.Value)
+                        return NotFound("Plot sale not found or already deleted.");
+                    plotId = Convert.ToInt32(result);
+                }
+
+                // Delete all transactions for this plot
+                using (var deleteTransCmd = new SqlCommand("DELETE FROM PlotTransaction WHERE PlotId = @PlotId", conn))
+                {
+                    deleteTransCmd.Parameters.AddWithValue("@PlotId", plotId);
+                    await deleteTransCmd.ExecuteNonQueryAsync();
+                }
+
+                // Delete the plot sale entry
+                using (var deleteSaleCmd = new SqlCommand("DELETE FROM PlotSale WHERE SaleId = @SaleId", conn))
+                {
+                    deleteSaleCmd.Parameters.AddWithValue("@SaleId", saleId);
+                    int rows = await deleteSaleCmd.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return Ok(new { Success = true, Message = "Plot sale and related transactions deleted successfully." });
+                    else
+                        return NotFound("Plot sale not found or already deleted.");
+                }
             }
             catch (Exception ex)
             {
@@ -420,105 +439,6 @@ namespace MyPropertyApi.Controllers
         }
 
         #region PlotTransaction
-
-        [HttpGet("transactions/active")]
-        public async Task<ActionResult<IEnumerable<PlotTransactionDto>>> GetActivePlotTransactions()
-        {
-            var transactions = new List<PlotTransactionDto>();
-            string? connectionString = _config.GetConnectionString("MyPropertyDb");
-            if (string.IsNullOrWhiteSpace(connectionString))
-                return StatusCode(500, "Database connection string is missing.");
-
-            string query = @"
-                SELECT TransactionId, PlotId, TransactionDate, TransactionType, Amount, PaymentMethod, ReferenceNumber, Notes,
-                       CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted
-                FROM PlotTransaction
-                WHERE IsDeleted = 0";
-
-            try
-            {
-                using var conn = new SqlConnection(connectionString);
-                await conn.OpenAsync();
-                using var cmd = new SqlCommand(query, conn);
-                using var reader = await cmd.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    transactions.Add(new PlotTransactionDto
-                    {
-                        TransactionId = reader["TransactionId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["TransactionId"]),
-                        PlotId = reader["PlotId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PlotId"]),
-                        TransactionDate = reader["TransactionDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["TransactionDate"]),
-                        TransactionType = reader["TransactionType"] == DBNull.Value ? "" : reader["TransactionType"].ToString(),
-                        Amount = reader["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Amount"]),
-                        PaymentMethod = reader["PaymentMethod"] == DBNull.Value ? "" : reader["PaymentMethod"].ToString(),
-                        ReferenceNumber = reader["ReferenceNumber"] == DBNull.Value ? "" : reader["ReferenceNumber"].ToString(),
-                        Notes = reader["Notes"] == DBNull.Value ? "" : reader["Notes"].ToString(),
-                        CreatedBy = reader["CreatedBy"] == DBNull.Value ? "" : reader["CreatedBy"].ToString(),
-                        CreatedDate = reader["CreatedDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["CreatedDate"]),
-                        ModifiedBy = reader["ModifiedBy"] == DBNull.Value ? "" : reader["ModifiedBy"].ToString(),
-                        ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"]),
-                        IsDeleted = reader["IsDeleted"] != DBNull.Value && Convert.ToInt32(reader["IsDeleted"]) == 1
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error reading plot transactions: {ex.Message}");
-            }
-
-            return Ok(transactions);
-        }
-
-        [HttpGet("transactions/{id}")]
-        public async Task<ActionResult<PlotTransactionDto>> GetPlotTransactionById(int id)
-        {
-            string? connectionString = _config.GetConnectionString("MyPropertyDb");
-            if (string.IsNullOrWhiteSpace(connectionString))
-                return StatusCode(500, "Database connection string is missing.");
-
-            string query = @"
-                SELECT TransactionId, PlotId, TransactionDate, TransactionType, Amount, PaymentMethod, ReferenceNumber, Notes,
-                       CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, IsDeleted
-                FROM PlotTransaction
-                WHERE TransactionId = @Id";
-
-            try
-            {
-                using var conn = new SqlConnection(connectionString);
-                await conn.OpenAsync();
-                using var cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                using var reader = await cmd.ExecuteReaderAsync();
-                if (await reader.ReadAsync())
-                {
-                    var transaction = new PlotTransactionDto
-                    {
-                        TransactionId = reader["TransactionId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["TransactionId"]),
-                        PlotId = reader["PlotId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PlotId"]),
-                        TransactionDate = reader["TransactionDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["TransactionDate"]),
-                        TransactionType = reader["TransactionType"] == DBNull.Value ? "" : reader["TransactionType"].ToString(),
-                        Amount = reader["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Amount"]),
-                        PaymentMethod = reader["PaymentMethod"] == DBNull.Value ? "" : reader["PaymentMethod"].ToString(),
-                        ReferenceNumber = reader["ReferenceNumber"] == DBNull.Value ? "" : reader["ReferenceNumber"].ToString(),
-                        Notes = reader["Notes"] == DBNull.Value ? "" : reader["Notes"].ToString(),
-                        CreatedBy = reader["CreatedBy"] == DBNull.Value ? "" : reader["CreatedBy"].ToString(),
-                        CreatedDate = reader["CreatedDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["CreatedDate"]),
-                        ModifiedBy = reader["ModifiedBy"] == DBNull.Value ? "" : reader["ModifiedBy"].ToString(),
-                        ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"]),
-                        IsDeleted = reader["IsDeleted"] != DBNull.Value && Convert.ToInt32(reader["IsDeleted"]) == 1
-                    };
-                    return Ok(transaction);
-                }
-                else
-                {
-                    return NotFound($"PlotTransaction with ID {id} not found.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error reading plot transaction: {ex.Message}");
-            }
-        }
 
         [HttpPost("transactions")]
         public async Task<ActionResult> CreatePlotTransaction([FromBody] PlotTransactionDto transaction)
@@ -559,54 +479,6 @@ namespace MyPropertyApi.Controllers
             }
         }
 
-        [HttpPut("transactions/{id}")]
-        public async Task<ActionResult> EditPlotTransaction(int id, [FromBody] PlotTransactionDto transaction)
-        {
-            string? connectionString = _config.GetConnectionString("MyPropertyDb");
-            if (string.IsNullOrWhiteSpace(connectionString))
-                return StatusCode(500, "Database connection string is missing.");
-
-            string userName = GetUserName();
-            string now = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-            try
-            {
-                using var conn = new SqlConnection(connectionString);
-                await conn.OpenAsync();
-                string update = @"UPDATE PlotTransaction SET
-                    PlotId = @PlotId,
-                    TransactionDate = @TransactionDate,
-                    TransactionType = @TransactionType,
-                    Amount = @Amount,
-                    PaymentMethod = @PaymentMethod,
-                    ReferenceNumber = @ReferenceNumber,
-                    Notes = @Notes,
-                    ModifiedBy = @ModifiedBy,
-                    ModifiedDate = @ModifiedDate
-                    WHERE TransactionId = @Id AND IsDeleted = 0";
-                using var cmd = new SqlCommand(update, conn);
-                cmd.Parameters.AddWithValue("@PlotId", transaction.PlotId);
-                cmd.Parameters.AddWithValue("@TransactionDate", transaction.TransactionDate);
-                cmd.Parameters.AddWithValue("@TransactionType", transaction.TransactionType ?? "");
-                cmd.Parameters.AddWithValue("@Amount", transaction.Amount);
-                cmd.Parameters.AddWithValue("@PaymentMethod", transaction.PaymentMethod ?? "");
-                cmd.Parameters.AddWithValue("@ReferenceNumber", transaction.ReferenceNumber ?? "");
-                cmd.Parameters.AddWithValue("@Notes", transaction.Notes ?? "");
-                cmd.Parameters.AddWithValue("@ModifiedBy", userName);
-                cmd.Parameters.AddWithValue("@ModifiedDate", now);
-                cmd.Parameters.AddWithValue("@Id", id);
-                int rows = await cmd.ExecuteNonQueryAsync();
-                if (rows > 0)
-                    return Ok(new { Success = true, Message = "Plot transaction updated successfully." });
-                else
-                    return NotFound("Plot transaction not found or already deleted.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error updating plot transaction: {ex.Message}");
-            }
-        }
-
         [HttpDelete("transactions/{id}")]
         public async Task<ActionResult> DeletePlotTransaction(int id)
         {
@@ -638,7 +510,54 @@ namespace MyPropertyApi.Controllers
             }
         }
 
-        // Get all transactions for a specific plot
+        [HttpGet("{plotId}/transaction-info")]
+        public async Task<ActionResult> GetPlotTransactionInfo(int plotId)
+        {
+            string? connectionString = _config.GetConnectionString("MyPropertyDb");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return StatusCode(500, "Database connection string is missing.");
+
+            string query = @"
+                SELECT 
+                    p.PlotNumber AS Plot,
+                    ps.SaleAmount AS SaleAmount,
+                    ISNULL((SELECT SUM(Amount) FROM PlotTransaction pt WHERE pt.PlotId = p.Id AND pt.IsDeleted = 0), 0) AS PaidTillDate,
+                    (ISNULL(ps.SaleAmount, 0)
+                        - ISNULL((SELECT SUM(Amount) FROM PlotTransaction pt WHERE pt.PlotId = p.Id AND pt.IsDeleted = 0), 0)
+                    ) AS OutstandingBalance
+                FROM Plot p
+                LEFT JOIN PlotSale ps ON p.Id = ps.PlotId
+                WHERE p.Id = @PlotId AND p.IsDeleted = 0";
+
+            try
+            {
+                using var conn = new SqlConnection(connectionString);
+                await conn.OpenAsync();
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@PlotId", plotId);
+                using var reader = await cmd.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    var result = new
+                    {
+                        Plot = reader["Plot"]?.ToString() ?? "",
+                        SaleAmount = reader["SaleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["SaleAmount"]),
+                        PaidTillDate = reader["PaidTillDate"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["PaidTillDate"]),
+                        OutstandingBalance = reader["OutstandingBalance"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["OutstandingBalance"])
+                    };
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound($"Plot with ID {plotId} not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching plot transaction info: {ex.Message}");
+            }
+        }
+
         [HttpGet("{plotId}/transactions")]
         public async Task<ActionResult<IEnumerable<PlotTransactionDto>>> GetTransactionsForPlot(int plotId)
         {

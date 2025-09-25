@@ -81,7 +81,7 @@ select[formControl]:focus {
   max-width: 750px !important;
   /* Add any other manage plots specific modal styles here */
 }
-/* Copied styles from property-form.component.css for consistency */
+
 .modal-header {
 	margin-bottom: 1.2rem;
 	border-bottom: 1px solid #e5e7eb;
@@ -127,31 +127,6 @@ select[formControl]:focus {
 	border-radius: 12px;
 	box-shadow: 0 4px 24px rgba(44,62,80,0.10);
 	padding: 2rem 2rem 1.5rem 2rem;
-}
-
-.property-form {
-	display: flex;
-	flex-direction: column;
-	gap: 0.7rem;
-}
-
-.property-form label {
-	font-weight: 500;
-	margin-bottom: 0.3rem;
-}
-
-.property-form input,
-.property-form select,
-.property-form textarea {
-	font-family: inherit;
-	font-size: 0.98rem;
-	border: 1px solid #d1d5db;
-	border-radius: 6px;
-	padding: 0.35rem 0.7rem;
-	margin-bottom: 0.25rem;
-	background: #f8fafc;
-	width: 100%;
-	box-sizing: border-box;
 }
 
 .form-sections {

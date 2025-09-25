@@ -14,11 +14,26 @@ import { MessageBoxComponent } from '../shared/message-box.component';
     imports: [ReactiveFormsModule, CommonModule, MessageBoxComponent]
 })
 export class PropertyFormComponent {
+    ngAfterViewInit() {
+        window.addEventListener('keydown', this.handleEscKey);
+    }
+
+    ngOnDestroy() {
+        window.removeEventListener('keydown', this.handleEscKey);
+    }
+
+    handleEscKey = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            this.closeModalClicked();
+        }
+    }
     messageBoxVisible: boolean = false;
     messageText: string = '';
     propertyForm;
     @Input() property: any = null;
     @Input() viewMode: boolean = false;
+
+    // formattedPrice removed, formatting will be inside the input
 
     constructor(private fb: FormBuilder, private propertyService: PropertyService) {
         this.propertyForm = this.fb.group({
@@ -27,14 +42,34 @@ export class PropertyFormComponent {
             status: ['', [Validators.required, this.noWhitespaceValidator]],
             price: [null, [Validators.required, Validators.min(0)]],
             owner: ['', [Validators.required, Validators.minLength(3), this.ownerNameValidator]],
-            phone: ['', [Validators.required, this.noWhitespaceValidator]],
+            phone: ['', [Validators.required, this.noWhitespaceValidator, Validators.pattern(/^\d{10}$/)]],
+            email: ['', [Validators.email]],
             address: [''],
             city: [''],
             state: [''],
-            zipCode: ['', [this.zipCodeValidator]],
+            zipCode: ['', [this.zipCodeValidator, Validators.pattern(/^\d{6}$/)]],
             description: [''],
             khasraNo: [''],
             area: [null, [Validators.required, Validators.min(0)]]
+        });
+
+        // Live INR formatting for price field inside the input
+        this.propertyForm.get('price')?.valueChanges.subscribe((value) => {
+            if (typeof value === 'string' && value != null) {
+                const trimmed = (value as string).trim();
+                if (trimmed !== '') {
+                    const num = parseFloat(trimmed.replace(/,/g, ''));
+                    if (!isNaN(num)) {
+                        const formatted = num.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+                        if (trimmed !== formatted) {
+                            (this.propertyForm.get('price') as any)?.setValue(formatted, { emitEvent: false });
+                        }
+                    }
+                }
+            } else if (typeof value === 'number' && value != null) {
+                const formatted = (value as number).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+                (this.propertyForm.get('price') as any)?.setValue(formatted, { emitEvent: false });
+            }
         });
     }
 
@@ -55,6 +90,15 @@ export class PropertyFormComponent {
         if (!value) return null;
         if (!/^\d{6}$/.test(value)) return { invalidZip: true };
         return null;
+    }
+
+    // Optionally, add more custom validators here for other fields
+
+    public formatINR(value: any): string {
+        if (value == null || value === '') return '';
+        const num = typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value;
+        if (isNaN(num)) return '';
+        return num.toLocaleString('en-IN', { maximumFractionDigits: 0 });
     }
 
     ngOnInit() {
@@ -115,40 +159,49 @@ export class PropertyFormComponent {
     }
 
     onSubmit() {
-        if (this.propertyForm.valid) {
-            const formValue = this.propertyForm.value;
-            const propertyData: RegisterPropertyRequest = {
-                title: formValue.title ?? '',
-                type: formValue.type ?? '',
-                status: formValue.status ?? '',
-                price: formValue.price ?? 0,
-                owner: formValue.owner ?? '',
-                phone: formValue.phone ?? '',
-                address: formValue.address ?? '',
-                city: formValue.city ?? '',
-                state: formValue.state ?? '',
-                zipCode: formValue.zipCode ?? '',
-                description: formValue.description ?? '',
-                khasraNo: formValue.khasraNo ?? '',
-                area: formValue.area ?? 0
-            };
-            if (this.property && this.property.id) {
-                // Edit mode
-                this.propertyService.updateProperty(this.property.id, propertyData).subscribe({
-                    next: () => {
-                        this.success.emit('Property updated successfully!');
-                    },
-                    error: err => this.success.emit('Error: ' + err.message)
-                });
-            } else {
-                // Create mode
-                this.propertyService.registerProperty(propertyData).subscribe({
-                    next: () => {
-                        this.success.emit('Property registered successfully!');
-                    },
-                    error: err => this.success.emit('Error: ' + err.message)
-                });
-            }
+        if (!this.propertyForm.valid) {
+            // Mark all controls as touched to show errors
+            this.propertyForm.markAllAsTouched();
+            this.showMessage('Please fix validation errors before submitting.');
+            return;
+        }
+        const formValue = this.propertyForm.value;
+        // Convert formatted price string to decimal
+        let priceValue = formValue.price ?? 0;
+        if (typeof priceValue === 'string' && priceValue != null) {
+            priceValue = parseFloat((priceValue as string).replace(/,/g, ''));
+        }
+        const propertyData: RegisterPropertyRequest = {
+            title: formValue.title ?? '',
+            type: formValue.type ?? '',
+            status: formValue.status ?? '',
+            price: priceValue,
+            owner: formValue.owner ?? '',
+            phone: formValue.phone ?? '',
+            address: formValue.address ?? '',
+            city: formValue.city ?? '',
+            state: formValue.state ?? '',
+            zipCode: formValue.zipCode ?? '',
+            description: formValue.description ?? '',
+            khasraNo: formValue.khasraNo ?? '',
+            area: formValue.area ?? 0
+        };
+        if (this.property && this.property.id) {
+            // Edit mode
+            this.propertyService.updateProperty(this.property.id, propertyData).subscribe({
+                next: () => {
+                    this.success.emit('Property updated successfully!');
+                },
+                error: err => this.success.emit('Error: ' + err.message)
+            });
+        } else {
+            // Create mode
+            this.propertyService.registerProperty(propertyData).subscribe({
+                next: () => {
+                    this.success.emit('Property registered successfully!');
+                },
+                error: err => this.success.emit('Error: ' + err.message)
+            });
         }
     }
 

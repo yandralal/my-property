@@ -1,3 +1,17 @@
+.text-danger {
+    color: #dc3545;
+}
+/* Highlight invalid fields */
+.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+}
+/* Standard error message styling for validation */
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.95em;
+    margin-top: 2px;
+}
 .modal-header {
     margin-bottom: 1.2rem;
     border-bottom: 1px solid #e5e7eb;

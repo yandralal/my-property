@@ -8,3 +8,5 @@
 /.vs
 /RealEstateManager/.vs/ProjectEvaluation
 /RealEstateManager/bin/Release/net8.0-windows
+/MyPropertyApi/bin/Debug/net9.0
+/MyPropertyApi/obj

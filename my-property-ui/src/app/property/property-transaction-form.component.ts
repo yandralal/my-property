@@ -2,8 +2,6 @@ import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PropertyService } from '../services/property.service';
-import { MessageBoxComponent } from '../shared/message-box.component';
-import { PropertyTransactionsListComponent } from './property-transactions-list.component';
 
 @Component({
   selector: 'app-property-transaction-form',
@@ -13,36 +11,14 @@ import { PropertyTransactionsListComponent } from './property-transactions-list.
   imports: [ReactiveFormsModule, CommonModule]
 })
 export class PropertyTransactionFormComponent implements OnInit {
-  // Helper to fetch transaction info and patch form fields
-  fetchTransactionInfo(propertyId: number) {
-    if (!propertyId) return;
-    this.propertyService.getPropertyTransactionInfo(propertyId).subscribe({
-      next: (info: any) => {
-        this.transactionForm.patchValue({
-          buyAmount: info.buyAmount || '',
-          totalLoan: info.totalLoan || '',
-          amountPaidTillDate: info.amountPaidTillDate || '',
-          balanceAmount: info.balanceAmount || ''
-        });
-      },
-      error: (err: any) => {
-        console.error('Failed to fetch transaction info:', err);
-      }
-    });
-  }
-  // Inputs
-  @Input() propertyList: { id: number; title: string; selected?: boolean; buyAmount?: number; totalLoan?: number; amountPaidTillDate?: number; balanceAmount?: number }[] = [];
+  isSubmitting = false;
+  @Input() propertyList: { id: number; title: string }[] = [];
   @Input() selectedPropertyId: number | null = null;
-  @Input() viewMode: 'view' | 'edit' = 'view';
   @Input() transaction: any = null;
-  // Outputs
   @Output() closeModal = new EventEmitter<void>();
   @Output() success = new EventEmitter<string>();
 
-  // Form and UI State
   transactionForm: FormGroup;
-  messageBoxVisible = false;
-  messageText = '';
   transactionTypes = ['Credit', 'Debit'];
   paymentModes = ['Cash', 'Cheque', 'Bank Transfer', 'Other'];
 
@@ -64,13 +40,7 @@ export class PropertyTransactionFormComponent implements OnInit {
   }
 
   ngOnInit() {
-      console.log('PropertyTransactionFormComponent ngOnInit', {
-        transaction: this.transaction,
-        propertyList: this.propertyList,
-        selectedPropertyId: this.selectedPropertyId,
-        viewMode: this.viewMode
-      });
-  const formatINR = (value: any) => {
+    const formatINR = (value: any) => {
       if (value == null || value === '') return '';
       const num = typeof value === 'string' ? value.replace(/,/g, '') : value;
       if (isNaN(num) || num === '') return '';
@@ -81,8 +51,18 @@ export class PropertyTransactionFormComponent implements OnInit {
       ['buyAmount', 'totalLoan', 'amountPaidTillDate', 'balanceAmount', 'amount'].forEach(field => {
         const ctrl = this.transactionForm.get(field);
         if (ctrl) {
-          const raw = ctrl.value;
-          ctrl.setValue(formatINR(raw), { emitEvent: false });
+          let raw = ctrl.value;
+          // For balanceAmount, ensure 0 is shown as '0' and not formatted
+          if (field === 'balanceAmount') {
+            if (raw === 0 || raw === '0') {
+              ctrl.setValue('0', { emitEvent: false });
+              return;
+            }
+          }
+          // Only format if not empty and not '0'
+          if (raw !== '' && !(field === 'balanceAmount' && raw === '0')) {
+            ctrl.setValue(formatINR(raw), { emitEvent: false });
+          }
         }
       });
     };
@@ -94,14 +74,19 @@ export class PropertyTransactionFormComponent implements OnInit {
       });
     });
 
-    // --- Outstanding balance calculation ---
+    // Outstanding balance calculation
     this.transactionForm.get('amount')?.valueChanges.subscribe((txnAmount) => {
       const buyAmountRaw = parseFloat((this.transactionForm.get('buyAmount')?.value || '0').toString().replace(/,/g, ''));
       const totalLoanRaw = parseFloat((this.transactionForm.get('totalLoan')?.value || '0').toString().replace(/,/g, ''));
       const paidTillDateRaw = parseFloat((this.transactionForm.get('amountPaidTillDate')?.value || '0').toString().replace(/,/g, ''));
       const txnAmountRaw = parseFloat((txnAmount || '0').toString().replace(/,/g, ''));
-      const remaining = buyAmountRaw - totalLoanRaw - (paidTillDateRaw + txnAmountRaw);
-      this.transactionForm.get('balanceAmount')?.setValue(remaining);
+      let remaining = buyAmountRaw - totalLoanRaw - (paidTillDateRaw + txnAmountRaw);
+      // If outstanding balance is 0, show 0
+      if (remaining === 0) {
+        this.transactionForm.get('balanceAmount')?.setValue('0');
+      } else {
+        this.transactionForm.get('balanceAmount')?.setValue(remaining);
+      }
     });
 
     if (!this.propertyList || this.propertyList.length === 0) {
@@ -131,13 +116,45 @@ export class PropertyTransactionFormComponent implements OnInit {
     });
   }
 
+  fetchTransactionInfo(propertyId: number) {
+    if (!propertyId) return;
+    this.propertyService.getPropertyTransactionInfo(propertyId).subscribe({
+      next: (info: any) => {
+        let balance = info.outstandingBalance;
+        // Handle 0, '0', 0.00, '0.00' as zero
+        if (balance === 0 || balance === '0' || balance === 0.00 || balance === '0.00') {
+          balance = '0';
+        }
+        let paidTillDate = (info.paidTillDate === null || info.paidTillDate === undefined) ? 0 : info.paidTillDate;
+        this.transactionForm.patchValue({
+          buyAmount: info.purchaseAmount || '',
+          totalLoan: info.totalLoan || '',
+          amountPaidTillDate: paidTillDate,
+          balanceAmount: balance || ''
+        });
+      },
+      error: (err: any) => {
+        console.error('Failed to fetch transaction info:', err);
+      }
+    });
+  }
+
   onSubmit() {
+    if (this.isSubmitting) return;
     if (this.transactionForm.valid) {
+      this.isSubmitting = true;
       const formValue = this.transactionForm.getRawValue();
+      let txnDate = formValue.transactionDate;
+      // If only date is provided (YYYY-MM-DD), append current time
+      if (/^\d{4}-\d{2}-\d{2}$/.test(txnDate)) {
+        const now = new Date();
+        const timeStr = now.toTimeString().slice(0,8); // HH:MM:SS
+        txnDate = `${txnDate}T${timeStr}`;
+      }
       const payload = {
         transactionId: 0,
         propertyId: formValue.propertyId || 0,
-        transactionDate: new Date(formValue.transactionDate).toISOString(),
+        transactionDate: new Date(txnDate).toISOString(),
         amount: parseFloat((formValue.amount || '0').toString().replace(/,/g, '')),
         paymentMethod: formValue.paymentMethod,
         referenceNumber: formValue.referenceNumber || '',
@@ -146,35 +163,18 @@ export class PropertyTransactionFormComponent implements OnInit {
       };
       this.propertyService.createPropertyTransaction(payload).subscribe({
         next: () => {
-          this.showMessage('Transaction saved successfully!');
-          this.success.emit();
+          this.success.emit('Transaction saved successfully!');
+          this.isSubmitting = false;
         },
         error: () => {
-          this.showMessage('Failed to save transaction.');
+          this.success.emit('Failed to save transaction.');
+          this.isSubmitting = false;
         }
       });
     }
-}
+  }
 
-closeModalClicked() {
+  closeModalClicked() {
     this.closeModal.emit();
-  }
-
-  showMessage(msg: string) {
-    this.messageText = msg;
-    this.messageBoxVisible = true;
-  }
-
-  closeMessageBox() {
-    this.messageBoxVisible = false;
-  }
-
-  populatePropertyFields(prop: any) {
-    this.transactionForm.patchValue({
-      buyAmount: prop.buyAmount || '',
-      totalLoan: prop.totalLoan || '',
-      amountPaidTillDate: prop.amountPaidTillDate || '',
-      balanceAmount: prop.balanceAmount || ''
-    });
   }
 }

@@ -1,3 +1,9 @@
+/* Standard error message styling for validation */
+.invalid-feedback {
+	color: #dc3545;
+	font-size: 0.95em;
+	margin-top: 2px;
+}
 .modal-header {
 	margin-bottom: 1.2rem;
 	border-bottom: 1px solid #e5e7eb;
@@ -83,6 +89,7 @@
 	box-shadow: 0 2px 8px rgba(44,62,80,0.08);
 	transition: background 0.2s;
 }
+
 .property-form button[type="submit"]:hover {
 	background: linear-gradient(90deg, #14b8a6 0%, #38bdf8 100%);
 }

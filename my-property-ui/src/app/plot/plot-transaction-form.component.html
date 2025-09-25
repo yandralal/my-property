@@ -1,25 +1,18 @@
 <div class="group-box">
     <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Property Transaction Form</h2>
+        <h2>Plot Transaction Form</h2>
         <button class="modal-close" type="button" (click)="closeModalClicked()" aria-label="Close">&times;</button>
     </div>
-    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="property-form" autocomplete="off">
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="plot-form" autocomplete="off">
         <div class="form-sections">
             <div class="form-section">
                 <div>
-                    <label for="propertyId">Property <span style="color:red">*</span></label>
-                    <select id="propertyId" formControlName="propertyId">
-                        <option value="">Select</option>
-                        <option *ngFor="let prop of propertyList" [value]="prop.id">{{ prop.title }}</option>
-                    </select>
+                    <label for="plot">Plot <span style="color:red">*</span></label>
+                    <input id="plot" formControlName="plot" [readonly]="true" />
                 </div>
                 <div>
-                    <label for="buyAmount">Purchase Amount</label>
+                    <label for="buyAmount">Sale Amount</label>
                     <input id="buyAmount" formControlName="buyAmount" [readonly]="true" />
-                </div>
-                <div>
-                    <label for="totalLoan">Total Loan (if any)</label>
-                    <input id="totalLoan" formControlName="totalLoan" [readonly]="true" />
                 </div>
                 <div>
                     <label for="amountPaidTillDate">Paid Till Date</label>
@@ -63,7 +56,6 @@
                 </div>
             </div>
         </div>
-
-    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">Save</button>
+    <button type="submit" class="btn btn-primary" [disabled]="transactionForm.invalid || isSubmitting">Save</button>
     </form>
 </div>

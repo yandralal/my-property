@@ -1,17 +1,17 @@
-.property-transaction-form {
+.plot-transaction-form {
 	display: flex;
 	flex-direction: column;
 	gap: 0.7rem;
 }
 
-.property-transaction-form label {
+.plot-transaction-form label {
 	font-weight: 500;
 	margin-bottom: 0.3rem;
 }
 
-.property-transaction-form input,
-.property-transaction-form select,
-.property-transaction-form textarea {
+.plot-transaction-form input,
+.plot-transaction-form select,
+.plot-transaction-form textarea {
 	font-family: inherit;
 	font-size: 0.98rem;
 	border: 1px solid #d1d5db;
@@ -23,7 +23,7 @@
 	box-sizing: border-box;
 }
 
-.property-transaction-form button[type="submit"] {
+.plot-transaction-form button[type="submit"] {
 	align-self: flex-end;
 	background: linear-gradient(90deg, #38bdf8 0%, #14b8a6 100%);
 	color: #fff;
@@ -36,7 +36,7 @@
 	box-shadow: 0 2px 8px rgba(44,62,80,0.08);
 	transition: background 0.2s;
 }
-.property-transaction-form button[type="submit"]:hover {
+.plot-transaction-form button[type="submit"]:hover {
 	background: linear-gradient(90deg, #14b8a6 0%, #38bdf8 100%);
 }
 
@@ -48,7 +48,6 @@
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-  border: 4px solid blue;
 }
 
 

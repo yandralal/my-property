@@ -1,1 +1,122 @@
-.group-box { max-width: 600px; margin: 0 auto; }
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0,0,0,0.25);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.modal-dialog {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+	max-width: 380px;
+	width: 98vw;
+	padding: 0;
+}
+.group-box {
+	max-width: 560px;
+	width: 98vw;
+	margin: 0 auto;
+	padding: 1.5em;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+}
+.form-sections {
+	display: flex;
+	gap: 2rem;
+	position: relative;
+}
+.form-section {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+}
+.form-section:first-child {
+	padding-right: 2rem;
+}
+.form-section:last-child {
+	padding-left: 2rem;
+}
+.agent-form label {
+	font-weight: 500;
+	margin-bottom: 0.3rem;
+}
+.agent-form input {
+	font-family: inherit;
+	font-size: 0.98rem;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 0.35rem 0.7rem;
+	margin-bottom: 0.25rem;
+	background: #f8fafc;
+	width: 100%;
+	box-sizing: border-box;
+}
+.agent-form button[type="submit"] {
+	margin-left: auto;
+	background: linear-gradient(90deg, #38bdf8 0%, #14b8a6 100%);
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	padding: 0.6rem 1.6rem;
+	font-weight: 600;
+	font-size: 1rem;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+	transition: background 0.2s;
+	margin-top: 1.2rem;
+}
+.agent-form button[type="submit"]:hover {
+	background: linear-gradient(90deg, #14b8a6 0%, #38bdf8 100%);
+}
+.text-danger {
+	color: #dc3545;
+}
+.is-invalid {
+	border-color: #dc3545 !important;
+	box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+}
+.invalid-feedback {
+	color: #dc3545;
+	font-size: 0.95em;
+	margin-top: 2px;
+}
+.modal-header {
+	margin-bottom: 1.2rem;
+	border-bottom: 1px solid #e5e7eb;
+	padding-bottom: 0.7rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+.modal-header h2 {
+	font-size: 1.35rem;
+	font-weight: 600;
+	margin: 0;
+}
+.modal-desc {
+	font-size: 0.98rem;
+	color: #64748b;
+	margin: 0;
+}
+.modal-close {
+	position: absolute;
+	top: 1.8rem;
+	right: 2.5rem;
+	background: none;
+	border: none;
+	font-size: 1.7rem;
+	color: #64748b;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+.modal-close:hover {
+	color: #14b8a6;
+}

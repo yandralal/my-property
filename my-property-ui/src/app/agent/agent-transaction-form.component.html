@@ -1,4 +1,79 @@
 <div class="group-box">
-  <h2>Add/Edit Agent Transaction</h2>
-  <!-- Agent transaction form fields -->
+    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Agent Transaction Form</h2>
+        <button class="modal-close" type="button" (click)="closeModalClicked()" aria-label="Close">&times;</button>
+    </div>
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="agent-transaction-form" autocomplete="off">
+        <div class="form-sections">
+            <div class="form-section">
+                <div>
+                    <label for="propertyId">Property <span style="color:red">*</span></label>
+                    <select id="propertyId" formControlName="propertyId">
+                        <option value="">Select</option>
+                        <option *ngFor="let prop of activePropertyList" [value]="prop.id">{{ prop.title }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="agentId">Agent <span style="color:red">*</span></label>
+                    <select id="agentId" formControlName="agentId" (change)="onAgentChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let agent of agentList" [value]="agent.id">{{ agent.name }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="plotId">Plot <span style="color:red">*</span></label>
+                    <select id="plotId" formControlName="plotId">
+                        <option value="">Select</option>
+                        <option *ngFor="let plot of plotList" [value]="plot.id">{{ plot.plotNumber }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="totalBrokerage">Total Brokerage</label>
+                    <input id="totalBrokerage" formControlName="totalBrokerage" [readonly]="true" />
+                </div>
+                <div>
+                    <label for="amountPaidTillDate">Paid Till Date</label>
+                    <input id="amountPaidTillDate" formControlName="amountPaidTillDate" [readonly]="true" [value]="transactionForm.get('amountPaidTillDate')?.value" />
+                </div>
+                <div>
+                    <label for="balanceAmount">Outstanding Balance</label>
+                    <input id="balanceAmount" formControlName="balanceAmount" [readonly]="true" />
+                </div>
+            </div>
+            <div class="form-section">
+                <div>
+                    <label for="transactionType">Transaction Type <span style="color:red">*</span></label>
+                    <select id="transactionType" formControlName="transactionType">
+                        <option value="">Select</option>
+                        <option *ngFor="let type of transactionTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="amount">Transaction Amount <span style="color:red">*</span></label>
+                    <input id="amount" formControlName="amount" />
+                </div>
+                <div>
+                    <label for="paymentMethod">Payment Mode <span style="color:red">*</span></label>
+                    <select id="paymentMethod" formControlName="paymentMethod">
+                        <option value="">Select</option>
+                        <option *ngFor="let mode of paymentModes" [value]="mode">{{ mode }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="referenceNumber">Reference Number</label>
+                    <input id="referenceNumber" formControlName="referenceNumber" />
+                </div>
+                <div>
+                    <label for="notes">Remarks</label>
+                    <textarea id="notes" formControlName="notes" rows="3"></textarea>
+                </div>
+                <div>
+                    <label for="transactionDate">Transaction Date <span style="color:red">*</span></label>
+                    <input id="transactionDate" type="date" formControlName="transactionDate" />
+                </div>
+            </div>
+        </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">Save</button>
+    </form>
 </div>

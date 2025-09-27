@@ -5,7 +5,7 @@ import { PropertyFormComponent } from "./property/property-form.component";
 
 import { AgentListComponent } from './agent/agent-list.component';
 import { AgentFormComponent } from './agent/agent-form.component';
-import { AgentTransactionListComponent } from './agent/agent-transaction-list.component';
+import { AgentTransactionsListComponent } from './agent/agent-transactions-list.component';
 import { AgentTransactionFormComponent } from './agent/agent-transaction-form.component';
 import { LoanListComponent } from './loan/loan-list.component';
 import { LoanFormComponent } from './loan/loan-form.component';
@@ -25,7 +25,7 @@ export const routes: Routes = [
   { path: 'agents', component: AgentListComponent },
   { path: 'agents/add', component: AgentFormComponent },
   { path: 'agents/edit/:id', component: AgentFormComponent },
-  { path: 'agents/transactions', component: AgentTransactionListComponent },
+  { path: 'agents/transactions', component: AgentTransactionsListComponent },
   { path: 'agents/transactions/add', component: AgentTransactionFormComponent },
   { path: 'agents/transactions/edit/:id', component: AgentTransactionFormComponent },
   { path: 'loans', component: LoanListComponent },

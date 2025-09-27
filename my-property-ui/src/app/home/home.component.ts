@@ -16,6 +16,13 @@ import { PropertyTransactionsListComponent } from '../property/property-transact
 import { PlotTransactionsListComponent } from '../plot/plot-transactions-list.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
 import { InrFormatPipe } from '../shared/inr-format.pipe';
+import { AgentListComponent } from '../agent/agent-list.component';
+import { AgentService } from '../services/agent.service';
+import { AgentTransactionsListComponent } from '../agent/agent-transactions-list.component';
+import { AgentFormComponent } from '../agent/agent-form.component';
+import { AgentTransactionFormComponent } from '../agent/agent-transaction-form.component';
+import { LoanListComponent } from '../loan/loan-list.component';
+import { MiscListComponent } from '../misc/misc-list.component';
 
 @Component({
     selector: 'app-home',
@@ -34,11 +41,76 @@ import { InrFormatPipe } from '../shared/inr-format.pipe';
         PlotTransactionsListComponent,
         ConfirmDialogComponent,
         PlotTransactionFormComponent,
-        InrFormatPipe
+        InrFormatPipe,
+    AgentListComponent,
+    AgentFormComponent,
+    AgentTransactionsListComponent,
+    AgentTransactionFormComponent,
+    LoanListComponent,
+    MiscListComponent
     ]
 })
 
 export class HomeComponent implements OnInit {
+    onAgentTransactionFormSuccess(msg: string) {
+        this.closeAgentTransactionFormModal();
+        this.showMessage(msg);
+        if (this.selectedAgentId) {
+            this.fetchAgentTransactions(this.selectedAgentId);
+        }
+        this.agentService.getAllAgents().subscribe({
+            next: (agents) => {
+                this.agents = agents || [];
+            },
+            error: () => {
+                this.agents = [];
+            }
+        });
+    }
+    showAgentTransactionFormModal: boolean = false;
+
+    onAddAgentTransaction() {
+        this.showAgentTransactionFormModal = true;
+    }
+
+    onAddPropertyTransaction() {
+        this.showPropertyTransactionFormModal = true;
+    }
+
+    onAddPlotTransaction() {
+        this.showPlotTransactionFormModal = true;
+    }
+
+    closeAgentTransactionFormModal() {
+        this.showAgentTransactionFormModal = false;
+    }
+    showLoansLandingPage: boolean = false;
+    showMiscLandingPage: boolean = false;
+    showAgentsLandingPage: boolean = false;
+    showAgentFormModal: boolean = false;
+    openAgentFormModal() {
+        this.showAgentFormModal = true;
+    }
+
+    closeAgentFormModal() {
+        this.showAgentFormModal = false;
+    }
+    
+    onAgentFormSuccess(agent: any) {
+        if (agent) {
+            this.closeAgentFormModal();
+            this.showMessage('Agent saved successfully.');
+            this.agentService.getAllAgents().subscribe({
+                next: (agents) => {
+                    this.agents = agents || [];
+                },
+                error: () => {
+                    this.agents = [];
+                }
+            });
+        }
+    }
+    agents: any[] = [];
     onSalePlot(plot: any) {
         if (plot && plot.id) {
             this.plotViewMode = false;
@@ -60,13 +132,10 @@ export class HomeComponent implements OnInit {
     }
     // Success handler for plot transaction form
     onPlotTransactionFormSuccess(message: string) {
-        this.messageText = message;
-        this.messageBoxVisible = true;
-
-        setTimeout(() => {
-            this.messageBoxVisible = false;
-            this.refreshPlotTransactions();
-        }, 1500); // Show message for 1.5 seconds
+        this.closePlotTransactionFormModal();
+        this.showMessage(message);
+        this.refreshPlotTransactions();
+        this.refreshPlots();
     }
     confirmDeletePlotTransactionVisible: boolean = false;
     plotTransactionToDelete: any = null;
@@ -83,6 +152,7 @@ export class HomeComponent implements OnInit {
                 this.showLoader(false);
                 this.showMessage('Plot transaction deleted successfully.');
                 this.refreshPlotTransactions();
+                this.refreshPlots();
                 this.confirmDeletePlotTransactionVisible = false;
                 this.plotTransactionToDelete = null;
             },
@@ -111,6 +181,9 @@ export class HomeComponent implements OnInit {
                 }
             });
         }
+        else {
+            this.plotTransactions = [];
+        }
     }
     confirmDeleteTransactionVisible: boolean = false;
     transactionToDelete: any = null;
@@ -129,6 +202,7 @@ export class HomeComponent implements OnInit {
                 this.showLoader(false);
                 this.showMessage('Transaction deleted successfully.');
                 this.fetchTransactions();
+                this.refreshProperties();
                 this.confirmDeleteTransactionVisible = false;
                 this.transactionToDelete = null;
             },
@@ -155,7 +229,8 @@ export class HomeComponent implements OnInit {
     error: string = '';
     transactionModal = { visible: false, type: '' };
     transactionListModal = { visible: false, type: '' };
-    selectedAgentId = null;
+    selectedAgentId: number | null = null;
+    agentTransactions: any[] = [];
     selectedLoanId = null;
     selectedMiscId = null;
     selectedTransactionDetails: any = null;
@@ -181,11 +256,15 @@ export class HomeComponent implements OnInit {
     messageText: string = '';
     confirmDeletePlotVisible: boolean = false;
     plotToDelete: Plot | null = null;
+    confirmDeleteAgentTransactionVisible: boolean = false;
+    selectedAgentTransactionToDelete: any = null;
+    editAgentData: any = null;
 
     constructor(
         private router: Router,
         private propertyService: PropertyService,
-        private plotService: PlotService
+        private plotService: PlotService,
+        private agentService: AgentService
     ) { }
 
     onTransactionMenuClick(menu: string) {
@@ -210,6 +289,21 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Fetch agents and select first agent
+        this.agentService.getAllAgents().subscribe({
+            next: (agents) => {
+                this.agents = agents || [];
+                if (agents && agents.length > 0) {
+                    this.selectedAgentId = agents[0].id;
+                    this.fetchAgentTransactions(agents[0].id);
+                }
+            },
+            error: (err) => {
+                console.error('Failed to fetch agents:', err);
+            }
+        });
+
+        // Fetch properties and select first property
         this.propertyService.getActiveProperties().subscribe({
             next: (props) => {
                 this.properties = props;
@@ -238,7 +332,24 @@ export class HomeComponent implements OnInit {
             }
         });
     }
+    // Fetch agent transactions for selected agent
+    fetchAgentTransactions(agentId: number) {
+        this.agentService.getAgentTransactions(agentId).subscribe({
+            next: (txns) => {
+                this.agentTransactions = txns || [];
+            },
+            error: () => {
+                this.agentTransactions = [];
+            }
+        });
+    }
 
+    // Change selected agent and fetch transactions
+    onSelectAgent(agent: any) {
+        this.selectedAgentId = agent.id;
+        this.fetchAgentTransactions(agent.id);
+    }
+    
     ngOnChanges(changes: any): void {
         if (changes.transactionListModal && changes.transactionListModal.currentValue.visible) {
             this.fetchTransactions();
@@ -268,28 +379,27 @@ export class HomeComponent implements OnInit {
     }
 
     onMenuClick(menu: string) {
-        // Determine which parent menu to keep expanded
-        if ([
-            'sale', 'agents', 'loans', 'miscDetails'
-        ].includes(menu)) {
-            this.expandedMenu = 'operations';
-        } else if ([
-            'viewReports'
-        ].includes(menu)) {
-            this.expandedMenu = 'reports';
-        } else if ([
-            'sendMessages'
-        ].includes(menu)) {
-            this.expandedMenu = 'notifications';
-        } else if ([
-            'help', 'about', 'customizeBackground', 'downloadGuide'
-        ].includes(menu)) {
-            this.expandedMenu = 'help';
-        } else if ([
-            'manageProperty', 'managePlots'
-        ].includes(menu)) {
-            this.expandedMenu = 'file';
+        // Only show landing pages for agent, loan, or misc
+        if (menu === 'agent') {
+            this.showAgentsLandingPage = true;
+            this.showLoansLandingPage = false;
+            this.showMiscLandingPage = false;
+        } else if (menu === 'loan') {
+            this.showAgentsLandingPage = false;
+            this.showLoansLandingPage = true;
+            this.showMiscLandingPage = false;
+        } else if (menu === 'misc') {
+            this.showAgentsLandingPage = false;
+            this.showLoansLandingPage = false;
+            this.showMiscLandingPage = true;
+        } else {
+            // For any other menu, always show home (hide all landing pages)
+            this.showAgentsLandingPage = false;
+            this.showLoansLandingPage = false;
+            this.showMiscLandingPage = false;
         }
+
+        // Preserve existing sale logic
         if (menu === 'sale') {
             if (this.selectedPlotDetails && this.selectedPlotDetails.id) {
                 // Only delete sale if user confirms, otherwise just open modal
@@ -333,7 +443,6 @@ export class HomeComponent implements OnInit {
                 this.showPlotFormModal = true;
             }
         }
-        // TODO: Implement other menu actions
     }
 
     logout() {
@@ -518,37 +627,25 @@ export class HomeComponent implements OnInit {
 
     onSelectProperty(property: Property) {
         this.selectedPropertyId = property.id;
-        this.plotService.getPlotsByPropertyId(property.id).subscribe({
-            next: (plots) => {
-                this.plots = plots;
-                if (plots.length > 0) {
-                    this.selectedPlotDetails = plots[0];
-                } else {
-                    this.selectedPlotDetails = null;
-                }
-            },
-            error: (err) => {
-                console.error('Failed to fetch plots:', err);
-                this.plots = [];
-                this.selectedPlotDetails = null;
-            }
-        });
+        this.refreshPlots();
+        this.refreshPlotTransactions();
         this.fetchTransactions();
     }
 
     onSelectPlot(plot: Plot) {
-            this.selectedPlotDetails = plot;
-            this.plotTransactions = [];
-            if (plot && plot.id) {
-                this.plotService.getPlotTransactions(plot.id).subscribe({
-                    next: (txns) => {
-                        this.plotTransactions = txns || [];
-                    },
-                    error: (err) => {
-                        this.plotTransactions = [];
-                    }
-                });
-            }
+        this.selectedPlotDetails = plot;
+        this.plotTransactions = [];
+        if (plot && plot.id) {
+            this.selectedPlotId = plot.id;
+            this.plotService.getPlotTransactions(plot.id).subscribe({
+                next: (txns) => {
+                    this.plotTransactions = txns || [];
+                },
+                error: (err) => {
+                    this.plotTransactions = [];
+                }
+            });
+        }
     }
 
     closePlotFormModal() {
@@ -659,6 +756,13 @@ export class HomeComponent implements OnInit {
                 next: (plots) => {
                     this.plots = plots;
                     this.selectedPlotDetails = plots.length > 0 ? plots[0] : null;
+                    if (plots.length > 0) {
+                        this.onSelectPlot(plots[0]);
+                    }
+                    else {
+                        this.selectedPlotId = undefined;
+                        this.plotTransactions = [];
+                    }
                 },
                 error: () => {
                     this.plots = [];
@@ -691,14 +795,10 @@ export class HomeComponent implements OnInit {
 
     // Success handler for transaction form
     onPropertyTransactionFormSuccess(message: string) {
-        this.messageText = message;
-        this.messageBoxVisible = true;
-
-        setTimeout(() => {
-            this.showPropertyTransactionFormModal = false;
-            this.messageBoxVisible = false;
-            this.refreshPropertyTransactions();
-        }, 1500);
+        this.closePropertyTransactionFormModal();
+        this.showMessage(message);
+        this.fetchTransactions();
+        this.refreshProperties();
     }
 
     // Refresh property transactions list
@@ -713,5 +813,56 @@ export class HomeComponent implements OnInit {
                 }
             });
         }
+    }
+
+    onRequestDeleteAgentTransaction(txn: any) {
+        // Show confirmation dialog and store transaction to delete
+        this.selectedAgentTransactionToDelete = txn;
+        this.confirmDeleteAgentTransactionVisible = true;
+    }
+
+    onConfirmDeleteAgentTransaction() {
+        if (this.selectedAgentTransactionToDelete && this.selectedAgentTransactionToDelete.transactionId) {
+            this.agentService.deleteAgentTransaction(this.selectedAgentTransactionToDelete.transactionId).subscribe({
+                next: () => {
+                    this.showMessage('Agent transaction deleted successfully.');
+                    this.fetchAgentTransactions(this.selectedAgentId ?? 0);
+                    this.agentService.getAllAgents().subscribe({
+                        next: (agents) => {
+                            this.agents = agents || [];
+                        },
+                        error: () => {
+                            this.agents = [];
+                        }
+                    });
+                },
+                error: () => {
+                    this.showMessage('Failed to delete agent transaction.');
+                }
+            });
+        }
+        this.confirmDeleteAgentTransactionVisible = false;
+        this.selectedAgentTransactionToDelete = null;
+    }
+
+    onCancelDeleteAgentTransaction() {
+        this.confirmDeleteAgentTransactionVisible = false;
+        this.selectedAgentTransactionToDelete = null;
+    }
+
+    openEditAgentModal(agent: any) {
+        this.editAgentData = agent;
+        this.showAgentFormModal = true;
+    }
+
+    refreshProperties() {
+        this.propertyService.getActiveProperties().subscribe({
+            next: (properties) => {
+                this.properties = properties || [];
+            },
+            error: () => {
+                this.properties = [];
+            }
+        });
     }
 }

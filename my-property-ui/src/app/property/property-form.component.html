@@ -9,11 +9,15 @@
     <div class="form-section">
       <div>
         <label for="title">Property Title *</label>
-        <input id="title" formControlName="title" autocomplete="off" />
+        <input id="title" formControlName="title" autocomplete="off" [class.is-invalid]="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched" />
+        <div *ngIf="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched" class="invalid-feedback d-block">
+          <span *ngIf="propertyForm.get('title')?.errors?.['required']">Title is required.</span>
+          <span *ngIf="propertyForm.get('title')?.errors?.['minlength']">Minimum 3 characters required.</span>
+        </div>
       </div>
       <div>
         <label for="type">Type *</label>
-        <select id="type" formControlName="type">
+        <select id="type" formControlName="type" [class.is-invalid]="propertyForm.get('type')?.invalid && propertyForm.get('type')?.touched">
           <option value="">Select</option>
           <option value="Residential">Residential</option>
           <option value="Commercial">Commercial</option>
@@ -23,7 +27,7 @@
       </div>
       <div>
         <label for="status">Status *</label>
-        <select id="status" formControlName="status">
+        <select id="status" formControlName="status" [class.is-invalid]="propertyForm.get('status')?.invalid && propertyForm.get('status')?.touched">
           <option value="">Select</option>
           <option value="Available">Available</option>
           <option value="Sold">Sold</option>
@@ -33,15 +37,23 @@
       </div>
       <div>
         <label for="price">Price *</label>
-        <input id="price" formControlName="price" />
+        <input id="price" formControlName="price" [class.is-invalid]="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched" />
+        <div *ngIf="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched" class="invalid-feedback d-block">
+          <span *ngIf="propertyForm.get('price')?.errors?.['required']">Price is required.</span>
+          <span *ngIf="propertyForm.get('price')?.errors?.['min']">Price must be positive.</span>
+        </div>
       </div>
       <div>
         <label for="owner">Owner Name *</label>
-        <input id="owner" formControlName="owner" autocomplete="off" />
+        <input id="owner" formControlName="owner" autocomplete="off" [class.is-invalid]="propertyForm.get('owner')?.invalid && propertyForm.get('owner')?.touched" />
+        <div *ngIf="propertyForm.get('owner')?.invalid && propertyForm.get('owner')?.touched" class="invalid-feedback d-block">
+          <span *ngIf="propertyForm.get('owner')?.errors?.['required']">Owner name is required.</span>
+          <span *ngIf="propertyForm.get('owner')?.errors?.['minlength']">Minimum 3 characters required.</span>
+        </div>
       </div>
       <div>
         <label for="phone">Phone Number *</label>
-        <input id="phone" formControlName="phone" autocomplete="off" />
+        <input id="phone" formControlName="phone" autocomplete="off" maxlength="10" [class.is-invalid]="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched" />
         <div *ngIf="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched" class="invalid-feedback d-block">
           <span *ngIf="propertyForm.get('phone')?.errors?.['required']">Phone is required.</span>
           <span *ngIf="propertyForm.get('phone')?.errors?.['pattern']">Enter a valid 10-digit phone number.</span>
@@ -58,7 +70,11 @@
     <div class="form-section">
       <div>
         <label for="area">Area (sq.ft) *</label>
-        <input id="area" type="number" formControlName="area" />
+        <input id="area" type="number" formControlName="area" [class.is-invalid]="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched" />
+        <div *ngIf="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched" class="invalid-feedback d-block">
+          <span *ngIf="propertyForm.get('area')?.errors?.['required']">Area is required.</span>
+          <span *ngIf="propertyForm.get('area')?.errors?.['min']">Area must be positive.</span>
+        </div>
       </div>
       <div>
         <label for="khasraNo">Khasra No</label>
@@ -78,7 +94,7 @@
       </div>
       <div>
         <label for="zip">Zip Code</label>
-        <input id="zip" formControlName="zipCode" autocomplete="off" />
+        <input id="zip" formControlName="zipCode" autocomplete="off" maxlength="6" />
         <div *ngIf="propertyForm.get('zipCode')?.invalid && propertyForm.get('zipCode')?.touched" class="invalid-feedback d-block">
           <span *ngIf="propertyForm.get('zipCode')?.errors?.['pattern'] || propertyForm.get('zipCode')?.errors?.['invalidZip']">Enter a valid 6-digit zip code.</span>
         </div>

@@ -1,11 +1,36 @@
-<div class="modal-header">
-  <h4>Agent Transactions</h4>
-  <button class="modal-close add-plot" type="button" (click)="closeModalClicked()" aria-label="Close" style="font-size:2rem; line-height:1; margin-left:1em;">&times;</button>
-</div>
-<div class="modal-body">
-  <p *ngIf="!agentId">No agent selected.</p>
-  <div *ngIf="agentId">
-    <!-- TODO: Replace with actual transaction list table -->
-    <p>Transactions for Agent ID: {{ agentId }}</p>
-  </div>
-</div>
+<table *ngIf="transactions.length > 0" class="table table-bordered table-striped data-table">
+    <thead>
+        <tr>
+            <th style="display:none;">Transaction ID</th>
+            <th>Property Name</th>
+            <th>Plot Name</th>
+            <th>Agent Name</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <th>Reference</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let txn of transactions">
+            <td style="display:none;">{{ txn.transactionId }}</td>
+            <td>{{ txn.propertyName }}</td>
+            <td>{{ txn.plotName }}</td>
+            <td>{{ txn.agentName }}</td>
+            <td>{{ txn.transactionDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+            <td>{{ txn.transactionType }}</td>
+            <td><i class="bi bi-currency-rupee"></i> {{ txn.amount | inrFormat }}</td>
+            <td>{{ txn.paymentMethod }}</td>
+            <td>{{ txn.referenceNumber }}</td>
+            <td>{{ txn.notes }}</td>
+            <td>
+                <button type="button" class="action-icon" title="Delete" (click)="onDeleteTransaction(txn)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,4 +1,51 @@
+<ng-container *ngIf="confirmDeleteAgentVisible">
+  <app-confirm-dialog [message]="'Are you sure you want to delete this agent?'"
+    (confirm)="onConfirmDeleteAgent()" (cancel)="onCancelDeleteAgent()"></app-confirm-dialog>
+</ng-container>
+<app-message-box [show]="messageBoxVisible" [message]="messageText"></app-message-box>
 <div class="group-box">
-  <h2>Agents</h2>
-  <!-- Table of agents, add/edit/delete buttons -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="display:none;">Id</th>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Agency</th>
+        <th>Total Brokerage</th>
+        <th>Paid</th>
+        <th>Balance</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let agent of agents" [class.selected-row]="agent.id === selectedAgentId"
+        (click)="onSelectAgent(agent)">
+        <td style="display:none;">{{agent.id}}</td>
+        <td>{{agent.name}}</td>
+        <td>{{agent.contact}}</td>
+        <td>{{agent.agency ? agent.agency : 'N/A'}}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ agent.totalBrokerage | inrFormat }}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ agent.paid | inrFormat }}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ agent.balance | inrFormat }}</td>
+        <td>
+          <button type="button" class="action-icon" title="View"
+            (click)="onViewAgent(agent); $event.stopPropagation();">
+            <i class="bi bi-eye"></i>
+          </button>
+          <button type="button" class="action-icon" title="Edit"
+            (click)="editAgent.emit(agent); $event.stopPropagation();">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button type="button" class="action-icon" title="Delete"
+            (click)="onDeleteAgent(agent); $event.stopPropagation();">
+            <i class="bi bi-trash"></i>
+          </button>
+          <button type="button" class="action-icon" title="WhatsApp"
+            (click)="onWhatsAppAgent(agent); $event.stopPropagation();">
+            <i class="bi bi-whatsapp" style="color:#25D366;"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

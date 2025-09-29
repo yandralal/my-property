@@ -23,6 +23,9 @@ import { AgentFormComponent } from '../agent/agent-form.component';
 import { AgentTransactionFormComponent } from '../agent/agent-transaction-form.component';
 import { LoanListComponent } from '../loan/loan-list.component';
 import { MiscListComponent } from '../misc/misc-list.component';
+import { LoanTransactionsListComponent } from '../loan/loan-transactions-list.component';
+import { LoanTransactionFormComponent } from '../loan/loan-transaction-form.component';
+import { LoanFormComponent } from '../loan/loan-form.component';
 
 @Component({
     selector: 'app-home',
@@ -42,16 +45,62 @@ import { MiscListComponent } from '../misc/misc-list.component';
         ConfirmDialogComponent,
         PlotTransactionFormComponent,
         InrFormatPipe,
-    AgentListComponent,
-    AgentFormComponent,
-    AgentTransactionsListComponent,
-    AgentTransactionFormComponent,
-    LoanListComponent,
-    MiscListComponent
+        AgentListComponent,
+        AgentFormComponent,
+        AgentTransactionsListComponent,
+        AgentTransactionFormComponent,
+        LoanListComponent,
+        MiscListComponent,
+        LoanTransactionsListComponent,
+        LoanTransactionFormComponent,
+        LoanFormComponent
     ]
 })
 
 export class HomeComponent implements OnInit {
+    private loadLoansAndSelectFirst() {
+            this.propertyService.getAllPropertyLoans().subscribe({
+                next: (data) => {
+                    this.loans = data || [];
+                    if (this.loans.length > 0) {
+                        this.selectedLoanId = this.loans[0].id;
+                        this.onSelectLoan(this.loans[0]);
+                        this.fetchLoanTransactions(this.loans[0].id);
+                    } else {
+                        this.selectedLoanId = null;
+                        this.loanTransactions = [];
+                    }
+                },
+                error: (err) => {
+                    console.error('Failed to fetch loans', err);
+                    this.loans = [];
+                    this.selectedLoanId = null;
+                    this.loanTransactions = [];
+                }
+            });
+    }
+    loans: any[] = [];
+
+    onSelectLoan(loan: any) {
+        this.selectedLoanId = loan.id;
+        this.fetchLoanTransactions(loan.id);
+    }
+
+    fetchLoanTransactions(loanId: number) {
+        this.propertyService.getPropertyLoanTransactions(loanId).subscribe({
+            next: (txns) => {
+                this.loanTransactions = txns || [];
+            },
+            error: () => {
+                this.loanTransactions = [];
+            }
+        });
+    }
+
+    openEditLoanModal(loan: any) {
+        this.editLoanData = loan;
+        this.showLoanFormModal = true;
+    }
     onAgentTransactionFormSuccess(msg: string) {
         this.closeAgentTransactionFormModal();
         this.showMessage(msg);
@@ -84,12 +133,24 @@ export class HomeComponent implements OnInit {
     closeAgentTransactionFormModal() {
         this.showAgentTransactionFormModal = false;
     }
+
     showLoansLandingPage: boolean = false;
     showMiscLandingPage: boolean = false;
     showAgentsLandingPage: boolean = false;
     showAgentFormModal: boolean = false;
+    showLoanFormModal: boolean = false;
+
     openAgentFormModal() {
         this.showAgentFormModal = true;
+    }
+    
+    openLoanFormModal() {
+        this.editLoanData = null;
+        this.showLoanFormModal = true;
+    }
+
+    closeLoanFormModal() {
+        this.showLoanFormModal = false;
     }
 
     closeAgentFormModal() {
@@ -111,6 +172,45 @@ export class HomeComponent implements OnInit {
         }
     }
     agents: any[] = [];
+
+    loanTransactions: any[] = [];
+    selectedPropertyLoanId: number | null = null;
+    showLoanTransactionFormModal: boolean = false;
+    selectedLoanTransactionToDelete: any = null;
+    confirmDeleteLoanTransactionVisible: boolean = false;
+    editLoanData: any = null;
+
+    onAddLoanTransaction() {
+        this.showLoanTransactionFormModal = true;
+    }
+
+    onRequestDeleteLoanTransaction(txn: any) {
+        this.selectedLoanTransactionToDelete = txn;
+        this.confirmDeleteLoanTransactionVisible = true;
+    }
+
+    closeLoanTransactionFormModal() {
+        this.showLoanTransactionFormModal = false;
+    }
+
+    onLoanTransactionFormSuccess(event: any) {
+        this.closeLoanTransactionFormModal();
+    }
+
+    onLoanFormSuccess(event: any) {
+        this.closeLoanFormModal();
+        this.fetchLoans();
+    }
+
+    onLoanDeleted(loanId: number) {
+        this.selectedLoanId = null;
+        this.fetchLoans();
+    }
+
+    onLoanEdited(loan: any) {
+        this.openEditLoanModal(loan);
+    }
+    
     onSalePlot(plot: any) {
         if (plot && plot.id) {
             this.plotViewMode = false;
@@ -230,6 +330,7 @@ export class HomeComponent implements OnInit {
     transactionModal = { visible: false, type: '' };
     transactionListModal = { visible: false, type: '' };
     selectedAgentId: number | null = null;
+
     agentTransactions: any[] = [];
     selectedLoanId = null;
     selectedMiscId = null;
@@ -303,6 +404,9 @@ export class HomeComponent implements OnInit {
             }
         });
 
+        // Fetch loans from API
+        this.fetchLoans();
+
         // Fetch properties and select first property
         this.propertyService.getActiveProperties().subscribe({
             next: (props) => {
@@ -329,6 +433,26 @@ export class HomeComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to fetch properties:', err);
+            }
+        });
+    }
+
+    fetchLoans() {
+        this.propertyService.getAllPropertyLoans().subscribe({
+            next: (loans) => {
+                this.loans = loans || [];
+                if (this.loans.length > 0) {
+                    this.onSelectLoan(this.loans[0]);
+                } else {
+                    this.selectedLoanId = null;
+                    this.loanTransactions = [];
+                }
+            },
+            error: (err) => {
+                console.error('Failed to fetch loans:', err);
+                this.loans = [];
+                this.selectedLoanId = null;
+                this.loanTransactions = [];
             }
         });
     }
@@ -388,12 +512,12 @@ export class HomeComponent implements OnInit {
             this.showAgentsLandingPage = false;
             this.showLoansLandingPage = true;
             this.showMiscLandingPage = false;
+            this.fetchLoans(); 
         } else if (menu === 'misc') {
             this.showAgentsLandingPage = false;
             this.showLoansLandingPage = false;
             this.showMiscLandingPage = true;
         } else {
-            // For any other menu, always show home (hide all landing pages)
             this.showAgentsLandingPage = false;
             this.showLoansLandingPage = false;
             this.showMiscLandingPage = false;

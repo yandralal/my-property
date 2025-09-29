@@ -11,11 +11,6 @@
         (confirm)="onConfirmDeletePropertyTransaction()"
         (cancel)="onCancelDeletePropertyTransaction()"></app-confirm-dialog>
 </ng-container>
-<ng-container *ngIf="confirmDeleteTransactionVisible">
-    <app-confirm-dialog [message]="'Are you sure you want to delete this transaction?'"
-        (confirm)="onConfirmDeletePropertyTransaction()"
-        (cancel)="onCancelDeletePropertyTransaction()"></app-confirm-dialog>
-</ng-container>
 <ng-container *ngIf="confirmDeletePlotTransactionVisible">
     <app-confirm-dialog [message]="'Are you sure you want to delete this plot transaction?'"
         (confirm)="onConfirmDeletePlotTransaction()" (cancel)="onCancelDeletePlotTransaction()"></app-confirm-dialog>
@@ -79,7 +74,15 @@
             </div>
         </ng-container>
         <ng-container *ngIf="showLoansLandingPage">
-            <app-loan-list></app-loan-list>
+            <div class="group-box">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                    <h3>Loan Lenders <span class="count-pill">{{ loans.length || 0 }}</span></h3>
+                    <button type="button" class="modern-btn primary" (click)="openLoanFormModal()">
+                        <i class="bi bi-plus-circle" style="margin-right: 0.5rem;"></i> Register New Loan
+                    </button>
+                </div>
+                <app-loan-list [loans]="loans" (selectLoan)="onSelectLoan($event)" (editLoan)="openEditLoanModal($event)" (loanDeleted)="onLoanDeleted($event)"></app-loan-list>
+            </div>
         </ng-container>
         <ng-container *ngIf="showMiscLandingPage">
             <app-misc-list></app-misc-list>
@@ -286,6 +289,38 @@
                         </div>
                     </div>
                 </ng-container>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="showLoansLandingPage">
+            <div class="group-box">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                    <h3>Loan Transactions <span class="count-pill">{{ loanTransactions.length || 0 }}</span></h3>
+                    <button type="button" class="modern-btn primary" (click)="onAddLoanTransaction()">
+                        <i class="bi bi-plus-circle" style="margin-right: 0.5rem;"></i> Add Transaction
+                    </button>
+                </div>
+                <div *ngIf="(loanTransactions?.length || 0) > 0">
+                    <app-loan-transactions-list [transactions]="loanTransactions"
+                        [propertyLoanId]="selectedPropertyLoanId"
+                        (requestDeleteTransaction)="onRequestDeleteLoanTransaction($event)"></app-loan-transactions-list>
+                </div>
+                <ng-container *ngIf="showLoanTransactionFormModal">
+                    <div class="modal-overlay">
+                        <div class="modal loan-transaction-form-modal">
+                            <app-loan-transaction-form (closeModal)="closeLoanTransactionFormModal()"
+                                (success)="onLoanTransactionFormSuccess($event)"></app-loan-transaction-form>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="showLoanFormModal">
+            <div class="modal-overlay">
+                <div class="modal loan-form-modal">
+                    <app-loan-form [loan]="editLoanData" (closeModal)="closeLoanFormModal()" (success)="onLoanFormSuccess($event)"></app-loan-form>
+                </div>
             </div>
         </ng-container>
 

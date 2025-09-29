@@ -1,4 +1,55 @@
+<ng-container *ngIf="confirmDeleteLoanVisible">
+  <app-confirm-dialog [message]="'Are you sure you want to delete this loan?'" 
+    (confirm)="onConfirmDeleteLoan()" (cancel)="onCancelDeleteLoan()"></app-confirm-dialog>
+</ng-container>
+<app-message-box [show]="messageBoxVisible" [message]="messageText"></app-message-box>
 <div class="group-box">
-  <h2>Loans</h2>
-  <!-- Table of loans, add/edit/delete buttons -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="display:none;">Id</th>
+        <th>Property</th>
+        <th>Lender Name</th>
+        <th>Loan Date</th>
+        <th>Loan Amount</th>
+        <th>Rate (%)</th>
+        <th>Tenure (Months)</th>
+        <th>Total Interest</th>
+        <th>Total Repayable</th>
+        <th>Total Paid</th>
+        <th>Outstanding</th>
+        <th>Remarks</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let loan of loans" [class.selected-row]="loan.id === selectedLoanId" (click)="onSelectLoan(loan)">
+        <td style="display:none;">{{loan.id}}</td>
+        <td>{{loan.propertyName}}</td>
+        <td>{{loan.lenderName}}</td>
+        <td>{{loan.loanDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ loan.loanAmount | inrFormat }}</td>
+        <td>{{loan.interestRate}}</td>
+        <td>{{loan.tenure}}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ loan.totalInterest | inrFormat }}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ loan.totalRepayment | inrFormat }}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ loan.totalPaid | inrFormat }}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ loan.outstanding | inrFormat }}</td>
+        <td>{{loan.remarks}}</td>
+        <td>
+          <button type="button" class="action-icon" title="View" (click)="onViewLoan(loan); $event.stopPropagation();">
+            <i class="bi bi-eye"></i>
+          </button>
+          <button type="button" class="action-icon" title="Edit"
+            (click)="onEditLoan(loan); $event.stopPropagation();">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button type="button" class="action-icon" title="Delete"
+            (click)="onDeleteLoan(loan); $event.stopPropagation();">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

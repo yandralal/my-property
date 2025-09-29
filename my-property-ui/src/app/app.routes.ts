@@ -9,7 +9,6 @@ import { AgentTransactionsListComponent } from './agent/agent-transactions-list.
 import { AgentTransactionFormComponent } from './agent/agent-transaction-form.component';
 import { LoanListComponent } from './loan/loan-list.component';
 import { LoanFormComponent } from './loan/loan-form.component';
-import { LoanTransactionListComponent } from './loan/loan-transaction-list.component';
 import { LoanTransactionFormComponent } from './loan/loan-transaction-form.component';
 import { MiscListComponent } from './misc/misc-list.component';
 import { MiscFormComponent } from './misc/misc-form.component';
@@ -31,7 +30,6 @@ export const routes: Routes = [
   { path: 'loans', component: LoanListComponent },
   { path: 'loans/add', component: LoanFormComponent },
   { path: 'loans/edit/:id', component: LoanFormComponent },
-  { path: 'loans/transactions', component: LoanTransactionListComponent },
   { path: 'loans/transactions/add', component: LoanTransactionFormComponent },
   { path: 'loans/transactions/edit/:id', component: LoanTransactionFormComponent },
   { path: 'misc', component: MiscListComponent },

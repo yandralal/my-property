@@ -1,70 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { Output, EventEmitter } from '@angular/core';
-import { Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgentService } from '../services/agent.service';
-import { AgentTransactionsListComponent } from './agent-transactions-list.component';
-import { AgentFormComponent } from './agent-form.component';
 import { MessageBoxComponent } from '../shared/message-box.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
-import { InrFormatPipe } from "../shared/inr-format.pipe";
+import { InrFormatPipe } from '../shared/inr-format.pipe';
 @Component({
   selector: 'app-agent-list',
   templateUrl: './agent-list.component.html',
   styleUrls: ['./agent-list.component.css'],
   standalone: true,
-  imports: [CommonModule, MessageBoxComponent, ConfirmDialogComponent, InrFormatPipe, AgentFormComponent]
+  imports: [CommonModule, MessageBoxComponent, ConfirmDialogComponent, InrFormatPipe]
 })
 export class AgentListComponent implements OnInit {
-  confirmDeleteAgentVisible: boolean = false;
-  agentToDelete: any = null;
-
-  showAgentFormModal: boolean = false;
-
+  @Input() agents: any[] = [];
   @Output() selectAgent = new EventEmitter<any>();
   @Output() editAgent = new EventEmitter<any>();
-  @Input() agents: any[] = [];
+
   agentTransactions: any[] = [];
   selectedAgentId: number | null = null;
-
-  messageBoxVisible: boolean = false;
-  messageText: string = '';
-
+  showAgentFormModal = false;
+  confirmDeleteAgentVisible = false;
+  agentToDelete: any = null;
   editAgentData: any = null;
+  messageBoxVisible = false;
+  messageText = '';
 
-  showMessage(msg: string) {
-    this.messageText = msg;
-    this.messageBoxVisible = true;
-    setTimeout(() => {
-      this.messageBoxVisible = false;
-    }, 1500);
-  }
-
-  constructor(private agentService: AgentService) {}
+  constructor(private agentService: AgentService) { }
 
   ngOnInit() {
+    this.loadAgentsAndSelectFirst();
+  }
+
+  private loadAgentsAndSelectFirst() {
     this.agentService.getAllAgents().subscribe({
       next: (data) => {
-        this.agents = data;
+        this.agents = data || [];
         if (this.agents.length > 0) {
-          this.selectedAgentId = this.agents[0].id;
-          this.fetchAgentTransactions(this.agents[0].id);
+          this.selectAndFetchTransactions(this.agents[0]);
+        } else {
+          this.selectedAgentId = null;
+          this.agentTransactions = [];
         }
       },
       error: (err) => {
         console.error('Failed to fetch agents', err);
         this.agents = [];
+        this.selectedAgentId = null;
+        this.agentTransactions = [];
       }
     });
   }
 
-  closeAgentFormModal() {
-    this.showAgentFormModal = false;
+  private selectAndFetchTransactions(agent: any) {
+    this.selectedAgentId = agent.id;
+    this.fetchAgentTransactions(agent.id);
+    this.selectAgent.emit(agent);
   }
 
   fetchAgentTransactions(agentId: number) {
     this.agentService.getAgentTransactions(agentId).subscribe({
-      next: (txns) => this.agentTransactions = txns,
+      next: (txns) => this.agentTransactions = txns || [],
       error: (err) => {
         console.error('Failed to fetch agent transactions', err);
         this.agentTransactions = [];
@@ -73,26 +68,11 @@ export class AgentListComponent implements OnInit {
   }
 
   onSelectAgent(agent: any) {
-    this.selectedAgentId = agent.id;
-    this.fetchAgentTransactions(agent.id);
-    this.selectAgent.emit(agent);
+    this.selectAndFetchTransactions(agent);
   }
-
-  onManagePlots() {
-    this.showMessage('Manage Plots clicked');
-  }
-
 
   onViewAgent(agent: any) {
-    if (!agent?.id) return;
-    this.agentService.getAgentById(agent.id).subscribe({
-      next: (data) => {
-        this.showMessage('Agent Details: ' + data.name + ', ' + data.contact + ', ' + data.agency);
-      },
-      error: () => {
-        this.showMessage('Failed to fetch agent details.');
-      }
-    });
+    this.showMessage('View Agent: ' + agent.name);
   }
 
   onEditAgent(agent: any) {
@@ -102,7 +82,7 @@ export class AgentListComponent implements OnInit {
       next: (data) => {
         this.editAgentData = data;
         this.showAgentFormModal = true;
-        this.editAgent.emit(agent); // Emit the edit event
+        this.editAgent.emit(agent);
       },
       error: () => {
         this.showMessage('Failed to fetch agent details for edit.');
@@ -121,24 +101,7 @@ export class AgentListComponent implements OnInit {
     this.agentService.deleteAgent(this.agentToDelete.id).subscribe({
       next: () => {
         this.showMessage('Agent deleted successfully.');
-        // Always refresh agent table after deletion
-        this.agentService.getAllAgents().subscribe({
-          next: (data) => {
-            this.agents = data;
-            if (this.agents.length > 0) {
-              this.selectedAgentId = this.agents[0].id;
-              this.fetchAgentTransactions(this.agents[0].id);
-            } else {
-              this.selectedAgentId = null;
-              this.agentTransactions = [];
-            }
-          },
-          error: () => {
-            this.agents = [];
-            this.selectedAgentId = null;
-            this.agentTransactions = [];
-          }
-        });
+        this.loadAgentsAndSelectFirst();
         this.confirmDeleteAgentVisible = false;
         this.agentToDelete = null;
       },
@@ -166,22 +129,15 @@ export class AgentListComponent implements OnInit {
   onAgentFormSuccess(agent: any) {
     this.showAgentFormModal = false;
     this.editAgentData = null;
-    this.agentService.getAllAgents().subscribe({
-      next: (data) => {
-        this.agents = data;
-        if (this.agents.length > 0) {
-          this.selectedAgentId = this.agents[0].id;
-          this.fetchAgentTransactions(this.agents[0].id);
-        } else {
-          this.selectedAgentId = null;
-          this.agentTransactions = [];
-        }
-      },
-      error: () => {
-        this.agents = [];
-        this.selectedAgentId = null;
-        this.agentTransactions = [];
-      }
-    });
+    this.loadAgentsAndSelectFirst();
   }
+
+  showMessage(msg: string) {
+    this.messageText = msg;
+    this.messageBoxVisible = true;
+    setTimeout(() => {
+      this.messageBoxVisible = false;
+    }, 1500);
+  }
+
 }

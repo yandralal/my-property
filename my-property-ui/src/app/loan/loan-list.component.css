@@ -1,1 +1,64 @@
-.group-box { max-width: 800px; margin: 0 auto; }
+group-box {
+  background: #f5f7fa;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.group-box h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  background: #f8f9fa;
+  color: #212529;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  display: inline-block;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  border: 1px solid #dee2e6;
+}
+/* Highlight the count in a pill */
+.group-box h3 .count-pill {
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 1rem;
+  padding: 0.15em 0.75em;
+  font-size: 0.95em;
+  margin-left: 0.5em;
+  font-weight: 600;
+}
+
+
+.modern-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.6rem;
+  margin-right: 1rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.modern-btn.primary {
+  background: linear-gradient(90deg, #38bdf8 0%, #14b8a6 100%);
+  color: #fff;
+}
+.modern-btn.primary:hover {
+  background: linear-gradient(90deg, #14b8a6 0%, #38bdf8 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(44,62,80,0.12);
+}
+.modern-btn.secondary {
+  background: linear-gradient(90deg, #fbbf24 0%, #f59e42 100%);
+  color: #fff;
+}
+.modern-btn.secondary:hover {
+  background: linear-gradient(90deg, #f59e42 0%, #fbbf24 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(44,62,80,0.12);
+}

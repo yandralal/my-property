@@ -499,6 +499,32 @@ body, .sidebar-layout, .sidebar, .panel-main, .group-box, .sidebar-menu, .sideba
   position: relative;
 }
 
+.loan-form-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  max-width: 845px !important;
+  width: 98vw;
+  max-height: 880px;
+  height: auto;
+  overflow-y: auto;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+  position: relative;
+}
+
+.loan-transaction-form-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  max-width: 845px !important;
+  width: 98vw;
+  max-height: 880px;
+  height: auto;
+  overflow-y: auto;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+  position: relative;
+}
+
 .agent-transactions-form-modal,
 .loan-transactions-form-modal,
 .misc-transactions-form-modal {

@@ -3,11 +3,11 @@ IF OBJECT_ID('dbo.PropertyTransaction', 'U') IS NOT NULL DROP TABLE dbo.Property
 IF OBJECT_ID('dbo.PlotTransaction', 'U') IS NOT NULL DROP TABLE dbo.PlotTransaction;
 IF OBJECT_ID('dbo.AgentTransaction', 'U') IS NOT NULL DROP TABLE dbo.AgentTransaction;
 IF OBJECT_ID('dbo.PropertyLoanTransaction', 'U') IS NOT NULL DROP TABLE dbo.PropertyLoanTransaction;
-IF OBJECT_ID('dbo.PropertyLoan', 'U') IS NOT NULL DROP TABLE dbo.PropertyLoan;
 IF OBJECT_ID('dbo.PlotSale', 'U') IS NOT NULL DROP TABLE dbo.PlotSale;
 IF OBJECT_ID('dbo.Plot', 'U') IS NOT NULL DROP TABLE dbo.Plot;
-IF OBJECT_ID('dbo.Property', 'U') IS NOT NULL DROP TABLE dbo.Property;
+IF OBJECT_ID('dbo.PropertyLoan', 'U') IS NOT NULL DROP TABLE dbo.PropertyLoan;
 IF OBJECT_ID('dbo.Agent', 'U') IS NOT NULL DROP TABLE dbo.Agent;
+IF OBJECT_ID('dbo.Property', 'U') IS NOT NULL DROP TABLE dbo.Property;
 IF OBJECT_ID('dbo.Login', 'U') IS NOT NULL DROP TABLE dbo.Login;
 
 CREATE TABLE Login (

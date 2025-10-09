@@ -1,4 +1,102 @@
 <div class="group-box">
-  <h2>Add/Edit Loan Transaction</h2>
-  <!-- Loan transaction form fields -->
+  <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Loan Transaction Form</h2>
+    <button class="modal-close" type="button" (click)="onCancel()" aria-label="Close">&times;</button>
+  </div>
+  <form [formGroup]="loanTransactionForm" (ngSubmit)="onSubmit()" class="loan-transaction-form" autocomplete="off">
+    <div class="form-sections">
+      <div class="form-section">
+        <div>
+          <label for="property">Property <span style="color:red">*</span></label>
+          <input id="property" formControlName="property" readonly/>
+        </div>
+
+        <div>
+          <label for="lenderName">Lender Name <span style="color:red">*</span></label>
+          <input id="lenderName" formControlName="lenderName" readonly/>
+        </div>
+
+        <div>
+          <label for="loanAmount">Loan Amount</label>
+          <input id="loanAmount" formControlName="loanAmount" readonly />
+        </div>
+        
+        <div>
+          <label for="payingFor">Paying For <span style="color:red">*</span></label>
+          <select id="payingFor" formControlName="payingFor">
+            <option value="Interest">Interest</option>
+            <option value="Principal">Principal</option>
+          </select>
+        </div>
+        
+        <ng-container *ngIf="loanTransactionForm.get('payingFor')?.value === 'Interest'">
+          <div>
+            <label for="totalInterest">Total Interest</label>
+            <input id="totalInterest" formControlName="totalInterest" readonly />
+          </div>
+          <div>
+            <label for="totalInterestPaid">Total Interest Paid</label>
+            <input id="totalInterestPaid" formControlName="totalInterestPaid" readonly />
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="loanTransactionForm.get('payingFor')?.value === 'Principal'">
+          <div> <label for="totalPrincipal">Total Principal</label>
+            <input id="totalPrincipal" formControlName="totalPrincipal" readonly />
+          </div>
+          <div>
+            <label for="totalPrincipalPaid">Total Principal Paid</label>
+            <input id="totalPrincipalPaid" formControlName="totalPrincipalPaid" readonly />
+          </div>
+        </ng-container>
+
+        <div>
+          <label for="balance">Outstanding Balance</label>
+          <input id="balance" formControlName="balance" readonly />
+        </div>
+      </div>
+      <div class="form-section">
+        <div>
+          <label for="transactionDate">Transaction Date <span style="color:red">*</span></label>
+          <input id="transactionDate" type="date" formControlName="transactionDate" />
+        </div>
+
+        <div>
+          <label for="amount">Transaction Amount <span style="color:red">*</span></label>
+          <input id="amount" formControlName="amount" />
+        </div>
+        
+        <div>
+          <label for="transactionType">Transaction Type <span style="color:red">*</span></label>
+          <select id="transactionType" formControlName="transactionType">
+            <option value="">Select</option>
+            <option *ngFor="let type of transactionTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="paymentMethod">Payment Method <span style="color:red">*</span></label>
+          <select id="paymentMethod" formControlName="paymentMethod">
+            <option value="">Select</option>
+            <option value="Cash">Cash</option>
+            <option value="Cheque">Cheque</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="referenceNumber">Reference Number</label>
+          <input id="referenceNumber" formControlName="referenceNumber" />
+        </div>
+
+        <div>
+          <label for="notes">Remarks</label>
+          <textarea id="notes" formControlName="notes" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: flex-end; padding-right:30px">
+      <button type="submit" class="btn btn-primary" [disabled]="loanTransactionForm.invalid">Save</button>
+    </div>
+  </form>
 </div>

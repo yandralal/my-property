@@ -308,7 +308,9 @@
                 <ng-container *ngIf="showLoanTransactionFormModal">
                     <div class="modal-overlay">
                         <div class="modal loan-transaction-form-modal">
-                            <app-loan-transaction-form (closeModal)="closeLoanTransactionFormModal()"
+                            <app-loan-transaction-form
+                                [loanDetails]="selectedLoanDetails"
+                                (closeModal)="closeLoanTransactionFormModal()"
                                 (success)="onLoanTransactionFormSuccess($event)"></app-loan-transaction-form>
                         </div>
                     </div>

@@ -180,8 +180,23 @@ export class HomeComponent implements OnInit {
     confirmDeleteLoanTransactionVisible: boolean = false;
     editLoanData: any = null;
 
+    selectedLoanDetails: any = null;
     onAddLoanTransaction() {
-        this.showLoanTransactionFormModal = true;
+        if (this.selectedLoanId == null) {
+            this.selectedLoanDetails = null;
+            this.showLoanTransactionFormModal = true;
+            return;
+        }
+        this.propertyService.getLoanById(this.selectedLoanId).subscribe({
+            next: (loanDetails) => {
+                this.selectedLoanDetails = loanDetails;
+                this.showLoanTransactionFormModal = true;
+            },
+            error: () => {
+                this.selectedLoanDetails = null;
+                this.showLoanTransactionFormModal = true;
+            }
+        });
     }
 
     onRequestDeleteLoanTransaction(txn: any) {

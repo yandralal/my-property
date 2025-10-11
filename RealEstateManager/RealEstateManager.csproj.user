@@ -7,6 +7,9 @@
     <Compile Update="LandingForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="LandingFormResponsive.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

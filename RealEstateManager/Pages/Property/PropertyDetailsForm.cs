@@ -160,7 +160,7 @@ namespace RealEstateManager.Pages
                     // Optionally refresh property grid in LandingForm if open
                     foreach (Form openForm in Application.OpenForms)
                     {
-                        if (openForm is LandingForm landingForm)
+                        if (openForm is LandingFormResponsive landingForm)
                         {
                             landingForm.LoadActiveProperties();
                             break;

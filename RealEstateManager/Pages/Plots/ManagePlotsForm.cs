@@ -592,7 +592,7 @@ namespace RealEstateManager.Pages
             // Find the open LandingForm instance
             foreach (Form form in Application.OpenForms)
             {
-                if (form is LandingForm landingForm)
+                if (form is LandingFormResponsive landingForm)
                 {
                     landingForm.LoadActiveProperties(propertyId);
                     landingForm.LoadPlotsForProperty(propertyId);

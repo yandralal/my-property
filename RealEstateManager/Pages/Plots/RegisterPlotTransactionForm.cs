@@ -290,7 +290,7 @@ namespace RealEstateManager.Pages
 
             foreach (Form openForm in Application.OpenForms)
             {
-                if (openForm is LandingForm landingForm)
+                if (openForm is LandingFormResponsive landingForm)
                 {
                     landingForm.LoadActiveProperties(propertyId);
                     break;

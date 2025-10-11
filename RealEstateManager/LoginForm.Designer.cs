@@ -8,7 +8,6 @@
         private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Button buttonLogin;
-        private System.Windows.Forms.CheckBox checkBoxRemember;
         private System.Windows.Forms.PictureBox pictureBoxLogo;
         private System.Windows.Forms.Button buttonShowPassword;
 
@@ -41,7 +40,6 @@
             textBoxUsername = new TextBox();
             textBoxPassword = new TextBox();
             buttonLogin = new Button();
-            checkBoxRemember = new CheckBox();
             panelLogin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogo).BeginInit();
             SuspendLayout();
@@ -56,7 +54,6 @@
             panelLogin.Controls.Add(textBoxUsername);
             panelLogin.Controls.Add(textBoxPassword);
             panelLogin.Controls.Add(buttonLogin);
-            panelLogin.Controls.Add(checkBoxRemember);
             panelLogin.Location = new Point(200, 75);
             panelLogin.Name = "panelLogin";
             panelLogin.Size = new Size(400, 363);
@@ -125,15 +122,6 @@
             buttonLogin.Text = "Login";
             buttonLogin.UseVisualStyleBackColor = false;
             buttonLogin.Click += ButtonLogin_Click;
-            // 
-            // checkBoxRemember
-            // 
-            checkBoxRemember.Font = new Font("Segoe UI", 10F);
-            checkBoxRemember.Location = new Point(50, 250);
-            checkBoxRemember.Name = "checkBoxRemember";
-            checkBoxRemember.Size = new Size(150, 24);
-            checkBoxRemember.TabIndex = 3;
-            checkBoxRemember.Text = "Remember Me";
             // 
             // LoginForm
             // 

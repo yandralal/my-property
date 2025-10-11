@@ -78,7 +78,7 @@ namespace RealEstateManager
                     }
                 }
                 GlobalBackgroundColor = ColorTranslator.FromHtml(colorHex);
-                var landingForm = new LandingForm();
+                var landingForm = new LandingFormResponsive();
                 landingForm.Show();
                 this.Hide();
             }

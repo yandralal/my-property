@@ -13,6 +13,9 @@
     <Compile Update="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\Agents\ViewAllAgentsResponsiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\Common\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -23,6 +26,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\Common\AllTransactionsFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Pages\Common\AllTransactionsFilterResponsiveForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\Common\BaseForm.cs">
@@ -37,7 +43,13 @@
     <Compile Update="Pages\Common\MiscTransactionDetailForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\Plots\RegisterPlotSaleResponsiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\Property\ManagePropertyLoansForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Pages\Property\ManagePropertyLoansResponsiveForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Pages\Property\PropertyLoanDetailsForm.cs">

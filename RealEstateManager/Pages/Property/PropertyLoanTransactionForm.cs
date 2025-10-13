@@ -58,7 +58,6 @@ namespace RealEstateManager.Pages
 
             comboBoxPayingFor.SelectedIndex = 0; // Default to Interest
             ComboBoxPayingFor_SelectedIndexChanged(comboBoxPayingFor, EventArgs.Empty);
-            ArrangePayingForControls();
 
             comboBoxLenderName.SelectedIndexChanged += ComboBoxLenderName_SelectedIndexChanged;
             textBoxAmount.TextChanged += TextBoxAmount_TextChanged;
@@ -166,8 +165,7 @@ namespace RealEstateManager.Pages
                         if (reader.Read())
                         {
                             textBoxLoanAmount.Text = reader["LoanAmount"] != DBNull.Value ? Convert.ToDecimal(reader["LoanAmount"]).ToString("0.00") : "";
-                            textBoxTotalPrincipal.Text = reader["LoanAmount"] != DBNull.Value ? Convert.ToDecimal(reader["LoanAmount"]).ToString("0.00") : "";
-                            textBoxTotalInterest.Text = reader["TotalInterest"] != DBNull.Value ? Convert.ToDecimal(reader["TotalInterest"]).ToString("0.00") : "";
+                            textBoxTotalAmount.Text = reader["LoanAmount"] != DBNull.Value ? Convert.ToDecimal(reader["LoanAmount"]).ToString("0.00") : "";
                         }
                     }
                 }
@@ -280,16 +278,14 @@ namespace RealEstateManager.Pages
                 return;
             }
 
-            // --- Existing code continues here ---
             DateTime transactionDate = dateTimePickerTransactionDate.Value;
-            string transactionType = comboBoxTransactionType.SelectedItem.ToString() ?? "";
-            string paymentMethod = comboBoxPaymentMethod.SelectedItem.ToString() ?? "";
+            string transactionType = comboBoxTransactionType.SelectedItem?.ToString() ?? "";
+            string paymentMethod = comboBoxPaymentMethod.SelectedItem?.ToString() ?? "";
             string referenceNumber = textBoxReferenceNumber.Text.Trim();
             string notes = textBoxNotes.Text.Trim();
             string lenderName = comboBoxLenderName.SelectedItem?.ToString() ?? "";
             int? propertyLoanId = _lenderNameToLoanId.TryGetValue(lenderName, out int id) ? id : (int?)null;
 
-            // Determine principal/interest split
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
             decimal principalAmount = isInterest ? 0 : amount;
             decimal interestAmount = isInterest ? amount : 0;
@@ -375,15 +371,9 @@ namespace RealEstateManager.Pages
         private void ComboBoxPayingFor_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
-
-            // Show/hide interest/Principal fields
-            labelTotalInterest.Visible = textBoxTotalInterest.Visible =
-            labelTotalInterestPaid.Visible = textBoxTotalInterestPaid.Visible = isInterest;
-
-            labelTotalPrincipalPaid.Visible = textBoxTotalPrincipalPaid.Visible = !isInterest;
-
+            labelTotalAmount.Text = isInterest ? "Total Interest:" : "Total Principal:";
+            labelTotalPaid.Text = isInterest ? "Total Interest Paid:" : "Total Principal Paid:";
             UpdateLoanSummaryFields();
-            ArrangePayingForControls();
         }
 
         private void UpdateLoanSummaryFields()
@@ -391,9 +381,9 @@ namespace RealEstateManager.Pages
             string lenderName = comboBoxLenderName.SelectedItem?.ToString() ?? "";
             if (!_lenderNameToLoanId.TryGetValue(lenderName, out int propertyLoanId))
             {
-                textBoxTotalInterest.Text = "";
-                textBoxTotalInterestPaid.Text = "";
-                textBoxTotalPrincipalPaid.Text = "";
+                textBoxTotalAmount.Text = "";
+                textBoxTotalPaid.Text = "";
+                textBoxLoanAmount.Text = "";
                 labelBalanceValue.Text = "0.00";
                 return;
             }
@@ -401,72 +391,51 @@ namespace RealEstateManager.Pages
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
+            decimal principal = 0;
+            decimal totalAmount = 0;
+            decimal totalPaid = 0;
             using (var conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
-                decimal totalInterest = 0, TotalRepayment = 0, loanAmount = 0;
-                using (var cmd = new SqlCommand("SELECT LoanAmount, TotalInterest, TotalRepayment FROM PropertyLoan WHERE Id = @LoanId", conn))
+                // Get principal and total amount (interest or principal)
+                string totalQuery = "SELECT LoanAmount, TotalInterest FROM PropertyLoan WHERE Id = @LoanId";
+                using (var cmd = new SqlCommand(totalQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            loanAmount = reader.GetDecimal(0);
-                            totalInterest = reader.GetDecimal(1);
-                            TotalRepayment = reader.GetDecimal(2);
+                            principal = reader["LoanAmount"] != DBNull.Value ? Convert.ToDecimal(reader["LoanAmount"]) : 0;
+                            totalAmount = isInterest
+                                ? (reader["TotalInterest"] != DBNull.Value ? Convert.ToDecimal(reader["TotalInterest"]) : 0)
+                                : principal;
                         }
                     }
                 }
-                textBoxLoanAmount.Text = loanAmount.ToString("N2");
-                textBoxTotalPrincipal.Text = loanAmount.ToString("N2");
-
-                if (isInterest)
+                // Get total paid (interest or principal)
+                string paidQuery = isInterest
+                    ? "SELECT ISNULL(SUM(InterestAmount),0) FROM PropertyLoanTransaction WHERE PropertyLoanId = @LoanId AND IsDeleted = 0"
+                    : "SELECT ISNULL(SUM(PrincipalAmount),0) FROM PropertyLoanTransaction WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
+                if (_editId.HasValue)
+                    paidQuery += " AND Id <> @CurrentId";
+                using (var cmd = new SqlCommand(paidQuery, conn))
                 {
-                    decimal totalInterestPaid = 0;
-                    string interestQuery = @"
-                        SELECT ISNULL(SUM(InterestAmount),0) FROM PropertyLoanTransaction
-                        WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
+                    cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
                     if (_editId.HasValue)
-                        interestQuery += " AND Id <> @CurrentId";
-                    using (var cmd = new SqlCommand(interestQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
-                        if (_editId.HasValue)
-                            cmd.Parameters.AddWithValue("@CurrentId", _editId.Value);
-                        totalInterestPaid = (decimal)cmd.ExecuteScalar();
-                    }
-
-                    textBoxTotalInterest.Text = totalInterest.ToString("N2");
-                    textBoxTotalInterestPaid.Text = totalInterestPaid.ToString("N2");
-                    labelBalanceValue.Text = (totalInterest - (totalInterestPaid + GetCurrentAmount())).ToString("N2");
-                    textBoxTotalPrincipalPaid.Text = "";
-                }
-                else
-                {
-                    decimal totalPrincipalPaid = 0;
-                    string principalQuery = @"
-                        SELECT ISNULL(SUM(PrincipalAmount),0) FROM PropertyLoanTransaction
-                        WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
-                    if (_editId.HasValue)
-                        principalQuery += " AND Id <> @CurrentId";
-                    using (var cmd = new SqlCommand(principalQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@LoanId", propertyLoanId);
-                        if (_editId.HasValue)
-                            cmd.Parameters.AddWithValue("@CurrentId", _editId.Value);
-                        totalPrincipalPaid = (decimal)cmd.ExecuteScalar();
-                    }
-
-                    textBoxTotalPrincipalPaid.Text = totalPrincipalPaid.ToString("N2");
-                    labelBalanceValue.Text = (loanAmount - (totalPrincipalPaid + GetCurrentAmount())).ToString("N2");
-                    textBoxTotalInterest.Text = "";
-                    textBoxTotalInterestPaid.Text = "";
+                        cmd.Parameters.AddWithValue("@CurrentId", _editId.Value);
+                    var paidResult = cmd.ExecuteScalar();
+                    totalPaid = paidResult != null && paidResult != DBNull.Value ? Convert.ToDecimal(paidResult) : 0;
                 }
             }
-
-            UpdateBalanceWithAmountToPay();
+            textBoxLoanAmount.Text = principal.ToString("N2");
+            textBoxTotalAmount.Text = totalAmount.ToString("N2");
+            textBoxTotalPaid.Text = totalPaid.ToString("N2");
+            decimal amountToPay = 0;
+            decimal.TryParse(textBoxAmount.Text, out amountToPay);
+            // Calculate balance: totalAmount - totalPaid - amountToPay
+            decimal balance = totalAmount - totalPaid - amountToPay;
+            labelBalanceValue.Text = balance.ToString("N2");
         }
 
         private void TextBoxAmount_TextChanged(object? sender, EventArgs e)
@@ -496,148 +465,11 @@ namespace RealEstateManager.Pages
             decimal total = 0;
             decimal paid = 0;
 
-            if (isInterest)
-            {
-                decimal.TryParse(textBoxTotalInterest.Text, out total);
-                decimal.TryParse(textBoxTotalInterestPaid.Text, out paid);
-            }
-            else
-            {
-                decimal.TryParse(textBoxTotalPrincipal.Text, out total);
-                decimal.TryParse(textBoxTotalPrincipalPaid.Text, out paid);
-            }
+            decimal.TryParse(textBoxTotalAmount.Text, out total);
+            decimal.TryParse(textBoxTotalPaid.Text, out paid);
 
             decimal newBalance = total - (paid + amountToPay);
             labelBalanceValue.Text = newBalance.ToString("N2");
-        }
-
-        private void ArrangePayingForControls()
-        {
-            // Base Y position after "Paying For"
-            int y = Y_AFTER_PAYING_FOR;
-            bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
-
-            // Hide all first
-            labelTotalInterest.Visible = textBoxTotalInterest.Visible =
-            labelTotalInterestPaid.Visible = textBoxTotalInterestPaid.Visible = isInterest;
-
-            labelTotalPrincipalPaid.Visible = textBoxTotalPrincipalPaid.Visible = !isInterest;
-
-            // --- Dynamic arrangement ---
-            if (isInterest)
-            {
-                // Interest fields
-                labelTotalInterest.Visible = textBoxTotalInterest.Visible = true;
-                labelTotalInterest.Location = new Point(27, y);
-                textBoxTotalInterest.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelTotalInterestPaid.Visible = textBoxTotalInterestPaid.Visible = true;
-                labelTotalInterestPaid.Location = new Point(27, y);
-                textBoxTotalInterestPaid.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelTransactionType.Location = new Point(27, y);
-                comboBoxTransactionType.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                // Amount To Pay (after interest fields)
-                labelAmount.Location = new Point(27, y);
-                textBoxAmount.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                // The rest of the controls follow
-                labelBalanceAmount.Location = new Point(27, y);
-                labelBalanceValue.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelPaymentMethod.Location = new Point(27, y);
-                comboBoxPaymentMethod.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelReferenceNumber.Location = new Point(27, y);
-                textBoxReferenceNumber.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelNotes.Location = new Point(27, y);
-                textBoxNotes.Location = new Point(229, y - 3);
-                y += Y_STEP + 30; // Extra space for multiline
-
-                labelTransactionDate.Location = new Point(27, y);
-                dateTimePickerTransactionDate.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                buttonSave.Location = new Point(263, y + 20);
-                buttonCancel.Location = new Point(398, y + 20);
-            }
-            else
-            {
-                // Principal fields
-                // Hide all first
-                labelTotalPrincipal.Visible = textBoxTotalPrincipal.Visible = false;
-                labelTotalPrincipalPaid.Visible = textBoxTotalPrincipalPaid.Visible =
-
-                // Total Principal
-                labelTotalPrincipal.Visible = textBoxTotalPrincipal.Visible = true;
-                labelTotalPrincipal.Location = new Point(27, y);
-                textBoxTotalPrincipal.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                // Principal Paid
-                labelTotalPrincipalPaid.Visible = textBoxTotalPrincipalPaid.Visible = true;
-                labelTotalPrincipalPaid.Location = new Point(27, y);
-                textBoxTotalPrincipalPaid.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelTransactionType.Location = new Point(27, y);
-                comboBoxTransactionType.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                // Amount To Pay (before Principal fields)
-                labelAmount.Location = new Point(27, y);
-                textBoxAmount.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                // The rest of the controls follow
-                labelBalanceAmount.Location = new Point(27, y);
-                labelBalanceValue.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelPaymentMethod.Location = new Point(27, y);
-                comboBoxPaymentMethod.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelReferenceNumber.Location = new Point(27, y);
-                textBoxReferenceNumber.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                labelNotes.Location = new Point(27, y);
-                textBoxNotes.Location = new Point(229, y - 3);
-                y += Y_STEP + 30; // Extra space for multiline
-
-                labelTransactionDate.Location = new Point(27, y);
-                dateTimePickerTransactionDate.Location = new Point(229, y - 3);
-                y += Y_STEP;
-
-                buttonSave.Location = new Point(263, y + 20);
-                buttonCancel.Location = new Point(398, y + 20);
-            }
-
-            int minHeight = 400; // your preferred minimum height
-            int paddingBottom = 40; // space below buttons
-
-            // Calculate the bottom of the lowest control (Save/Cancel buttons)
-            int bottomY = Math.Max(buttonSave.Bottom, buttonCancel.Bottom);
-
-            // Set new height for group box and form
-            int newGroupBoxHeight = bottomY - groupBoxTransactionEntry.Top + paddingBottom;
-            int newFormHeight = groupBoxTransactionEntry.Top + newGroupBoxHeight + 40; // 40 for form padding
-
-            // Optionally, set a max width if you want to reduce width as well
-            int newWidth = 605; // or a smaller value if you want to reduce width
-
-            groupBoxTransactionEntry.Size = new Size(newWidth, Math.Max(minHeight, newGroupBoxHeight));
-            this.ClientSize = new Size(newWidth + 32, Math.Max(minHeight + 40, newFormHeight)); // 32 for form border/padding
         }
 
         private void SetComboBoxSelectedItem(ComboBox comboBox, string value)
@@ -645,7 +477,7 @@ namespace RealEstateManager.Pages
             if (string.IsNullOrEmpty(value)) return;
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
-                if (string.Equals(comboBox.Items[i].ToString(), value, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(comboBox?.Items[i]?.ToString(), value, StringComparison.OrdinalIgnoreCase))
                 {
                     comboBox.SelectedIndex = i;
                     return;

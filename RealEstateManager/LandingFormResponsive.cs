@@ -1,6 +1,9 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
 using RealEstateManager.Pages;
+using RealEstateManager.Pages.Agents;
+using RealEstateManager.Pages.Plots;
+using RealEstateManager.Pages.Property;
 using System.Configuration;
 using System.Data;
 
@@ -26,7 +29,7 @@ namespace RealEstateManager
             dataGridViewPlots.SelectionChanged += DataGridViewPlots_SelectionChanged;
             LoadActiveProperties();
 
-            ManagePropertyLoansForm.PropertyLoansChanged += OnPropertyLoansChanged;
+            ManagePropertyLoansResponsiveForm.PropertyLoansChanged += OnPropertyLoansChanged;
             panelFooter.BringToFront();
             footerLabel.Text = $"© {DateTime.Now.Year} VVT Softwares Pvt. Ltd. All rights reserved.";
             panelFooter.BringToFront();
@@ -34,7 +37,7 @@ namespace RealEstateManager
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManagePropertyLoansForm.PropertyLoansChanged -= OnPropertyLoansChanged;
+            ManagePropertyLoansResponsiveForm.PropertyLoansChanged -= OnPropertyLoansChanged;
             base.OnFormClosed(e);
         }
 
@@ -351,7 +354,7 @@ namespace RealEstateManager
             if (dataGridViewProperties.CurrentRow != null)
                 selectedPropertyId = Convert.ToInt32(dataGridViewProperties.CurrentRow.Cells["Id"].Value);
 
-            var editForm = new RegisterPlotSaleForm(
+            var editForm = new RegisterPlotSaleResponsiveForm(
                 propertyId,
                 plotId,
                 plotNumber,
@@ -565,7 +568,7 @@ namespace RealEstateManager
                             string saleDate = row.Cells["SaleDate"].Value?.ToString() ?? "";
                             string salePrice = row.Cells["SalePrice"].Value?.ToString() ?? "";
 
-                            var editForm = new RegisterPlotSaleForm(
+                            var editForm = new RegisterPlotSaleResponsiveForm(
                                 propertyId,
                                 plotId,
                                 plotNumber,
@@ -1065,7 +1068,7 @@ namespace RealEstateManager
 
         private void ViewAllAgentsMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new ViewAllAgentsForm();
+            var form = new ViewAllAgentsResponsiveForm();
             form.ShowDialog();
         }
 
@@ -1093,7 +1096,7 @@ namespace RealEstateManager
 
         private void ViewReportsMenuItem_Click(object sender, EventArgs e)
         {
-            var filterForm = new AllTransactionsFilterForm();
+            var filterForm = new AllTransactionsFilterResponsiveForm();
             filterForm.ShowDialog();
         }
 
@@ -1300,7 +1303,7 @@ namespace RealEstateManager
 
         private void ManagePropertyLoansMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new ManagePropertyLoansForm();
+            var form = new ManagePropertyLoansResponsiveForm();
             form.ShowDialog();
         }
 
@@ -1345,6 +1348,11 @@ namespace RealEstateManager
                 ForeColor = Color.Black
             };
             grid.RowTemplate.Height = 28;
+        }
+
+        private void groupBoxProperties_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

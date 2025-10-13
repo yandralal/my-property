@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace RealEstateManager.Pages
 {
-    public partial class MiscTransactionDetailForm : BaseForm
+    public partial class MiscTransactionDetailForm : Form
     {
         public MiscTransactionDetailForm()
         {
@@ -198,6 +198,43 @@ namespace RealEstateManager.Pages
                 dgv.Columns["Action"].Width = 90;
                 dgv.Columns["Action"].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+        }
+
+        private static void ApplyGridStyle(DataGridView grid)
+        {
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            grid.BackgroundColor = Color.White;
+            grid.ColumnHeadersHeight = 32;
+            grid.Dock = DockStyle.Fill;
+            grid.ReadOnly = true;
+            grid.RowHeadersWidth = 51;
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.GridColor = Color.LightGray;
+            grid.DefaultCellStyle = new DataGridViewCellStyle
+            {
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = Color.Black,
+                SelectionBackColor = Color.FromArgb(220, 237, 255),
+                SelectionForeColor = Color.Black,
+                BackColor = Color.White
+            };
+            grid.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+            {
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.MidnightBlue,
+                Alignment = DataGridViewContentAlignment.MiddleCenter,
+                SelectionBackColor = Color.MidnightBlue,
+                SelectionForeColor = Color.White,
+                WrapMode = DataGridViewTriState.False
+            };
+            grid.EnableHeadersVisualStyles = false;
+            grid.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
+            {
+                BackColor = Color.FromArgb(245, 248, 255),
+                ForeColor = Color.Black
+            };
+            grid.RowTemplate.Height = 28;
         }
     }
 }

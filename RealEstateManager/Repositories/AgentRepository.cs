@@ -1,6 +1,8 @@
 using Microsoft.Data.SqlClient;
 using RealEstateManager.Entities;
 using System.Configuration;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace RealEstateManager.Repositories
 {
@@ -12,11 +14,14 @@ namespace RealEstateManager.Repositories
         public static void AddAgent(Agent agent)
         {
             using var conn = new SqlConnection(connectionString);
-            using var cmd = new SqlCommand("INSERT INTO Agent (Name, Contact, Agency, CreatedDate) VALUES (@Name, @Contact, @Agency, @CreatedDate)", conn);
+            using var cmd = new SqlCommand("INSERT INTO Agent (Name, Contact, Agency, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy) VALUES (@Name, @Contact, @Agency, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy)", conn);
             cmd.Parameters.AddWithValue("@Name", agent.Name);
             cmd.Parameters.AddWithValue("@Contact", (object?)agent.Contact ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@Agency", (object?)agent.Agency ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@CreatedBy", Environment.UserName);
+            cmd.Parameters.AddWithValue("@ModifiedBy", Environment.UserName);
             conn.Open();
             cmd.ExecuteNonQuery();
             AgentsChanged?.Invoke();
@@ -25,11 +30,13 @@ namespace RealEstateManager.Repositories
         public static void UpdateAgent(Agent agent)
         {
             using var conn = new SqlConnection(connectionString);
-            using var cmd = new SqlCommand("UPDATE Agent SET Name = @Name, Contact = @Contact, Agency = @Agency WHERE Id = @Id", conn);
+            using var cmd = new SqlCommand("UPDATE Agent SET Name = @Name, Contact = @Contact, Agency = @Agency, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE Id = @Id", conn);
             cmd.Parameters.AddWithValue("@Id", agent.Id);
             cmd.Parameters.AddWithValue("@Name", agent.Name);
             cmd.Parameters.AddWithValue("@Contact", (object?)agent.Contact ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@Agency", (object?)agent.Agency ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@ModifiedBy", Environment.UserName);
+            cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
             conn.Open();
             cmd.ExecuteNonQuery();
             AgentsChanged?.Invoke();
@@ -106,6 +113,43 @@ namespace RealEstateManager.Repositories
         public static void RaiseAgentsChanged()
         {
             AgentsChanged?.Invoke();
+        }
+
+        // Example usage for agent grid styling
+        public static void ApplyLandingGridStyle(DataGridView grid)
+        {
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            grid.BackgroundColor = Color.White;
+            grid.ColumnHeadersHeight = 32;
+            grid.ReadOnly = true;
+            grid.RowHeadersWidth = 51;
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.GridColor = Color.LightGray;
+            grid.DefaultCellStyle = new DataGridViewCellStyle
+            {
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = Color.Black,
+                SelectionBackColor = Color.FromArgb(220, 237, 255),
+                SelectionForeColor = Color.Black,
+                BackColor = Color.White
+            };
+            grid.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+            {
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.MidnightBlue,
+                Alignment = DataGridViewContentAlignment.MiddleCenter,
+                SelectionBackColor = Color.MidnightBlue,
+                SelectionForeColor = Color.White,
+                WrapMode = DataGridViewTriState.False
+            };
+            grid.EnableHeadersVisualStyles = false;
+            grid.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
+            {
+                BackColor = Color.FromArgb(245, 248, 255),
+                ForeColor = Color.Black
+            };
+            grid.RowTemplate.Height = 28;
         }
     }
 }

@@ -134,10 +134,11 @@ namespace RealEstateManager.Pages
             groupBoxTransactionGrid.Controls.Add(dataGridViewTransactions);
             groupBoxTransactionGrid.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxTransactionGrid.ForeColor = Color.MidnightBlue;
-            groupBoxTransactionGrid.Location = new Point(22, 493);
+            groupBoxTransactionGrid.Location = new Point(19, 354);
+            groupBoxTransactionGrid.Margin = new Padding(3, 2, 3, 2);
             groupBoxTransactionGrid.Name = "groupBoxTransactionGrid";
-            groupBoxTransactionGrid.Padding = new Padding(15);
-            groupBoxTransactionGrid.Size = new Size(1290, 341);
+            groupBoxTransactionGrid.Padding = new Padding(13, 11, 13, 11);
+            groupBoxTransactionGrid.Size = new Size(1129, 180);
             groupBoxTransactionGrid.TabIndex = 3;
             groupBoxTransactionGrid.TabStop = false;
             groupBoxTransactionGrid.Text = "Transaction List (Payments to Land Owner)";
@@ -167,11 +168,12 @@ namespace RealEstateManager.Pages
             dataGridViewCellStyle3.SelectionForeColor = Color.Black;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dataGridViewTransactions.DefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewTransactions.Location = new Point(18, 46);
+            dataGridViewTransactions.Location = new Point(16, 34);
+            dataGridViewTransactions.Margin = new Padding(3, 2, 3, 2);
             dataGridViewTransactions.Name = "dataGridViewTransactions";
             dataGridViewTransactions.ReadOnly = true;
             dataGridViewTransactions.RowHeadersWidth = 51;
-            dataGridViewTransactions.Size = new Size(1261, 280);
+            dataGridViewTransactions.Size = new Size(1103, 130);
             dataGridViewTransactions.TabIndex = 1;
             // 
             // groupBoxPropertyDetails
@@ -211,9 +213,11 @@ namespace RealEstateManager.Pages
             groupBoxPropertyDetails.Controls.Add(labelAreaValue);
             groupBoxPropertyDetails.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPropertyDetails.ForeColor = Color.MidnightBlue;
-            groupBoxPropertyDetails.Location = new Point(22, 25);
+            groupBoxPropertyDetails.Location = new Point(19, 9);
+            groupBoxPropertyDetails.Margin = new Padding(3, 2, 3, 2);
             groupBoxPropertyDetails.Name = "groupBoxPropertyDetails";
-            groupBoxPropertyDetails.Size = new Size(1290, 266);
+            groupBoxPropertyDetails.Padding = new Padding(3, 2, 3, 2);
+            groupBoxPropertyDetails.Size = new Size(1129, 200);
             groupBoxPropertyDetails.TabIndex = 4;
             groupBoxPropertyDetails.TabStop = false;
             groupBoxPropertyDetails.Text = "Property Details";
@@ -223,9 +227,9 @@ namespace RealEstateManager.Pages
             labelPropertyAmountPaidLoanTitle.AutoSize = true;
             labelPropertyAmountPaidLoanTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyAmountPaidLoanTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyAmountPaidLoanTitle.Location = new Point(861, 130);
+            labelPropertyAmountPaidLoanTitle.Location = new Point(753, 98);
             labelPropertyAmountPaidLoanTitle.Name = "labelPropertyAmountPaidLoanTitle";
-            labelPropertyAmountPaidLoanTitle.Size = new Size(175, 23);
+            labelPropertyAmountPaidLoanTitle.Size = new Size(146, 19);
             labelPropertyAmountPaidLoanTitle.TabIndex = 42;
             labelPropertyAmountPaidLoanTitle.Text = "Amount Paid (Loan):";
             // 
@@ -233,9 +237,9 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyAmountPaidLoanValue.Font = new Font("Segoe UI", 10F);
             labelPropertyAmountPaidLoanValue.ForeColor = Color.Black;
-            labelPropertyAmountPaidLoanValue.Location = new Point(1046, 129);
+            labelPropertyAmountPaidLoanValue.Location = new Point(915, 97);
             labelPropertyAmountPaidLoanValue.Name = "labelPropertyAmountPaidLoanValue";
-            labelPropertyAmountPaidLoanValue.Size = new Size(233, 30);
+            labelPropertyAmountPaidLoanValue.Size = new Size(204, 22);
             labelPropertyAmountPaidLoanValue.TabIndex = 43;
             labelPropertyAmountPaidLoanValue.Text = "0.00";
             // 
@@ -244,9 +248,9 @@ namespace RealEstateManager.Pages
             labelTitle.AutoSize = true;
             labelTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTitle.ForeColor = Color.DarkSlateGray;
-            labelTitle.Location = new Point(26, 47);
+            labelTitle.Location = new Point(23, 35);
             labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(51, 23);
+            labelTitle.Size = new Size(42, 19);
             labelTitle.TabIndex = 0;
             labelTitle.Text = "Title:";
             // 
@@ -254,9 +258,9 @@ namespace RealEstateManager.Pages
             // 
             labelTitleValue.Font = new Font("Segoe UI", 10F);
             labelTitleValue.ForeColor = Color.Black;
-            labelTitleValue.Location = new Point(186, 47);
+            labelTitleValue.Location = new Point(163, 35);
             labelTitleValue.Name = "labelTitleValue";
-            labelTitleValue.Size = new Size(202, 30);
+            labelTitleValue.Size = new Size(177, 22);
             labelTitleValue.TabIndex = 1;
             labelTitleValue.Text = "Title: ";
             // 
@@ -265,9 +269,9 @@ namespace RealEstateManager.Pages
             labelType.AutoSize = true;
             labelType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelType.ForeColor = Color.DarkSlateGray;
-            labelType.Location = new Point(26, 82);
+            labelType.Location = new Point(23, 62);
             labelType.Name = "labelType";
-            labelType.Size = new Size(53, 23);
+            labelType.Size = new Size(45, 19);
             labelType.TabIndex = 2;
             labelType.Text = "Type:";
             // 
@@ -275,9 +279,9 @@ namespace RealEstateManager.Pages
             // 
             labelTypeValue.Font = new Font("Segoe UI", 10F);
             labelTypeValue.ForeColor = Color.Black;
-            labelTypeValue.Location = new Point(186, 82);
+            labelTypeValue.Location = new Point(163, 62);
             labelTypeValue.Name = "labelTypeValue";
-            labelTypeValue.Size = new Size(202, 30);
+            labelTypeValue.Size = new Size(177, 22);
             labelTypeValue.TabIndex = 3;
             labelTypeValue.Text = "Type: ";
             // 
@@ -286,9 +290,9 @@ namespace RealEstateManager.Pages
             labelStatus.AutoSize = true;
             labelStatus.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelStatus.ForeColor = Color.DarkSlateGray;
-            labelStatus.Location = new Point(26, 190);
+            labelStatus.Location = new Point(23, 142);
             labelStatus.Name = "labelStatus";
-            labelStatus.Size = new Size(65, 23);
+            labelStatus.Size = new Size(53, 19);
             labelStatus.TabIndex = 4;
             labelStatus.Text = "Status:";
             // 
@@ -296,9 +300,9 @@ namespace RealEstateManager.Pages
             // 
             labelStatusValue.Font = new Font("Segoe UI", 10F);
             labelStatusValue.ForeColor = Color.Black;
-            labelStatusValue.Location = new Point(186, 190);
+            labelStatusValue.Location = new Point(163, 142);
             labelStatusValue.Name = "labelStatusValue";
-            labelStatusValue.Size = new Size(202, 30);
+            labelStatusValue.Size = new Size(177, 22);
             labelStatusValue.TabIndex = 5;
             labelStatusValue.Text = "Status: ";
             // 
@@ -307,9 +311,9 @@ namespace RealEstateManager.Pages
             labelOwner.AutoSize = true;
             labelOwner.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelOwner.ForeColor = Color.DarkSlateGray;
-            labelOwner.Location = new Point(26, 226);
+            labelOwner.Location = new Point(23, 170);
             labelOwner.Name = "labelOwner";
-            labelOwner.Size = new Size(69, 23);
+            labelOwner.Size = new Size(58, 19);
             labelOwner.TabIndex = 8;
             labelOwner.Text = "Owner:";
             // 
@@ -317,9 +321,9 @@ namespace RealEstateManager.Pages
             // 
             labelOwnerValue.Font = new Font("Segoe UI", 10F);
             labelOwnerValue.ForeColor = Color.Black;
-            labelOwnerValue.Location = new Point(186, 226);
+            labelOwnerValue.Location = new Point(163, 170);
             labelOwnerValue.Name = "labelOwnerValue";
-            labelOwnerValue.Size = new Size(202, 30);
+            labelOwnerValue.Size = new Size(177, 22);
             labelOwnerValue.TabIndex = 9;
             labelOwnerValue.Text = "Owner: ";
             // 
@@ -328,9 +332,9 @@ namespace RealEstateManager.Pages
             labelPhone.AutoSize = true;
             labelPhone.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPhone.ForeColor = Color.DarkSlateGray;
-            labelPhone.Location = new Point(425, 47);
+            labelPhone.Location = new Point(372, 35);
             labelPhone.Name = "labelPhone";
-            labelPhone.Size = new Size(64, 23);
+            labelPhone.Size = new Size(55, 19);
             labelPhone.TabIndex = 10;
             labelPhone.Text = "Phone:";
             // 
@@ -338,9 +342,9 @@ namespace RealEstateManager.Pages
             // 
             labelPhoneValue.Font = new Font("Segoe UI", 10F);
             labelPhoneValue.ForeColor = Color.Black;
-            labelPhoneValue.Location = new Point(608, 47);
+            labelPhoneValue.Location = new Point(532, 35);
             labelPhoneValue.Name = "labelPhoneValue";
-            labelPhoneValue.Size = new Size(233, 30);
+            labelPhoneValue.Size = new Size(204, 22);
             labelPhoneValue.TabIndex = 11;
             labelPhoneValue.Text = "Phone: ";
             // 
@@ -349,9 +353,9 @@ namespace RealEstateManager.Pages
             labelAddress.AutoSize = true;
             labelAddress.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelAddress.ForeColor = Color.DarkSlateGray;
-            labelAddress.Location = new Point(424, 87);
+            labelAddress.Location = new Point(371, 65);
             labelAddress.Name = "labelAddress";
-            labelAddress.Size = new Size(79, 23);
+            labelAddress.Size = new Size(67, 19);
             labelAddress.TabIndex = 12;
             labelAddress.Text = "Address:";
             // 
@@ -360,9 +364,9 @@ namespace RealEstateManager.Pages
             labelAreaTitle.AutoSize = true;
             labelAreaTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelAreaTitle.ForeColor = Color.DarkSlateGray;
-            labelAreaTitle.Location = new Point(26, 156);
+            labelAreaTitle.Location = new Point(23, 117);
             labelAreaTitle.Name = "labelAreaTitle";
-            labelAreaTitle.Size = new Size(106, 23);
+            labelAreaTitle.Size = new Size(88, 19);
             labelAreaTitle.TabIndex = 40;
             labelAreaTitle.Text = "Area (sq.ft):";
             // 
@@ -370,9 +374,9 @@ namespace RealEstateManager.Pages
             // 
             labelAddressValue.Font = new Font("Segoe UI", 10F);
             labelAddressValue.ForeColor = Color.Black;
-            labelAddressValue.Location = new Point(608, 87);
+            labelAddressValue.Location = new Point(532, 65);
             labelAddressValue.Name = "labelAddressValue";
-            labelAddressValue.Size = new Size(233, 30);
+            labelAddressValue.Size = new Size(204, 22);
             labelAddressValue.TabIndex = 13;
             labelAddressValue.Text = "Address: ";
             // 
@@ -381,9 +385,9 @@ namespace RealEstateManager.Pages
             labelCity.AutoSize = true;
             labelCity.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelCity.ForeColor = Color.DarkSlateGray;
-            labelCity.Location = new Point(424, 123);
+            labelCity.Location = new Point(371, 92);
             labelCity.Name = "labelCity";
-            labelCity.Size = new Size(47, 23);
+            labelCity.Size = new Size(39, 19);
             labelCity.TabIndex = 14;
             labelCity.Text = "City:";
             // 
@@ -391,9 +395,9 @@ namespace RealEstateManager.Pages
             // 
             labelCityValue.Font = new Font("Segoe UI", 10F);
             labelCityValue.ForeColor = Color.Black;
-            labelCityValue.Location = new Point(608, 123);
+            labelCityValue.Location = new Point(532, 92);
             labelCityValue.Name = "labelCityValue";
-            labelCityValue.Size = new Size(233, 30);
+            labelCityValue.Size = new Size(204, 22);
             labelCityValue.TabIndex = 15;
             labelCityValue.Text = "City: ";
             // 
@@ -402,9 +406,9 @@ namespace RealEstateManager.Pages
             labelState.AutoSize = true;
             labelState.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelState.ForeColor = Color.DarkSlateGray;
-            labelState.Location = new Point(424, 158);
+            labelState.Location = new Point(371, 118);
             labelState.Name = "labelState";
-            labelState.Size = new Size(57, 23);
+            labelState.Size = new Size(47, 19);
             labelState.TabIndex = 16;
             labelState.Text = "State:";
             // 
@@ -412,9 +416,9 @@ namespace RealEstateManager.Pages
             // 
             labelStateValue.Font = new Font("Segoe UI", 10F);
             labelStateValue.ForeColor = Color.Black;
-            labelStateValue.Location = new Point(608, 158);
+            labelStateValue.Location = new Point(532, 118);
             labelStateValue.Name = "labelStateValue";
-            labelStateValue.Size = new Size(233, 30);
+            labelStateValue.Size = new Size(204, 22);
             labelStateValue.TabIndex = 17;
             labelStateValue.Text = "State: ";
             // 
@@ -423,9 +427,9 @@ namespace RealEstateManager.Pages
             labelZip.AutoSize = true;
             labelZip.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelZip.ForeColor = Color.DarkSlateGray;
-            labelZip.Location = new Point(424, 193);
+            labelZip.Location = new Point(371, 145);
             labelZip.Name = "labelZip";
-            labelZip.Size = new Size(41, 23);
+            labelZip.Size = new Size(35, 19);
             labelZip.TabIndex = 18;
             labelZip.Text = "Zip:";
             // 
@@ -433,9 +437,9 @@ namespace RealEstateManager.Pages
             // 
             labelZipValue.Font = new Font("Segoe UI", 10F);
             labelZipValue.ForeColor = Color.Black;
-            labelZipValue.Location = new Point(608, 193);
+            labelZipValue.Location = new Point(532, 145);
             labelZipValue.Name = "labelZipValue";
-            labelZipValue.Size = new Size(233, 30);
+            labelZipValue.Size = new Size(204, 22);
             labelZipValue.TabIndex = 19;
             labelZipValue.Text = "Zip: ";
             // 
@@ -444,9 +448,9 @@ namespace RealEstateManager.Pages
             labelDescription.AutoSize = true;
             labelDescription.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelDescription.ForeColor = Color.DarkSlateGray;
-            labelDescription.Location = new Point(424, 227);
+            labelDescription.Location = new Point(371, 170);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(107, 23);
+            labelDescription.Size = new Size(89, 19);
             labelDescription.TabIndex = 20;
             labelDescription.Text = "Description:";
             // 
@@ -454,9 +458,9 @@ namespace RealEstateManager.Pages
             // 
             labelDescriptionValue.Font = new Font("Segoe UI", 10F);
             labelDescriptionValue.ForeColor = Color.Black;
-            labelDescriptionValue.Location = new Point(608, 227);
+            labelDescriptionValue.Location = new Point(532, 170);
             labelDescriptionValue.Name = "labelDescriptionValue";
-            labelDescriptionValue.Size = new Size(233, 30);
+            labelDescriptionValue.Size = new Size(204, 22);
             labelDescriptionValue.TabIndex = 21;
             labelDescriptionValue.Text = "Description: ";
             // 
@@ -465,9 +469,9 @@ namespace RealEstateManager.Pages
             labelPropertyBuyPriceTitle.AutoSize = true;
             labelPropertyBuyPriceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyBuyPriceTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyBuyPriceTitle.Location = new Point(861, 47);
+            labelPropertyBuyPriceTitle.Location = new Point(753, 35);
             labelPropertyBuyPriceTitle.Name = "labelPropertyBuyPriceTitle";
-            labelPropertyBuyPriceTitle.Size = new Size(89, 23);
+            labelPropertyBuyPriceTitle.Size = new Size(76, 19);
             labelPropertyBuyPriceTitle.TabIndex = 22;
             labelPropertyBuyPriceTitle.Text = "Buy Price:";
             // 
@@ -475,9 +479,9 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyBuyPrice.Font = new Font("Segoe UI", 10F);
             labelPropertyBuyPrice.ForeColor = Color.Black;
-            labelPropertyBuyPrice.Location = new Point(1046, 45);
+            labelPropertyBuyPrice.Location = new Point(915, 34);
             labelPropertyBuyPrice.Name = "labelPropertyBuyPrice";
-            labelPropertyBuyPrice.Size = new Size(233, 30);
+            labelPropertyBuyPrice.Size = new Size(204, 22);
             labelPropertyBuyPrice.TabIndex = 23;
             labelPropertyBuyPrice.Text = "0.00";
             // 
@@ -486,9 +490,9 @@ namespace RealEstateManager.Pages
             labelPropertyAmountPaidTitle.AutoSize = true;
             labelPropertyAmountPaidTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyAmountPaidTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyAmountPaidTitle.Location = new Point(861, 87);
+            labelPropertyAmountPaidTitle.Location = new Point(753, 65);
             labelPropertyAmountPaidTitle.Name = "labelPropertyAmountPaidTitle";
-            labelPropertyAmountPaidTitle.Size = new Size(174, 23);
+            labelPropertyAmountPaidTitle.Size = new Size(145, 19);
             labelPropertyAmountPaidTitle.TabIndex = 24;
             labelPropertyAmountPaidTitle.Text = "Amount Paid (Cash):";
             // 
@@ -496,9 +500,9 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyAmountPaid.Font = new Font("Segoe UI", 10F);
             labelPropertyAmountPaid.ForeColor = Color.Black;
-            labelPropertyAmountPaid.Location = new Point(1046, 86);
+            labelPropertyAmountPaid.Location = new Point(915, 64);
             labelPropertyAmountPaid.Name = "labelPropertyAmountPaid";
-            labelPropertyAmountPaid.Size = new Size(233, 30);
+            labelPropertyAmountPaid.Size = new Size(204, 22);
             labelPropertyAmountPaid.TabIndex = 25;
             labelPropertyAmountPaid.Text = "0.00";
             // 
@@ -507,9 +511,9 @@ namespace RealEstateManager.Pages
             labelPropertyBalanceTitle.AutoSize = true;
             labelPropertyBalanceTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelPropertyBalanceTitle.ForeColor = Color.DarkSlateGray;
-            labelPropertyBalanceTitle.Location = new Point(861, 171);
+            labelPropertyBalanceTitle.Location = new Point(753, 128);
             labelPropertyBalanceTitle.Name = "labelPropertyBalanceTitle";
-            labelPropertyBalanceTitle.Size = new Size(146, 23);
+            labelPropertyBalanceTitle.Size = new Size(122, 19);
             labelPropertyBalanceTitle.TabIndex = 26;
             labelPropertyBalanceTitle.Text = "Amount Balance:";
             // 
@@ -517,9 +521,9 @@ namespace RealEstateManager.Pages
             // 
             labelPropertyBalance.Font = new Font("Segoe UI", 10F);
             labelPropertyBalance.ForeColor = Color.Black;
-            labelPropertyBalance.Location = new Point(1046, 171);
+            labelPropertyBalance.Location = new Point(915, 128);
             labelPropertyBalance.Name = "labelPropertyBalance";
-            labelPropertyBalance.Size = new Size(233, 30);
+            labelPropertyBalance.Size = new Size(204, 22);
             labelPropertyBalance.TabIndex = 27;
             labelPropertyBalance.Text = "0.00";
             // 
@@ -528,9 +532,9 @@ namespace RealEstateManager.Pages
             labelKhasraNoTitle.AutoSize = true;
             labelKhasraNoTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelKhasraNoTitle.ForeColor = Color.DarkSlateGray;
-            labelKhasraNoTitle.Location = new Point(25, 119);
+            labelKhasraNoTitle.Location = new Point(22, 89);
             labelKhasraNoTitle.Name = "labelKhasraNoTitle";
-            labelKhasraNoTitle.Size = new Size(96, 23);
+            labelKhasraNoTitle.Size = new Size(82, 19);
             labelKhasraNoTitle.TabIndex = 38;
             labelKhasraNoTitle.Text = "Khasra No:";
             // 
@@ -538,9 +542,9 @@ namespace RealEstateManager.Pages
             // 
             labelKhasraNoValue.Font = new Font("Segoe UI", 10F);
             labelKhasraNoValue.ForeColor = Color.Black;
-            labelKhasraNoValue.Location = new Point(185, 119);
+            labelKhasraNoValue.Location = new Point(162, 89);
             labelKhasraNoValue.Name = "labelKhasraNoValue";
-            labelKhasraNoValue.Size = new Size(202, 30);
+            labelKhasraNoValue.Size = new Size(177, 22);
             labelKhasraNoValue.TabIndex = 39;
             labelKhasraNoValue.Text = "Khasra No:";
             // 
@@ -548,9 +552,9 @@ namespace RealEstateManager.Pages
             // 
             labelAreaValue.Font = new Font("Segoe UI", 10F);
             labelAreaValue.ForeColor = Color.Black;
-            labelAreaValue.Location = new Point(186, 156);
+            labelAreaValue.Location = new Point(163, 117);
             labelAreaValue.Name = "labelAreaValue";
-            labelAreaValue.Size = new Size(202, 30);
+            labelAreaValue.Size = new Size(177, 22);
             labelAreaValue.TabIndex = 41;
             labelAreaValue.Text = "0.00";
             // 
@@ -580,9 +584,9 @@ namespace RealEstateManager.Pages
             labelTotalPlotsTitle.AutoSize = true;
             labelTotalPlotsTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalPlotsTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalPlotsTitle.Location = new Point(26, 41);
+            labelTotalPlotsTitle.Location = new Point(23, 31);
             labelTotalPlotsTitle.Name = "labelTotalPlotsTitle";
-            labelTotalPlotsTitle.Size = new Size(98, 23);
+            labelTotalPlotsTitle.Size = new Size(83, 19);
             labelTotalPlotsTitle.TabIndex = 28;
             labelTotalPlotsTitle.Text = "Total Plots:";
             // 
@@ -590,9 +594,9 @@ namespace RealEstateManager.Pages
             // 
             labelTotalPlotsValue.Font = new Font("Segoe UI", 10F);
             labelTotalPlotsValue.ForeColor = Color.Black;
-            labelTotalPlotsValue.Location = new Point(214, 41);
+            labelTotalPlotsValue.Location = new Point(187, 31);
             labelTotalPlotsValue.Name = "labelTotalPlotsValue";
-            labelTotalPlotsValue.Size = new Size(186, 30);
+            labelTotalPlotsValue.Size = new Size(163, 22);
             labelTotalPlotsValue.TabIndex = 29;
             labelTotalPlotsValue.Text = "0";
             // 
@@ -601,9 +605,9 @@ namespace RealEstateManager.Pages
             labelTotalSaleAmountTitle.AutoSize = true;
             labelTotalSaleAmountTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalSaleAmountTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalSaleAmountTitle.Location = new Point(26, 80);
+            labelTotalSaleAmountTitle.Location = new Point(23, 60);
             labelTotalSaleAmountTitle.Name = "labelTotalSaleAmountTitle";
-            labelTotalSaleAmountTitle.Size = new Size(162, 23);
+            labelTotalSaleAmountTitle.Size = new Size(135, 19);
             labelTotalSaleAmountTitle.TabIndex = 30;
             labelTotalSaleAmountTitle.Text = "Total Sale Amount:";
             // 
@@ -611,9 +615,9 @@ namespace RealEstateManager.Pages
             // 
             labelTotalSaleAmountValue.Font = new Font("Segoe UI", 10F);
             labelTotalSaleAmountValue.ForeColor = Color.Black;
-            labelTotalSaleAmountValue.Location = new Point(214, 80);
+            labelTotalSaleAmountValue.Location = new Point(187, 60);
             labelTotalSaleAmountValue.Name = "labelTotalSaleAmountValue";
-            labelTotalSaleAmountValue.Size = new Size(186, 30);
+            labelTotalSaleAmountValue.Size = new Size(163, 22);
             labelTotalSaleAmountValue.TabIndex = 31;
             labelTotalSaleAmountValue.Text = "0.00";
             // 
@@ -643,9 +647,9 @@ namespace RealEstateManager.Pages
             labelTotalBrokerageTitle.AutoSize = true;
             labelTotalBrokerageTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalBrokerageTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalBrokerageTitle.Location = new Point(26, 120);
+            labelTotalBrokerageTitle.Location = new Point(23, 90);
             labelTotalBrokerageTitle.Name = "labelTotalBrokerageTitle";
-            labelTotalBrokerageTitle.Size = new Size(142, 23);
+            labelTotalBrokerageTitle.Size = new Size(121, 19);
             labelTotalBrokerageTitle.TabIndex = 42;
             labelTotalBrokerageTitle.Text = "Total Brokerage:";
             // 
@@ -653,9 +657,9 @@ namespace RealEstateManager.Pages
             // 
             labelTotalBrokerageValue.Font = new Font("Segoe UI", 10F);
             labelTotalBrokerageValue.ForeColor = Color.Black;
-            labelTotalBrokerageValue.Location = new Point(214, 120);
+            labelTotalBrokerageValue.Location = new Point(187, 90);
             labelTotalBrokerageValue.Name = "labelTotalBrokerageValue";
-            labelTotalBrokerageValue.Size = new Size(186, 30);
+            labelTotalBrokerageValue.Size = new Size(163, 22);
             labelTotalBrokerageValue.TabIndex = 43;
             labelTotalBrokerageValue.Text = "0.00";
             // 
@@ -664,9 +668,9 @@ namespace RealEstateManager.Pages
             labelTotalLoanPrincipalTitle.AutoSize = true;
             labelTotalLoanPrincipalTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalLoanPrincipalTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalLoanPrincipalTitle.Location = new Point(420, 41);
+            labelTotalLoanPrincipalTitle.Location = new Point(368, 31);
             labelTotalLoanPrincipalTitle.Name = "labelTotalLoanPrincipalTitle";
-            labelTotalLoanPrincipalTitle.Size = new Size(172, 23);
+            labelTotalLoanPrincipalTitle.Size = new Size(145, 19);
             labelTotalLoanPrincipalTitle.TabIndex = 46;
             labelTotalLoanPrincipalTitle.Text = "Total Loan Principal:";
             // 
@@ -674,9 +678,9 @@ namespace RealEstateManager.Pages
             // 
             labelTotalLoanPrincipalValue.Font = new Font("Segoe UI", 10F);
             labelTotalLoanPrincipalValue.ForeColor = Color.Black;
-            labelTotalLoanPrincipalValue.Location = new Point(608, 41);
+            labelTotalLoanPrincipalValue.Location = new Point(532, 31);
             labelTotalLoanPrincipalValue.Name = "labelTotalLoanPrincipalValue";
-            labelTotalLoanPrincipalValue.Size = new Size(233, 30);
+            labelTotalLoanPrincipalValue.Size = new Size(204, 22);
             labelTotalLoanPrincipalValue.TabIndex = 47;
             labelTotalLoanPrincipalValue.Text = "0.00";
             // 
@@ -685,9 +689,9 @@ namespace RealEstateManager.Pages
             labelTotalLoanInterestTitle.AutoSize = true;
             labelTotalLoanInterestTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTotalLoanInterestTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalLoanInterestTitle.Location = new Point(420, 82);
+            labelTotalLoanInterestTitle.Location = new Point(368, 62);
             labelTotalLoanInterestTitle.Name = "labelTotalLoanInterestTitle";
-            labelTotalLoanInterestTitle.Size = new Size(163, 23);
+            labelTotalLoanInterestTitle.Size = new Size(136, 19);
             labelTotalLoanInterestTitle.TabIndex = 48;
             labelTotalLoanInterestTitle.Text = "Total Loan Interest:";
             // 
@@ -695,9 +699,9 @@ namespace RealEstateManager.Pages
             // 
             labelTotalLoanInterestValue.Font = new Font("Segoe UI", 10F);
             labelTotalLoanInterestValue.ForeColor = Color.Black;
-            labelTotalLoanInterestValue.Location = new Point(608, 82);
+            labelTotalLoanInterestValue.Location = new Point(532, 62);
             labelTotalLoanInterestValue.Name = "labelTotalLoanInterestValue";
-            labelTotalLoanInterestValue.Size = new Size(233, 30);
+            labelTotalLoanInterestValue.Size = new Size(204, 22);
             labelTotalLoanInterestValue.TabIndex = 49;
             labelTotalLoanInterestValue.Text = "0.00";
             // 
@@ -706,9 +710,9 @@ namespace RealEstateManager.Pages
             labelProfitLossAfterLoanTitle.AutoSize = true;
             labelProfitLossAfterLoanTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelProfitLossAfterLoanTitle.ForeColor = Color.DarkSlateGray;
-            labelProfitLossAfterLoanTitle.Location = new Point(946, 30);
+            labelProfitLossAfterLoanTitle.Location = new Point(828, 22);
             labelProfitLossAfterLoanTitle.Name = "labelProfitLossAfterLoanTitle";
-            labelProfitLossAfterLoanTitle.Size = new Size(120, 28);
+            labelProfitLossAfterLoanTitle.Size = new Size(96, 21);
             labelProfitLossAfterLoanTitle.TabIndex = 50;
             labelProfitLossAfterLoanTitle.Text = "Profit/Loss:";
             // 
@@ -717,18 +721,19 @@ namespace RealEstateManager.Pages
             labelProfitLossAfterLoanValue.BorderStyle = BorderStyle.FixedSingle;
             labelProfitLossAfterLoanValue.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             labelProfitLossAfterLoanValue.ForeColor = Color.Black;
-            labelProfitLossAfterLoanValue.Location = new Point(850, 69);
+            labelProfitLossAfterLoanValue.Location = new Point(744, 52);
             labelProfitLossAfterLoanValue.Name = "labelProfitLossAfterLoanValue";
-            labelProfitLossAfterLoanValue.Size = new Size(314, 63);
+            labelProfitLossAfterLoanValue.Size = new Size(275, 48);
             labelProfitLossAfterLoanValue.TabIndex = 51;
             labelProfitLossAfterLoanValue.Text = "0.00";
             labelProfitLossAfterLoanValue.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // buttonGenerateReport
             // 
-            buttonGenerateReport.Location = new Point(1234, 107);
+            buttonGenerateReport.Location = new Point(1080, 80);
+            buttonGenerateReport.Margin = new Padding(3, 2, 3, 2);
             buttonGenerateReport.Name = "buttonGenerateReport";
-            buttonGenerateReport.Size = new Size(45, 45);
+            buttonGenerateReport.Size = new Size(39, 34);
             buttonGenerateReport.TabIndex = 40;
             buttonGenerateReport.UseVisualStyleBackColor = false;
             buttonGenerateReport.Click += ButtonGenerateReport_Click;
@@ -751,9 +756,11 @@ namespace RealEstateManager.Pages
             groupBoxSummary.Controls.Add(buttonGenerateReport);
             groupBoxSummary.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxSummary.ForeColor = Color.MidnightBlue;
-            groupBoxSummary.Location = new Point(22, 308);
+            groupBoxSummary.Location = new Point(19, 215);
+            groupBoxSummary.Margin = new Padding(3, 2, 3, 2);
             groupBoxSummary.Name = "groupBoxSummary";
-            groupBoxSummary.Size = new Size(1290, 171);
+            groupBoxSummary.Padding = new Padding(3, 2, 3, 2);
+            groupBoxSummary.Size = new Size(1129, 128);
             groupBoxSummary.TabIndex = 36;
             groupBoxSummary.TabStop = false;
             groupBoxSummary.Text = "Plots Summary";
@@ -781,16 +788,16 @@ namespace RealEstateManager.Pages
             // 
             // PropertyDetailsForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1331, 851);
+            ClientSize = new Size(1165, 541);
             Controls.Add(groupBoxSummary);
             Controls.Add(groupBoxTransactionGrid);
             Controls.Add(groupBoxPropertyDetails);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             Name = "PropertyDetailsForm";
-            StartPosition = FormStartPosition.CenterParent;
             Text = "Property Details";
             groupBoxTransactionGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridViewTransactions).EndInit();

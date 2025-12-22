@@ -17,6 +17,7 @@ export class LoanListComponent {
   @Output() loanEdited = new EventEmitter<any>();
   @Output() selectLoan = new EventEmitter<any>();
   @Output() editLoan = new EventEmitter<any>();
+  @Output() viewLoan = new EventEmitter<any>();
   @Output() loanDeleted = new EventEmitter<number>();
   
   selectedLoanId: number | null = null;
@@ -76,7 +77,7 @@ export class LoanListComponent {
   }
 
   onViewLoan(loan: any) {
-    this.showMessage('Viewing loan: ' + loan.id);
+    this.viewLoan.emit(loan);
   }
 
   onEditLoan(loan: any) {

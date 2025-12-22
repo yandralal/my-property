@@ -116,7 +116,7 @@ namespace RealEstateManager.Pages
                     plt.Id AS TransactionId,
                     plt.TransactionDate,
                     plt.TransactionType,
-                    plt.PrincipalAmount,
+                    plt.PrincipleAmount,
                     plt.InterestAmount,
                     plt.PaymentMethod,
                     plt.ReferenceNumber,
@@ -218,13 +218,13 @@ namespace RealEstateManager.Pages
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None
                     });
                 }
-                if (dt.Columns.Contains("PrincipalAmount"))
+                if (dt.Columns.Contains("PrincipleAmount"))
                 {
                     dataGridViewResults.Columns.Add(new DataGridViewTextBoxColumn
                     {
-                        Name = "PrincipalAmount",
-                        DataPropertyName = "PrincipalAmount",
-                        HeaderText = "Principal Paid",
+                        Name = "PrincipleAmount",
+                        DataPropertyName = "PrincipleAmount",
+                        HeaderText = "Principle Paid",
                         Width = 150,
                         AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
                         DefaultCellStyle = new DataGridViewCellStyle { Format = "C" }

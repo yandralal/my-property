@@ -62,29 +62,63 @@
 .agent-transaction-form {
     display: flex;
     flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-sections {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.form-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     gap: 0.7rem;
+}
+
+.form-section:first-child {
+    border-right: 1.5px solid #d1d5db;
+    padding-right: 2rem;
+}
+
+.form-section:last-child {
+    padding-left: 2rem;
+}
+
+.form-section > div {
+    display: flex;
+    flex-direction: column;
 }
 
 .agent-transaction-form label {
     font-weight: 500;
     margin-bottom: 0.3rem;
+    color: #334155;
+    display: block;
 }
 
 .agent-transaction-form input,
 .agent-transaction-form select,
 .agent-transaction-form textarea {
     font-family: inherit;
-    font-size: 0.98rem;
+    font-size: 1rem;
     border: 1px solid #d1d5db;
     border-radius: 6px;
-    padding: 0.35rem 0.7rem;
+    padding: 0.45rem 0.8rem;
     margin-bottom: 0.25rem;
     background: #f8fafc;
     width: 100%;
     box-sizing: border-box;
 }
 
-.agent-transaction-form button[type="submit"] {
+.agent-transaction-form input[readonly] {
+    background: #e5e7eb;
+    color: #64748b;
+}
+
+.agent-transaction-form button[type="submit"],
+.agent-transaction-form button[type="button"] {
     align-self: flex-end;
     background: linear-gradient(90deg, #38bdf8 0%, #14b8a6 100%);
     color: #fff;
@@ -96,28 +130,17 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
     transition: background 0.2s;
+    margin-left: 1rem;
 }
 
-.agent-transaction-form button[type="submit"]:hover {
+.agent-transaction-form button[type="submit"]:hover,
+.agent-transaction-form button[type="button"]:hover {
     background: linear-gradient(90deg, #14b8a6 0%, #38bdf8 100%);
 }
 
-.form-sections {
+.form-actions {
     display: flex;
-    gap: 2.5rem;
-}
-
-.form-section {
-    display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
     gap: 1rem;
-}
-
-.form-section:first-child {
-    border-right: 1.5px solid #d1d5db;
-    padding-right: 2rem;
-}
-
-.form-section:last-child {
-    padding-left: 2rem;
+    margin-top: 2rem;
 }

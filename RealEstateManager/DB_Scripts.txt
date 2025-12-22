@@ -190,9 +190,9 @@ CREATE TABLE PropertyLoanTransaction (
     PropertyId INT NOT NULL,
     PropertyLoanId INT NULL,
     LenderName NVARCHAR(200) NOT NULL,
-    PrincipalAmount DECIMAL(18,2) NOT NULL DEFAULT 0,   -- Amount paid towards principal
+    PrincipleAmount DECIMAL(18,2) NOT NULL DEFAULT 0,   -- Amount paid towards Principle
     InterestAmount DECIMAL(18,2) NOT NULL DEFAULT 0,    -- Amount paid towards interest
-    TransactionType NVARCHAR(50) NOT NULL,              -- "Principal" or "Interest"
+    TransactionType NVARCHAR(50) NOT NULL,              -- "Principle" or "Interest"
     TransactionDate DATETIME NOT NULL,
     PaymentMethod NVARCHAR(100) NOT NULL,
     ReferenceNumber NVARCHAR(100) NULL,

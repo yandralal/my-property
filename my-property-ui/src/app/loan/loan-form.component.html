@@ -1,6 +1,6 @@
 <div class="group-box">
   <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>Loan Detail Form</h2>
+    <h2>{{ isViewMode ? 'View Loan' : 'Loan Detail Form' }}</h2>
     <button class="modal-close" type="button" (click)="closeModalClicked()" aria-label="Close">&times;</button>
   </div>
   <form [formGroup]="loanForm" (ngSubmit)="onSubmit()" class="loan-form" autocomplete="off">
@@ -86,7 +86,7 @@
       </div>
     </div>
     <div style="display: flex; justify-content: flex-end;">
-      <button type="submit" class="btn btn-success">Save</button>
+      <button type="submit" class="btn btn-success" [disabled]="!isViewMode && loanForm.invalid">{{ isViewMode ? 'Close' : 'Save' }}</button>
     </div>
   </form>
 </div>

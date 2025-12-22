@@ -42,7 +42,7 @@ export class AgentTransactionFormComponent implements OnInit {
       amountPaidTillDate: [{ value: '', disabled: true }],
       balanceAmount: [{ value: '', disabled: true }],
       transactionType: ['Debit', Validators.required],
-      amount: ['', Validators.required],
+      amount: ['', [Validators.required, this.validateTransactionAmount.bind(this)]],
       paymentMethod: ['Cash', Validators.required],
       referenceNumber: [''],
       notes: [''],
@@ -93,6 +93,26 @@ export class AgentTransactionFormComponent implements OnInit {
       const remaining = totalBrokerageRaw - (paidTillDateRaw + txnAmountRaw);
       this.transactionForm.get('balanceAmount')?.setValue(remaining === 0 ? '0' : remaining);
     });
+  }
+
+  validateTransactionAmount(control: any) {
+    if (!this.transactionForm) return null;
+    
+    const amountStr = String(control.value ?? '').replace(/,/g, '');
+    const txnAmount = Number(amountStr);
+    
+    if (isNaN(txnAmount) || txnAmount <= 0) return null;
+    
+    const totalBrokerage = Number(String(this.transactionForm.get('totalBrokerage')?.value ?? 0).replace(/,/g, ''));
+    const amountPaidTillDate = Number(String(this.transactionForm.get('amountPaidTillDate')?.value ?? 0).replace(/,/g, ''));
+    
+    const outstanding = totalBrokerage - amountPaidTillDate;
+    
+    if (txnAmount > outstanding) {
+      return { exceedsOutstanding: { outstanding, txnAmount } };
+    }
+    
+    return null;
   }
 
   private fetchActiveProperties() {

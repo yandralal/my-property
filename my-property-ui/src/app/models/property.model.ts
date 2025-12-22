@@ -7,7 +7,7 @@ export interface Property {
   owner: string;
   phone: string;
   amountPaid: number;
-  totalLoanPrincipal: number;
+  totalLoanPrinciple: number;
   amountBalance: number;
   khasraNo: string;
   area: number;

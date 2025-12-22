@@ -353,7 +353,7 @@ namespace RealEstateManager.Pages
             // 
             comboBoxPayingFor.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPayingFor.Font = new Font("Segoe UI", 10F);
-            comboBoxPayingFor.Items.AddRange(new object[] { "Interest", "Principal" });
+            comboBoxPayingFor.Items.AddRange(new object[] { "Interest", "Principle" });
             comboBoxPayingFor.Location = new Point(229, 171);
             comboBoxPayingFor.Name = "comboBoxPayingFor";
             comboBoxPayingFor.Size = new Size(320, 31);

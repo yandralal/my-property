@@ -25,7 +25,7 @@
           <label for="payingFor">Paying For <span style="color:red">*</span></label>
           <select id="payingFor" formControlName="payingFor">
             <option value="Interest">Interest</option>
-            <option value="Principal">Principal</option>
+            <option value="Principle">Principle</option>
           </select>
         </div>
         
@@ -40,13 +40,13 @@
           </div>
         </ng-container>
 
-        <ng-container *ngIf="loanTransactionForm.get('payingFor')?.value === 'Principal'">
-          <div> <label for="totalPrincipal">Total Principal</label>
-            <input id="totalPrincipal" formControlName="totalPrincipal" readonly />
+        <ng-container *ngIf="loanTransactionForm.get('payingFor')?.value === 'Principle'">
+          <div> <label for="totalPrinciple">Total Principle</label>
+            <input id="totalPrinciple" formControlName="totalPrinciple" readonly />
           </div>
           <div>
-            <label for="totalPrincipalPaid">Total Principal Paid</label>
-            <input id="totalPrincipalPaid" formControlName="totalPrincipalPaid" readonly />
+            <label for="totalPrinciplePaid">Total Principle Paid</label>
+            <input id="totalPrinciplePaid" formControlName="totalPrinciplePaid" readonly />
           </div>
         </ng-container>
 
@@ -64,6 +64,18 @@
         <div>
           <label for="amount">Transaction Amount <span style="color:red">*</span></label>
           <input id="amount" formControlName="amount" />
+          <div *ngIf="loanTransactionForm.get('amount')?.hasError('exceedsOutstanding') && loanTransactionForm.get('amount')?.touched" 
+               class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+            Transaction amount cannot exceed the outstanding balance.
+          </div>
+          <div *ngIf="loanTransactionForm.get('amount')?.hasError('exceedsInterest') && loanTransactionForm.get('amount')?.touched" 
+               class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+            Transaction amount cannot exceed remaining interest to be paid.
+          </div>
+          <div *ngIf="loanTransactionForm.get('amount')?.hasError('exceedsPrincipal') && loanTransactionForm.get('amount')?.touched" 
+               class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+            Transaction amount cannot exceed remaining principal to be paid.
+          </div>
         </div>
         
         <div>
@@ -95,7 +107,7 @@
         </div>
       </div>
     </div>
-    <div style="display: flex; justify-content: flex-end; padding-right:30px">
+    <div style="display: flex; justify-content: flex-end;">
       <button type="submit" class="btn btn-primary" [disabled]="loanTransactionForm.invalid">Save</button>
     </div>
   </form>

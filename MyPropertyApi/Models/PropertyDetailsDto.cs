@@ -11,7 +11,7 @@ namespace MyPropertyApi.Models
         public string Description { get; set; } = "";
         public string Phone { get; set; } = "";
         public decimal AmountPaid { get; set; }
-        public decimal TotalLoanPrincipal { get; set; }
+        public decimal TotalLoanPrinciple { get; set; }
         public decimal AmountBalance { get; set; }
         public string KhasraNo { get; set; } = "";
         public decimal Area { get; set; }

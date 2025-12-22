@@ -1,4 +1,42 @@
+<ng-container *ngIf="confirmDeleteMiscVisible">
+  <app-confirm-dialog [message]="'Are you sure you want to delete this record?'" 
+    (confirm)="onConfirmDeleteMisc()" (cancel)="onCancelDeleteMisc()"></app-confirm-dialog>
+</ng-container>
+<app-message-box [show]="messageBoxVisible" [message]="messageText"></app-message-box>
 <div class="group-box">
-  <h2>Miscellaneous</h2>
-  <!-- Table of miscellaneous items, add/edit/delete buttons -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="display:none;">TransactionId</th>
+        <th>Created Date</th>
+        <th>Transaction Type</th>
+        <th>Amount</th>
+        <th>Recipient</th>
+        <th>Payment Method</th>
+        <th>Reference Number</th>
+        <th>Notes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of miscList" [class.selected-row]="item.transactionId === selectedMiscId" (click)="onSelectMisc(item)">
+        <td style="display:none;">{{item.transactionId}}</td>
+        <td>{{item.createdDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+        <td>{{item.transactionType}}</td>
+        <td><i class="bi bi-currency-rupee"></i> {{ item.amount | inrFormat }}</td>
+        <td>{{item.recipient}}</td>
+        <td>{{item.paymentMethod}}</td>
+        <td>{{item.referenceNumber}}</td>
+        <td>{{item.notes}}</td>
+        <td>
+          <button type="button" class="action-icon" title="View" (click)="onViewMisc(item); $event.stopPropagation();">
+            <i class="bi bi-eye"></i>
+          </button>
+          <button type="button" class="action-icon" title="Delete" (click)="onDeleteMisc(item); $event.stopPropagation();">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -45,7 +45,7 @@ export class LoanTransactionFormComponent implements OnInit {
     }
 
     patchFormattedAmounts() {
-      ['totalInterest', 'totalInterestPaid', 'totalPrincipalPaid', 'totalPrincipal', 'amount', 'balance', 'loanAmount'].forEach(field => {
+      ['totalInterest', 'totalInterestPaid', 'totalPrinciplePaid', 'totalPrinciple', 'amount', 'balance', 'loanAmount'].forEach(field => {
         const ctrl = this.loanTransactionForm.get(field);
         if (ctrl) {
           let raw = ctrl.value;
@@ -68,9 +68,9 @@ export class LoanTransactionFormComponent implements OnInit {
       interest: [''],
       totalInterest: [{ value: '', disabled: true }],
       totalInterestPaid: [{ value: '', disabled: true }],
-      totalPrincipalPaid: [{ value: '', disabled: true }],
-      totalPrincipal: [{ value: '', disabled: true }],
-      amount: ['', [Validators.required, Validators.min(1)]],
+      totalPrinciplePaid: [{ value: '', disabled: true }],
+      totalPrinciple: [{ value: '', disabled: true }],
+      amount: ['', [Validators.required, Validators.min(1), this.validateTransactionAmount.bind(this)]],
       balance: [{ value: '', disabled: true }],
       paymentMethod: ['Cash', Validators.required],
       referenceNumber: [''],
@@ -85,7 +85,9 @@ export class LoanTransactionFormComponent implements OnInit {
         lenderName: this.loanDetails.lenderName || '',
         loanAmount: this.loanDetails.loanAmount || '',
         totalInterest: this.loanDetails.totalInterest || '',
-        totalPrincipal: this.loanDetails.totalRepayment || '',
+        totalInterestPaid: this.loanDetails.totalInterestPaid || 0,
+        totalPrinciplePaid: this.loanDetails.totalPrincipalPaid || 0,
+        totalPrinciple: this.loanDetails.loanAmount || '',
         balance: this.calculateOutstandingBalance(this.loanDetails, 0)
       });
     }
@@ -96,26 +98,111 @@ export class LoanTransactionFormComponent implements OnInit {
 
     // Update balance when amount changes
     this.loanTransactionForm.get('amount')?.valueChanges.subscribe((amount: any) => {
-      let validAmount = Number(amount);
+      // Remove formatting (commas) before converting to number
+      let amountStr = String(amount ?? '').replace(/,/g, '');
+      let validAmount = Number(amountStr);
       if (isNaN(validAmount) || amount === '' || amount === null || amount === undefined) {
         validAmount = 0;
       }
       if (this.loanDetails) {
         const newBalance = this.calculateOutstandingBalance(this.loanDetails, validAmount);
-        this.loanTransactionForm.patchValue({ balance: newBalance });
+        this.loanTransactionForm.patchValue({ balance: this.formatINR(newBalance) }, { emitEvent: false });
       }
-      this.patchFormattedAmounts();
+      
+      // Format the amount field itself
+      if (validAmount > 0) {
+        const formattedAmount = this.formatINR(validAmount);
+        if (formattedAmount !== amount) {
+          this.loanTransactionForm.patchValue({ amount: formattedAmount }, { emitEvent: false });
+        }
+      }
     });
+    
+    // Revalidate amount when payingFor changes
+    this.loanTransactionForm.get('payingFor')?.valueChanges.subscribe(() => {
+      this.loanTransactionForm.get('amount')?.updateValueAndValidity();
+      
+      // Recalculate balance when payingFor changes
+      const currentAmount = this.loanTransactionForm.get('amount')?.value;
+      if (currentAmount && this.loanDetails) {
+        const amountStr = String(currentAmount ?? '').replace(/,/g, '');
+        const validAmount = Number(amountStr);
+        if (!isNaN(validAmount) && validAmount > 0) {
+          const newBalance = this.calculateOutstandingBalance(this.loanDetails, validAmount);
+          this.loanTransactionForm.patchValue({ balance: this.formatINR(newBalance) }, { emitEvent: false });
+        }
+      }
+    });
+    
     // Format amounts on init
     this.patchFormattedAmounts();
   }
 
+  validateTransactionAmount(control: any) {
+    if (!this.loanDetails || !this.loanTransactionForm) return null;
+    
+    const amountStr = String(control.value ?? '').replace(/,/g, '');
+    const txnAmount = Number(amountStr);
+    
+    if (isNaN(txnAmount) || txnAmount <= 0) return null;
+    
+    const loanAmount = Number(String(this.loanDetails?.loanAmount ?? 0).replace(/,/g, ''));
+    const totalInterest = Number(String(this.loanDetails?.totalInterest ?? 0).replace(/,/g, ''));
+    const totalPaid = Number(String(this.loanDetails?.totalPaid ?? 0).replace(/,/g, ''));
+    const totalInterestPaid = Number(String(this.loanDetails?.totalInterestPaid ?? 0).replace(/,/g, ''));
+    const totalPrincipalPaid = Number(String(this.loanDetails?.totalPrincipalPaid ?? 0).replace(/,/g, ''));
+    
+    // Check if transaction exceeds overall outstanding
+    const totalRepayable = loanAmount + totalInterest;
+    const outstanding = totalRepayable - totalPaid;
+    
+    if (txnAmount > outstanding) {
+      return { exceedsOutstanding: { outstanding, txnAmount } };
+    }
+    
+    // Check based on what user is paying for (Interest or Principal)
+    const payingFor = this.loanTransactionForm.get('payingFor')?.value;
+    
+    if (payingFor === 'Interest') {
+      const remainingInterest = totalInterest - totalInterestPaid;
+      if (txnAmount > remainingInterest) {
+        return { exceedsInterest: { total: totalInterest, paid: totalInterestPaid, remaining: remainingInterest } };
+      }
+    } else if (payingFor === 'Principle') {
+      const remainingPrincipal = loanAmount - totalPrincipalPaid;
+      if (txnAmount > remainingPrincipal) {
+        return { exceedsPrincipal: { total: loanAmount, paid: totalPrincipalPaid, remaining: remainingPrincipal } };
+      }
+    }
+    
+    return null;
+  }
+
   calculateOutstandingBalance(loanDetails: any, transactionAmount: number): number {
-    // Outstanding = (loanAmount + totalInterest) - (totalPaid + transactionAmount)
-    const loanAmount = Number(loanDetails?.loanAmount ?? 0);
-    const totalInterest = Number(loanDetails?.totalInterest ?? 0);
-    const totalPaid = Number(loanDetails?.totalPaid ?? 0);
-    return (loanAmount + totalInterest) - (totalPaid + Number(transactionAmount ?? 0));
+    // Remove formatting and convert to numbers
+    const loanAmount = Number(String(loanDetails?.loanAmount ?? 0).replace(/,/g, ''));
+    const totalInterest = Number(String(loanDetails?.totalInterest ?? 0).replace(/,/g, ''));
+    const totalInterestPaid = Number(String(loanDetails?.totalInterestPaid ?? 0).replace(/,/g, ''));
+    const totalPrincipalPaid = Number(String(loanDetails?.totalPrincipalPaid ?? 0).replace(/,/g, ''));
+    const txnAmount = Number(transactionAmount ?? 0);
+    
+    // Get what user is paying for
+    const payingFor = this.loanTransactionForm?.get('payingFor')?.value;
+    
+    if (payingFor === 'Interest') {
+      // Outstanding Interest = Total Interest - Total Interest Paid - Current Transaction Amount
+      return totalInterest - totalInterestPaid - txnAmount;
+    } else if (payingFor === 'Principle') {
+      // Outstanding Principal = Loan Amount - Total Principal Paid - Current Transaction Amount
+      return loanAmount - totalPrincipalPaid - txnAmount;
+    }
+    
+    // Default: calculate total outstanding (Interest + Principal)
+    const totalPaid = Number(String(loanDetails?.totalPaid ?? 0).replace(/,/g, ''));
+    const totalRepayable = loanAmount + totalInterest;
+    const totalPaidAfterTransaction = totalPaid + txnAmount;
+    
+    return totalRepayable - totalPaidAfterTransaction;
   }
 
   onSubmit() {
@@ -124,9 +211,18 @@ export class LoanTransactionFormComponent implements OnInit {
       return;
     }
     this.isSubmitting = true;
-    this.success.emit(this.loanTransactionForm.getRawValue());
-    this.closeModal.emit();
-    this.isSubmitting = false;
+    
+    const formData = this.loanTransactionForm.getRawValue();
+    
+    // Add propertyLoanId and propertyId to the form data
+    const payload = {
+      ...formData,
+      propertyLoanId: this.loanDetails?.id,
+      propertyId: this.loanDetails?.propertyId
+    };
+    
+    this.success.emit(payload);
+    // Don't close immediately - let parent handle closing after successful API call
   }
 
   onCancel() {

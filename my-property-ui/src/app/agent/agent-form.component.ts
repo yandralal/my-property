@@ -19,6 +19,7 @@ export class AgentFormComponent implements OnInit {
 
   agentForm: FormGroup;
   isSubmitting = false;
+  isViewMode = false;
 
   constructor(private fb: FormBuilder, private agentService: AgentService) {
     this.agentForm = this.fb.group({
@@ -29,6 +30,12 @@ export class AgentFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Check if in view mode
+    if (this.agent && this.agent.isViewMode) {
+      this.isViewMode = true;
+      this.agentForm.disable();
+    }
+
     if (this.agent) {
       this.agentForm.patchValue({
         name: this.agent.name,
@@ -51,6 +58,12 @@ export class AgentFormComponent implements OnInit {
   }
 
   onSubmit() {
+    // If in view mode, just close the form without saving
+    if (this.isViewMode) {
+      this.closeModalClicked();
+      return;
+    }
+
     if (this.agentForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       const formValue = this.agentForm.value;

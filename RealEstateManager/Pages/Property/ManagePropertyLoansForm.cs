@@ -34,10 +34,10 @@ namespace RealEstateManager.Pages
                     l.TotalInterest AS [Total Interest],
                     l.TotalRepayment AS [Total Repayment],
                     ISNULL(
-                        (SELECT SUM(ISNULL(PrincipalAmount,0) + ISNULL(InterestAmount,0)) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
+                        (SELECT SUM(ISNULL(PrincipleAmount,0) + ISNULL(InterestAmount,0)) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     ) AS [Total Paid],
                     (l.TotalRepayment - ISNULL(
-                        (SELECT SUM(ISNULL(PrincipalAmount,0) + ISNULL(InterestAmount,0)) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
+                        (SELECT SUM(ISNULL(PrincipleAmount,0) + ISNULL(InterestAmount,0)) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     )) AS [Balance]
                 FROM PropertyLoan l
                 LEFT JOIN Property p ON l.PropertyId = p.Id
@@ -278,10 +278,10 @@ namespace RealEstateManager.Pages
                     l.TotalInterest,
                     l.TotalRepayment,
                     ISNULL(
-                        (SELECT SUM(PrincipalAmount) + SUM(InterestAmount) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
+                        (SELECT SUM(PrincipleAmount) + SUM(InterestAmount) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     ) AS [TotalPaid],
                     (l.TotalRepayment - ISNULL(
-                        (SELECT SUM(PrincipalAmount) + SUM(InterestAmount) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
+                        (SELECT SUM(PrincipleAmount) + SUM(InterestAmount) FROM PropertyLoanTransaction t WHERE t.PropertyLoanId = l.Id AND t.IsDeleted = 0), 0
                     )) AS [Balance],
                     l.Remarks,
                     l.Tenure, -- assuming you have a Tenure column

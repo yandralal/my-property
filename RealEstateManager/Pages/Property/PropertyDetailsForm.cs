@@ -291,15 +291,15 @@ namespace RealEstateManager.Pages
                 }
 
                 // --- Loan summary ---
-                var (totalLoanPrincipal, totalLoanInterest) = GetLoanSummary(_propertyId);
-                labelTotalLoanPrincipalValue.Text = string.Format("{0:C}", totalLoanPrincipal);
+                var (totalLoanPrinciple, totalLoanInterest) = GetLoanSummary(_propertyId);
+                labelTotalLoanPrincipleValue.Text = string.Format("{0:C}", totalLoanPrinciple);
                 labelTotalLoanInterestValue.Text = string.Format("{0:C}", totalLoanInterest);
 
                 // Assign total loan taken to labelPropertyAmountPaidLoanValue
-                labelPropertyAmountPaidLoanValue.Text = string.Format("{0:C}", totalLoanPrincipal);
+                labelPropertyAmountPaidLoanValue.Text = string.Format("{0:C}", totalLoanPrinciple);
 
                 // Calculate balance: Buy Price - (Total Loan + Total Cash Paid)
-                decimal balance = buyPrice - (totalLoanPrincipal + amountPaid);
+                decimal balance = buyPrice - (totalLoanPrinciple + amountPaid);
                 labelPropertyBalance.Text = string.Format("{0:C}", balance);
 
                 // --- Profit/Loss calculations ---
@@ -563,7 +563,7 @@ namespace RealEstateManager.Pages
                 ("Total Plots:", labelTotalPlotsValue.Text),
                 ("Total Sale Amount:", labelTotalSaleAmountValue.Text),
                 ("Total Brokerage:", labelTotalBrokerageValue.Text),
-                ("Total Loan Principal:", labelTotalLoanPrincipalValue.Text),
+                ("Total Loan Principle:", labelTotalLoanPrincipleValue.Text),
                 ("Total Loan Interest:", labelTotalLoanInterestValue.Text),
                 ("Profit/Loss:", labelProfitLossAfterLoanValue.Text)
             };
@@ -710,9 +710,9 @@ namespace RealEstateManager.Pages
             Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
         }
 
-        private (decimal totalPrincipal, decimal totalInterest) GetLoanSummary(int propertyId)
+        private (decimal totalPrinciple, decimal totalInterest) GetLoanSummary(int propertyId)
         {
-            decimal totalPrincipal = 0;
+            decimal totalPrinciple = 0;
             decimal totalInterest = 0;
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
@@ -725,12 +725,12 @@ namespace RealEstateManager.Pages
                 {
                     while (reader.Read())
                     {
-                        totalPrincipal += reader.GetDecimal(0);
+						totalPrinciple += reader.GetDecimal(0);
                         totalInterest += reader.GetDecimal(1);
                     }
                 }
             }
-            return (totalPrincipal, totalInterest);
+            return (totalPrinciple, totalInterest);
         }
 
         // Use the same grid styling as LandingFormResponsive property grid

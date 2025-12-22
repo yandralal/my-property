@@ -77,7 +77,7 @@ namespace RealEstateManager.Pages.Property
                     Id AS [TransactionId],
                     TransactionDate AS [Date],
                     TransactionType,
-                    PrincipalAmount,
+                    PrincipleAmount,
                     InterestAmount,
                     PaymentMethod,
                     ReferenceNumber
@@ -132,9 +132,9 @@ namespace RealEstateManager.Pages.Property
             });
             dgv.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "PrincipalAmount",
-                DataPropertyName = "PrincipalAmount",
-                HeaderText = "Principal Amt",
+                Name = "PrincipleAmount",
+                DataPropertyName = "PrincipleAmount",
+                HeaderText = "Principle Amt",
                 Width = 150,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" }
             });
@@ -234,7 +234,7 @@ namespace RealEstateManager.Pages.Property
             y += 24;
 
             // Table columns
-            var columns = new[] { "TRN #", "TRN Date", "Type", "Principal", "Interest", "Total Paid", "Payment Method", "Reference #", "Notes" };
+            var columns = new[] { "TRN #", "TRN Date", "Type", "Principle", "Interest", "Total Paid", "Payment Method", "Reference #", "Notes" };
             var colWidths = new[] { 50, 90, 50, 70, 70, 70, 90, 70, 120 };
             double x = margin;
             for (int i = 0; i < columns.Length; i++)
@@ -262,7 +262,7 @@ namespace RealEstateManager.Pages.Property
                                 value = row.Cells["Date"].Value?.ToString() ?? "";
                             break;
                         case 2: value = row.Cells["TransactionType"].Value?.ToString() ?? ""; break;
-                        case 3: value = row.Cells["PrincipalAmount"].Value != null ? Convert.ToDecimal(row.Cells["PrincipalAmount"].Value).ToString("C2") : ""; break;
+                        case 3: value = row.Cells["PrincipleAmount"].Value != null ? Convert.ToDecimal(row.Cells["PrincipleAmount"].Value).ToString("C2") : ""; break;
                         case 4: value = row.Cells["InterestAmount"].Value != null ? Convert.ToDecimal(row.Cells["InterestAmount"].Value).ToString("C2") : ""; break;
                         case 5: value = row.Cells["Amount"].Value != null ? Convert.ToDecimal(row.Cells["Amount"].Value).ToString("C2") : ""; break;
                         case 6: value = row.Cells["PaymentMethod"].Value?.ToString() ?? ""; break;
@@ -310,12 +310,12 @@ namespace RealEstateManager.Pages.Property
                 dgv.Columns["TransactionType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dgv.Columns["TransactionType"].Width = 100;
             }
-            if (dgv.Columns["PrincipalAmount"] != null)
+            if (dgv.Columns["PrincipleAmount"] != null)
             {
-                dgv.Columns["PrincipalAmount"].HeaderText = "Principal Amt";
-                dgv.Columns["PrincipalAmount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgv.Columns["PrincipalAmount"].Width = 150;
-                dgv.Columns["PrincipalAmount"].DefaultCellStyle.Format = "C2";
+                dgv.Columns["PrincipleAmount"].HeaderText = "Principle Amt";
+                dgv.Columns["PrincipleAmount"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgv.Columns["PrincipleAmount"].Width = 150;
+                dgv.Columns["PrincipleAmount"].DefaultCellStyle.Format = "C2";
             }
             if (dgv.Columns["InterestAmount"] != null)
             {
@@ -426,20 +426,20 @@ namespace RealEstateManager.Pages.Property
         {
             if (dataGridViewTransactions.DataSource is DataTable dt)
             {
-                decimal totalPrincipal = 0;
+                decimal totalPrinciple = 0;
                 decimal totalInterest = 0;
                 foreach (DataRow row in dt.Rows)
                 {
-                    if (row["PrincipalAmount"] != DBNull.Value)
-                        totalPrincipal += Convert.ToDecimal(row["PrincipalAmount"]);
+                    if (row["PrincipleAmount"] != DBNull.Value)
+                        totalPrinciple += Convert.ToDecimal(row["PrincipleAmount"]);
                     if (row["InterestAmount"] != DBNull.Value)
                         totalInterest += Convert.ToDecimal(row["InterestAmount"]);
                 }
-                labelTotalPrincipalPaidValue.Text = totalPrincipal.ToString("C2");
+                labelTotalPrinciplePaidValue.Text = totalPrinciple.ToString("C2");
                 labelTotalInterestPaidValue.Text = totalInterest.ToString("C2");
 
                 // Optionally, update total paid and balance if needed
-                decimal totalPaid = totalPrincipal + totalInterest;
+                decimal totalPaid = totalPrinciple + totalInterest;
                 labelTotalPaidValue.Text = totalPaid.ToString("C2");
                 labelBalanceValue.Text = (_loan.TotalRepayment - totalPaid).ToString("C2");
             }

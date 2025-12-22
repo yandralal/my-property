@@ -9,20 +9,25 @@ import { environment } from '../../environments/environment';
 export class PropertyService {
   constructor(private http: HttpClient) {}
   private apiUrl = environment.apiUrl + '/property';
-  getLoanById(loanId: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/Property/loan/${loanId}`);
+  // Property Loan Management
+  getAllPropertyLoans(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/loans`);
+  }
+
+  getLoanById(propertyLoanId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/loan/${propertyLoanId}`);
   }
 
   createPropertyLoan(data: any): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/Property/loan`, data);
+    return this.http.post(`${this.apiUrl}/loan`, data);
   }
 
   updatePropertyLoan(propertyLoanId: number, data: any): Observable<any> {
-    return this.http.put(`${environment.apiUrl}/Property/loan/${propertyLoanId}`, data);
+    return this.http.put(`${this.apiUrl}/loan/${propertyLoanId}`, data);
   }
 
   deletePropertyLoan(propertyLoanId: number): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/Property/loan/${propertyLoanId}`);
+    return this.http.delete(`${this.apiUrl}/loan/${propertyLoanId}`);
   }
 
   getActiveProperties(): Observable<Property[]> {
@@ -41,14 +46,17 @@ export class PropertyService {
     return this.http.put(`${this.apiUrl}/${id}`, data);
   }
 
-  // Transactions
-  // Loans
-  getAllPropertyLoans(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/Property/loans`);
+  // Property Loan Transactions
+  getPropertyLoanTransactions(propertyLoanId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${propertyLoanId}/loan-transactions`);
   }
 
-  getPropertyLoanTransactions(propertyLoadId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/Property/${propertyLoadId}/loan-transactions`);
+  createPropertyLoanTransaction(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/loan-transactions`, data);
+  }
+
+  deletePropertyLoanTransaction(transactionId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/loan-transactions/${transactionId}`);
   }
 
   getPropertyTransactions(propertyId: number): Observable<any[]> {

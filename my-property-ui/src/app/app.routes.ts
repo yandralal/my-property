@@ -12,8 +12,6 @@ import { LoanFormComponent } from './loan/loan-form.component';
 import { LoanTransactionFormComponent } from './loan/loan-transaction-form.component';
 import { MiscListComponent } from './misc/misc-list.component';
 import { MiscFormComponent } from './misc/misc-form.component';
-import { MiscTransactionListComponent } from './misc/misc-transaction-list.component';
-import { MiscTransactionFormComponent } from './misc/misc-transaction-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -34,8 +32,5 @@ export const routes: Routes = [
   { path: 'loans/transactions/edit/:id', component: LoanTransactionFormComponent },
   { path: 'misc', component: MiscListComponent },
   { path: 'misc/add', component: MiscFormComponent },
-  { path: 'misc/edit/:id', component: MiscFormComponent },
-  { path: 'misc/transactions', component: MiscTransactionListComponent },
-  { path: 'misc/transactions/add', component: MiscTransactionFormComponent },
-  { path: 'misc/transactions/edit/:id', component: MiscTransactionFormComponent }
+  { path: 'misc/edit/:id', component: MiscFormComponent }
 ];

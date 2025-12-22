@@ -14,6 +14,7 @@ import { InrFormatPipe } from '../shared/inr-format.pipe';
 export class AgentListComponent implements OnInit {
   @Input() agents: any[] = [];
   @Output() selectAgent = new EventEmitter<any>();
+  @Output() viewAgent = new EventEmitter<any>();
   @Output() editAgent = new EventEmitter<any>();
 
   agentTransactions: any[] = [];
@@ -72,7 +73,7 @@ export class AgentListComponent implements OnInit {
   }
 
   onViewAgent(agent: any) {
-    this.showMessage('View Agent: ' + agent.name);
+    this.viewAgent.emit(agent);
   }
 
   onEditAgent(agent: any) {

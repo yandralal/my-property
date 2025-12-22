@@ -246,15 +246,15 @@ namespace RealEstateManager.Pages
 
         private void UpdateTotalRepayment()
         {
-            bool hasPrincipal = decimal.TryParse(textBoxLoanAmount.Text, out decimal principal);
+            bool hasPrinciple = decimal.TryParse(textBoxLoanAmount.Text, out decimal Principle);
             bool hasRate = decimal.TryParse(textBoxInterestRate.Text, out decimal rate);
             bool hasMonths = int.TryParse(textBoxTenure.Text, out int months);
 
-            if (hasPrincipal && hasRate && hasMonths)
+            if (hasPrinciple && hasRate && hasMonths)
             {
-                decimal interestPerPeriod = principal * rate / 100m;
+                decimal interestPerPeriod = Principle * rate / 100m;
                 decimal totalInterest = interestPerPeriod * months;
-                decimal total = principal + totalInterest;
+                decimal total = Principle + totalInterest;
                 textBoxTotalInterest.Text = totalInterest.ToString("N2");
                 textBoxTotalRepayment.Text = total.ToString("N2");
             }

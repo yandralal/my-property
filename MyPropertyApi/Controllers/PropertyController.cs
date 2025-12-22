@@ -42,7 +42,7 @@ namespace MyPropertyApi.Controllers
                     p.Description,
                     p.Phone,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
-                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrincipal,
+                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrinciple,
                     (p.Price 
                         - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)
                         - ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0)
@@ -75,7 +75,7 @@ namespace MyPropertyApi.Controllers
                         Description = reader["Description"]?.ToString() ?? "",
                         Phone = reader["Phone"]?.ToString() ?? "",
                         AmountPaid = reader["AmountPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["AmountPaid"]),
-                        TotalLoanPrincipal = reader["TotalLoanPrincipal"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalLoanPrincipal"]),
+                        TotalLoanPrinciple = reader["TotalLoanPrinciple"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalLoanPrinciple"]),
                         AmountBalance = reader["AmountBalance"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["AmountBalance"]),
                         KhasraNo = reader["KhasraNo"]?.ToString() ?? "",
                         Area = reader["Area"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Area"]),
@@ -203,7 +203,7 @@ namespace MyPropertyApi.Controllers
                     plots.Add(new PlotDetailsDto
                     {
                         Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                        PropertyId = reader.GetInt32(reader.GetOrdinal("PropertyId")), 
+                        PropertyId = reader.GetInt32(reader.GetOrdinal("PropertyId")),
                         PlotNumber = reader["PlotNumber"]?.ToString() ?? "",
                         Status = reader["Status"]?.ToString() ?? "",
                         Area = reader["Area"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Area"])
@@ -236,7 +236,7 @@ namespace MyPropertyApi.Controllers
                     p.Description,
                     p.Phone,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
-                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrincipal,
+                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrinciple,
                     (p.Price 
                         - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)
                         - ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0)
@@ -270,7 +270,7 @@ namespace MyPropertyApi.Controllers
                         Description = reader["Description"]?.ToString() ?? "",
                         Phone = reader["Phone"]?.ToString() ?? "",
                         AmountPaid = reader["AmountPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["AmountPaid"]),
-                        TotalLoanPrincipal = reader["TotalLoanPrincipal"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalLoanPrincipal"]),
+                        TotalLoanPrinciple = reader["TotalLoanPrinciple"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalLoanPrinciple"]),
                         AmountBalance = reader["AmountBalance"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["AmountBalance"]),
                         KhasraNo = reader["KhasraNo"]?.ToString() ?? "",
                         Area = reader["Area"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Area"]),
@@ -490,7 +490,7 @@ namespace MyPropertyApi.Controllers
         #endregion
 
         #region Property Transaction
-        
+
         [HttpPost("transactions")]
         public async Task<ActionResult> CreatePropertyTransaction([FromBody] PropertyTransactionDto transaction)
         {
@@ -678,10 +678,16 @@ namespace MyPropertyApi.Controllers
                 pl.TotalInterest, pl.TotalRepayment, pl.LoanDate, pl.Remarks, pl.CreatedDate, pl.CreatedBy, 
                 pl.ModifiedBy, pl.ModifiedDate, pl.IsDeleted,
                 ISNULL((
-                    SELECT SUM(ISNULL(plt.PrincipalAmount,0) + ISNULL(plt.InterestAmount,0))
+                    SELECT SUM(ISNULL(plt.PrincipleAmount,0) + ISNULL(plt.InterestAmount,0))
                     FROM PropertyLoanTransaction plt
                     WHERE plt.PropertyLoanId = pl.Id AND plt.IsDeleted = 0
-                ), 0) AS TotalPaid
+                ), 0) AS TotalPaid,
+                ISNULL((
+                    SELECT ISNULL(SUM(plt.PrincipleAmount),0) FROM PropertyLoanTransaction plt WHERE plt.PropertyLoanId = pl.Id AND plt.IsDeleted = 0
+                ),0) AS TotalPrincipalPaid,
+                ISNULL((
+                    SELECT ISNULL(SUM(plt.InterestAmount),0) FROM PropertyLoanTransaction plt WHERE plt.PropertyLoanId = pl.Id AND plt.IsDeleted = 0
+                ),0) AS TotalInterestPaid
             FROM PropertyLoan pl
             INNER JOIN Property p ON pl.PropertyId = p.Id
             WHERE pl.IsDeleted = 0 AND p.IsDeleted = 0";
@@ -715,7 +721,9 @@ namespace MyPropertyApi.Controllers
                         ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"]),
                         IsDeleted = reader["IsDeleted"] != DBNull.Value && Convert.ToInt32(reader["IsDeleted"]) == 1,
                         TotalPaid = totalPaid,
-                        Outstanding = totalRepayment - totalPaid
+                        Outstanding = totalRepayment - totalPaid,
+                        TotalPrincipalPaid = reader["TotalPrincipalPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalPrincipalPaid"]),
+                        TotalInterestPaid = reader["TotalInterestPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalInterestPaid"])
                     });
                 }
             }
@@ -725,58 +733,6 @@ namespace MyPropertyApi.Controllers
             }
 
             return Ok(loans);
-        }
-
-        [HttpGet("{propertyLoanId}/loan-transactions")]
-        public async Task<ActionResult<IEnumerable<PropertyLoanTransactionDto>>> GetActivePropertyLoanTransactions(int propertyLoanId)
-        {
-            var transactions = new List<PropertyLoanTransactionDto>();
-            string? connectionString = _config.GetConnectionString("MyPropertyDb");
-            if (string.IsNullOrWhiteSpace(connectionString))
-                return StatusCode(500, "Database connection string is missing.");
-
-            string query = @"
-            SELECT Id, PropertyId, PropertyLoanId, LenderName, PrincipalAmount, InterestAmount, TransactionType, TransactionDate,
-                   PaymentMethod, ReferenceNumber, Notes, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy, IsDeleted
-            FROM PropertyLoanTransaction
-            WHERE PropertyLoanId = @PropertyLoanId AND IsDeleted = 0";
-
-            try
-            {
-                using var conn = new SqlConnection(connectionString);
-                await conn.OpenAsync();
-                using var cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@PropertyLoanId", propertyLoanId);
-                using var reader = await cmd.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    transactions.Add(new PropertyLoanTransactionDto
-                    {
-                        Id = reader["Id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Id"]),
-                        PropertyId = reader["PropertyId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PropertyId"]),
-                        PropertyLoanId = reader["PropertyLoanId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PropertyLoanId"]),
-                        LenderName = reader["LenderName"]?.ToString() ?? "",
-                        PrincipalAmount = reader["PrincipalAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["PrincipalAmount"]),
-                        InterestAmount = reader["InterestAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["InterestAmount"]),
-                        TransactionType = reader["TransactionType"]?.ToString() ?? "",
-                        TransactionDate = reader["TransactionDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["TransactionDate"]),
-                        PaymentMethod = reader["PaymentMethod"]?.ToString() ?? "",
-                        ReferenceNumber = reader["ReferenceNumber"]?.ToString() ?? "",
-                        Notes = reader["Notes"]?.ToString() ?? "",
-                        CreatedDate = reader["CreatedDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["CreatedDate"]),
-                        CreatedBy = reader["CreatedBy"]?.ToString() ?? "",
-                        ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"]),
-                        ModifiedBy = reader["ModifiedBy"]?.ToString() ?? "",
-                        IsDeleted = reader["IsDeleted"] != DBNull.Value && Convert.ToInt32(reader["IsDeleted"]) == 1
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error fetching property loan transactions: {ex.Message}");
-            }
-
-            return Ok(transactions);
         }
 
         [HttpPost("loan")]
@@ -917,7 +873,18 @@ namespace MyPropertyApi.Controllers
                 SELECT 
                     pl.Id, pl.PropertyId, p.Title AS PropertyName, pl.LoanAmount, pl.LenderName, pl.InterestRate, pl.Tenure, 
                     pl.TotalInterest, pl.TotalRepayment, pl.LoanDate, pl.Remarks, pl.CreatedDate, pl.CreatedBy, 
-                    pl.ModifiedBy, pl.ModifiedDate, pl.IsDeleted
+                    pl.ModifiedBy, pl.ModifiedDate, pl.IsDeleted,
+                    ISNULL((
+                        SELECT SUM(ISNULL(plt.PrincipleAmount,0) + ISNULL(plt.InterestAmount,0))
+                        FROM PropertyLoanTransaction plt
+                        WHERE plt.PropertyLoanId = pl.Id AND plt.IsDeleted = 0
+                    ), 0) AS TotalPaid,
+                    ISNULL((
+                        SELECT ISNULL(SUM(plt.PrincipleAmount),0) FROM PropertyLoanTransaction plt WHERE plt.PropertyLoanId = pl.Id AND plt.IsDeleted = 0
+                    ),0) AS TotalPrincipalPaid,
+                    ISNULL((
+                        SELECT ISNULL(SUM(plt.InterestAmount),0) FROM PropertyLoanTransaction plt WHERE plt.PropertyLoanId = pl.Id AND plt.IsDeleted = 0
+                    ),0) AS TotalInterestPaid
                 FROM PropertyLoan pl
                 INNER JOIN Property p ON pl.PropertyId = p.Id
                 WHERE pl.Id = @PropertyLoanId AND pl.IsDeleted = 0 AND p.IsDeleted = 0";
@@ -932,6 +899,9 @@ namespace MyPropertyApi.Controllers
                 if (await reader.ReadAsync())
                 {
                     var totalRepayment = reader["TotalRepayment"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalRepayment"]);
+                    var totalPaid = reader["TotalPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalPaid"]);
+                    var totalPrincipalPaid = reader["TotalPrincipalPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalPrincipalPaid"]);
+                    var totalInterestPaid = reader["TotalInterestPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalInterestPaid"]);
                     var loan = new PropertyLoanDto
                     {
                         Id = reader["Id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Id"]),
@@ -948,6 +918,10 @@ namespace MyPropertyApi.Controllers
                         CreatedBy = reader["CreatedBy"]?.ToString() ?? "",
                         ModifiedBy = reader["ModifiedBy"]?.ToString() ?? "",
                         IsDeleted = reader["IsDeleted"] != DBNull.Value && Convert.ToInt32(reader["IsDeleted"]) == 1,
+                        TotalPaid = totalPaid,
+                        Outstanding = totalRepayment - totalPaid,
+                        TotalPrincipalPaid = totalPrincipalPaid,
+                        TotalInterestPaid = totalInterestPaid
                     };
                     return Ok(loan);
                 }
@@ -959,6 +933,159 @@ namespace MyPropertyApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error fetching property loan: {ex.Message}");
+            }
+        }
+
+        [HttpGet("{propertyLoanId}/loan-transactions")]
+        public async Task<ActionResult<IEnumerable<PropertyLoanTransactionDto>>> GetActivePropertyLoanTransactions(int propertyLoanId)
+        {
+            var transactions = new List<PropertyLoanTransactionDto>();
+            string? connectionString = _config.GetConnectionString("MyPropertyDb");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return StatusCode(500, "Database connection string is missing.");
+
+            string query = @"
+            SELECT Id, PropertyId, PropertyLoanId, LenderName, PrincipleAmount, InterestAmount, TransactionType, TransactionDate,
+                   PaymentMethod, ReferenceNumber, Notes, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy, IsDeleted
+            FROM PropertyLoanTransaction
+            WHERE PropertyLoanId = @PropertyLoanId AND IsDeleted = 0";
+
+            try
+            {
+                using var conn = new SqlConnection(connectionString);
+                await conn.OpenAsync();
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@PropertyLoanId", propertyLoanId);
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    transactions.Add(new PropertyLoanTransactionDto
+                    {
+                        Id = reader["Id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Id"]),
+                        PropertyId = reader["PropertyId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PropertyId"]),
+                        PropertyLoanId = reader["PropertyLoanId"] == DBNull.Value ? 0 : Convert.ToInt32(reader["PropertyLoanId"]),
+                        LenderName = reader["LenderName"]?.ToString() ?? "",
+                        PrincipleAmount = reader["PrincipleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["PrincipleAmount"]),
+                        InterestAmount = reader["InterestAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["InterestAmount"]),
+                        TransactionType = reader["TransactionType"]?.ToString() ?? "",
+                        TransactionDate = reader["TransactionDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["TransactionDate"]),
+                        PaymentMethod = reader["PaymentMethod"]?.ToString() ?? "",
+                        ReferenceNumber = reader["ReferenceNumber"]?.ToString() ?? "",
+                        Notes = reader["Notes"]?.ToString() ?? "",
+                        CreatedDate = reader["CreatedDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["CreatedDate"]),
+                        CreatedBy = reader["CreatedBy"]?.ToString() ?? "",
+                        ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"]),
+                        ModifiedBy = reader["ModifiedBy"]?.ToString() ?? "",
+                        IsDeleted = reader["IsDeleted"] != DBNull.Value && Convert.ToInt32(reader["IsDeleted"]) == 1
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching property loan transactions: {ex.Message}");
+            }
+
+            return Ok(transactions);
+        }
+
+        [HttpPost("loan-transactions")]
+        public async Task<ActionResult> CreatePropertyLoanTransaction([FromBody] CreatePropertyLoanTransactionRequest request)
+        {
+            string? connectionString = _config.GetConnectionString("MyPropertyDb");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return StatusCode(500, "Database connection string is missing.");
+
+            string userName = GetUserName();
+            string now = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            try
+            {
+                // Parse amount strings (may contain commas) to decimal
+                decimal totalAmount = 0;
+                decimal interestAmount = 0;
+                decimal PrincipleAmount = 0;
+                if (!string.IsNullOrWhiteSpace(request.Amount))
+                {
+                    var cleaned = request.Amount.Replace(",", "");
+                    decimal.TryParse(cleaned, out totalAmount);
+                }
+                if (!string.IsNullOrWhiteSpace(request.Interest))
+                {
+                    var cleaned = request.Interest.Replace(",", "");
+                    decimal.TryParse(cleaned, out interestAmount);
+                }
+
+                switch (request.PayingFor?.ToLowerInvariant())
+                {
+                    case "interest":
+                        interestAmount = totalAmount;
+                        PrincipleAmount = 0;
+                        break;
+                    case "principle":
+                        PrincipleAmount = totalAmount;
+                        interestAmount = 0;
+                        break;  
+                }
+
+                using var conn = new SqlConnection(connectionString);
+                await conn.OpenAsync();
+                string insert = @"INSERT INTO PropertyLoanTransaction
+                    (PropertyId, PropertyLoanId, LenderName, TransactionType, TransactionDate, PrincipleAmount, InterestAmount, PaymentMethod, ReferenceNumber, Notes, CreatedDate, CreatedBy, ModifiedBy, ModifiedDate, IsDeleted)
+                    VALUES (@PropertyId, @PropertyLoanId, @LenderName, @TransactionType, @TransactionDate, @PrincipleAmount, @InterestAmount, @PaymentMethod, @ReferenceNumber, @Notes, @CreatedDate, @CreatedBy, @ModifiedBy, @ModifiedDate, 0);
+                    SELECT SCOPE_IDENTITY();";
+                using var cmd = new SqlCommand(insert, conn);
+                cmd.Parameters.AddWithValue("@PropertyId", request.PropertyId);
+                cmd.Parameters.AddWithValue("@PropertyLoanId", request.PropertyLoanId);
+                cmd.Parameters.AddWithValue("@LenderName", request.LenderName ?? "");
+                cmd.Parameters.AddWithValue("@TransactionType", request.TransactionType ?? "");
+                cmd.Parameters.AddWithValue("@TransactionDate", request.TransactionDate);
+                cmd.Parameters.AddWithValue("@PrincipleAmount", PrincipleAmount);
+                cmd.Parameters.AddWithValue("@InterestAmount", interestAmount);
+                cmd.Parameters.AddWithValue("@PaymentMethod", request.PaymentMethod ?? "");
+                cmd.Parameters.AddWithValue("@ReferenceNumber", request.ReferenceNumber ?? "");
+                cmd.Parameters.AddWithValue("@Notes", request.Notes ?? "");
+                cmd.Parameters.AddWithValue("@CreatedDate", now);
+                cmd.Parameters.AddWithValue("@CreatedBy", userName);
+                cmd.Parameters.AddWithValue("@ModifiedBy", userName);
+                cmd.Parameters.AddWithValue("@ModifiedDate", now);
+
+                var newId = await cmd.ExecuteScalarAsync();
+                return Ok(new { Success = true, TransactionId = newId, PrincipleAmount = PrincipleAmount, InterestAmount = interestAmount });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error creating property loan transaction: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("loan-transactions/{id}")]
+        public async Task<ActionResult> DeletePropertyLoanTransaction(int id)
+        {
+            string? connectionString = _config.GetConnectionString("MyPropertyDb");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return StatusCode(500, "Database connection string is missing.");
+
+            string userName = GetUserName();
+            string now = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            try
+            {
+                using var conn = new SqlConnection(connectionString);
+                await conn.OpenAsync();
+                string delete = @"UPDATE PropertyLoanTransaction SET IsDeleted = 1, ModifiedBy = @ModifiedBy, ModifiedDate = @ModifiedDate WHERE Id = @Id";
+                using var cmd = new SqlCommand(delete, conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@ModifiedBy", userName);
+                cmd.Parameters.AddWithValue("@ModifiedDate", now);
+                int rows = await cmd.ExecuteNonQueryAsync();
+                if (rows > 0)
+                    return Ok(new { Success = true, Message = "Property loan transaction deleted successfully." });
+                else
+                    return NotFound("Property loan transaction not found or already deleted.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error deleting property loan transaction: {ex.Message}");
             }
         }
 

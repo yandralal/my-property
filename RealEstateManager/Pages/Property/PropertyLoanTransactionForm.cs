@@ -81,7 +81,7 @@ namespace RealEstateManager.Pages
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
             int? propertyLoanId = null;
-            string payingFor = "Principal"; // default
+            string payingFor = "Principle"; // default
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(@"
@@ -118,7 +118,7 @@ namespace RealEstateManager.Pages
                         if (reader["TransactionDate"] != DBNull.Value)
                             dateTimePickerTransactionDate.Value = Convert.ToDateTime(reader["TransactionDate"]);
 
-                        decimal principal = reader["PrincipalAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PrincipalAmount"]) : 0;
+                        decimal Principle = reader["PrincipleAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PrincipleAmount"]) : 0;
                         decimal interest = reader["InterestAmount"] != DBNull.Value ? Convert.ToDecimal(reader["InterestAmount"]) : 0;
 
                         // Set PayingFor and Amount
@@ -129,8 +129,8 @@ namespace RealEstateManager.Pages
                         }
                         else
                         {
-                            payingFor = "Principal";
-                            textBoxAmount.Text = principal.ToString("N2");
+                            payingFor = "Principle";
+                            textBoxAmount.Text = Principle.ToString("N2");
                         }
 
                         // Ensure .00 is always appended and balance is updated
@@ -145,7 +145,7 @@ namespace RealEstateManager.Pages
             // Ensure comboBoxPayingFor has items before setting
             if (comboBoxPayingFor.Items.Count == 0)
             {
-                comboBoxPayingFor.Items.AddRange(new[] { "Interest", "Principal" });
+                comboBoxPayingFor.Items.AddRange(new[] { "Interest", "Principle" });
             }
             SetComboBoxSelectedItem(comboBoxPayingFor, payingFor);
 
@@ -241,7 +241,7 @@ namespace RealEstateManager.Pages
             // 4. Paying For
             if (comboBoxPayingFor.SelectedIndex < 0 || string.IsNullOrWhiteSpace(comboBoxPayingFor.Text))
             {
-                MessageBox.Show("Please select what you are paying for (Interest/Principal).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select what you are paying for (Interest/Principle).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 comboBoxPayingFor.Focus();
                 return;
             }
@@ -287,7 +287,7 @@ namespace RealEstateManager.Pages
             int? propertyLoanId = _lenderNameToLoanId.TryGetValue(lenderName, out int id) ? id : (int?)null;
 
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
-            decimal principalAmount = isInterest ? 0 : amount;
+            decimal PrincipleAmount = isInterest ? 0 : amount;
             decimal interestAmount = isInterest ? amount : 0;
 
             string userIdentifier = !string.IsNullOrEmpty(LoggedInUserId) ? LoggedInUserId : Environment.UserName;
@@ -309,7 +309,7 @@ namespace RealEstateManager.Pages
                             LenderName = @LenderName,
                             TransactionType = @TransactionType,
                             TransactionDate = @TransactionDate,
-                            PrincipalAmount = @PrincipalAmount,
+                            PrincipleAmount = @PrincipleAmount,
                             InterestAmount = @InterestAmount,
                             PaymentMethod = @PaymentMethod,
                             ReferenceNumber = @ReferenceNumber,
@@ -325,9 +325,9 @@ namespace RealEstateManager.Pages
                     {
                         // INSERT
                         cmd.CommandText = @"INSERT INTO PropertyLoanTransaction
-                            (PropertyId, PropertyLoanId, LenderName, TransactionType, TransactionDate, PrincipalAmount, InterestAmount, PaymentMethod, ReferenceNumber, Notes, CreatedDate, CreatedBy, IsDeleted)
+                            (PropertyId, PropertyLoanId, LenderName, TransactionType, TransactionDate, PrincipleAmount, InterestAmount, PaymentMethod, ReferenceNumber, Notes, CreatedDate, CreatedBy, IsDeleted)
                             VALUES
-                            (@PropertyId, @PropertyLoanId, @LenderName, @TransactionType, @TransactionDate, @PrincipalAmount, @InterestAmount, @PaymentMethod, @ReferenceNumber, @Notes, @CreatedDate, @CreatedBy, 0)";
+                            (@PropertyId, @PropertyLoanId, @LenderName, @TransactionType, @TransactionDate, @PrincipleAmount, @InterestAmount, @PaymentMethod, @ReferenceNumber, @Notes, @CreatedDate, @CreatedBy, 0)";
                         cmd.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
                         cmd.Parameters.AddWithValue("@CreatedBy", userIdentifier);
                     }
@@ -337,7 +337,7 @@ namespace RealEstateManager.Pages
                     cmd.Parameters.AddWithValue("@LenderName", lenderName);
                     cmd.Parameters.AddWithValue("@TransactionType", transactionType);
                     cmd.Parameters.AddWithValue("@TransactionDate", transactionDate);
-                    cmd.Parameters.AddWithValue("@PrincipalAmount", principalAmount);
+                    cmd.Parameters.AddWithValue("@PrincipleAmount", PrincipleAmount);
                     cmd.Parameters.AddWithValue("@InterestAmount", interestAmount);
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
                     cmd.Parameters.AddWithValue("@ReferenceNumber", (object)referenceNumber ?? DBNull.Value);
@@ -371,8 +371,8 @@ namespace RealEstateManager.Pages
         private void ComboBoxPayingFor_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
-            labelTotalAmount.Text = isInterest ? "Total Interest:" : "Total Principal:";
-            labelTotalPaid.Text = isInterest ? "Total Interest Paid:" : "Total Principal Paid:";
+            labelTotalAmount.Text = isInterest ? "Total Interest:" : "Total Principle:";
+            labelTotalPaid.Text = isInterest ? "Total Interest Paid:" : "Total Principle Paid:";
             UpdateLoanSummaryFields();
         }
 
@@ -391,13 +391,13 @@ namespace RealEstateManager.Pages
             bool isInterest = comboBoxPayingFor.SelectedItem?.ToString() == "Interest";
             string connectionString = ConfigurationManager.ConnectionStrings["MyPropertyDb"].ConnectionString;
 
-            decimal principal = 0;
+            decimal Principle = 0;
             decimal totalAmount = 0;
             decimal totalPaid = 0;
             using (var conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                // Get principal and total amount (interest or principal)
+                // Get Principle and total amount (interest or Principle)
                 string totalQuery = "SELECT LoanAmount, TotalInterest FROM PropertyLoan WHERE Id = @LoanId";
                 using (var cmd = new SqlCommand(totalQuery, conn))
                 {
@@ -406,17 +406,17 @@ namespace RealEstateManager.Pages
                     {
                         if (reader.Read())
                         {
-                            principal = reader["LoanAmount"] != DBNull.Value ? Convert.ToDecimal(reader["LoanAmount"]) : 0;
+                            Principle = reader["LoanAmount"] != DBNull.Value ? Convert.ToDecimal(reader["LoanAmount"]) : 0;
                             totalAmount = isInterest
                                 ? (reader["TotalInterest"] != DBNull.Value ? Convert.ToDecimal(reader["TotalInterest"]) : 0)
-                                : principal;
+                                : Principle;
                         }
                     }
                 }
-                // Get total paid (interest or principal)
+                // Get total paid (interest or Principle)
                 string paidQuery = isInterest
                     ? "SELECT ISNULL(SUM(InterestAmount),0) FROM PropertyLoanTransaction WHERE PropertyLoanId = @LoanId AND IsDeleted = 0"
-                    : "SELECT ISNULL(SUM(PrincipalAmount),0) FROM PropertyLoanTransaction WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
+                    : "SELECT ISNULL(SUM(PrincipleAmount),0) FROM PropertyLoanTransaction WHERE PropertyLoanId = @LoanId AND IsDeleted = 0";
                 if (_editId.HasValue)
                     paidQuery += " AND Id <> @CurrentId";
                 using (var cmd = new SqlCommand(paidQuery, conn))
@@ -428,7 +428,7 @@ namespace RealEstateManager.Pages
                     totalPaid = paidResult != null && paidResult != DBNull.Value ? Convert.ToDecimal(paidResult) : 0;
                 }
             }
-            textBoxLoanAmount.Text = principal.ToString("N2");
+            textBoxLoanAmount.Text = Principle.ToString("N2");
             textBoxTotalAmount.Text = totalAmount.ToString("N2");
             textBoxTotalPaid.Text = totalPaid.ToString("N2");
             decimal amountToPay = 0;

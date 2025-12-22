@@ -1,7 +1,7 @@
 
 <div class="group-box">
   <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>Agent Detail Form</h2>
+    <h2>{{ isViewMode ? 'View Agent' : 'Agent Detail Form' }}</h2>
     <button class="modal-close" type="button" (click)="closeModalClicked()" aria-label="Close">&times;</button>
   </div>
   <form [formGroup]="agentForm" (ngSubmit)="onSubmit()" class="agent-form" autocomplete="off">
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div style="display: flex; justify-content: flex-end; padding-right:30px">
-      <button type="submit" class="btn btn-primary" [disabled]="agentForm.invalid">Save</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!isViewMode && agentForm.invalid">{{ isViewMode ? 'Close' : 'Save' }}</button>
     </div>
   </form>
 </div>

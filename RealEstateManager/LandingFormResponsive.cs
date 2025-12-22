@@ -72,9 +72,9 @@ namespace RealEstateManager
                     p.Owner, 
                     p.Phone,
                     ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
-                    -- Calculate total principal loan for the property
-                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrincipal,
-                    -- AmountBalance = BuyPrice - AmountPaid - TotalLoanPrincipal
+                    -- Calculate total Principle loan for the property
+                    ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrinciple,
+                    -- AmountBalance = BuyPrice - AmountPaid - TotalLoanPrinciple
                     (p.Price 
                         - ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0)
                         - ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0)
@@ -946,7 +946,7 @@ namespace RealEstateManager
             SetCol("Area", "Area (sq.ft)", 120);
             SetCol("BuyPrice", "Buy Price", 155, "C");
             SetCol("AmountPaid", "Amount Paid", 155, "C");
-            SetCol("TotalLoanPrincipal", "Total Loan", 160, "C"); // <-- Add this line
+            SetCol("TotalLoanPrinciple", "Total Loan", 160, "C"); // <-- Add this line
             SetCol("AmountBalance", "Amount Balance", 155, "C");
 
             if (dgv.Columns["Id"] != null)
@@ -1162,7 +1162,7 @@ namespace RealEstateManager
         private void DataGridViewProperties_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             var colName = dataGridViewProperties.Columns[e.ColumnIndex].Name;
-            if (colName == "AmountBalance" || colName == "BuyPrice" || colName == "AmountPaid" || colName == "TotalLoanPrincipal" || colName == "Area")
+            if (colName == "AmountBalance" || colName == "BuyPrice" || colName == "AmountPaid" || colName == "TotalLoanPrinciple" || colName == "Area")
             {
                 if (e.Value == null || e.Value == DBNull.Value)
                 {

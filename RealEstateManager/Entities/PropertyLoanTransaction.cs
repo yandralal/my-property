@@ -6,7 +6,7 @@ namespace RealEstateManager.Entities
         public int PropertyId { get; set; }
         public int? PropertyLoanId { get; set; }
         public string LenderName { get; set; } = string.Empty;
-        public decimal PrincipalAmount { get; set; }     
+        public decimal PrincipleAmount { get; set; }     
         public decimal InterestAmount { get; set; }      
         public string TransactionType { get; set; } = string.Empty; 
         public DateTime TransactionDate { get; set; }

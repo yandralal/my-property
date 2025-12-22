@@ -18,7 +18,6 @@
         <th>Total Repayable</th>
         <th>Total Paid</th>
         <th>Outstanding</th>
-        <th>Remarks</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -35,7 +34,6 @@
         <td><i class="bi bi-currency-rupee"></i> {{ loan.totalRepayment | inrFormat }}</td>
         <td><i class="bi bi-currency-rupee"></i> {{ loan.totalPaid | inrFormat }}</td>
         <td><i class="bi bi-currency-rupee"></i> {{ loan.outstanding | inrFormat }}</td>
-        <td>{{loan.remarks}}</td>
         <td>
           <button type="button" class="action-icon" title="View" (click)="onViewLoan(loan); $event.stopPropagation();">
             <i class="bi bi-eye"></i>

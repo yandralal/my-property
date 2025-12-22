@@ -18,4 +18,8 @@ public class PropertyLoanDto
     public bool IsDeleted { get; set; }
     public decimal TotalPaid { get; set; } 
     public decimal Outstanding { get; set; }
+
+    // Added fields to show breakdown of amounts already paid
+    public decimal TotalPrincipalPaid { get; set; }
+    public decimal TotalInterestPaid { get; set; }
 }

@@ -45,8 +45,8 @@ namespace RealEstateManager.Pages
         private Label labelTotalBalanceTitle;
         private Label labelTotalBalanceValue;
         private Button buttonGenerateReport;
-        private Label labelTotalLoanPrincipalTitle;
-        private Label labelTotalLoanPrincipalValue;
+        private Label labelTotalLoanPrincipleTitle;
+        private Label labelTotalLoanPrincipleValue;
         private Label labelTotalLoanInterestTitle;
         private Label labelTotalLoanInterestValue;
         private Label labelProfitLossAfterLoanTitle;
@@ -112,8 +112,8 @@ namespace RealEstateManager.Pages
             labelTotalPaidValue = new Label();
             labelTotalBrokerageTitle = new Label();
             labelTotalBrokerageValue = new Label();
-            labelTotalLoanPrincipalTitle = new Label();
-            labelTotalLoanPrincipalValue = new Label();
+            labelTotalLoanPrincipleTitle = new Label();
+            labelTotalLoanPrincipleValue = new Label();
             labelTotalLoanInterestTitle = new Label();
             labelTotalLoanInterestValue = new Label();
             labelProfitLossAfterLoanTitle = new Label();
@@ -663,26 +663,26 @@ namespace RealEstateManager.Pages
             labelTotalBrokerageValue.TabIndex = 43;
             labelTotalBrokerageValue.Text = "0.00";
             // 
-            // labelTotalLoanPrincipalTitle
+            // labelTotalLoanPrincipleTitle
             // 
-            labelTotalLoanPrincipalTitle.AutoSize = true;
-            labelTotalLoanPrincipalTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelTotalLoanPrincipalTitle.ForeColor = Color.DarkSlateGray;
-            labelTotalLoanPrincipalTitle.Location = new Point(368, 31);
-            labelTotalLoanPrincipalTitle.Name = "labelTotalLoanPrincipalTitle";
-            labelTotalLoanPrincipalTitle.Size = new Size(145, 19);
-            labelTotalLoanPrincipalTitle.TabIndex = 46;
-            labelTotalLoanPrincipalTitle.Text = "Total Loan Principal:";
+            labelTotalLoanPrincipleTitle.AutoSize = true;
+            labelTotalLoanPrincipleTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTotalLoanPrincipleTitle.ForeColor = Color.DarkSlateGray;
+            labelTotalLoanPrincipleTitle.Location = new Point(368, 31);
+            labelTotalLoanPrincipleTitle.Name = "labelTotalLoanPrincipleTitle";
+            labelTotalLoanPrincipleTitle.Size = new Size(145, 19);
+            labelTotalLoanPrincipleTitle.TabIndex = 46;
+            labelTotalLoanPrincipleTitle.Text = "Total Loan Principle:";
             // 
-            // labelTotalLoanPrincipalValue
+            // labelTotalLoanPrincipleValue
             // 
-            labelTotalLoanPrincipalValue.Font = new Font("Segoe UI", 10F);
-            labelTotalLoanPrincipalValue.ForeColor = Color.Black;
-            labelTotalLoanPrincipalValue.Location = new Point(532, 31);
-            labelTotalLoanPrincipalValue.Name = "labelTotalLoanPrincipalValue";
-            labelTotalLoanPrincipalValue.Size = new Size(204, 22);
-            labelTotalLoanPrincipalValue.TabIndex = 47;
-            labelTotalLoanPrincipalValue.Text = "0.00";
+            labelTotalLoanPrincipleValue.Font = new Font("Segoe UI", 10F);
+            labelTotalLoanPrincipleValue.ForeColor = Color.Black;
+            labelTotalLoanPrincipleValue.Location = new Point(532, 31);
+            labelTotalLoanPrincipleValue.Name = "labelTotalLoanPrincipleValue";
+            labelTotalLoanPrincipleValue.Size = new Size(204, 22);
+            labelTotalLoanPrincipleValue.TabIndex = 47;
+            labelTotalLoanPrincipleValue.Text = "0.00";
             // 
             // labelTotalLoanInterestTitle
             // 
@@ -747,8 +747,8 @@ namespace RealEstateManager.Pages
             groupBoxSummary.Controls.Add(labelTotalSaleAmountValue);
             groupBoxSummary.Controls.Add(labelTotalBrokerageTitle);
             groupBoxSummary.Controls.Add(labelTotalBrokerageValue);
-            groupBoxSummary.Controls.Add(labelTotalLoanPrincipalTitle);
-            groupBoxSummary.Controls.Add(labelTotalLoanPrincipalValue);
+            groupBoxSummary.Controls.Add(labelTotalLoanPrincipleTitle);
+            groupBoxSummary.Controls.Add(labelTotalLoanPrincipleValue);
             groupBoxSummary.Controls.Add(labelTotalLoanInterestTitle);
             groupBoxSummary.Controls.Add(labelTotalLoanInterestValue);
             groupBoxSummary.Controls.Add(labelProfitLossAfterLoanTitle);

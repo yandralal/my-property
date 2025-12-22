@@ -4,7 +4,7 @@
       <th style="display:none;">ID</th>
       <th>Transaction Date</th>
       <th>Transaction Type</th>
-      <th>Principal Amount</th>
+      <th>Principle Amount</th>
       <th>Interest Amount</th>
       <th>Payment Method</th>
       <th>Reference Number</th>
@@ -17,7 +17,7 @@
       <td style="display:none;">{{ txn.id }}</td>
       <td>{{ txn.transactionDate | date:'dd/MM/yyyy hh:mm a' }}</td>
       <td>{{ txn.transactionType }}</td>
-      <td><i class="bi bi-currency-rupee"></i> {{ txn.principalAmount | inrFormat }}</td>
+      <td><i class="bi bi-currency-rupee"></i> {{ txn.principleAmount | inrFormat }}</td>
       <td><i class="bi bi-currency-rupee"></i> {{ txn.interestAmount | inrFormat }}</td>
       <td>{{ txn.paymentMethod }}</td>
       <td>{{ txn.referenceNumber }}</td>

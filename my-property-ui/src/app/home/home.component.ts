@@ -23,6 +23,8 @@ import { AgentFormComponent } from '../agent/agent-form.component';
 import { AgentTransactionFormComponent } from '../agent/agent-transaction-form.component';
 import { LoanListComponent } from '../loan/loan-list.component';
 import { MiscListComponent } from '../misc/misc-list.component';
+import { MiscFormComponent } from '../misc/misc-form.component';
+import { MiscService } from '../services/misc.service';
 import { LoanTransactionsListComponent } from '../loan/loan-transactions-list.component';
 import { LoanTransactionFormComponent } from '../loan/loan-transaction-form.component';
 import { LoanFormComponent } from '../loan/loan-form.component';
@@ -51,6 +53,7 @@ import { LoanFormComponent } from '../loan/loan-form.component';
         AgentTransactionFormComponent,
         LoanListComponent,
         MiscListComponent,
+        MiscFormComponent,
         LoanTransactionsListComponent,
         LoanTransactionFormComponent,
         LoanFormComponent
@@ -84,6 +87,12 @@ export class HomeComponent implements OnInit {
     onSelectLoan(loan: any) {
         this.selectedLoanId = loan.id;
         this.fetchLoanTransactions(loan.id);
+    }
+
+    onViewLoan(loan: any) {
+        // Open loan form in view mode (all fields disabled)
+        this.editLoanData = { ...loan, isViewMode: true };
+        this.showLoanFormModal = true;
     }
 
     fetchLoanTransactions(loanId: number) {
@@ -184,12 +193,15 @@ export class HomeComponent implements OnInit {
     onAddLoanTransaction() {
         if (this.selectedLoanId == null) {
             this.selectedLoanDetails = null;
+            this.selectedPropertyLoanId = null;
             this.showLoanTransactionFormModal = true;
             return;
         }
+        this.selectedPropertyLoanId = this.selectedLoanId;
         this.propertyService.getLoanById(this.selectedLoanId).subscribe({
             next: (loanDetails) => {
                 this.selectedLoanDetails = loanDetails;
+                this.selectedPropertyLoanId = loanDetails.id;
                 this.showLoanTransactionFormModal = true;
             },
             error: () => {
@@ -204,12 +216,54 @@ export class HomeComponent implements OnInit {
         this.confirmDeleteLoanTransactionVisible = true;
     }
 
+    onConfirmDeleteLoanTransaction() {
+        if (this.selectedLoanTransactionToDelete) {
+            this.propertyService.deletePropertyLoanTransaction(this.selectedLoanTransactionToDelete.id).subscribe({
+                next: () => {
+                    this.confirmDeleteLoanTransactionVisible = false;
+                    this.selectedLoanTransactionToDelete = null;
+                    if (this.selectedPropertyLoanId) {
+                        this.fetchLoanTransactions(this.selectedPropertyLoanId);
+                    }
+                    this.fetchLoans();
+                },
+                error: (error) => {
+                    console.error('Error deleting loan transaction:', error);
+                    this.confirmDeleteLoanTransactionVisible = false;
+                }
+            });
+        }
+    }
+
+    onCancelDeleteLoanTransaction() {
+        this.confirmDeleteLoanTransactionVisible = false;
+        this.selectedLoanTransactionToDelete = null;
+    }
+
     closeLoanTransactionFormModal() {
         this.showLoanTransactionFormModal = false;
     }
 
     onLoanTransactionFormSuccess(event: any) {
-        this.closeLoanTransactionFormModal();
+        console.log('onLoanTransactionFormSuccess called with:', event);
+        console.log('selectedPropertyLoanId:', this.selectedPropertyLoanId);
+        
+        if (!this.selectedPropertyLoanId) {
+            console.error('No loan selected');
+            return;
+        }
+        
+        console.log('Calling API with data:', event);
+        this.propertyService.createPropertyLoanTransaction(event).subscribe({
+            next: () => {
+                this.closeLoanTransactionFormModal();
+                this.fetchLoanTransactions(this.selectedPropertyLoanId!);
+                this.fetchLoans();
+            },
+            error: (error) => {
+                console.error('Error saving loan transaction:', error);
+            }
+        });
     }
 
     onLoanFormSuccess(event: any) {
@@ -349,6 +403,9 @@ export class HomeComponent implements OnInit {
     agentTransactions: any[] = [];
     selectedLoanId = null;
     selectedMiscId = null;
+    miscList: any[] = [];
+    showMiscFormModal: boolean = false;
+    selectedMiscData: any = null;
     selectedTransactionDetails: any = null;
     transactionViewMode: 'view' | 'edit' = 'view';
     showPropertyTransactionFormModal: boolean = false;
@@ -380,7 +437,8 @@ export class HomeComponent implements OnInit {
         private router: Router,
         private propertyService: PropertyService,
         private plotService: PlotService,
-        private agentService: AgentService
+        private agentService: AgentService,
+        private miscService: MiscService
     ) { }
 
     onTransactionMenuClick(menu: string) {
@@ -422,6 +480,9 @@ export class HomeComponent implements OnInit {
         // Fetch loans from API
         this.fetchLoans();
 
+        // Fetch misc transactions from API
+        this.loadMiscTransactions();
+
         // Fetch properties and select first property
         this.propertyService.getActiveProperties().subscribe({
             next: (props) => {
@@ -457,7 +518,20 @@ export class HomeComponent implements OnInit {
             next: (loans) => {
                 this.loans = loans || [];
                 if (this.loans.length > 0) {
-                    this.onSelectLoan(this.loans[0]);
+                    // If we have a currently selected loan, maintain that selection
+                    if (this.selectedLoanId) {
+                        const currentlySelectedLoan = this.loans.find(l => l.id === this.selectedLoanId);
+                        if (currentlySelectedLoan) {
+                            // Refresh the transactions for the currently selected loan
+                            this.fetchLoanTransactions(this.selectedLoanId);
+                        } else {
+                            // If the selected loan no longer exists, select the first one
+                            this.onSelectLoan(this.loans[0]);
+                        }
+                    } else {
+                        // No loan was selected, select the first one
+                        this.onSelectLoan(this.loans[0]);
+                    }
                 } else {
                     this.selectedLoanId = null;
                     this.loanTransactions = [];
@@ -471,6 +545,19 @@ export class HomeComponent implements OnInit {
             }
         });
     }
+
+    loadMiscTransactions() {
+        this.miscService.getAllMiscTransactions().subscribe({
+            next: (miscTransactions: any) => {
+                this.miscList = miscTransactions || [];
+            },
+            error: (err: any) => {
+                console.error('Failed to fetch misc transactions:', err);
+                this.miscList = [];
+            }
+        });
+    }
+
     // Fetch agent transactions for selected agent
     fetchAgentTransactions(agentId: number) {
         this.agentService.getAgentTransactions(agentId).subscribe({
@@ -487,6 +574,12 @@ export class HomeComponent implements OnInit {
     onSelectAgent(agent: any) {
         this.selectedAgentId = agent.id;
         this.fetchAgentTransactions(agent.id);
+    }
+
+    onViewAgent(agent: any) {
+        // Open agent form in view mode (all fields disabled)
+        this.editAgentData = { ...agent, isViewMode: true };
+        this.showAgentFormModal = true;
     }
     
     ngOnChanges(changes: any): void {
@@ -992,6 +1085,71 @@ export class HomeComponent implements OnInit {
     openEditAgentModal(agent: any) {
         this.editAgentData = agent;
         this.showAgentFormModal = true;
+    }
+
+    onSelectMisc(item: any) {
+        this.selectedMiscId = item.transactionId ?? item.id;
+    }
+
+    onViewMisc(item: any) {
+        // Open misc form in view mode (all fields disabled)
+        this.selectedMiscData = { ...item, isViewMode: true };
+        this.showMiscFormModal = true;
+    }
+
+    onMiscDeleted(id: number) {
+        // Delete misc transaction via API
+        this.miscService.deleteMiscTransaction(id.toString()).subscribe({
+            next: (response: any) => {
+                this.loadMiscTransactions(); // Reload the list
+            },
+            error: (err: any) => {
+                console.error('Failed to delete misc transaction:', err);
+                this.showMessage('Failed to delete misc record.');
+            }
+        });
+    }
+
+    onAddMiscTransaction() {
+        // Open add transaction form modal
+        this.selectedMiscData = null;
+        this.showMiscFormModal = true;
+    }
+
+    closeMiscFormModal() {
+        this.showMiscFormModal = false;
+        this.selectedMiscData = null;
+    }
+
+    onMiscFormSuccess(formData: any) {
+        // Handle form submission - save misc transaction via API
+        if (this.selectedMiscData?.id) {
+            // Update existing misc transaction
+            this.miscService.updateMiscTransaction(this.selectedMiscData.id, formData).subscribe({
+                next: (response: any) => {
+                    this.showMessage('Misc transaction updated successfully.');
+                    this.closeMiscFormModal();
+                    this.loadMiscTransactions(); // Reload the list
+                },
+                error: (err: any) => {
+                    console.error('Failed to update misc transaction:', err);
+                    this.showMessage('Failed to update misc transaction.');
+                }
+            });
+        } else {
+            // Create new misc transaction
+            this.miscService.createMiscTransaction(formData).subscribe({
+                next: (response: any) => {
+                    this.showMessage('Misc transaction created successfully.');
+                    this.closeMiscFormModal();
+                    this.loadMiscTransactions(); // Reload the list
+                },
+                error: (err: any) => {
+                    console.error('Failed to create misc transaction:', err);
+                    this.showMessage('Failed to create misc transaction.');
+                }
+            });
+        }
     }
 
     refreshProperties() {

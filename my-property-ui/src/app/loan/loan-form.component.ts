@@ -14,6 +14,12 @@ import { CommonModule } from '@angular/common';
 export class LoanFormComponent {
   ngOnChanges() {
     if (this.loan && this.loanForm) {
+      // Check if in view mode
+      if (this.loan && this.loan.isViewMode) {
+        this.isViewMode = true;
+        this.loanForm.disable();
+      }
+
       this.loanForm.patchValue({
         property: this.loan.propertyId || '',
         loanAmount: this.formatINR(this.loan.loanAmount),
@@ -34,6 +40,7 @@ export class LoanFormComponent {
 
   loanForm!: FormGroup;
   properties: Property[] = [];
+  isViewMode = false;
 
   constructor(private fb: FormBuilder, private propertyService: PropertyService) {
     this.initForm();
@@ -92,17 +99,17 @@ export class LoanFormComponent {
   }
 
   private calculateInterest(values: any) {
-    const principal = parseFloat((values.loanAmount || '').toString().replace(/,/g, ''));
+    const principle = parseFloat((values.loanAmount || '').toString().replace(/,/g, ''));
     const rate = parseFloat(values.interestRate);
     const months = parseInt(values.tenure, 10);
-    const hasPrincipal = !isNaN(principal);
+    const hasPrinciple = !isNaN(principle);
     const hasRate = !isNaN(rate);
     const hasMonths = !isNaN(months);
 
-    if (hasPrincipal && hasRate && hasMonths) {
-      const interestPerPeriod = principal * rate / 100;
+    if (hasPrinciple && hasRate && hasMonths) {
+      const interestPerPeriod = principle * rate / 100;
       const totalInterest = interestPerPeriod * months;
-      const total = principal + totalInterest;
+      const total = principle + totalInterest;
       const formattedInterest = this.formatINR(totalInterest).replace(/\.00$/, '');
       const formattedTotal = this.formatINR(total).replace(/\.00$/, '');
       this.loanForm.get('totalInterest')?.setValue(formattedInterest, { emitEvent: false });
@@ -126,6 +133,12 @@ export class LoanFormComponent {
   }
 
   onSubmit() {
+    // If in view mode, just close the form without saving
+    if (this.isViewMode) {
+      this.closeModalClicked();
+      return;
+    }
+
     if (!this.loanForm.valid) {
       this.loanForm.markAllAsTouched();
       return;

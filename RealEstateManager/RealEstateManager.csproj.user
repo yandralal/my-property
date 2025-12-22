@@ -4,6 +4,9 @@
     <_LastSelectedProfileId>E:\Source Code\my-property\RealEstateManager\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Presentations\HomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="LandingForm.cs">
       <SubType>Form</SubType>
     </Compile>

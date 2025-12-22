@@ -1,4 +1,89 @@
 <div class="group-box">
-  <h2>Add/Edit Miscellaneous</h2>
-  <!-- Miscellaneous form fields -->
+  <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>{{ isViewMode ? 'View Miscellaneous Transaction' : 'Miscellaneous Transaction' }}</h2>
+    <button class="modal-close" type="button" (click)="onCancel()" aria-label="Close">&times;</button>
+  </div>
+  <form [formGroup]="miscForm" (ngSubmit)="onSubmit()" class="misc-form" autocomplete="off">
+    <div class="form-sections">
+      <div class="form-section">
+        <div>
+          <label for="recipient">Recipient <span class="text-danger">*</span></label>
+          <input id="recipient" type="text" formControlName="recipient"
+            [class.is-invalid]="miscForm.get('recipient')?.invalid && miscForm.get('recipient')?.touched" />
+          <div *ngIf="miscForm.get('recipient')?.invalid && miscForm.get('recipient')?.touched"
+            class="invalid-feedback d-block">
+            <span *ngIf="miscForm.get('recipient')?.errors?.['required']">Recipient is required.</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="amount">Amount <span class="text-danger">*</span></label>
+          <input id="amount" type="text" formControlName="amount"
+            [class.is-invalid]="miscForm.get('amount')?.invalid && miscForm.get('amount')?.touched" />
+          <div *ngIf="miscForm.get('amount')?.invalid && miscForm.get('amount')?.touched"
+            class="invalid-feedback d-block">
+            <span *ngIf="miscForm.get('amount')?.errors?.['required']">Amount is required.</span>
+            <span *ngIf="miscForm.get('amount')?.errors?.['min']">Amount must be positive.</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="transactionType">Transaction Type <span class="text-danger">*</span></label>
+          <select id="transactionType" formControlName="transactionType"
+            [class.is-invalid]="miscForm.get('transactionType')?.invalid && miscForm.get('transactionType')?.touched">
+            <option value="">Select</option>
+            <option *ngFor="let type of transactionTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div *ngIf="miscForm.get('transactionType')?.invalid && miscForm.get('transactionType')?.touched"
+            class="invalid-feedback d-block">
+            <span *ngIf="miscForm.get('transactionType')?.errors?.['required']">Transaction type is required.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div>
+          <label for="paymentMethod">Payment Method <span class="text-danger">*</span></label>
+          <select id="paymentMethod" formControlName="paymentMethod"
+            [class.is-invalid]="miscForm.get('paymentMethod')?.invalid && miscForm.get('paymentMethod')?.touched">
+            <option value="">Select</option>
+            <option value="Cash">Cash</option>
+            <option value="Cheque">Cheque</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Other">Other</option>
+          </select>
+          <div *ngIf="miscForm.get('paymentMethod')?.invalid && miscForm.get('paymentMethod')?.touched"
+            class="invalid-feedback d-block">
+            <span *ngIf="miscForm.get('paymentMethod')?.errors?.['required']">Payment method is required.</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="referenceNumber">Reference Number</label>
+          <input id="referenceNumber" type="text" formControlName="referenceNumber" />
+        </div>
+
+        <div>
+          <label for="transactionDate">Date <span class="text-danger">*</span></label>
+          <input id="transactionDate" type="date" formControlName="transactionDate"
+            [class.is-invalid]="miscForm.get('transactionDate')?.invalid && miscForm.get('transactionDate')?.touched" />
+          <div *ngIf="miscForm.get('transactionDate')?.invalid && miscForm.get('transactionDate')?.touched"
+            class="invalid-feedback d-block">
+            <span *ngIf="miscForm.get('transactionDate')?.errors?.['required']">Date is required.</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="notes">Notes</label>
+          <textarea id="notes" formControlName="notes" rows="3" style="resize: vertical;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+      <button type="submit" class="btn btn-primary" [disabled]="!isViewMode && miscForm.invalid">
+        {{ isViewMode ? 'Close' : 'Save' }}
+      </button>
+    </div>
+  </form>
 </div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Property } from '../models/property.model';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { PropertyService } from '../services/property.service';
 import { PlotTransactionFormComponent } from '../plot/plot-transaction-form.component';
 import { PlotService } from '../services/plot.service';
@@ -17,6 +18,7 @@ import { PlotTransactionsListComponent } from '../plot/plot-transactions-list.co
 import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
 import { InrFormatPipe } from '../shared/inr-format.pipe';
 import { AgentListComponent } from '../agent/agent-list.component';
+import { PropertyProfitLossComponent } from '../property/property-profit-loss.component';
 import { AgentService } from '../services/agent.service';
 import { AgentTransactionsListComponent } from '../agent/agent-transactions-list.component';
 import { AgentFormComponent } from '../agent/agent-form.component';
@@ -56,11 +58,55 @@ import { LoanFormComponent } from '../loan/loan-form.component';
         MiscFormComponent,
         LoanTransactionsListComponent,
         LoanTransactionFormComponent,
-        LoanFormComponent
+        LoanFormComponent,
+        PropertyProfitLossComponent
     ]
 })
 
 export class HomeComponent implements OnInit {
+    // Current year for footer
+    currentYear = new Date().getFullYear();
+    
+    // Getter for selected property (for template binding)
+    get selectedProperty(): Property | null {
+        return this.properties.find(p => p.id === this.selectedPropertyId) || null;
+    }
+
+    // Pagination getters for properties
+    get paginatedProperties(): Property[] {
+        const startIndex = (this.currentPropertyPage - 1) * this.propertyPageSize;
+        const endIndex = startIndex + this.propertyPageSize;
+        return this.properties.slice(startIndex, endIndex);
+    }
+
+    get totalPropertyPages(): number {
+        return Math.ceil(this.properties.length / this.propertyPageSize);
+    }
+
+    // Pagination getters for plots
+    get paginatedPlots(): Plot[] {
+        const startIndex = (this.currentPlotPage - 1) * this.plotPageSize;
+        const endIndex = startIndex + this.plotPageSize;
+        return this.plots.slice(startIndex, endIndex);
+    }
+
+    get totalPlotPages(): number {
+        return Math.ceil(this.plots.length / this.plotPageSize);
+    }
+
+    // Pagination navigation methods
+    goToPropertyPage(page: number): void {
+        if (page >= 1 && page <= this.totalPropertyPages) {
+            this.currentPropertyPage = page;
+        }
+    }
+
+    goToPlotPage(page: number): void {
+        if (page >= 1 && page <= this.totalPlotPages) {
+            this.currentPlotPage = page;
+        }
+    }
+
     private loadLoansAndSelectFirst() {
             this.propertyService.getAllPropertyLoans().subscribe({
                 next: (data) => {
@@ -271,6 +317,23 @@ export class HomeComponent implements OnInit {
         this.fetchLoans();
     }
 
+    onAgentDeleted() {
+        // Reload agents after deletion
+        this.agentService.getAllAgents().subscribe({
+            next: (agents) => {
+                this.agents = agents || [];
+                if (this.agents.length > 0 && !this.selectedAgentId) {
+                    this.selectedAgentId = this.agents[0].id;
+                    this.fetchAgentTransactions(this.agents[0].id);
+                }
+            },
+            error: (err) => {
+                console.error('Failed to fetch agents:', err);
+                this.agents = [];
+            }
+        });
+    }
+
     onLoanDeleted(loanId: number) {
         this.selectedLoanId = null;
         this.fetchLoans();
@@ -412,12 +475,21 @@ export class HomeComponent implements OnInit {
     showDropdown = false;
     properties: Property[] = [];
     plots: Plot[] = [];
+    
+    // Pagination for properties
+    currentPropertyPage = 1;
+    propertyPageSize = 10;
+    
+    // Pagination for plots
+    currentPlotPage = 1;
+    plotPageSize = 10;
+    
     selectedPropertyId: number | undefined = undefined;
     selectedPlotId: number | undefined = undefined;
     selectedPropertyDetails: any = null;
     isSidebarCollapsed = false;
     expandedMenu: string | null = null;
-    userName: string = 'User';
+    userName: string = '';
     showPropertyFormModal = false;
     viewMode: boolean = false;
     showManagePlotsModal: boolean = false;
@@ -432,9 +504,11 @@ export class HomeComponent implements OnInit {
     confirmDeleteAgentTransactionVisible: boolean = false;
     selectedAgentTransactionToDelete: any = null;
     editAgentData: any = null;
+    showProfitLossSummaryModal: boolean = false;
 
     constructor(
         private router: Router,
+        private location: Location,
         private propertyService: PropertyService,
         private plotService: PlotService,
         private agentService: AgentService,
@@ -463,6 +537,10 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Load username from localStorage
+        const storedUsername = localStorage.getItem('username') || 'User';
+        this.userName = storedUsername.charAt(0).toUpperCase() + storedUsername.slice(1);
+        
         // Fetch agents and select first agent
         this.agentService.getAllAgents().subscribe({
             next: (agents) => {
@@ -611,20 +689,28 @@ export class HomeComponent implements OnInit {
     }
 
     onMenuClick(menu: string) {
-        // Only show landing pages for agent, loan, or misc
-        if (menu === 'agent') {
+        // Update URL and show landing pages for agent, loan, or misc
+        if (menu === 'home') {
+            this.showAgentsLandingPage = false;
+            this.showLoansLandingPage = false;
+            this.showMiscLandingPage = false;
+            this.location.go('/home');
+        } else if (menu === 'agent') {
             this.showAgentsLandingPage = true;
             this.showLoansLandingPage = false;
             this.showMiscLandingPage = false;
+            this.location.go('/home/agents');
         } else if (menu === 'loan') {
             this.showAgentsLandingPage = false;
             this.showLoansLandingPage = true;
             this.showMiscLandingPage = false;
-            this.fetchLoans(); 
+            this.fetchLoans();
+            this.location.go('/home/loans');
         } else if (menu === 'misc') {
             this.showAgentsLandingPage = false;
             this.showLoansLandingPage = false;
             this.showMiscLandingPage = true;
+            this.location.go('/home/misc');
         } else {
             this.showAgentsLandingPage = false;
             this.showLoansLandingPage = false;
@@ -681,6 +767,15 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/login']);
     }
 
+    openProfitLossSummaryModal(property: Property) {
+        this.selectedPropertyId = property.id;
+        this.showProfitLossSummaryModal = true;
+    }
+
+    closeProfitLossSummaryModal() {
+        this.showProfitLossSummaryModal = false;
+    }
+
     onViewProperty(property: Property) {
         this.selectedPropertyId = property.id;
         this.viewMode = true;
@@ -728,6 +823,10 @@ export class HomeComponent implements OnInit {
                     next: (props) => {
                         this.properties = props;
                         this.propertyList = props;
+                        // Adjust pagination if current page is now empty
+                        if (this.currentPropertyPage > this.totalPropertyPages && this.totalPropertyPages > 0) {
+                            this.currentPropertyPage = this.totalPropertyPages;
+                        }
                         if (props.length > 0) {
                             this.selectedPropertyId = props[0].id;
                             this.plotService.getPlotsByPropertyId(props[0].id).subscribe({
@@ -821,6 +920,10 @@ export class HomeComponent implements OnInit {
                 this.plotService.getPlotsByPropertyId(this.selectedPropertyId!).subscribe({
                     next: (plots) => {
                         this.plots = plots;
+                        // Adjust pagination if current page is now empty
+                        if (this.currentPlotPage > this.totalPlotPages && this.totalPlotPages > 0) {
+                            this.currentPlotPage = this.totalPlotPages;
+                        }
                         this.selectedPlotDetails = plots.length > 0 ? plots[0] : null;
                     },
                     error: () => {

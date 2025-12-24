@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Property, RegisterPropertyRequest } from '../models/property.model';
+import { PropertyDetailsResponse } from '../models/property-details.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -88,5 +89,9 @@ export class PropertyService {
 
   deleteProperty(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  getPropertyDetails(propertyId: number): Observable<PropertyDetailsResponse> {
+    return this.http.get<PropertyDetailsResponse>(`${this.apiUrl}/${propertyId}/details`);
   }
 }

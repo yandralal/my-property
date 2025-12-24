@@ -4,6 +4,7 @@
 </ng-container>
 <app-message-box [show]="messageBoxVisible" [message]="messageText"></app-message-box>
 <div class="group-box">
+  <div class="table-wrapper">
   <table class="data-table">
     <thead>
       <tr>
@@ -19,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of miscList" [class.selected-row]="item.transactionId === selectedMiscId" (click)="onSelectMisc(item)">
+      <tr *ngFor="let item of paginatedMiscList" [class.selected-row]="item.transactionId === selectedMiscId" (click)="onSelectMisc(item)">
         <td style="display:none;">{{item.transactionId}}</td>
         <td>{{item.createdDate | date:'dd/MM/yyyy hh:mm a'}}</td>
         <td>{{item.transactionType}}</td>
@@ -39,4 +40,12 @@
       </tr>
     </tbody>
   </table>
+  </div>
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn" (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
+    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+    <button class="page-btn" (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">&raquo;</button>
+  </div>
 </div>

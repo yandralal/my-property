@@ -12,6 +12,9 @@
                         <option value="">Select</option>
                         <option *ngFor="let prop of propertyList" [value]="prop.id">{{ prop.title }}</option>
                     </select>
+                    <div *ngIf="transactionForm.get('propertyId')?.invalid && (transactionForm.get('propertyId')?.dirty || transactionForm.get('propertyId')?.touched)" class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+                        <small *ngIf="transactionForm.get('propertyId')?.errors?.['required']">Property is required</small>
+                    </div>
                 </div>
                 <div>
                     <label for="buyAmount">Purchase Amount</label>
@@ -37,10 +40,18 @@
                         <option value="">Select</option>
                         <option *ngFor="let type of transactionTypes" [value]="type">{{ type }}</option>
                     </select>
+                    <div *ngIf="transactionForm.get('transactionType')?.invalid && (transactionForm.get('transactionType')?.dirty || transactionForm.get('transactionType')?.touched)" class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+                        <small *ngIf="transactionForm.get('transactionType')?.errors?.['required']">Transaction type is required</small>
+                    </div>
                 </div>
                 <div>
                     <label for="amount">Transaction Amount <span style="color:red">*</span></label>
                     <input id="amount" formControlName="amount" />
+                    <div *ngIf="transactionForm.get('amount')?.invalid && (transactionForm.get('amount')?.dirty || transactionForm.get('amount')?.touched)" class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+                        <small *ngIf="transactionForm.get('amount')?.errors?.['required']">Amount is required</small>
+                        <small *ngIf="transactionForm.get('amount')?.errors?.['min']">Amount must be greater than 0</small>
+                        <small *ngIf="transactionForm.get('amount')?.errors?.['exceedsOutstanding']">Transaction amount cannot exceed the outstanding balance</small>
+                    </div>
                 </div>
                 <div>
                     <label for="paymentMethod">Payment Mode <span style="color:red">*</span></label>
@@ -48,6 +59,9 @@
                         <option value="">Select</option>
                         <option *ngFor="let mode of paymentModes" [value]="mode">{{ mode }}</option>
                     </select>
+                    <div *ngIf="transactionForm.get('paymentMethod')?.invalid && (transactionForm.get('paymentMethod')?.dirty || transactionForm.get('paymentMethod')?.touched)" class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+                        <small *ngIf="transactionForm.get('paymentMethod')?.errors?.['required']">Payment method is required</small>
+                    </div>
                 </div>
                 <div>
                     <label for="referenceNumber">Reference Number</label>
@@ -60,10 +74,13 @@
                 <div>
                     <label for="transactionDate">Transaction Date <span style="color:red">*</span></label>
                     <input id="transactionDate" type="date" formControlName="transactionDate" />
+                    <div *ngIf="transactionForm.get('transactionDate')?.invalid && (transactionForm.get('transactionDate')?.dirty || transactionForm.get('transactionDate')?.touched)" class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
+                        <small *ngIf="transactionForm.get('transactionDate')?.errors?.['required']">Transaction date is required</small>
+                    </div>
                 </div>
             </div>
         </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">Save</button>
+    <button type="submit" class="btn btn-primary" [disabled]="transactionForm.invalid || isSubmitting">Save</button>
     </form>
 </div>

@@ -159,6 +159,12 @@ export class PropertyFormComponent {
     }
 
     onSubmit() {
+        // In view mode, just close the modal
+        if (this.viewMode) {
+            this.closeModalClicked();
+            return;
+        }
+        
         if (!this.propertyForm.valid) {
             // Mark all controls as touched to show errors
             this.propertyForm.markAllAsTouched();

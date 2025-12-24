@@ -27,7 +27,7 @@
         </div>
         <div>
           <label for="area">Area (sq.ft) <span class="text-danger">*</span></label>
-          <input id="area" type="number" formControlName="area"
+          <input id="area" type="number" formControlName="area" [disabled]="true"
             [class.is-invalid]="plotForm.get('area')?.invalid && plotForm.get('area')?.touched" />
           <div *ngIf="plotForm.get('area')?.invalid && plotForm.get('area')?.touched" class="invalid-feedback d-block">
             <span *ngIf="plotForm.get('area')?.errors?.['required']">Area is required.</span>
@@ -107,6 +107,6 @@
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" [disabled]="viewMode">Save</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!viewMode && plotForm.invalid">{{ viewMode ? 'Close' : 'Save' }}</button>
   </form>
 </div>

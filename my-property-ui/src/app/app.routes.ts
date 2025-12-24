@@ -14,7 +14,7 @@ import { MiscListComponent } from './misc/misc-list.component';
 import { MiscFormComponent } from './misc/misc-form.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
   { path: 'property-form', component: PropertyFormComponent },

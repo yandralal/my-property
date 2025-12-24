@@ -34,6 +34,8 @@ export class LoginComponent {
         next: (response) => {
           // Handle successful login (e.g., store token, redirect)
           console.log('Login success:', response);
+          // Store username in localStorage
+          localStorage.setItem('username', username);
           this.router.navigate(['/home']);
         },
         error: (err) => {

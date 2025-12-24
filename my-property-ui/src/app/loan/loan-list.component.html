@@ -4,6 +4,7 @@
 </ng-container>
 <app-message-box [show]="messageBoxVisible" [message]="messageText"></app-message-box>
 <div class="group-box">
+  <div class="table-wrapper">
   <table class="data-table">
     <thead>
       <tr>
@@ -22,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let loan of loans" [class.selected-row]="loan.id === selectedLoanId" (click)="onSelectLoan(loan)">
+      <tr *ngFor="let loan of paginatedLoans" [class.selected-row]="loan.id === selectedLoanId" (click)="onSelectLoan(loan)">
         <td style="display:none;">{{loan.id}}</td>
         <td>{{loan.propertyName}}</td>
         <td>{{loan.lenderName}}</td>
@@ -50,4 +51,12 @@
       </tr>
     </tbody>
   </table>
+  </div>
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn" (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
+    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+    <button class="page-btn" (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">&raquo;</button>
+  </div>
 </div>

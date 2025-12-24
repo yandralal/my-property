@@ -1,3 +1,4 @@
+<div class="table-wrapper">
 <table *ngIf="transactions.length > 0" class="table table-bordered table-striped data-table">
     <thead>
         <tr>
@@ -11,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let txn of transactions">
+        <tr *ngFor="let txn of paginatedTransactions">
             <td>{{ txn.transactionDate | date:'dd/MM/yyyy hh:mm a' }}</td>
             <td>{{ txn.transactionType }}</td>
             <td><i class="bi bi-currency-rupee"></i> {{ txn.amount | inrFormat }}</td>
@@ -26,3 +27,11 @@
         </tr>
     </tbody>
 </table>
+</div>
+<div class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn" (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
+    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+    <button class="page-btn" (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">&raquo;</button>
+</div>

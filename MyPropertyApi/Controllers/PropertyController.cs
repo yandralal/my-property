@@ -1089,6 +1089,129 @@ namespace MyPropertyApi.Controllers
             }
         }
 
+        [HttpGet("{propertyId}/details")]
+        public async Task<ActionResult<PropertyDetailsSummaryDto>> GetPropertyDetailsSummary(int propertyId)
+        {
+            string? connectionString = _config.GetConnectionString("MyPropertyDb");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return StatusCode(500, "Database connection string is missing.");
+
+            var summary = new PropertyDetailsSummaryDto();
+
+            try
+            {
+                using var conn = new SqlConnection(connectionString);
+                await conn.OpenAsync();
+
+                // Get property details with financial summary
+                string propertyQuery = @"
+                    SELECT 
+                        Id, Title, Type, Status, Price, Owner, Phone, Address, City, State, ZipCode, Description, KhasraNo, Area,
+                        ISNULL((SELECT SUM(Amount) FROM PropertyTransaction pt WHERE pt.PropertyId = p.Id AND pt.IsDeleted = 0), 0) AS AmountPaid,
+                        ISNULL((SELECT SUM(LoanAmount) FROM PropertyLoan WHERE PropertyId = p.Id AND IsDeleted = 0), 0) AS TotalLoanPrinciple
+                    FROM Property p
+                    WHERE Id = @Id AND IsDeleted = 0";
+
+                using (var propertyCmd = new SqlCommand(propertyQuery, conn))
+                {
+                    propertyCmd.Parameters.AddWithValue("@Id", propertyId);
+                    using var reader = await propertyCmd.ExecuteReaderAsync();
+                    if (await reader.ReadAsync())
+                    {
+                        summary.Id = reader.GetInt32(reader.GetOrdinal("Id"));
+                        summary.Title = reader["Title"]?.ToString() ?? "";
+                        summary.Type = reader["Type"]?.ToString() ?? "";
+                        summary.Status = reader["Status"]?.ToString() ?? "";
+                        summary.Owner = reader["Owner"]?.ToString() ?? "";
+                        summary.Phone = reader["Phone"]?.ToString() ?? "";
+                        summary.Address = reader["Address"]?.ToString() ?? "";
+                        summary.City = reader["City"]?.ToString() ?? "";
+                        summary.State = reader["State"]?.ToString() ?? "";
+                        summary.ZipCode = reader["ZipCode"]?.ToString() ?? "";
+                        summary.Description = reader["Description"]?.ToString() ?? "";
+                        summary.KhasraNo = reader["KhasraNo"]?.ToString() ?? "";
+                        summary.Area = reader["Area"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Area"]);
+                        summary.BuyPrice = reader["Price"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Price"]);
+                        summary.AmountPaid = reader["AmountPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["AmountPaid"]);
+                        summary.TotalLoanPrinciple = reader["TotalLoanPrinciple"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalLoanPrinciple"]);
+                        summary.AmountBalance = summary.BuyPrice - (summary.TotalLoanPrinciple + summary.AmountPaid);
+                    }
+                    else
+                    {
+                        return NotFound($"Property with ID {propertyId} not found.");
+                    }
+                }
+
+                // Get plot summary
+                string plotSummaryQuery = @"
+                    SELECT 
+                        (SELECT COUNT(*) FROM Plot WHERE PropertyId = @Id AND IsDeleted = 0) AS TotalPlots,
+                        (SELECT COUNT(*) 
+                         FROM Plot p 
+                         WHERE p.PropertyId = @Id 
+                         AND p.IsDeleted = 0 
+                         AND NOT EXISTS (SELECT 1 FROM PlotSale ps WHERE ps.PlotId = p.Id)) AS AvailablePlots,
+                        (SELECT COUNT(*) 
+                         FROM Plot p 
+                         WHERE p.PropertyId = @Id 
+                         AND p.IsDeleted = 0 
+                         AND EXISTS (SELECT 1 FROM PlotSale ps WHERE ps.PlotId = p.Id)) AS BookedPlots,
+                        ISNULL((SELECT SUM(SaleAmount) FROM PlotSale ps INNER JOIN Plot p ON ps.PlotId = p.Id WHERE p.PropertyId = @Id AND p.IsDeleted = 0), 0) AS TotalSaleAmount,
+                        ISNULL((SELECT SUM(Amount) FROM PlotTransaction pt INNER JOIN Plot p ON pt.PlotId = p.Id WHERE p.PropertyId = @Id AND pt.IsDeleted = 0), 0) AS TotalPlotsPaid";
+
+                using (var plotCmd = new SqlCommand(plotSummaryQuery, conn))
+                {
+                    plotCmd.Parameters.AddWithValue("@Id", propertyId);
+                    using var reader = await plotCmd.ExecuteReaderAsync();
+                    if (await reader.ReadAsync())
+                    {
+                        summary.TotalPlots = reader["TotalPlots"] == DBNull.Value ? 0 : Convert.ToInt32(reader["TotalPlots"]);
+                        summary.AvailablePlots = reader["AvailablePlots"] == DBNull.Value ? 0 : Convert.ToInt32(reader["AvailablePlots"]);
+                        summary.BookedPlots = reader["BookedPlots"] == DBNull.Value ? 0 : Convert.ToInt32(reader["BookedPlots"]);
+                        summary.TotalSaleAmount = reader["TotalSaleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalSaleAmount"]);
+                        summary.TotalPlotsPaid = reader["TotalPlotsPaid"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["TotalPlotsPaid"]);
+                        summary.TotalPlotsBalance = summary.TotalSaleAmount - summary.TotalPlotsPaid;
+                    }
+                }
+
+                // Get brokerage summary
+                string brokerageQuery = @"
+                    SELECT ISNULL(SUM(BrokerageAmount), 0) AS TotalBrokerage
+                    FROM PlotSale ps
+                    INNER JOIN Plot p ON ps.PlotId = p.Id
+                    WHERE p.PropertyId = @Id AND p.IsDeleted = 0";
+
+                using (var brokerageCmd = new SqlCommand(brokerageQuery, conn))
+                {
+                    brokerageCmd.Parameters.AddWithValue("@Id", propertyId);
+                    var result = await brokerageCmd.ExecuteScalarAsync();
+                    summary.TotalBrokerage = result == DBNull.Value ? 0 : Convert.ToDecimal(result);
+                }
+
+                // Get loan interest summary
+                string loanInterestQuery = @"
+                    SELECT ISNULL(SUM(TotalInterest), 0) AS TotalLoanInterest
+                    FROM PropertyLoan
+                    WHERE PropertyId = @Id AND IsDeleted = 0";
+
+                using (var loanCmd = new SqlCommand(loanInterestQuery, conn))
+                {
+                    loanCmd.Parameters.AddWithValue("@Id", propertyId);
+                    var result = await loanCmd.ExecuteScalarAsync();
+                    summary.TotalLoanInterest = result == DBNull.Value ? 0 : Convert.ToDecimal(result);
+                }
+
+                // Calculate profit/loss
+                summary.ProfitLossAfterLoan = summary.TotalSaleAmount - summary.BuyPrice - summary.TotalBrokerage - summary.TotalLoanInterest;
+
+                return Ok(summary);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching property details: {ex.Message}");
+            }
+        }
+
         #endregion
     }
 }

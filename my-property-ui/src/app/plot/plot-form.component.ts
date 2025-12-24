@@ -134,6 +134,12 @@ export class PlotFormComponent {
   }
 
   onSubmit() {
+    // In view mode, just close the modal
+    if (this.viewMode) {
+      this.closeModalClicked();
+      return;
+    }
+    
     if (!this.plotForm.valid) {
       this.plotForm.markAllAsTouched();
       this.showMessage.emit('Please fix validation errors before submitting.');

@@ -1,0 +1,114 @@
+<div class="group-box">
+  <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2><i class="bi bi-graph-up-arrow" style="margin-right: 0.5rem;"></i>Property Profit/Loss Summary</h2>
+    <button class="modal-close" type="button" (click)="onClose()" aria-label="Close">&times;</button>
+  </div>
+
+  <div *ngIf="!property" class="no-data-message">
+    <i class="bi bi-info-circle"></i>
+    <p>Select a property to view profit/loss summary.</p>
+  </div>
+
+  <div *ngIf="property" class="summary-content">
+    <!-- Financial Details Section -->
+    <div class="financial-section">
+      <h3 class="section-title"><i class="bi bi-cash-stack"></i> Financial Details</h3>
+      <div class="financial-grid">
+        <div class="financial-card">
+          <div class="card-label">Buy Price</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ buyValue | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Amount Paid (Cash)</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ amountPaidCash | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Amount Paid (Loan)</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ totalLoanPrinciple | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Property Balance</div>
+          <div class="card-value warning"><i class="bi bi-currency-rupee"></i>{{ propertyBalance | number:'1.0-0' }}/-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plots Summary Section -->
+    <div class="plots-section">
+      <h3 class="section-title"><i class="bi bi-geo-alt"></i> Plots Summary</h3>
+      <div class="plots-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-grid-3x3"></i></div>
+          <div class="stat-content">
+            <div class="stat-label">Total Plots</div>
+            <div class="stat-value">{{ totalPlots }}</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon sold"><i class="bi bi-check-circle"></i></div>
+          <div class="stat-content">
+            <div class="stat-label">Plots Sold</div>
+            <div class="stat-value">{{ totalPlotsSold }}</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon available"><i class="bi bi-circle"></i></div>
+          <div class="stat-content">
+            <div class="stat-label">Available</div>
+            <div class="stat-value">{{ totalPlots - totalPlotsSold }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="financial-grid" style="margin-top: 1rem;">
+        <div class="financial-card">
+          <div class="card-label">Total Sale Amount</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ totalPlotsSaleAmount | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Total Paid</div>
+          <div class="card-value success"><i class="bi bi-currency-rupee"></i>{{ totalPlotsPaid | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Total Balance</div>
+          <div class="card-value warning"><i class="bi bi-currency-rupee"></i>{{ totalPlotsBalance | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Total Brokerage</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ totalBrokerage | number:'1.0-0' }}/-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan Summary Section -->
+    <div class="loan-section">
+      <h3 class="section-title"><i class="bi bi-bank"></i> Loan Summary</h3>
+      <div class="financial-grid">
+        <div class="financial-card">
+          <div class="card-label">Total Loan Principle</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ totalLoanPrinciple | number:'1.0-0' }}/-</div>
+        </div>
+        <div class="financial-card">
+          <div class="card-label">Total Loan Interest</div>
+          <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ totalLoanInterest | number:'1.0-0' }}/-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profit/Loss Section -->
+    <div class="profit-loss-section">
+      <div class="profit-loss-card" [ngClass]="profitLoss >= 0 ? 'profit-card' : 'loss-card'">
+        <div class="pl-icon">
+          <i class="bi" [ngClass]="profitLoss >= 0 ? 'bi-graph-up' : 'bi-graph-down'"></i>
+        </div>
+        <div class="pl-content">
+          <div class="pl-label">{{ profitLoss >= 0 ? 'Net Profit' : 'Net Loss' }}</div>
+          <div class="pl-value">
+            <i class="bi bi-currency-rupee"></i>{{ profitLoss | number:'1.0-0' }}/-
+          </div>
+          <div class="pl-note">After deducting all expenses including loans and brokerage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

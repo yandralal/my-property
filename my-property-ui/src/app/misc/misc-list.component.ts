@@ -26,6 +26,26 @@ export class MiscListComponent {
   viewMiscModalVisible = false;
   selectedMiscForView: any = null;
   @Output() viewMisc = new EventEmitter<any>();
+  
+  // Pagination
+  currentPage = 1;
+  pageSize = 10;
+  
+  get paginatedMiscList(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.miscList.slice(startIndex, endIndex);
+  }
+  
+  get totalPages(): number {
+    return Math.ceil(this.miscList.length / this.pageSize);
+  }
+  
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
 
   constructor(private propertyService: PropertyService) {}
 
@@ -66,6 +86,12 @@ export class MiscListComponent {
       // Replace with API call if needed. For now emit event and show message
       this.miscDeleted.emit(id);
       this.showMessage('Record deleted successfully.');
+      // Adjust pagination if current page is now empty
+      setTimeout(() => {
+        if (this.currentPage > this.totalPages && this.totalPages > 0) {
+          this.currentPage = this.totalPages;
+        }
+      }, 100);
       this.confirmDeleteMiscVisible = false;
       this.miscToDelete = null;
     }

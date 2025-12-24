@@ -16,6 +16,7 @@ export class AgentListComponent implements OnInit {
   @Output() selectAgent = new EventEmitter<any>();
   @Output() viewAgent = new EventEmitter<any>();
   @Output() editAgent = new EventEmitter<any>();
+  @Output() agentDeleted = new EventEmitter<void>();
 
   agentTransactions: any[] = [];
   selectedAgentId: number | null = null;
@@ -25,6 +26,26 @@ export class AgentListComponent implements OnInit {
   editAgentData: any = null;
   messageBoxVisible = false;
   messageText = '';
+  
+  // Pagination
+  currentPage = 1;
+  pageSize = 10;
+  
+  get paginatedAgents(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.agents.slice(startIndex, endIndex);
+  }
+  
+  get totalPages(): number {
+    return Math.ceil(this.agents.length / this.pageSize);
+  }
+  
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
 
   constructor(private agentService: AgentService) { }
 
@@ -102,7 +123,14 @@ export class AgentListComponent implements OnInit {
     this.agentService.deleteAgent(this.agentToDelete.id).subscribe({
       next: () => {
         this.showMessage('Agent deleted successfully.');
+        this.agentDeleted.emit();
         this.loadAgentsAndSelectFirst();
+        // Adjust pagination if current page is now empty
+        setTimeout(() => {
+          if (this.currentPage > this.totalPages && this.totalPages > 0) {
+            this.currentPage = this.totalPages;
+          }
+        }, 100);
         this.confirmDeleteAgentVisible = false;
         this.agentToDelete = null;
       },

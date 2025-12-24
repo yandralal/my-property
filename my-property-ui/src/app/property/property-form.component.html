@@ -105,6 +105,6 @@
       </div>
     </div>
   </div>
-  <button type="submit" class="btn btn-primary">Save</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!viewMode && propertyForm.invalid">{{ viewMode ? 'Close' : 'Save' }}</button>
 </form>
 </div>

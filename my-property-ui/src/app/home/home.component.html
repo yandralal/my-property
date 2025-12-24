@@ -27,14 +27,22 @@
 </ng-container>
 
 <app-message-box [show]="messageBoxVisible" [message]="messageText" (close)="closeMessageBox()"></app-message-box>
-<div class="main-container sidebar-layout">
+<div class="main-container">
+<div class="sidebar-layout">
     <div class="user-info-bar">
-        <div class="user-dropdown" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
-            <span class="user-name">{{ userName }} &#x25BC;</span>
-            <div class="dropdown-menu" *ngIf="showDropdown">
-                <button class="dropdown-item" (click)="logout()">Logout</button>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-greeting">Welcome back,</span>
+                <span class="user-name">{{ userName }}</span>
             </div>
         </div>
+        <button class="logout-btn" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </button>
     </div>
     <div class="sidebar" [class.collapsed]="isSidebarCollapsed">
         <button type="button" class="sidebar-toggle" (click)="isSidebarCollapsed = !isSidebarCollapsed">
@@ -42,25 +50,61 @@
         </button>
         <ng-container *ngIf="!isSidebarCollapsed">
             <ul class="sidebar-menu">
-                <li (click)="toggleMenu('management')" class="sidebar-separator"><span>Management</span></li>
+                <li (click)="onMenuClick('home')" class="sidebar-separator menu-item">
+                    <i class="bi bi-house-door-fill menu-icon"></i>
+                    <span>Home</span>
+                </li>
+                <li (click)="toggleMenu('management')" class="sidebar-separator menu-item">
+                    <i class="bi bi-gear-fill menu-icon"></i>
+                    <span>Management</span>
+                    <i class="bi" [ngClass]="expandedMenu === 'management' ? 'bi-chevron-down' : 'bi-chevron-right'" style="margin-left: auto; font-size: 0.8rem;"></i>
+                </li>
                 <ul *ngIf="expandedMenu === 'management'" class="sidebar-submenu">
-                    <li (click)="onMenuClick('agent')"> Agent</li>
-                    <li (click)="onMenuClick('loan')"> Loan</li>
-                    <li (click)="onMenuClick('misc')"> Misc</li>
+                    <li (click)="onMenuClick('agent')">
+                        <i class="bi bi-person-badge submenu-icon"></i>
+                        <span>Agent</span>
+                    </li>
+                    <li (click)="onMenuClick('loan')">
+                        <i class="bi bi-cash-coin submenu-icon"></i>
+                        <span>Loan</span>
+                    </li>
+                    <li (click)="onMenuClick('misc')">
+                        <i class="bi bi-file-earmark-text submenu-icon"></i>
+                        <span>Misc</span>
+                    </li>
                 </ul>
-                <li (click)="toggleMenu('notifications')">
+                <li (click)="toggleMenu('notifications')" class="menu-item">
+                    <i class="bi bi-bell-fill menu-icon"></i>
                     <span>Notifications</span>
+                    <i class="bi" [ngClass]="expandedMenu === 'notifications' ? 'bi-chevron-down' : 'bi-chevron-right'" style="margin-left: auto; font-size: 0.8rem;"></i>
                     <ul *ngIf="expandedMenu === 'notifications'">
-                        <li (click)="onMenuClick('sendMessages')">Send Messages</li>
+                        <li (click)="onMenuClick('sendMessages')">
+                            <i class="bi bi-send submenu-icon"></i>
+                            <span>Send Messages</span>
+                        </li>
                     </ul>
                 </li>
-                <li (click)="toggleMenu('help')">
+                <li (click)="toggleMenu('help')" class="menu-item">
+                    <i class="bi bi-question-circle-fill menu-icon"></i>
                     <span>Help</span>
+                    <i class="bi" [ngClass]="expandedMenu === 'help' ? 'bi-chevron-down' : 'bi-chevron-right'" style="margin-left: auto; font-size: 0.8rem;"></i>
                     <ul *ngIf="expandedMenu === 'help'">
-                        <li (click)="onMenuClick('help')">Help</li>
-                        <li (click)="onMenuClick('about')">About</li>
-                        <li (click)="onMenuClick('customizeBackground')">Customize Background</li>
-                        <li (click)="onMenuClick('downloadGuide')">Download User Guide</li>
+                        <li (click)="onMenuClick('help')">
+                            <i class="bi bi-info-circle submenu-icon"></i>
+                            <span>Help</span>
+                        </li>
+                        <li (click)="onMenuClick('about')">
+                            <i class="bi bi-info-square submenu-icon"></i>
+                            <span>About</span>
+                        </li>
+                        <li (click)="onMenuClick('customizeBackground')">
+                            <i class="bi bi-palette submenu-icon"></i>
+                            <span>Customize Background</span>
+                        </li>
+                        <li (click)="onMenuClick('downloadGuide')">
+                            <i class="bi bi-download submenu-icon"></i>
+                            <span>Download User Guide</span>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -75,7 +119,7 @@
                         <i class="bi bi-plus-circle" style="margin-right: 0.5rem;"></i> Register New Agent
                     </button>
                 </div>
-                <app-agent-list [agents]="agents" (selectAgent)="onSelectAgent($event)" (viewAgent)="onViewAgent($event)" (editAgent)="openEditAgentModal($event)"></app-agent-list>
+                <app-agent-list [agents]="agents" (selectAgent)="onSelectAgent($event)" (viewAgent)="onViewAgent($event)" (editAgent)="openEditAgentModal($event)" (agentDeleted)="onAgentDeleted()"></app-agent-list>
             </div>
         </ng-container>
         <ng-container *ngIf="showLoansLandingPage">
@@ -107,24 +151,23 @@
                         <h3>Properties <span class="count-pill">{{ propertyList.length }}</span></h3>
                     </div>
                     <div class="action-btn-group" style="display: flex; gap: 0.5rem;">
-                        <button type="button" class="modern-btn primary" (click)="onRegisterProperty()">
-                            <i class="bi bi-plus-circle" style="margin-right: 0.5rem;"></i> Register New Property
+                        <button type="button" class="modern-btn primary " style="margin-right: 1rem;" (click)="onRegisterProperty()">
+                            <i class="bi bi-plus-circle" style="margin-right: 1rem;"></i> Register New Property
                         </button>
                         <button type="button" class="modern-btn secondary" (click)="onManagePlots()">
                             <i class="bi bi-geo-alt" style="margin-right: 0.5rem;"></i> Manage Plots
                         </button>
                     </div>
                 </div>
+                <div class="table-wrapper">
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th style="display:none;">ID</th>
                             <th>Title</th>
                             <th>Type</th>
-                            <th>Status</th>
                             <th>Buy Price</th>
                             <th>Owner</th>
-                            <th>Phone</th>
                             <th>Amount Paid</th>
                             <th>Loan Principle</th>
                             <th>Balance</th>
@@ -134,22 +177,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let property of properties"
+                        <tr *ngFor="let property of paginatedProperties"
                             [class.selected-row]="property.id === selectedPropertyId"
                             (click)="onSelectProperty(property)">
                             <td style="display:none;">{{property.id}}</td>
                             <td>{{property.title}}</td>
                             <td>{{property.type}}</td>
-                            <td>{{property.status}}</td>
                             <td><i class="bi bi-currency-rupee"></i> {{property.buyPrice | inrFormat}}</td>
                             <td>{{property.owner}}</td>
-                            <td>{{property.phone}}</td>
                             <td><i class="bi bi-currency-rupee"></i> {{property.amountPaid | inrFormat}}</td>
                             <td><i class="bi bi-currency-rupee"></i> {{property.totalLoanPrinciple | inrFormat}}</td>
                             <td><i class="bi bi-currency-rupee"></i> {{property.amountBalance | inrFormat}}</td>
                             <td>{{property.khasraNo}}</td>
                             <td>{{property.area}} sqft</td>
-                            <td>
+                            <td style="white-space: nowrap;">
                                 <button type="button" class="action-icon" title="View"
                                     (click)="onViewProperty(property)">
                                     <i class="bi bi-eye"></i>
@@ -162,6 +203,10 @@
                                     (click)="onDeleteProperty(property)">
                                     <i class="bi bi-trash"></i>
                                 </button>
+                                <button type="button" class="action-icon" title="View Summary"
+                                    (click)="openProfitLossSummaryModal(property)">
+                                    <i class="bi bi-graph-up" style="color:#0d6efd;"></i>
+                                </button>
                                 <button type="button" class="action-icon" title="WhatsApp"
                                     (click)="onWhatsAppProperty(property)">
                                     <i class="bi bi-whatsapp" style="color:#25D366;"></i>
@@ -170,6 +215,14 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
+                <div class="pagination" *ngIf="totalPropertyPages > 1">
+                    <button class="page-btn" (click)="goToPropertyPage(1)" [disabled]="currentPropertyPage === 1">&laquo;</button>
+                    <button class="page-btn" (click)="goToPropertyPage(currentPropertyPage - 1)" [disabled]="currentPropertyPage === 1">‹</button>
+                    <span class="page-info">Page {{ currentPropertyPage }} of {{ totalPropertyPages }}</span>
+                    <button class="page-btn" (click)="goToPropertyPage(currentPropertyPage + 1)" [disabled]="currentPropertyPage === totalPropertyPages">›</button>
+                    <button class="page-btn" (click)="goToPropertyPage(totalPropertyPages)" [disabled]="currentPropertyPage === totalPropertyPages">&raquo;</button>
+                </div>
             </div>
 
             <div class="group-box">
@@ -180,6 +233,7 @@
                         <i class="bi bi-currency-rupee" style="margin-right: 0.5rem;"></i> Sale Plot
                     </button>
                 </div>
+                <div class="table-wrapper">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -196,7 +250,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let plot of plots" [class.selected-row]="plot.id === selectedPlotDetails?.id"
+                        <tr *ngFor="let plot of paginatedPlots" [class.selected-row]="plot.id === selectedPlotDetails?.id"
                             (click)="onSelectPlot(plot)">
                             <td style="display:none;">{{plot.id}}</td>
                             <td>{{plot.plotNumber}}</td>
@@ -228,6 +282,14 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
+                <div class="pagination" *ngIf="totalPlotPages > 1">
+                    <button class="page-btn" (click)="goToPlotPage(1)" [disabled]="currentPlotPage === 1">&laquo;</button>
+                    <button class="page-btn" (click)="goToPlotPage(currentPlotPage - 1)" [disabled]="currentPlotPage === 1">‹</button>
+                    <span class="page-info">Page {{ currentPlotPage }} of {{ totalPlotPages }}</span>
+                    <button class="page-btn" (click)="goToPlotPage(currentPlotPage + 1)" [disabled]="currentPlotPage === totalPlotPages">›</button>
+                    <button class="page-btn" (click)="goToPlotPage(totalPlotPages)" [disabled]="currentPlotPage === totalPlotPages">&raquo;</button>
+                </div>
             </div>
 
             <div class="group-box">
@@ -397,5 +459,28 @@
                 </div>
             </div>
         </ng-container>
+
+        <ng-container *ngIf="showProfitLossSummaryModal">
+            <div class="modal-overlay">
+                <div class="modal profit-loss-summary-modal">
+                    <app-property-profit-loss
+                        [property]="selectedProperty"
+                        [plots]="plots"
+                        (closeModal)="closeProfitLossSummaryModal()"></app-property-profit-loss>
+                </div>
+            </div>
+        </ng-container>
     </div>
+</div>
+<footer class="app-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <i class="bi bi-building" style="margin-right: 0.5rem;"></i>
+            <span>&copy; {{ currentYear }} VVT Softwares Pvt. Ltd. All rights reserved.</span>
+        </div>
+        <div class="footer-section">
+            <span>Version 1.0.0</span>
+        </div>
+    </div>
+</footer>
 </div>

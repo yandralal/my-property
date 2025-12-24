@@ -30,7 +30,7 @@ export class PropertyTransactionFormComponent implements OnInit {
       totalLoan: [{ value: '', disabled: true }],
       amountPaidTillDate: [{ value: '', disabled: true }],
       transactionType: ['Debit', Validators.required],
-      amount: [null, [Validators.required, Validators.min(1)]],
+      amount: [null, [Validators.required, Validators.min(1), this.validateTransactionAmount.bind(this)]],
       balanceAmount: [{ value: '', disabled: true }],
       paymentMethod: [this.paymentModes[0], Validators.required],
       referenceNumber: [''],
@@ -114,6 +114,27 @@ export class PropertyTransactionFormComponent implements OnInit {
         this.fetchTransactionInfo(propertyId);
       }
     });
+  }
+
+  validateTransactionAmount(control: any) {
+    if (!this.transactionForm) return null;
+    
+    const amountStr = String(control.value ?? '').replace(/,/g, '');
+    const txnAmount = Number(amountStr);
+    
+    if (isNaN(txnAmount) || txnAmount <= 0) return null;
+    
+    const buyAmount = Number(String(this.transactionForm.get('buyAmount')?.value ?? 0).replace(/,/g, ''));
+    const totalLoan = Number(String(this.transactionForm.get('totalLoan')?.value ?? 0).replace(/,/g, ''));
+    const amountPaidTillDate = Number(String(this.transactionForm.get('amountPaidTillDate')?.value ?? 0).replace(/,/g, ''));
+    
+    const outstanding = buyAmount - totalLoan - amountPaidTillDate;
+    
+    if (txnAmount > outstanding) {
+      return { exceedsOutstanding: { outstanding, txnAmount } };
+    }
+    
+    return null;
   }
 
   fetchTransactionInfo(propertyId: number) {

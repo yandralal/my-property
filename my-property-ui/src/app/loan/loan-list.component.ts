@@ -29,6 +29,26 @@ export class LoanListComponent {
   editLoanData: any = null;
   agentTransactions: any[] = [];
   loanTransactions: any[] = [];
+  
+  // Pagination
+  currentPage = 1;
+  pageSize = 10;
+  
+  get paginatedLoans(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.loans.slice(startIndex, endIndex);
+  }
+  
+  get totalPages(): number {
+    return Math.ceil(this.loans.length / this.pageSize);
+  }
+  
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
 
   constructor(private propertyService: PropertyService) {}
   
@@ -108,6 +128,12 @@ export class LoanListComponent {
         next: () => {
           this.showMessage('Loan deleted successfully.');
           this.loanDeleted.emit(this.loanToDelete.id);
+          // Adjust pagination if current page is now empty
+          setTimeout(() => {
+            if (this.currentPage > this.totalPages && this.totalPages > 0) {
+              this.currentPage = this.totalPages;
+            }
+          }, 100);
           this.confirmDeleteLoanVisible = false;
           this.loanToDelete = null;
         },

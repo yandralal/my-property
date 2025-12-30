@@ -66,7 +66,7 @@
           <div class="card-value"><i class="bi bi-currency-rupee"></i>{{ totalPlotsSaleAmount | number:'1.0-0' }}/-</div>
         </div>
         <div class="financial-card">
-          <div class="card-label">Total Paid</div>
+          <div class="card-label">Total Received</div>
           <div class="card-value success"><i class="bi bi-currency-rupee"></i>{{ totalPlotsPaid | number:'1.0-0' }}/-</div>
         </div>
         <div class="financial-card">
@@ -80,7 +80,6 @@
       </div>
     </div>
 
-    <!-- Loan Summary Section -->
     <div class="loan-section">
       <h3 class="section-title"><i class="bi bi-bank"></i> Loan Summary</h3>
       <div class="financial-grid">
@@ -95,18 +94,40 @@
       </div>
     </div>
 
-    <!-- Profit/Loss Section -->
+    <!-- Profit/Loss Section (KPIs + Charts + Realized/Unrealized) -->
     <div class="profit-loss-section">
-      <div class="profit-loss-card" [ngClass]="profitLoss >= 0 ? 'profit-card' : 'loss-card'">
-        <div class="pl-icon">
-          <i class="bi" [ngClass]="profitLoss >= 0 ? 'bi-graph-up' : 'bi-graph-down'"></i>
+      <h3 class="section-title"><i class="bi bi-graph-up-arrow"></i> Profit / Loss</h3>
+
+      <!-- Net Profit/Loss Highlight Card -->
+      <div class="net-profit-loss-card">
+        <div class="card-label">Net Profit / Loss</div>
+        <div 
+          class="card-value net-profit-loss-value"
+          [style.color]="profitLossAfterLoan < 0 ? '#dc2626 !important' : '#059669 !important'"
+        >
+          <i class="bi bi-currency-rupee"></i>{{ (profitLossAfterLoan < 0 ? -profitLossAfterLoan : profitLossAfterLoan) | number:'1.0-0' }}/-
         </div>
-        <div class="pl-content">
-          <div class="pl-label">{{ profitLoss >= 0 ? 'Net Profit' : 'Net Loss' }}</div>
-          <div class="pl-value">
-            <i class="bi bi-currency-rupee"></i>{{ profitLoss | number:'1.0-0' }}/-
+        <div class="card-sub formula-sub">
+          <span class="formula-label">(Total Cost - Total Sale Amount)</span>
+        </div>
+      </div>
+
+      <div class="pl-main">
+        <!-- Small inline stacked bar chart (Received | Costs | Receivable) -->
+        <div class="pl-chart-card" style="width:100%">
+          <div class="card-label">Composition</div>
+          <div class="pl-chart" aria-hidden="true">
+            <div class="bar">
+              <div class="segment received" [attr.title]="getSegmentTitle('received')" [style.width.%]="(realizedReceived + 0) && (realizedReceived + realizedCosts + unrealizedReceivable) > 0 ? (realizedReceived / (realizedReceived + realizedCosts + unrealizedReceivable) * 100) : 0"></div>
+              <div class="segment costs" [attr.title]="getSegmentTitle('costs')" [style.width.%]="(realizedCosts + 0) && (realizedReceived + realizedCosts + unrealizedReceivable) > 0 ? (realizedCosts / (realizedReceived + realizedCosts + unrealizedReceivable) * 100) : 0"></div>
+              <div class="segment receivable" [attr.title]="getSegmentTitle('receivable')" [style.width.%]="(unrealizedReceivable + 0) && (realizedReceived + realizedCosts + unrealizedReceivable) > 0 ? (unrealizedReceivable / (realizedReceived + realizedCosts + unrealizedReceivable) * 100) : 0"></div>
+            </div>
+            <div class="legend">
+              <span><i class="legend-box received"></i>Received</span>
+              <span><i class="legend-box costs"></i>Costs</span>
+              <span><i class="legend-box receivable"></i>Receivable</span>
+            </div>
           </div>
-          <div class="pl-note">After deducting all expenses including loans and brokerage</div>
         </div>
       </div>
     </div>

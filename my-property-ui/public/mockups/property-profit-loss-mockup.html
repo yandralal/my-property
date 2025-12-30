@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Property Profit/Loss Mockup</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;padding:20px}
+    .modal{width:980px;margin:20px auto;background:#fff;border-radius:10px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+    h2{margin:0 0 12px 0;font-size:1.1rem}
+    .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+    .card{background:#f8fafc;border-radius:8px;padding:10px;border:1px solid #e6eef8}
+    .label{font-size:0.8rem;color:#475569;margin-bottom:6px}
+    .value{font-weight:700;font-size:1.05rem}
+    .pl-main{display:flex;gap:10px}
+    .left{flex:1}
+    .chart{width:260px}
+    .bar{height:18px;background:#eef2ff;border-radius:8px;overflow:hidden;display:flex}
+    .seg{height:100%}
+    .seg.r{background:linear-gradient(90deg,#10b981,#059669)}
+    .seg.c{background:linear-gradient(90deg,#f97316,#f59e0b)}
+    .seg.u{background:linear-gradient(90deg,#60a5fa,#3b82f6)}
+    .legend{display:flex;gap:8px;margin-top:8px;font-size:0.82rem;color:#475569}
+    .toggle{margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <div class="modal">
+    <h2>Property Profit/Loss Summary — Mockup</h2>
+
+    <div class="kpi">
+      <div class="card"><div class="label">Net Profit / Loss</div><div class="value">₹ 2,50,000</div></div>
+      <div class="card"><div class="label">Total Sale Amount</div><div class="value">₹ 10,00,000</div></div>
+      <div class="card"><div class="label">Total Received</div><div class="value">₹ 6,00,000</div></div>
+      <div class="card"><div class="label">Available Plots</div><div class="value">4</div></div>
+    </div>
+
+    <div class="toggle">Allocate costs by: <strong>Amount</strong> | <a href="#">Switch to Count</a></div>
+
+    <div class="pl-main">
+      <div class="left">
+        <div class="card" style="margin-bottom:8px"><div class="label">Realized — Received</div><div class="value">₹ 6,00,000</div><div style="margin-top:6px;font-size:0.85rem;color:#475569">Allocated Costs: ₹ 3,50,000 — Realized P/L: ₹ 2,50,000</div></div>
+        <div class="card"><div class="label">Unrealized — Sold Value</div><div class="value">₹ 4,00,000</div><div style="margin-top:6px;font-size:0.85rem;color:#475569">Received: ₹ 0 — Receivable: ₹ 4,00,000</div></div>
+      </div>
+
+      <div class="chart card">
+        <div class="label">Composition</div>
+        <div class="bar">
+          <div class="seg r" style="width:50%" title="Received: ₹6,00,000 (50%)"></div>
+          <div class="seg c" style="width:29%" title="Costs: ₹3,50,000 (29%)"></div>
+          <div class="seg u" style="width:21%" title="Receivable: ₹4,00,000 (21%)"></div>
+        </div>
+        <div class="legend"><span><span style="display:inline-block;width:12px;height:12px;background:linear-gradient(90deg,#10b981,#059669);margin-right:6px"></span>Received</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:linear-gradient(90deg,#f97316,#f59e0b);margin-right:6px"></span>Costs</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:linear-gradient(90deg,#60a5fa,#3b82f6);margin-right:6px"></span>Receivable</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

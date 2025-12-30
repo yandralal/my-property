@@ -27,7 +27,7 @@
         <td style="display:none;">{{loan.id}}</td>
         <td>{{loan.propertyName}}</td>
         <td>{{loan.lenderName}}</td>
-        <td>{{loan.loanDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+        <td>{{loan.loanDate | date:'dd/MM/yyyy' }}</td>
         <td><i class="bi bi-currency-rupee"></i> {{ loan.loanAmount | inrFormat }}</td>
         <td>{{loan.interestRate}}</td>
         <td>{{loan.tenure}}</td>

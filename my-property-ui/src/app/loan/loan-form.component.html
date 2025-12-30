@@ -30,6 +30,7 @@
           <div>
             <label for="loanAmount">Loan Amount *</label>
             <input id="loanAmount" type="text" formControlName="loanAmount"
+              (input)="onlyNumbers($event)"
               (input)="patchFormattedField('loanAmount')"
               [class.is-invalid]="loanForm.get('loanAmount')?.invalid && loanForm.get('loanAmount')?.touched" />
             <div *ngIf="loanForm.get('loanAmount')?.invalid && loanForm.get('loanAmount')?.touched"

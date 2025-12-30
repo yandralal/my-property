@@ -46,7 +46,7 @@
                 </div>
                 <div>
                     <label for="amount">Transaction Amount <span style="color:red">*</span></label>
-                    <input id="amount" formControlName="amount" />
+                    <input id="amount" type="text" formControlName="amount" (input)="onlyNumbers($event)" />
                     <div *ngIf="transactionForm.get('amount')?.invalid && (transactionForm.get('amount')?.dirty || transactionForm.get('amount')?.touched)" class="invalid-feedback" style="display: block; margin-top: 0.25rem;">
                         <small *ngIf="transactionForm.get('amount')?.errors?.['required']">Amount is required</small>
                         <small *ngIf="transactionForm.get('amount')?.errors?.['min']">Amount must be greater than 0</small>

@@ -19,6 +19,26 @@ export class PropertyTransactionFormComponent implements OnInit {
   @Output() success = new EventEmitter<string>();
 
   transactionForm: FormGroup;
+
+  onlyNumbers(event: any): void {
+    const input = event.target;
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      value = this.formatIndianNumber(value);
+    }
+    input.value = value;
+  }
+
+  formatIndianNumber(num: string): string {
+    if (!num) return '';
+    const numStr = num.toString();
+    let lastThree = numStr.substring(numStr.length - 3);
+    const otherNumbers = numStr.substring(0, numStr.length - 3);
+    if (otherNumbers !== '') {
+      lastThree = ',' + lastThree;
+    }
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+  }
   transactionTypes = ['Credit', 'Debit'];
   paymentModes = ['Cash', 'Cheque', 'Bank Transfer', 'Other'];
 

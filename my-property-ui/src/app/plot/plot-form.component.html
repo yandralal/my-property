@@ -37,6 +37,7 @@
         <div>
           <label for="saleAmount">Sale Amount <span class="text-danger">*</span></label>
           <input id="saleAmount" type="text" formControlName="saleAmount"
+            (input)="onlyNumbers($event)"
             [class.is-invalid]="plotForm.get('saleAmount')?.invalid && plotForm.get('saleAmount')?.touched" />
           <div *ngIf="plotForm.get('saleAmount')?.invalid && plotForm.get('saleAmount')?.touched"
             class="invalid-feedback d-block">
@@ -54,6 +55,7 @@
         <div>
           <label for="brokerageAmount">Brokerage Amount</label>
           <input id="brokerageAmount" type="text" formControlName="brokerageAmount"
+            (input)="onlyNumbers($event)"
             [class.is-invalid]="plotForm.get('brokerageAmount')?.invalid && plotForm.get('brokerageAmount')?.touched" />
           <div *ngIf="plotForm.get('brokerageAmount')?.invalid && plotForm.get('brokerageAmount')?.touched"
             class="invalid-feedback d-block">
@@ -76,8 +78,7 @@
         </div>
         <div>
           <label for="customerPhone">Customer Phone <span class="text-danger">*</span></label>
-          <input id="customerPhone" formControlName="customerPhone" autocomplete="off"
-            maxlength="10"
+          <input id="customerPhone" type="number" formControlName="customerPhone" autocomplete="off"
             [class.is-invalid]="plotForm.get('customerPhone')?.invalid && plotForm.get('customerPhone')?.touched" />
           <div *ngIf="plotForm.get('customerPhone')?.invalid && plotForm.get('customerPhone')?.touched"
             class="invalid-feedback d-block">

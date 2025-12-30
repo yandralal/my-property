@@ -1,3 +1,65 @@
+.net-profit-loss-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 2px solid #667eea;
+  box-shadow: 0 8px 32px rgba(102,126,234,0.12), 
+              0 4px 16px rgba(118,75,162,0.08);
+  padding: 1rem 1.5rem 0.9rem 1.5rem;
+  margin: 1.2rem auto 1.2rem auto;
+  text-align: center;
+  position: relative;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.net-profit-loss-card .card-label {
+  color: #667eea;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.net-profit-loss-value {
+  font-size: 2.1rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px;
+  margin: 0.2rem 0 0.1rem 0;
+  transition: color 0.3s;
+}
+.net-profit-loss-value {
+  font-size: 2.4rem !important;
+  font-weight: 900 !important;
+  line-height: 1.1;
+  margin: 0.2rem 0 0.3rem 0;
+  display: inline-block;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+}
+.formula-sub {
+  margin-top: 0.15rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  position: relative;
+  z-index: 1;
+}
+.formula-label {
+  color: #64748b;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -32,6 +94,11 @@
   top: 0;
   left: 0;
   right: 0;
+  .profit-loss-section.two-columns {
+    display:flex;
+    gap:1rem;
+    margin-top:1rem;
+  }
   bottom: 0;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
@@ -50,6 +117,16 @@
 }
 
 .modal-header {
+  .profit-loss-card {
+    flex:1;
+    background:#fff;
+    border-radius:8px;
+    padding:0.9rem;
+    box-shadow:0 4px 12px rgba(0,0,0,0.04);
+    display:flex;
+    gap:0.75rem;
+    align-items:flex-start;
+  }
   margin-bottom: 1rem;
   border-bottom: 3px solid transparent;
   background: linear-gradient(white, white) padding-box,
@@ -86,10 +163,10 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
+/* @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
-}
+} */
 
 .modal-close {
   position: absolute;
@@ -287,16 +364,6 @@
   transition: all 0.5s;
 }
 
-.financial-card:hover::before {
-  left: 100%;
-}
-
-.financial-card:hover {
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
-  transform: translateY(-4px) scale(1.02);
-  border-color: #667eea;
-}
-
 .card-label {
   font-size: 0.85rem;
   color: #64748b;
@@ -386,10 +453,6 @@
   opacity: 1;
 }
 
-.stat-card:hover {
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.25);
-  transform: translateY(-4px) scale(1.03);
-}
 
 .stat-icon {
   width: 42px;
@@ -668,4 +731,103 @@
   .pl-value {
     justify-content: center;
   }
+}
+
+/* Compact overrides: reduce heights/paddings for tighter layout */
+.summary-content {
+  gap: 0.45rem;
+}
+
+.details-section,
+.financial-section,
+.plots-section,
+.loan-section {
+  padding: 0.45rem !important;
+}
+
+.detail-card,
+.financial-card,
+.stat-card {
+  padding: 0.45rem !important;
+}
+
+.financial-grid {
+  gap: 0.45rem !important;
+}
+
+.card-label {
+  font-size: 0.8rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.card-value {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.card-sub {
+  font-size: 0.78rem;
+  color: #475569;
+  margin-top: 0.25rem;
+}
+
+/* Make sure icons and rupee size scale down a little */
+.card-value i {
+  font-size: 0.95rem !important;
+}
+
+@media (max-width: 480px) {
+  .card-value { font-size: 0.95rem !important; }
+  .card-label { font-size: 0.78rem !important; }
+  .card-sub { font-size: 0.72rem; }
+}
+
+/* KPI grid for Profit/Loss */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.net-card {
+  border: 1px solid rgba(16,185,129,0.12);
+  background: linear-gradient(135deg,#ecfdf5 0%, #f0fdf4 100%);
+}
+
+.pl-main {
+  grid-template-columns: 1fr 260px;
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.pl-chart-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 12px;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.pl-chart .bar {
+  height: 18px;
+  display: flex;
+  width: 100%;
+  background: #eef2ff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pl-chart .segment { height: 100%; }
+.pl-chart .segment.received { background: linear-gradient(90deg,#10b981,#059669); }
+.pl-chart .segment.costs { background: linear-gradient(90deg,#f97316,#f59e0b); }
+.pl-chart .segment.receivable { background: linear-gradient(90deg,#60a5fa,#3b82f6); }
+
+.pl-chart .legend { display:flex; gap:0.6rem; margin-top:0.45rem; font-size:0.78rem; color:#475569; }
+.legend-box { display:inline-block; width:12px; height:12px; margin-right:0.4rem; border-radius:3px; vertical-align:middle; }
+.legend-box.received { background: linear-gradient(90deg,#10b981,#059669); }
+.legend-box.costs { background: linear-gradient(90deg,#f97316,#f59e0b); }
+.legend-box.receivable { background: linear-gradient(90deg,#60a5fa,#3b82f6); }
+
+@media (max-width: 900px) {
+  .pl-main { grid-template-columns: 1fr; }
 }

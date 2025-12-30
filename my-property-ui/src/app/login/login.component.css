@@ -5,73 +5,139 @@ body, .login-container, .login-panel, .title, .input, .login-btn, .show-password
   letter-spacing: 0.01em;
 }
 .login-container {
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #e6f0ff 0%, #f7fbff 50%, #f2f7f0 100%);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
 }
 .login-panel {
-  background: #fff;
-  border: 1px solid #eee;
-  padding: 2.5rem 2rem 2rem 2rem;
-  border-radius: 12px;
-  width: 370px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(20,20,20,0.04);
+  padding: 2.25rem 2rem;
+  border-radius: 14px;
+  width: 560px;
+  max-width: 98vw;
+  box-shadow: 0 18px 44px rgba(32,45,62,0.14);
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.5rem;
 }
 .logo {
-  width: 70px;
-  margin-bottom: 1rem;
+  width: 110px;
+  margin-bottom: 0.5rem;
 }
 .title {
-  color: #1e90ff;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
+  color: #0b57a4;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  font-size: 1.6rem;
+}
+.subtitle {
+  color: #556677;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
 }
 .input {
-  width: 300px;
-  height: 38px;
+  width: 100%;
+  height: 44px;
   padding: 0 1rem;
-  margin-bottom: 1.25rem;
-  font-size: 1.12rem;
-  border: 1px solid #bbb;
-  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid rgba(20,20,20,0.08);
+  border-radius: 8px;
   box-sizing: border-box;
+  background: rgba(250,250,250,0.9);
+  transition: box-shadow 0.18s, border-color 0.18s;
+}
+.input:focus {
+  outline: none;
+  border-color: #2b8bd3;
+  box-shadow: 0 6px 18px rgba(43,139,211,0.08);
 }
 .password-group {
-  display: flex;
-  align-items: center;
+  display: block;
+  position: relative;
   width: 100%;
-  margin-bottom: 1.5rem;
 }
+.field { margin-bottom: 1rem; }
 .password-group .input {
   margin-bottom: 0;
+  padding-right: 4.5rem;
 }
 .show-password {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  margin-left: -2.5rem;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(43,139,211,0.06);
+  border: 1px solid rgba(43,139,211,0.14);
+  width: 36px;
+  height: 36px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 999px;
   cursor: pointer;
+  padding: 0;
 }
+.show-password svg { display:block; }
+.show-password:focus { outline: none; box-shadow: 0 4px 12px rgba(43,139,211,0.12); }
 .login-btn {
-  width: 100%;
-  padding: 0.5rem 0;
-  font-size: 1rem;
-  background: #228b22;
+  width: 160px;
+  padding: 0.6rem 0;
+  font-size: 0.98rem;
+  background: linear-gradient(90deg,#0b79d0,#0b9ad0);
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
-  border-radius: 4px;
-  margin-top: 1rem;
+  border-radius: 999px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  box-shadow: 0 8px 22px rgba(11,121,208,0.18);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, opacity 0.14s;
+}
+.login-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(11,121,208,0.22);
+}
+.login-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actions {
+  width: 100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:0.5rem;
+}
+.forgot {
+  color: #2b8bd3;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.divider {
+  width: 100%;
+  text-align: center;
+  margin-top: 0.75rem;
   margin-bottom: 0.5rem;
-  box-shadow: 0 2px 6px rgba(34,139,34,0.08);
-  transition: background 0.2s;
+  color: #8a9aa6;
+  font-size: 0.85rem;
 }
-.login-btn:hover {
-  background: #1e7e1e;
+.divider span {
+  background: rgba(255,255,255,0.85);
+  padding: 0 0.75rem;
 }
+.socials { display:flex; gap:0.5rem; }
+.social { padding:0.45rem 0.8rem; border-radius:10px; border:1px solid rgba(0,0,0,0.06); background:#fff; cursor:pointer; }
+.google { color:#de5246 }
+.microsoft { color:#2b7bd3 }
+.footer-note { font-size:0.9rem; color:#6b7b88; margin-top:0.8rem }
+.footer-note a { color:#2b8bd3; text-decoration:none }
+
+.error { color:#c0392b; font-size:0.82rem; margin-bottom:0.5rem }

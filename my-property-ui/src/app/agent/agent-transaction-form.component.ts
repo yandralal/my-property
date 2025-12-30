@@ -28,6 +28,26 @@ export class AgentTransactionFormComponent implements OnInit {
 
   transactionForm: FormGroup;
 
+  onlyNumbers(event: any): void {
+    const input = event.target;
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      value = this.formatIndianNumber(value);
+    }
+    input.value = value;
+  }
+
+  formatIndianNumber(num: string): string {
+    if (!num) return '';
+    const numStr = num.toString();
+    let lastThree = numStr.substring(numStr.length - 3);
+    const otherNumbers = numStr.substring(0, numStr.length - 3);
+    if (otherNumbers !== '') {
+      lastThree = ',' + lastThree;
+    }
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+  }
+
   constructor(private fb: FormBuilder, private propertyService: PropertyService, private agentService: AgentService) {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -236,11 +256,20 @@ export class AgentTransactionFormComponent implements OnInit {
     if (this.transactionForm.valid) {
       this.isSubmitting = true;
       const raw = this.transactionForm.getRawValue();
+      
+      // If only date is provided (YYYY-MM-DD), append current time
+      let txnDate = raw.transactionDate;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(txnDate)) {
+        const now = new Date();
+        const timeStr = now.toTimeString().slice(0, 8); // HH:MM:SS
+        txnDate = `${txnDate}T${timeStr}`;
+      }
+      
       const payload = {
         agentId: parseInt(raw.agentId),
         plotId: parseInt(raw.plotId),
         propertyId: parseInt(raw.propertyId),
-        transactionDate: raw.transactionDate,
+        transactionDate: new Date(txnDate).toISOString(),
         amount: parseFloat(raw.amount.toString().replace(/,/g, '')),
         paymentMethod: raw.paymentMethod,
         referenceNumber: raw.referenceNumber,

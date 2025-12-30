@@ -344,6 +344,13 @@ export class HomeComponent implements OnInit {
     }
     
     onSalePlot(plot: any) {
+        // If plot already sold, ask user before opening sale form for update
+        if (plot && (plot.saleId || plot.hasSale)) {
+            this.selectedPlotForSaleUpdate = plot;
+            this.confirmUpdateSoldPlotVisible = true;
+            return;
+        }
+
         if (plot && plot.id) {
             this.plotViewMode = false;
             this.plotService.getPlotById(plot.id).subscribe({
@@ -356,6 +363,29 @@ export class HomeComponent implements OnInit {
                 }
             });
         }
+    }
+    onConfirmUpdateSoldPlot() {
+        if (!this.selectedPlotForSaleUpdate) return;
+        const id = this.selectedPlotForSaleUpdate.id;
+        this.confirmUpdateSoldPlotVisible = false;
+        this.selectedPlotForSaleUpdate = null;
+        if (id) {
+            this.plotViewMode = false;
+            this.plotService.getPlotById(id).subscribe({
+                next: (plotDetails) => {
+                    this.selectedPlotDetails = plotDetails;
+                    this.showPlotFormModal = true;
+                },
+                error: () => {
+                    this.showPlotFormModal = true;
+                }
+            });
+        }
+    }
+
+    onCancelUpdateSoldPlot() {
+        this.confirmUpdateSoldPlotVisible = false;
+        this.selectedPlotForSaleUpdate = null;
     }
     showPlotTransactionFormModal: boolean = false;
     closePlotTransactionFormModal() {
@@ -500,6 +530,9 @@ export class HomeComponent implements OnInit {
     messageBoxVisible: boolean = false;
     messageText: string = '';
     confirmDeletePlotVisible: boolean = false;
+    // Confirmation when attempting to sale a plot that is already sold
+    confirmUpdateSoldPlotVisible: boolean = false;
+    selectedPlotForSaleUpdate: any = null;
     plotToDelete: Plot | null = null;
     confirmDeleteAgentTransactionVisible: boolean = false;
     selectedAgentTransactionToDelete: any = null;
@@ -764,6 +797,9 @@ export class HomeComponent implements OnInit {
     }
 
     logout() {
+        // Clear login flag and username
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
         this.router.navigate(['/login']);
     }
 

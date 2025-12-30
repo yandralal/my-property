@@ -37,7 +37,7 @@
       </div>
       <div>
         <label for="price">Price *</label>
-        <input id="price" formControlName="price" [class.is-invalid]="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched" />
+        <input id="price" type="text" formControlName="price" (input)="onlyNumbers($event)" [class.is-invalid]="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched" />
         <div *ngIf="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched" class="invalid-feedback d-block">
           <span *ngIf="propertyForm.get('price')?.errors?.['required']">Price is required.</span>
           <span *ngIf="propertyForm.get('price')?.errors?.['min']">Price must be positive.</span>
@@ -53,7 +53,7 @@
       </div>
       <div>
         <label for="phone">Phone Number *</label>
-        <input id="phone" formControlName="phone" autocomplete="off" maxlength="10" [class.is-invalid]="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched" />
+        <input id="phone" type="text" formControlName="phone" (input)="onlyNumbersNoFormat($event)" autocomplete="off" [class.is-invalid]="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched" />
         <div *ngIf="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched" class="invalid-feedback d-block">
           <span *ngIf="propertyForm.get('phone')?.errors?.['required']">Phone is required.</span>
           <span *ngIf="propertyForm.get('phone')?.errors?.['pattern']">Enter a valid 10-digit phone number.</span>
@@ -70,7 +70,7 @@
     <div class="form-section">
       <div>
         <label for="area">Area (sq.ft) *</label>
-        <input id="area" type="number" formControlName="area" [class.is-invalid]="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched" />
+        <input id="area" type="text" formControlName="area" (input)="onlyNumbers($event)" [class.is-invalid]="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched" />
         <div *ngIf="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched" class="invalid-feedback d-block">
           <span *ngIf="propertyForm.get('area')?.errors?.['required']">Area is required.</span>
           <span *ngIf="propertyForm.get('area')?.errors?.['min']">Area must be positive.</span>

@@ -19,6 +19,7 @@
         <div>
           <label for="amount">Amount <span class="text-danger">*</span></label>
           <input id="amount" type="text" formControlName="amount"
+            (input)="onlyNumbers($event)"
             [class.is-invalid]="miscForm.get('amount')?.invalid && miscForm.get('amount')?.touched" />
           <div *ngIf="miscForm.get('amount')?.invalid && miscForm.get('amount')?.touched"
             class="invalid-feedback d-block">

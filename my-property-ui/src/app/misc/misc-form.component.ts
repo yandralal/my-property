@@ -15,7 +15,25 @@ export class MiscFormComponent implements OnInit {
   @Output() success = new EventEmitter<any>();
 
   miscForm!: FormGroup;
-  transactionTypes: string[] = ['Expense', 'Income', 'Other'];
+  onlyNumbers(event: any): void {
+    const input = event.target;
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      value = this.formatIndianNumber(value);
+    }
+    input.value = value;
+  }
+
+  formatIndianNumber(num: string): string {
+    if (!num) return '';
+    const numStr = num.toString();
+    let lastThree = numStr.substring(numStr.length - 3);
+    const otherNumbers = numStr.substring(0, numStr.length - 3);
+    if (otherNumbers !== '') {
+      lastThree = ',' + lastThree;
+    }
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+  }  transactionTypes: string[] = ['Expense', 'Income', 'Other'];
   isSubmitting = false;
   isViewMode = false;
 

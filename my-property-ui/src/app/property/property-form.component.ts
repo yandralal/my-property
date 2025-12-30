@@ -31,6 +31,31 @@ export class PropertyFormComponent {
     messageText: string = '';
     propertyForm;
     @Input() property: any = null;
+
+    onlyNumbers(event: any): void {
+        const input = event.target;
+        let value = input.value.replace(/[^0-9]/g, '');
+        if (value) {
+            value = this.formatIndianNumber(value);
+        }
+        input.value = value;
+    }
+
+    onlyNumbersNoFormat(event: any): void {
+        const input = event.target;
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    formatIndianNumber(num: string): string {
+        if (!num) return '';
+        const numStr = num.toString();
+        let lastThree = numStr.substring(numStr.length - 3);
+        const otherNumbers = numStr.substring(0, numStr.length - 3);
+        if (otherNumbers !== '') {
+            lastThree = ',' + lastThree;
+        }
+        return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+    }
     @Input() viewMode: boolean = false;
 
     // formattedPrice removed, formatting will be inside the input
@@ -177,6 +202,11 @@ export class PropertyFormComponent {
         if (typeof priceValue === 'string' && priceValue != null) {
             priceValue = parseFloat((priceValue as string).replace(/,/g, ''));
         }
+        // Convert formatted area string to decimal
+        let areaValue = formValue.area ?? 0;
+        if (typeof areaValue === 'string' && areaValue != null) {
+            areaValue = parseFloat((areaValue as string).replace(/,/g, ''));
+        }
         const propertyData: RegisterPropertyRequest = {
             title: formValue.title ?? '',
             type: formValue.type ?? '',
@@ -190,7 +220,7 @@ export class PropertyFormComponent {
             zipCode: formValue.zipCode ?? '',
             description: formValue.description ?? '',
             khasraNo: formValue.khasraNo ?? '',
-            area: formValue.area ?? 0
+            area: areaValue
         };
         if (this.property && this.property.id) {
             // Edit mode

@@ -214,9 +214,18 @@ export class LoanTransactionFormComponent implements OnInit {
     
     const formData = this.loanTransactionForm.getRawValue();
     
+    // If only date is provided (YYYY-MM-DD), append current time
+    let txnDate = formData.transactionDate;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(txnDate)) {
+      const now = new Date();
+      const timeStr = now.toTimeString().slice(0, 8); // HH:MM:SS
+      txnDate = `${txnDate}T${timeStr}`;
+    }
+    
     // Add propertyLoanId and propertyId to the form data
     const payload = {
       ...formData,
+      transactionDate: new Date(txnDate).toISOString(),
       propertyLoanId: this.loanDetails?.id,
       propertyId: this.loanDetails?.propertyId
     };
@@ -227,5 +236,25 @@ export class LoanTransactionFormComponent implements OnInit {
 
   onCancel() {
     this.closeModal.emit();
+  }
+
+  onlyNumbers(event: any): void {
+    const input = event.target;
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      value = this.formatIndianNumber(value);
+    }
+    input.value = value;
+  }
+
+  formatIndianNumber(num: string): string {
+    if (!num) return '';
+    const numStr = num.toString();
+    let lastThree = numStr.substring(numStr.length - 3);
+    const otherNumbers = numStr.substring(0, numStr.length - 3);
+    if (otherNumbers !== '') {
+      lastThree = ',' + lastThree;
+    }
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
   }
 }

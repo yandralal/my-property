@@ -32,6 +32,19 @@ export class PropertyProfitLossComponent implements OnChanges, OnInit {
   totalPlotsPaid = 0;
   totalPlotsBalance = 0;
   totalBrokerage = 0;
+  profitLossAfterLoan = 0;
+
+  // Available / unrealized summary (computed from input plots when possible)
+  totalAvailablePlots = 0;
+  totalAvailablePotentialSale = 0;
+  totalAvailablePotentialBalance = 0;
+
+  // Realized / Unrealized metrics
+  realizedReceived = 0; // amount actually received for sold plots
+  realizedCosts = 0; // portion of costs allocated to sold plots
+  realizedProfitLoss = 0;
+
+  unrealizedReceivable = 0; // sold value not yet received
 
   // Loan details
   totalLoanPrinciple = 0;
@@ -39,6 +52,9 @@ export class PropertyProfitLossComponent implements OnChanges, OnInit {
 
   // Final profit/loss
   profitLoss = 0;
+
+  // Allocation method: 'amount' = by sale amount, 'count' = by number of plots
+  allocationMethod: 'amount' | 'count' = 'amount';
 
   ngOnInit() {
     this.loadPropertyDetails();
@@ -71,11 +87,18 @@ export class PropertyProfitLossComponent implements OnChanges, OnInit {
         // Loan details
         this.totalLoanInterest = response.totalLoanInterest || 0;
 
-        // Final profit/loss
-        this.profitLoss = response.profitLossAfterLoan || 0;
+        // Compute final net profit/loss per requested definition:
+        // Net P/L = (cost of property + brokerage) - Total Sale Amount
+        const totalCost = (this.buyValue || 0) + (this.totalBrokerage || 0);
+        this.profitLoss = totalCost - (this.totalPlotsSaleAmount || 0);
+
+        this.profitLossAfterLoan = response.profitLossAfterLoan;
         
         // Calculate plots sold using available and booked plots from API
         this.totalPlotsSold = response.bookedPlots || 0;
+        // compute available/unrealized sums from input plots if provided
+        this.computeAvailableFromInputPlots();
+        this.computeRealizedUnrealized();
       },
       error: (error) => {
         console.error('Error loading property details:', error);
@@ -111,8 +134,69 @@ export class PropertyProfitLossComponent implements OnChanges, OnInit {
     this.totalLoanInterest = 0;
     
     // Calculate profit/loss
-    // Profit/Loss = Total Sale Amount - (Buy Price + Total Loan Principle + Total Loan Interest + Total Brokerage)
-    this.profitLoss = this.totalPlotsSaleAmount - (this.buyValue + this.totalLoanPrinciple + this.totalLoanInterest + this.totalBrokerage);
+    // Net P/L = (Buy Price + Total Brokerage) - Total Sale Amount
+    this.profitLoss = (this.buyValue || 0) + (this.totalBrokerage || 0) - (this.totalPlotsSaleAmount || 0);
+
+    // Net P/L after loan and interest
+    const totalCostAfterLoan = (this.buyValue || 0) + (this.totalLoanPrinciple || 0) + (this.totalLoanInterest || 0) + (this.totalBrokerage || 0);
+    this.profitLossAfterLoan = totalCostAfterLoan - (this.totalPlotsSaleAmount || 0);
+
+    // Compute available/unrealized sums from local plots
+    this.computeAvailableFromInputPlots();
+    this.computeRealizedUnrealized();
+  }
+
+  private computeRealizedUnrealized() {
+    // realizedReceived = totalPlotsPaid
+    this.realizedReceived = this.totalPlotsPaid || 0;
+
+    // allocate property-level costs to realized portion.
+    // Choose allocation method based on `allocationMethod`.
+    // Total Costs = Buy Price + Total Loan Interest + Token Brokerage
+    const totalCost = (this.buyValue || 0) + (this.totalLoanInterest || 0) + (this.totalBrokerage || 0);
+    let allocationRatio = 0;
+    if (this.allocationMethod === 'amount') {
+      const totalSalePotential = (this.totalPlotsSaleAmount || 0) + (this.totalAvailablePotentialSale || 0);
+      if (totalSalePotential > 0) {
+        allocationRatio = (this.totalPlotsSaleAmount || 0) / totalSalePotential;
+      } else if (this.totalPlots && this.totalPlots > 0) {
+        allocationRatio = (this.totalPlotsSold / this.totalPlots);
+      }
+    } else {
+      // count-based allocation
+      allocationRatio = (this.totalPlots && this.totalPlots > 0) ? (this.totalPlotsSold / this.totalPlots) : 0;
+    }
+    this.realizedCosts = totalCost * allocationRatio;
+
+    // realized profit/loss = amount received - allocated costs
+    this.realizedProfitLoss = (this.realizedReceived || 0) - (this.realizedCosts || 0);
+
+    // unrealized receivable = total sale amount (sold value) - amount received
+    this.unrealizedReceivable = (this.totalPlotsSaleAmount || 0) - (this.totalPlotsPaid || 0);
+  }
+
+  setAllocationMethod(method: 'amount' | 'count') {
+    this.allocationMethod = method;
+    this.computeRealizedUnrealized();
+  }
+
+  getSegmentTitle(kind: 'received' | 'costs' | 'receivable') {
+    const total = (this.realizedReceived || 0) + (this.realizedCosts || 0) + (this.unrealizedReceivable || 0);
+    let value = 0;
+    if (kind === 'received') value = this.realizedReceived || 0;
+    if (kind === 'costs') value = this.realizedCosts || 0;
+    if (kind === 'receivable') value = this.unrealizedReceivable || 0;
+    const pct = total > 0 ? Math.round((value / total) * 100) : 0;
+    return `${kind.charAt(0).toUpperCase() + kind.slice(1)}: ₹${value.toLocaleString()} (${pct}%)`;
+  }
+
+  private computeAvailableFromInputPlots() {
+    if (!this.property) return;
+    const propertyPlots = (this.plots || []).filter(p => p.propertyId === this.property?.id);
+    const available = propertyPlots.filter(p => !p.hasSale);
+    this.totalAvailablePlots = available.length;
+    this.totalAvailablePotentialSale = available.reduce((sum, p) => sum + (p.saleAmount || 0), 0);
+    this.totalAvailablePotentialBalance = available.reduce((sum, p) => sum + (p.amountBalance || 0), 0);
   }
 
   onClose() {

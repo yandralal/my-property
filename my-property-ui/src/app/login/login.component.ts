@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, HttpClientModule]
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule]
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -18,8 +19,7 @@ export class LoginComponent {
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required],
-      remember: [false]
+      password: ['', Validators.required]
     });
   }
 
@@ -36,6 +36,8 @@ export class LoginComponent {
           console.log('Login success:', response);
           // Store username in localStorage
           localStorage.setItem('username', username);
+          // Mark user as logged in
+          localStorage.setItem('isLoggedIn', 'true');
           this.router.navigate(['/home']);
         },
         error: (err) => {

@@ -14,3 +14,7 @@
 /RealEstateManager/.vs/CopilotSnapshots/EEF1618D69E17545AD57C20C54D99A4B
 /RealEstateManager/.vs/CopilotSnapshots/DA3BE0DFB033CA498FFC9C9ADECC33A7
 /RealEstateManager/.vs/CopilotSnapshots/AB461C318D0D734EB0DCB64AACBF012A
+/RealEstateManager/.vs/*
+/MyPropertyApi/bin/*
+/MyPropertyApi/Properties/*
+/MyPropertyApi/publish/*

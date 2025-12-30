@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class PropertyService {
   constructor(private http: HttpClient) {}
-  private apiUrl = environment.apiUrl + '/property';
+  private apiUrl = environment.apiUrl + '/api/Property';
   // Property Loan Management
   getAllPropertyLoans(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/loans`);
@@ -61,7 +61,7 @@ export class PropertyService {
   }
 
   getPropertyTransactions(propertyId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/property/${propertyId}/transactions`);
+    return this.http.get<any[]>(`${environment.apiUrl}/api/Property/${propertyId}/transactions`);
   }
 
   getActivePropertyTransactions(): Observable<any[]> {

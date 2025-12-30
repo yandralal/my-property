@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class MiscService {
   constructor(private http: HttpClient) {}
-  private apiUrl = environment.apiUrl + '/misctransaction';
+  private apiUrl = environment.apiUrl + '/api/MiscTransaction';
 
   getAllMiscTransactions(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);

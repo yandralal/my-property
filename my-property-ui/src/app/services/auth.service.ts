@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: { username: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/login`, credentials).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/api/login`, credentials).pipe(
       tap((response: any) => {
         if (response && response.token) {
           sessionStorage.setItem('token', response.token);
